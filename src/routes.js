@@ -9,17 +9,21 @@ import MyTripList from './Screens/AuthScreens/MyTripList/MyTripList';
 import LoginScreen from './Screens/UnauthScreens/LoginScreen';
 import SignupScreen from './Screens/UnauthScreens/SignupScreen';
 import ForgotPassScreen from './Screens/UnauthScreens/ForgotPassScreen';
+import SetPassScreen from './Screens/UnauthScreens/SetPassScreen';
 import SideMenu from './Components/SideMenu/SideMenu';
 import {Router, Scene, Stack, Drawer} from 'react-native-router-flux';
 import MenuIcon from '../src/Images/hamburger.png';
 
 const Routes = () => {
   return (
-    <Router navigationBarStyle={{ backgroundColor: 'transfrent', borderBottomWidth: 0, }}>
+    <Router
+      navigationBarStyle={{
+        backgroundColor: 'transfrent',
+        borderBottomWidth: 0,
+      }}>
       <Stack key="root" hideNavBar>
         <Drawer
           key="drawer"
-          hideNavBar
           contentComponent={SideMenu}
           drawerWidth={300}
           drawerImage={MenuIcon}>
@@ -30,9 +34,10 @@ const Routes = () => {
         <Scene key="AddMymaps" component={AddMymaps} />
         <Scene key="MyReviews" component={MyReviews} />
         <Scene key="MyTripList" component={MyTripList} />
-        <Scene key="LoginScreen" component={LoginScreen} hideNavBar={true} />
-        <Scene key="SignupScreen" component={SignupScreen} hideNavBar={true} />
+        <Scene key="LoginScreen" component={LoginScreen} hideNavBar />
+        <Scene key="SignupScreen" component={SignupScreen} hideNavBar />
         <Scene key="ForgotPassScreen" component={ForgotPassScreen} hideNavBar />
+        <Scene key="SetPassScreen" component={SetPassScreen} />
       </Stack>
     </Router>
   );

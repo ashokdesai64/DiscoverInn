@@ -1,19 +1,12 @@
 import React, {Fragment} from 'react';
-import {View, Text, Image, ScrollView} from 'react-native';
+import {View, Text, Image, ScrollView, Dimensions} from 'react-native';
 import styles from './HomeScreen.style';
-import {SearchBar} from 'react-native-elements';
 import Carousel from 'react-native-snap-carousel';
 import Icon from 'react-native-vector-icons/Feather';
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
     title: 'Discover Inn',
-  };
-  state = {
-    search: '',
-  };
-  updateSearch = search => {
-    this.setState({search});
   };
   constructor(props) {
     super(props);
@@ -33,64 +26,113 @@ class HomeScreen extends React.Component {
         },
       ],
     };
+    this.cateText = {
+      carouselItems: [
+        {
+          title: 'Sights',
+          icon: require('./../../Images/sights.png'),
+        },
+        {
+          title: 'Activities',
+          icon: require('./../../Images/activities.png'),
+        },
+        {
+          title: 'Restaurants',
+          icon: require('./../../Images/restaurants.png'),
+        },
+        {
+          title: 'Nightlife',
+          icon: require('./../../Images/nightlife.png'),
+        },
+        {
+          title: 'Transportations',
+          icon: require('./../../Images/transportations.png'),
+        },
+        {
+          title: 'Shopping',
+          icon: require('./../../Images/shopping.png'),
+        },
+        {
+          title: 'Other',
+          icon: require('./../../Images/other.png'),
+        },
+      ],
+    };
   }
 
   _renderItem({item, index}) {
     return (
       <View style={styles.mapSlidCard}>
-        <Image
-          style={styles.mapSlideCardImg}
-          source={require('./../../Images/login-bg.jpg')}
-        />
-        <View style={styles.mapSlideCardImg_overlay} />
-        <View style={styles.mapSlideCardContent}>
-          <View style={[styles.badgeRed, styles.badge]}>
-            <Text style={[styles.badgeText]}>
-              199 <Icon name="eye" />
-            </Text>
-          </View>
-          <Text style={styles.mapSlideCardTitle}>{item.title}</Text>
-          <View style={styles.rateList}>
-            <Icon
-              style={styles.starIcon}
-              name="star"
-              size={15}
-              color="#FFAF2C"
-            />
-            <Icon
-              style={styles.starIcon}
-              name="star"
-              size={15}
-              color="#FFAF2C"
-            />
-            <Icon
-              style={styles.starIcon}
-              name="star"
-              size={15}
-              color="#FFAF2C"
-            />
-            <Icon
-              style={styles.starIcon}
-              name="star"
-              size={15}
-              color="#FFAF2C"
-            />
-            <Icon
-              style={styles.starIcon}
-              name="star"
-              size={15}
-              color="#FFAF2C"
-            />
-            <Text style={styles.rateListCount}>(2 Reviews)</Text>
+        <View style={styles.mapSlidCardInner}>
+          <Image
+            style={styles.mapSlideCardImg}
+            source={require('./../../Images/login-bg.jpg')}
+          />
+          <View style={styles.mapSlideCardImg_overlay} />
+          <View style={styles.mapSlideCardContent}>
+            <View style={[styles.badgeRed, styles.badge]}>
+              <Text style={[styles.badgeText]}>
+                199 <Icon name="eye" />
+              </Text>
+            </View>
+            <Text style={styles.mapSlideCardTitle}>{item.title}</Text>
+            <View style={styles.rateList}>
+              <Icon
+                style={styles.starIcon}
+                name="star"
+                size={15}
+                color="#FFAF2C"
+              />
+              <Icon
+                style={styles.starIcon}
+                name="star"
+                size={15}
+                color="#FFAF2C"
+              />
+              <Icon
+                style={styles.starIcon}
+                name="star"
+                size={15}
+                color="#FFAF2C"
+              />
+              <Icon
+                style={styles.starIcon}
+                name="star"
+                size={15}
+                color="#FFAF2C"
+              />
+              <Icon
+                style={styles.starIcon}
+                name="star"
+                size={15}
+                color="#FFAF2C"
+              />
+              <Text style={styles.rateListCount}>(2 Reviews)</Text>
+            </View>
           </View>
         </View>
       </View>
     );
   }
-  render() {
-    const {search} = this.state;
+
+  _renderItemCate({item, index}) {
     return (
-      <Fragment>
+      <View style={styles.cateSlideCard}>
+        <View style={styles.cateSlideCardContent}>
+          <Image
+            source={item.icon}
+            style={styles.cateSlideCardIcon}
+            resizeMode="contain"
+          />
+          <Text style={styles.cateSlideCardTitle}>{item.title}</Text>
+        </View>
+      </View>
+    );
+  }
+  render() {
+    const {width} = Dimensions.get('window');
+    return (
+      <Fragment style={styles.homePage}>
         <ScrollView
           style={styles.scrollView}
           showsHorizontalScrollIndicator={false}>
@@ -100,54 +142,50 @@ class HomeScreen extends React.Component {
                 The 1-stop Travel Planner that suits your needs!
               </Text>
             </View>
-            <View style={styles.searchbarCard}>
-              <SearchBar
-                clearIcon
-                style={styles.searchbarInput}
-                placeholder="Type in your next destination!"
-                onChangeText={this.updateSearch}
-                value={search}
-                inputStyle={{
-                  backgroundColor: '#fff',
-                  fontSize: 12,
-                  color: '#333333',
-                  fontFamily: 'Montserrat-Regular',
-                }}
-                containerStyle={{
-                  backgroundColor: 'transfarent',
-                  borderWidth: 0,
-                  borderTopWidth: 0,
-                  borderBottomWidth: 0,
-                  paddingLeft: 15,
-                  paddingRight: 15,
-                  borderRadius: 0,
-                }}
-                placeholderTextColor={'#BDBDBD'}
-                inputContainerStyle={{backgroundColor: '#fff'}}
-                lightTheme
-              />
+            <View style={styles.searchbarCard}></View>
+            <View style={styles.cateCard}>
+              <Text style={styles.sectionTitle}>Categories</Text>
             </View>
 
+            <Carousel
+              data={this.cateText.carouselItems}
+              sliderWidth={width}
+              itemWidth={100}
+              firstItem={2}
+              inactiveSlideOpacity={1}
+              inactiveSlideScale={1}
+              renderItem={this._renderItemCate}
+            />
             <View style={styles.cateCard}>
               <Text style={styles.sectionTitle}>Most Popular</Text>
               <Text style={styles.seeAll}>See All</Text>
             </View>
-            <Carousel
-              data={this.state.carouselItems}
-              sliderWidth={370}
-              itemWidth={280}
-              renderItem={this._renderItem}
-            />
+            <View style={styles.carouselMapView}>
+              <Carousel
+                data={this.state.carouselItems}
+                sliderWidth={width}
+                itemWidth={300}
+                firstItem={2}
+                inactiveSlideOpacity={1}
+                inactiveSlideScale={1}
+                renderItem={this._renderItem}
+              />
+            </View>
             <View style={styles.cateCard}>
               <Text style={styles.sectionTitle}>Top Rated</Text>
               <Text style={styles.seeAll}>See All</Text>
             </View>
-            <Carousel
-              data={this.state.carouselItems}
-              sliderWidth={370}
-              itemWidth={280}
-              renderItem={this._renderItem}
-            />
+            <View style={styles.carouselMapView}>
+              <Carousel
+                data={this.state.carouselItems}
+                sliderWidth={width}
+                itemWidth={300}
+                firstItem={2}
+                inactiveSlideOpacity={1}
+                inactiveSlideScale={1}
+                renderItem={this._renderItem}
+              />
+            </View>
           </View>
         </ScrollView>
       </Fragment>

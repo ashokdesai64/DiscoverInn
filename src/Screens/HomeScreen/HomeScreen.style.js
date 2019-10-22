@@ -1,9 +1,11 @@
 import {StyleSheet} from 'react-native';
-import {Row} from 'native-base';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  homePage: {
+    marginBottom: 25,
   },
   scrollView: {
     paddingRight: 0,
@@ -50,6 +52,33 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Regular',
     lineHeight: 15,
   },
+  cateSlideCard: {
+    width: 88,
+    height: 88,
+    marginBottom: 10,
+    shadowOffset: {width: 0, height: 5},
+    shadowColor: 'rgba(6, 18, 42, 0.08);',
+    shadowOpacity: 1.0,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
+    borderRadius: 5,
+  },
+  cateSlideCardIcon: {
+    width: 50,
+    height: 28,
+    alignSelf: 'center',
+    color: '#2F80ED',
+  },
+  cateSlideCardTitle: {
+    fontFamily: 'Montserrat-Medium',
+    fontSize: 10,
+    lineHeight: 12,
+    marginTop: 10,
+    color: '#333333',
+    textAlign: 'center',
+  },
   carouselItems: {
     display: 'flex',
     alignItems: 'center',
@@ -58,6 +87,8 @@ const styles = StyleSheet.create({
   mapSlidCard: {
     alignItems: 'center',
     justifyContent: 'center',
+    marginLeft: 15,
+    marginRight: 15,
   },
   mapSlideCardImg: {
     width: 280,

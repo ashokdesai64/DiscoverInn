@@ -31,7 +31,7 @@ class SideMenu extends Component {
                   paddingLeft={0}
                   backgroundColor="#ffffff"
                   color="#EB5757"
-                  onPress={() => this.props.navigation.navigate('MyTripList')}>
+                  onPress={() => this.props.navigation.navigate('EditProfile')}>
                   <Text style={styles.profileHeader_buttonText}>
                     Edit Profile
                   </Text>
@@ -107,7 +107,7 @@ class SideMenu extends Component {
                   size={12}
                   paddingRight={0}
                   backgroundColor="#ffffff"
-                  onPress={() => Actions.ForgotPassScreen({type: 'reset'})}>
+                  onPress={() => this.props.navigation.navigate('LoginScreen')}>
                   <Text style={styles.menuList_LinkText}>Login</Text>
                 </Icon.Button>
               </View>
@@ -120,7 +120,7 @@ class SideMenu extends Component {
                   paddingRight={0}
                   backgroundColor="#ffffff"
                   onPress={() =>
-                    this.props.navigation.navigate('ForgotPassScreen')
+                    this.props.navigation.navigate('SignupScreen')
                   }>
                   <Text style={styles.menuList_LinkText}>Signup</Text>
                 </Icon.Button>
