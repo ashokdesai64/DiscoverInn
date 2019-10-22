@@ -3,7 +3,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  editProfileContent: {
+  pageContent: {
     paddingVertical: 10,
     paddingHorizontal: 15,
   },
