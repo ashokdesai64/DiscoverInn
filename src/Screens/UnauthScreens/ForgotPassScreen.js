@@ -13,7 +13,7 @@ class ForgotPassScreen extends React.Component {
   static navigationOptions = {
     title: '',
     headerStyle: {
-      backgroundColor: 'transparent',
+      backgroundColor: 'transfrent',
       borderBottomWidth: 0,
     },
     headerTintColor: '#fff',

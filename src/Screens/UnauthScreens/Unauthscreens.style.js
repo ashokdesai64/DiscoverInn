@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   },
   unauthBottomText: {
     color: '#fff',
-    height: 100,
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
   },

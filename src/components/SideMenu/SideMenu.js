@@ -4,6 +4,11 @@ import Icon from 'react-native-vector-icons/Feather';
 import styles from '../../Screens/AuthScreens/MyTripList/MyTripList.style';
 import {Actions} from 'react-native-router-flux';
 
+//REDUX
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import * as authActions from './../../actions/authActions';
+
 class SideMenu extends Component {
   render() {
     return (
@@ -95,22 +100,43 @@ class SideMenu extends Component {
                   size={12}
                   paddingRight={0}
                   backgroundColor="#ffffff"
-                  onPress={() => this.props.navigation.navigate('Profile')}>
+                  onPress={() =>
+                    this.props.navigation.navigate('MyMapShareList')
+                  }>
                   <Text style={styles.menuList_LinkText}>Shared Zone</Text>
                 </Icon.Button>
               </View>
-              <View style={styles.menuList_Item}>
-                <Icon.Button
-                  style={styles.menuList_Link}
-                  color="#828282"
-                  name="share-2"
-                  size={12}
-                  paddingRight={0}
-                  backgroundColor="#ffffff"
-                  onPress={() => this.props.navigation.navigate('LoginScreen')}>
-                  <Text style={styles.menuList_LinkText}>Login</Text>
-                </Icon.Button>
-              </View>
+
+              {this.props.userData && this.props.userData.id ? (
+                <View style={styles.menuList_Item}>
+                  <Icon.Button
+                    style={styles.menuList_Link}
+                    color="#828282"
+                    name="share-2"
+                    size={12}
+                    paddingRight={0}
+                    backgroundColor="#ffffff"
+                    onPress={() => this.props.authAction.userLogout()}>
+                    <Text style={styles.menuList_LinkText}>Logout</Text>
+                  </Icon.Button>
+                </View>
+              ) : (
+                <View style={styles.menuList_Item}>
+                  <Icon.Button
+                    style={styles.menuList_Link}
+                    color="#828282"
+                    name="share-2"
+                    size={12}
+                    paddingRight={0}
+                    backgroundColor="#ffffff"
+                    onPress={() =>
+                      this.props.navigation.navigate('LoginScreen')
+                    }>
+                    <Text style={styles.menuList_LinkText}>Login</Text>
+                  </Icon.Button>
+                </View>
+              )}
+
               <View style={styles.menuList_Item}>
                 <Icon.Button
                   style={styles.menuList_Link}
@@ -140,4 +166,15 @@ class SideMenu extends Component {
   }
 }
 
-export default SideMenu;
+function mapStateToProps(state) {
+  return {
+    userData: state.user.userData,
+  };
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    authAction: bindActionCreators(authActions, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SideMenu);

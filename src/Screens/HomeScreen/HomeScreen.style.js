@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   seeAll: {
     fontSize: 12,
     color: '#2F80ED',
-    fontFamily: 'Montserrat-Regular',
+    fontFamily: 'Montserrat-Medium',
     lineHeight: 15,
   },
   cateSlideCard: {
@@ -124,6 +124,9 @@ const styles = StyleSheet.create({
   badgeRed: {
     backgroundColor: '#EB5757',
   },
+  badgeGreen: {
+    backgroundColor: '#27AE60',
+  },
   badgeText: {
     fontSize: 12,
     color: '#fff',
@@ -149,6 +152,53 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 15,
     marginLeft: 10,
+  },
+  searchbarCard: {
+    marginHorizontal: 15,
+    marginVertical: 0,
+    flexWrap: 'nowrap',
+    flexDirection: 'row',
+    borderRadius: 5,
+    backgroundColor: '#fff',
+    borderBottomWidth: 0,
+  },
+  searchbarInputBox: {
+    flex: 1,
+    borderBottomWidth: 0,
+  },
+  searchbarIcon: {
+    fontSize: 16,
+    borderBottomWidth: 0,
+    paddingLeft: 15,
+    paddingRight: 10,
+  },
+  searchbarInput: {
+    backgroundColor: 'transparent',
+    fontSize: 12,
+    fontFamily: 'Montserrat-Medium',
+    padding: 0,
+    height: 40,
+  },
+  searchbarFilter: {
+    fontSize: 16,
+    borderBottomWidth: 0,
+    paddingRight: 5,
+    color: '#828282',
+  },
+  searchbarCardButton: {
+    margin: 5,
+    padding: 10,
+    width: 32,
+    height: 32,
+    backgroundColor: 'rgba(47, 128, 237, 0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  searchbarCardButtonIcon: {
+    fontSize: 18,
+    width: 18,
+    height: 18,
+    color: 'rgba(47, 128, 237, 1)',
   },
 });
 

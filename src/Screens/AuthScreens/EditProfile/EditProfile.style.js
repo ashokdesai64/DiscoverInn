@@ -28,12 +28,14 @@ const styles = StyleSheet.create({
     color: '#4F4F4F',
     fontSize: 14,
   },
+
   checkBox: {
     flexDirection: 'row',
     alignItems: 'center',
     color: '#2F80ED',
     fontFamily: 'Montserrat-Regular',
     fontSize: 14,
+    alignItems: 'flex-start',
   },
   textStyle: {
     fontFamily: 'Montserrat-Medium',

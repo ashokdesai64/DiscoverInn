@@ -7,29 +7,38 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import styles from './EditProfile.style';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/Feather';
 
 const CheckBox = ({
   selected,
   onPress,
-  style,
-  textStyle,
   size = 30,
   color = '#2F80ED',
   text = '',
-  ...props
 }) => (
-  <TouchableOpacity style={styles.checkBox} onPress={onPress} {...props}>
+  <TouchableOpacity
+    style={styles.checkBox}
+    onPress={onPress}
+    backgroundColor="red"
+    activeBackgroundColor="red">
     <Icon
       size={size}
       color={color}
-      name={selected ? 'check-box' : 'check-box-outline-blank'}
+      name={selected ? 'square' : 'check-square'}
     />
 
     <Text style={styles.textStyle}> {text} </Text>
   </TouchableOpacity>
 );
 class EditProfile extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      termsAccepted: false,
+      photo: null,
+    };
+  }
+
   static navigationOptions = {
     title: 'Edit Profile',
     headerStyle: {
@@ -48,9 +57,6 @@ class EditProfile extends React.Component {
     },
   };
 
-  state = {
-    termsAccepted: false,
-  };
   handleCheckBox = () =>
     this.setState({termsAccepted: !this.state.termsAccepted});
 
@@ -58,7 +64,7 @@ class EditProfile extends React.Component {
     return (
       <Fragment>
         <View style={styles.container}>
-          <View style={styles.editProfileContent}>
+          <View style={styles.pageContent}>
             <View style={styles.editProfileAvatar}></View>
             <View style={styles.formGroup}>
               <Text style={styles.formLabel}>First Name</Text>

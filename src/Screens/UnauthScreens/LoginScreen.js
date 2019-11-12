@@ -9,6 +9,11 @@ import {
 } from 'react-native';
 import styles from './Unauthscreens.style';
 
+//REDUX
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import * as authActions from './../../actions/authActions';
+
 class LoginScreen extends React.Component {
   static navigationOptions = {
     title: '',
@@ -19,9 +24,40 @@ class LoginScreen extends React.Component {
     headerTintColor: '#fff',
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      password: '',
+    };
+    this.checkLogin(props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log('login screen props => ', nextProps);
+    this.checkLogin(nextProps);
+  }
+
+  checkLogin(props) {
+    if (props.userData && props.userData.id) {
+      this.props.navigation.navigate('Home');
+    }
+  }
+
+  login() {
+    let {email, password} = this.state;
+    if (!email) {
+      return alert('Please enter email');
+    }
+    if (!password) {
+      return alert('Please enter password');
+    }
+    this.props.authAction.userLogin(email, password);
+  }
+
   render() {
     return (
-      <Fragment>
+      <>
         <ImageBackground
           source={require('../../Images/login-bg.jpg')}
           style={{
@@ -40,7 +76,13 @@ class LoginScreen extends React.Component {
                 <Text style={styles.formTitle}>Sign in</Text>
                 <View style={styles.formGroup}>
                   <Text style={styles.formLabel}>Email</Text>
-                  <TextInput style={styles.formControl} />
+                  <TextInput
+                    style={styles.formControl}
+                    onChangeText={email => {
+                      this.setState({email: email.trim()});
+                    }}
+                    autoCapitalize={'none'}
+                  />
                 </View>
                 <View style={styles.formGroup}>
                   <Text style={styles.formLabel}>
@@ -54,11 +96,20 @@ class LoginScreen extends React.Component {
                       Forgot?
                     </Text>
                   </Text>
-                  <TextInput style={styles.formControl} />
+                  <TextInput
+                    secureTextEntry={true}
+                    style={styles.formControl}
+                    onChangeText={password => {
+                      this.setState({password: password.trim()});
+                    }}
+                    autoCapitalize={'none'}
+                  />
                 </View>
                 <TouchableOpacity
                   style={[styles.button, styles.buttonPrimary]}
-                  onPress={() => {}}>
+                  onPress={() => {
+                    this.login();
+                  }}>
                   <Text style={styles.buttonText}>Sign In</Text>
                 </TouchableOpacity>
               </View>
@@ -78,8 +129,20 @@ class LoginScreen extends React.Component {
             </View>
           </View>
         </ImageBackground>
-      </Fragment>
+      </>
     );
   }
 }
-export default LoginScreen;
+
+function mapStateToProps(state) {
+  return {
+    userData: state.user.userData,
+  };
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    authAction: bindActionCreators(authActions, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
