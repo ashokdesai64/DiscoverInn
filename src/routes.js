@@ -14,7 +14,7 @@ import MyMapShareList from './Screens/ShareList/MyMapShareList';
 import UploadMap from './Screens/HomeScreen/UploadMap/UploadMap';
 import PinCategories from './Screens/AuthScreens/PinCategories/PinCategories';
 import Sights from './Screens/AuthScreens/Sights/Sights';
-import SideMenu from './Components/SideMenu/SideMenu';
+import SideMenu from './components/SideMenu/SideMenu';
 import {Router, Scene, Stack, Drawer} from 'react-native-router-flux';
 import MenuIcon from '../src/Images/hamburger.png';
 
@@ -22,8 +22,9 @@ const Routes = () => {
   return (
     <Router
       navigationBarStyle={{
-        backgroundColor: 'transfrent',
+        backgroundColor: 'transparent',
         borderBottomWidth: 0,
+        elevation:0
       }}>
       <Stack key="root" hideNavBar>
         <Drawer
