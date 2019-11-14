@@ -12,9 +12,10 @@ import styles from './Unauthscreens.style';
 class SignupScreen extends React.Component {
   static navigationOptions = {
     title: '',
+    header:null,
     headerStyle: {
-      backgroundColor: 'transparent',
-      borderBottomWidth: 0,
+      backgroundColor: 'red',
+      borderBottomWidth: 0
     },
     headerTintColor: '#fff',
   };

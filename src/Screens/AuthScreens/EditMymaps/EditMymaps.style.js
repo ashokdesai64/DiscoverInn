@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {Row} from 'native-base';
+import { StyleSheet } from 'react-native';
+import { Row } from 'native-base';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -17,6 +17,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderBottomWidth: 0,
     flex: 1,
+    shadowColor: 'black',
+    shadowOpacity: 0.26,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 10,
+    elevation: 5
   },
   searchbarInputBox: {
     flex: 1,
@@ -64,6 +69,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 15,
     backgroundColor: '#ffffff',
+    borderBottomColor:'#E0E0E0',
     borderRadius: 5,
     zIndex: 1,
   },
@@ -133,7 +139,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 30,
     height: 30,
-    width: 100,
+    // width: 100,
     alignSelf: 'center',
     borderRadius: 5,
     alignItems: 'center',

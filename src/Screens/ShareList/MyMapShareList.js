@@ -4,10 +4,11 @@ import {Item, Input, Button, Content, Accordion, Picker} from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import styles from './MyMapShareList.style';
 import Carousel from 'react-native-snap-carousel';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import Header from './../../components/header/header'
 
 class MyMapShareList extends React.Component {
   static navigationOptions = {
+    header:null,
     title: 'ShareList',
     headerStyle: {
       backgroundColor: 'transparent',
@@ -112,6 +113,7 @@ class MyMapShareList extends React.Component {
     const {width} = Dimensions.get('window');
     return (
       <Fragment>
+        <Header showMenu={true} title={'My Maps'}/>
         <ScrollView
           style={styles.scrollView}
           showsHorizontalScrollIndicator={false}>

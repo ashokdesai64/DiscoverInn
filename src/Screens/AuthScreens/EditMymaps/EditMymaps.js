@@ -4,9 +4,10 @@ import {Item, Input, Button, Content, Accordion, Picker} from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import styles from './EditMymaps.style';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-
+import Header from './../../../components/header/header';
 class EditMymaps extends React.Component {
   static navigationOptions = {
+    header:null,
     title: 'EditMymaps',
     headerStyle: {
       backgroundColor: 'transparent',
@@ -95,6 +96,7 @@ class EditMymaps extends React.Component {
             <Switch
               style={styles.mymapsItemSwitch}
               value={item.public}
+              thumbColor={'#2F80ED'}
               onValueChange={value =>
                 (this.state.dataArray[commentIndex].public = item.public
                   ? false
@@ -165,9 +167,11 @@ class EditMymaps extends React.Component {
       </View>
     );
   };
+
   render() {
     return (
       <Fragment style={styles.editMaps}>
+        <Header showMenu={true} title={'My Maps'}/>
         <ScrollView
           style={styles.scrollView}
           showsHorizontalScrollIndicator={false}>

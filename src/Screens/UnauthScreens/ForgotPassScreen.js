@@ -11,6 +11,7 @@ import styles from './Unauthscreens.style';
 
 class ForgotPassScreen extends React.Component {
   static navigationOptions = {
+    header:null,
     title: '',
     headerStyle: {
       backgroundColor: 'transfrent',

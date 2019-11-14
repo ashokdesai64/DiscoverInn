@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: '#BDBDBD',
     zIndex: 6,
+    borderStyle:'dashed'
   },
   button: {
     paddingVertical: 5,

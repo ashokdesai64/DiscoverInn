@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   Text,
@@ -7,13 +7,15 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import {Item, Input, Button, Content, Accordion, Picker} from 'native-base';
+import { Item, Input, Button, Content, Accordion, Picker } from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import styles from './PinCategories.style';
+import Header from './../../../components/header/header'
 // import {TouchableOpacity} from 'react-native-gesture-handler';
 
 class PinCategories extends React.Component {
   static navigationOptions = {
+    header: null,
     title: 'Pin Categories',
     headerStyle: {
       backgroundColor: 'transparent',
@@ -78,6 +80,7 @@ class PinCategories extends React.Component {
       <ScrollView
         style={styles.scrollView}
         showsHorizontalScrollIndicator={false}>
+        <Header showBack={true} title={'Pin Categories'} />
         <View style={styles.container}>
           <View style={styles.pageContent}>
             <View style={styles.cateCardRow}>

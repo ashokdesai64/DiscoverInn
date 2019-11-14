@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   menuWrapper: {
-    paddingTop: 50,
+    paddingTop: 10,
   },
   profileHeader: {
     flexDirection: 'row',

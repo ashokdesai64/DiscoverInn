@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     paddingRight: 0,
-    marginRight: 0,
+    marginRight: 0
   },
   pageContent: {
     paddingVertical: 5,

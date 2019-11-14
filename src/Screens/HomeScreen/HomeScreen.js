@@ -11,7 +11,7 @@ import {Item, Input, Button} from 'native-base';
 import styles from './HomeScreen.style';
 import Carousel from 'react-native-snap-carousel';
 import Feather from 'react-native-vector-icons/Feather';
-
+import Header from './../../components/header/header';
 //REDUX
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -219,6 +219,7 @@ class HomeScreen extends React.Component {
     const {width} = Dimensions.get('window');
     return (
       <Fragment style={styles.homePage}>
+        <Header showMenu={true} title={'Discover Inn'} {...this.props}/>
         <ScrollView
           style={styles.scrollView}
           showsHorizontalScrollIndicator={false}>

@@ -1,5 +1,5 @@
-import React, {component} from 'react';
-import {TouchableOpacity, Image} from 'react-native';
+import React, { component } from 'react';
+import { TouchableOpacity, Image } from 'react-native';
 import HomeScreen from './Screens/HomeScreen/HomeScreen';
 import EditProfile from './Screens/AuthScreens/EditProfile/EditProfile';
 import AddMymaps from './Screens/AuthScreens/AddMymaps/AddMymaps';
@@ -15,7 +15,7 @@ import UploadMap from './Screens/HomeScreen/UploadMap/UploadMap';
 import PinCategories from './Screens/AuthScreens/PinCategories/PinCategories';
 import Sights from './Screens/AuthScreens/Sights/Sights';
 import SideMenu from './components/SideMenu/SideMenu';
-import {Router, Scene, Stack, Drawer} from 'react-native-router-flux';
+import { Router, Scene, Stack, Drawer, Actions } from 'react-native-router-flux';
 import MenuIcon from '../src/Images/hamburger.png';
 
 const Routes = () => {
@@ -24,33 +24,42 @@ const Routes = () => {
       navigationBarStyle={{
         backgroundColor: 'transparent',
         borderBottomWidth: 0,
-        elevation:0
-      }}>
-      <Stack key="root" hideNavBar>
-        <Drawer
-          key="drawer"
-          contentComponent={SideMenu}
-          drawerWidth={300}
-          drawerImage={MenuIcon}>
-          <Scene key="Home" component={HomeScreen} hideNavBar={false} />
-        </Drawer>
-        <Scene key="EditProfile" component={EditProfile} />
-        <Scene key="EditMymaps" component={EditMymaps} />
-        <Scene key="AddMymaps" component={AddMymaps} />
-        <Scene key="MyReviews" component={MyReviews} />
-        <Scene key="MyTripList" component={MyTripList} />
-        <Scene key="LoginScreen" component={LoginScreen} hideNavBar={true} />
-        <Scene key="SignupScreen" component={SignupScreen} hideNavBar />
-        <Scene key="ForgotPassScreen" component={ForgotPassScreen} hideNavBar />
-        <Scene key="SetPassScreen" component={SetPassScreen} />
-        <Scene key="MyMapShareList" component={MyMapShareList} />
-        <Scene key="PinCategories" component={PinCategories} />
-        <Scene key="Sights" component={Sights} />
-        <Scene
-          contentComponent={SideMenu}
-          key="UploadMap"
-          component={UploadMap}
-        />
+        elevation: 0
+      }}
+    >
+      <Stack key="root1" hideNavBar={true} titleStyle={{ alignSelf: 'center' }}>
+        <Stack key="root" hideNavBar={true}>
+          <Drawer
+            key="drawer"
+            contentComponent={SideMenu}
+            drawerWidth={300}
+            drawerImage={MenuIcon}
+            panHandlers={null}
+            hideNavBar
+          >
+            <Scene key="Home" component={HomeScreen} hideNavBar={true} />
+            <Scene key="EditProfile" component={EditProfile} hideNavBar={true} />
+            <Scene key="EditMymaps" component={EditMymaps} hideNavBar={true} />
+            <Scene key="AddMymaps" component={AddMymaps} hideNavBar={true} />
+            <Scene key="MyReviews" component={MyReviews} hideNavBar={true} />
+            <Scene key="MyTripList" component={MyTripList} hideNavBar={true} />
+            <Scene key="MyMapShareList" component={MyMapShareList} hideNavBar={true} />
+            <Scene key="PinCategories" component={PinCategories} hideNavBar={true} />
+            <Scene key="Sights" component={Sights} hideNavBar={true} />
+            <Scene
+              contentComponent={SideMenu}
+              key="UploadMap"
+              component={UploadMap}
+              hideNavBar={true}
+            />
+          </Drawer>
+        </Stack>
+        <Stack hideNavBar>
+          <Scene key="LoginScreen" component={LoginScreen} hideNavBar={true} />
+          <Scene key="SignupScreen" component={SignupScreen} hideNavBar={true} />
+          <Scene key="ForgotPassScreen" component={ForgotPassScreen} hideNavBar={true} />
+          <Scene key="SetPassScreen" component={SetPassScreen} hideNavBar={true} />
+        </Stack>
       </Stack>
     </Router>
   );

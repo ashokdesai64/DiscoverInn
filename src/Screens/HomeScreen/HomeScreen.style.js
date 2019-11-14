@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     marginRight: 0,
   },
   homeHeadingCard: {
-    paddingTop: 30,
+    paddingTop: 10,
     paddingBottom: 30,
     paddingLeft: 15,
     paddingRight: 15,

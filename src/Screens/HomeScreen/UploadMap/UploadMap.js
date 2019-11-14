@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
 } from 'react-native';
+import Header from './../../../components/header/header';
 import {ListItem, CheckBox, Picker, Textarea} from 'native-base';
 import Icon from 'react-native-vector-icons/Feather';
 import styles from './UploadMap.style';
@@ -17,6 +18,7 @@ class UploadMap extends React.Component {
   }
 
   static navigationOptions = {
+    header:null,
     title: 'UploadMap',
     headerStyle: {
       backgroundColor: 'transparent',
@@ -36,6 +38,7 @@ class UploadMap extends React.Component {
   render() {
     return (
       <Fragment>
+        <Header showBack={true} title={'Discover Inn'} style={{backgroundColor:'#F3F4F6'}}/>
         <ScrollView
           style={styles.scrollView}
           showsHorizontalScrollIndicator={false}>
