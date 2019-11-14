@@ -14,15 +14,16 @@ import MyMapShareList from './Screens/ShareList/MyMapShareList';
 import UploadMap from './Screens/HomeScreen/UploadMap/UploadMap';
 import PinCategories from './Screens/AuthScreens/PinCategories/PinCategories';
 import Sights from './Screens/AuthScreens/Sights/Sights';
-import SideMenu from './components/SideMenu/SideMenu';
-import { Router, Scene, Stack, Drawer, Actions } from 'react-native-router-flux';
+import FilterScreen from './Screens/FilterScreen/FilterScreen';
+import SideMenu from './Components/SideMenu/SideMenu';
+import {Router, Scene, Stack, Drawer} from 'react-native-router-flux';
 import MenuIcon from '../src/Images/hamburger.png';
 
 const Routes = () => {
   return (
     <Router
       navigationBarStyle={{
-        backgroundColor: 'transparent',
+        backgroundColor: '#F3F4F6',
         borderBottomWidth: 0,
         elevation: 0
       }}
@@ -46,6 +47,7 @@ const Routes = () => {
             <Scene key="MyMapShareList" component={MyMapShareList} hideNavBar={true} />
             <Scene key="PinCategories" component={PinCategories} hideNavBar={true} />
             <Scene key="Sights" component={Sights} hideNavBar={true} />
+            <Scene key="FilterScreen" component={FilterScreen} />
             <Scene
               contentComponent={SideMenu}
               key="UploadMap"

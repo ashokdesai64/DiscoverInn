@@ -21,7 +21,7 @@ class UploadMap extends React.Component {
     header:null,
     title: 'UploadMap',
     headerStyle: {
-      backgroundColor: 'transparent',
+      backgroundColor: '#F3F4F6',
       borderBottomWidth: 0,
     },
     headerTitleStyle: {

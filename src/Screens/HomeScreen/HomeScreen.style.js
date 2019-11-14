@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
   scrollView: {
     paddingRight: 0,
     marginRight: 0,
+    backgroundColor: '#F3F4F6',
   },
   homeHeadingCard: {
     paddingTop: 10,
