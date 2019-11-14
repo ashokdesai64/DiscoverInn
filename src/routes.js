@@ -14,7 +14,8 @@ import MyMapShareList from './Screens/ShareList/MyMapShareList';
 import UploadMap from './Screens/HomeScreen/UploadMap/UploadMap';
 import PinCategories from './Screens/AuthScreens/PinCategories/PinCategories';
 import Sights from './Screens/AuthScreens/Sights/Sights';
-import SideMenu from './components/SideMenu/SideMenu';
+import FilterScreen from './Screens/FilterScreen/FilterScreen';
+import SideMenu from './Components/SideMenu/SideMenu';
 import {Router, Scene, Stack, Drawer} from 'react-native-router-flux';
 import MenuIcon from '../src/Images/hamburger.png';
 
@@ -22,9 +23,9 @@ const Routes = () => {
   return (
     <Router
       navigationBarStyle={{
-        backgroundColor: 'transparent',
+        backgroundColor: '#F3F4F6',
         borderBottomWidth: 0,
-        elevation:0
+        elevation: 0,
       }}>
       <Stack key="root" hideNavBar>
         <Drawer
@@ -46,6 +47,7 @@ const Routes = () => {
         <Scene key="MyMapShareList" component={MyMapShareList} />
         <Scene key="PinCategories" component={PinCategories} />
         <Scene key="Sights" component={Sights} />
+        <Scene key="FilterScreen" component={FilterScreen} />
         <Scene
           contentComponent={SideMenu}
           key="UploadMap"

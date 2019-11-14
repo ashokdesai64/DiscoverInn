@@ -19,7 +19,7 @@ class UploadMap extends React.Component {
   static navigationOptions = {
     title: 'UploadMap',
     headerStyle: {
-      backgroundColor: 'transparent',
+      backgroundColor: '#F3F4F6',
       borderBottomWidth: 0,
     },
     headerTitleStyle: {
