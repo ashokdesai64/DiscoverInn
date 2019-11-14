@@ -220,7 +220,7 @@ class HomeScreen extends React.Component {
     const { width } = Dimensions.get("window");
     return (
       <Fragment style={styles.homePage}>
-        <Header showMenu={true} title={'Discover Inn'} {...this.props}/>
+        <Header showMenu={true} title={'Discover Inn'} {...this.props} style={{backgroundColor:'#F3F4F6'}}/>
         <ScrollView
           style={styles.scrollView}
           showsHorizontalScrollIndicator={false}

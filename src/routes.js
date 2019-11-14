@@ -15,7 +15,7 @@ import UploadMap from './Screens/HomeScreen/UploadMap/UploadMap';
 import PinCategories from './Screens/AuthScreens/PinCategories/PinCategories';
 import Sights from './Screens/AuthScreens/Sights/Sights';
 import FilterScreen from './Screens/FilterScreen/FilterScreen';
-import SideMenu from './Components/SideMenu/SideMenu';
+import SideMenu from './components/SideMenu/SideMenu';
 import {Router, Scene, Stack, Drawer} from 'react-native-router-flux';
 import MenuIcon from '../src/Images/hamburger.png';
 
