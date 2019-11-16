@@ -6,24 +6,27 @@ import styles from './EditMymaps.style';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Header from './../../../components/header/header';
 class EditMymaps extends React.Component {
-  static navigationOptions = {
-    header:null,
-    title: 'EditMymaps',
-    headerStyle: {
-      backgroundColor: 'transparent',
-      borderBottomWidth: 0,
-    },
-    headerTitleStyle: {
-      color: '#333333',
-      fontSize: 16,
-      fontFamily: 'Montserrat-Semibold',
-    },
-    headerTintColor: '#333333',
-    headerLeftContainerStyle: {
-      paddingLeft: 10,
-    },
-  };
-
+  // static navigationOptions = {
+  //   header:null,
+  //   title: 'EditMymaps',
+  //   headerStyle: {
+  //     backgroundColor: 'transparent',
+  //     borderBottomWidth: 0,
+  //   },
+  //   headerTitleStyle: {
+  //     color: '#333333',
+  //     fontSize: 16,
+  //     fontFamily: 'Montserrat-Semibold',
+  //   },
+  //   headerTintColor: '#333333',
+  //   headerLeftContainerStyle: {
+  //     paddingLeft: 10,
+  //   },
+  // };
+  constructor(props) {
+    super(props);
+    console.log();
+  }
   state = {
     selected: 'User Picture',
     dataArray: [
@@ -171,7 +174,7 @@ class EditMymaps extends React.Component {
   render() {
     return (
       <Fragment style={styles.editMaps}>
-        <Header showMenu={true} title={'My Maps'}/>
+        <Header showMenu={true} title={'My Maps'} {...this.props} />
         <ScrollView
           style={styles.scrollView}
           showsHorizontalScrollIndicator={false}>

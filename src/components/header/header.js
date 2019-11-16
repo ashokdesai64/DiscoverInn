@@ -4,7 +4,7 @@ import {
   ScrollView,
   Text,
   Image,
-  Button,
+  SafeAreaView,
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
@@ -30,11 +30,34 @@ class Header extends Component {
     this.state = {
       authModal: false,
     };
+    this.popupDialog = null;
+  }
+
+  componentDidMount() {
+    console.log(this.props);
+  }
+
+  goToSignup() {
+    console.log(this.popupDialog);
+    this.setState({authModal: false}, () => {
+      setTimeout(() => {
+        this.props.navigation.navigate('SignupScreen');
+      }, 100);
+    });
+  }
+
+  goToLogin() {
+    this.setState({authModal: false}, () => {
+      setTimeout(() => {
+        this.props.navigation.navigate('LoginScreen');
+      }, 100);
+    });
   }
 
   render() {
+    console.log('in render => ', this.state.authModal);
     return (
-      <View style={styles.headerContainer}>
+      <SafeAreaView style={styles.headerContainer}>
         {this.props.showBack ? (
           <TouchableOpacity
             style={styles.headerLeftIcon}
@@ -44,7 +67,7 @@ class Header extends Component {
         ) : this.props.showMenu ? (
           <TouchableOpacity
             style={[styles.headerLeftIcon, styles.headerLeftIconMenu]}
-            onPress={() => Actions.drawerOpen()}>
+            onPress={() => this.props.navigation.openDrawer()}>
             <Image source={MenuIcon} style={styles.headerLeftIconImage} />
           </TouchableOpacity>
         ) : (
@@ -72,8 +95,11 @@ class Header extends Component {
 
         <Dialog
           rounded={false}
-          hasOverlay={false}
           visible={this.state.authModal}
+          hasOverlay={false}
+          ref={popupDialog => {
+            this.popupDialog = popupDialog;
+          }}
           animationDuration={1}
           onTouchOutside={() => {
             this.setState({authModal: false});
@@ -84,7 +110,6 @@ class Header extends Component {
               animationDuration: 150, // optional
               useNativeDriver: true, // optional
             })
-              
           }
           onHardwareBackPress={() => {
             this.setState({authModal: false});
@@ -101,35 +126,27 @@ class Header extends Component {
           <DialogContent style={styles.loginDialogContent}>
             <View style={styles.loginDialogContentInner}>
               <TouchableOpacity
-                onPress={() =>
-                  this.setState({authModal: false}, () =>
-                    this.props.navigation.navigate('LoginScreen'),
-                  )
-                }
+                onPress={() => this.goToLogin()}
                 style={styles.loginDialogLink}>
                 <SimpleLineIcons
                   name={'login'}
                   color={'#828282'}
-                  style={loginDialogLinkIcon}
+                  style={styles.loginDialogLinkIcon}
                   size={25}
                 />
-                <Text style={loginDialogLinkText}>Sign In</Text>
+                <Text style={styles.loginDialogLinkText}>Sign In</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
-                onPress={() =>
-                  this.setState({authModal: false}, () =>
-                    this.props.navigation.navigate('SignupScreen'),
-                  )
-                }
+                onPress={() => this.goToSignup()}
                 style={styles.loginDialogLink}>
                 <Icon
                   name={'user-plus'}
                   color={'#828282'}
-                  style={loginDialogLinkIcon}
+                  style={styles.loginDialogLinkIcon}
                   size={25}
                 />
-                <Text style={loginDialogLinkText}>Sign Up</Text>
+                <Text style={styles.loginDialogLinkText}>Sign Up</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -138,15 +155,15 @@ class Header extends Component {
                 <AntDesign
                   name={'customerservice'}
                   color={'#828282'}
-                  style={loginDialogLinkIcon}
+                  style={styles.loginDialogLinkIcon}
                   size={25}
                 />
-                <Text style={loginDialogLinkText}>How It Work</Text>
+                <Text style={styles.loginDialogLinkText}>How It Work</Text>
               </TouchableOpacity>
             </View>
           </DialogContent>
         </Dialog>
-      </View>
+      </SafeAreaView>
     );
   }
 }

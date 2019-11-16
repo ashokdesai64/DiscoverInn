@@ -1,19 +1,18 @@
-import React, { Component } from 'react';
-import { View, ScrollView, Text, Image, Button } from 'react-native';
+import React, {Component} from 'react';
+import {View, ScrollView, Text, Image, SafeAreaView} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import styles from '../../Screens/AuthScreens/MyTripList/MyTripList.style';
-import { Actions } from 'react-native-router-flux';
+import {Actions} from 'react-native-router-flux';
 
 //REDUX
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import * as authActions from './../../actions/authActions';
 
 class SideMenu extends Component {
-
   render() {
     return (
-      <View style={styles.menuWrapper}>
+      <SafeAreaView style={styles.menuWrapper}>
         <ScrollView>
           <View style={styles.profileHeader}>
             <View style={styles.profileHeader_img}>
@@ -25,10 +24,10 @@ class SideMenu extends Component {
             <View style={styles.profileHeader_text}>
               <Text style={styles.profileHeader_name}>
                 Welcome, Kylie Jenner!
-                </Text>
+              </Text>
               <Text style={styles.profileHeader_email}>
                 kyliejenner@gmail.com
-                </Text>
+              </Text>
               <Icon.Button
                 style={styles.profileHeader_button}
                 name="edit-2"
@@ -39,7 +38,7 @@ class SideMenu extends Component {
                 onPress={() => this.props.navigation.navigate('EditProfile')}>
                 <Text style={styles.profileHeader_buttonText}>
                   Edit Profile
-                  </Text>
+                </Text>
               </Icon.Button>
             </View>
           </View>
@@ -106,7 +105,7 @@ class SideMenu extends Component {
                 <Text style={styles.menuList_LinkText}>Shared Zone</Text>
               </Icon.Button>
             </View>
-{/* 
+            {/* 
             {this.props.userData && this.props.userData.id ? (
               <View style={styles.menuList_Item}>
                 <Icon.Button
@@ -151,7 +150,6 @@ class SideMenu extends Component {
                 <Text style={styles.menuList_LinkText}>Signup</Text>
               </Icon.Button>
             </View> */}
-            
           </View>
           <View style={styles.staticMenu}>
             <Text style={styles.staticMenu_Link}>About</Text>
@@ -161,7 +159,7 @@ class SideMenu extends Component {
             <Text style={styles.staticMenu_Link}>How It Works</Text>
           </View>
         </ScrollView>
-      </View>
+      </SafeAreaView>
     );
   }
 }

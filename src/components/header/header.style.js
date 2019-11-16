@@ -4,12 +4,13 @@ import {Dimensions} from 'react-native';
 const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   headerContainer: {
-    paddingHorizontal: 20,
-    height: 60,
+    height: 100,
+    width: '90%',
+    marginLeft: '5%',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    textAlign: 'center',
     alignItems: 'center',
-    // ...this.props.style,
   },
   headerLeftIcon: {
     height: 30,

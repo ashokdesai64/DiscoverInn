@@ -80,7 +80,7 @@ class PinCategories extends React.Component {
       <ScrollView
         style={styles.scrollView}
         showsHorizontalScrollIndicator={false}>
-        <Header showBack={true} title={'Pin Categories'} />
+        <Header showBack={true} title={'Pin Categories'} {...this.props}/>
         <View style={styles.container}>
           <View style={styles.pageContent}>
             <View style={styles.cateCardRow}>

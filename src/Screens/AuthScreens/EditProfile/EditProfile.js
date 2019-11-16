@@ -78,7 +78,8 @@ class EditProfile extends React.Component {
           showRightButton={true}
           rightButtonText={'Save'}
           onRightPress={()=> this.saveProfile()}
-          rightTextStyle={{color:'#27AE60'}}
+          rightTextStyle={{ color: '#27AE60' }}
+          {...this.props}
         />
         <View style={styles.container}>
           <View style={styles.pageContent}>
