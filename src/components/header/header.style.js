@@ -4,7 +4,7 @@ import {Dimensions} from 'react-native';
 const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   headerContainer: {
-    height: 100,
+    height: 50,
     width: '90%',
     marginLeft: '5%',
     flexDirection: 'row',
