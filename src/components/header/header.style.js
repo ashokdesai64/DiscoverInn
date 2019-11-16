@@ -5,12 +5,14 @@ const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   headerContainer: {
     height: 50,
-    width: '90%',
-    marginLeft: '5%',
+    // width: '90%',
+    // marginLeft: '5%',
+    paddingHorizontal:15,
     flexDirection: 'row',
     justifyContent: 'space-between',
     textAlign: 'center',
     alignItems: 'center',
+    backgroundColor:'transparent',
   },
   headerLeftIcon: {
     height: 30,

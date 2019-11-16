@@ -246,7 +246,7 @@ class HomeScreen extends React.Component {
               </Item>
               <Button
                 style={styles.searchbarCardButton}
-                onPress={() => this.props.navigation.navigate("UploadMap")}
+                onPress={() => this.props.navigation.navigate("MapList")}
               >
                 <Feather
                   style={styles.searchbarCardButtonIcon}

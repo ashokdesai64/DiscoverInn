@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -14,11 +14,14 @@ const styles = StyleSheet.create({
   searchbarCard: {
     marginHorizontal: 15,
     marginVertical: 0,
-    flexWrap: 'nowrap',
     flexDirection: 'row',
-    borderRadius: 5,
-    backgroundColor: '#fff',
-    borderBottomWidth: 0,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    elevation: 1,
+    shadowColor: 'black',
+    shadowOpacity: 0.26,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 10,
   },
   searchbarInputBox: {
     flex: 1,
@@ -62,12 +65,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 15,
-    marginRight: 15,
+    marginRight: 15
   },
   mapSlideCardImg: {
     width: 300,
     height: 180,
-    borderTopEndRadius: 10,
+    borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
   },
   mapSlideCardImg_overlay: {
@@ -78,7 +81,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     flex: 1,
     height: 180,
-    borderTopEndRadius: 10,
+    borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
   },
@@ -88,7 +91,6 @@ const styles = StyleSheet.create({
   },
   mapSlideCardBody: {
     backgroundColor: '#fff',
-    flex: 1,
     padding: 15,
     paddingBottom: 30,
     borderBottomLeftRadius: 10,
@@ -96,6 +98,11 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     marginRight: 0,
     width: 300,
+    elevation: 5,
+    shadowColor: 'black',
+    shadowOpacity: 0.26,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 10,
   },
   mapSlideBadgeGroup: {
     flexDirection: 'row',
