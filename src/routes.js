@@ -20,6 +20,7 @@ import ForgotPassScreen from './Screens/UnauthScreens/ForgotPassScreen';
 import SetPassScreen from './Screens/UnauthScreens/SetPassScreen';
 import MyMapShareList from './Screens/ShareList/MyMapShareList';
 import MapList from './Screens/MapList/MapList';
+import MapView from './Screens/MapView/MapView';
 import UploadMap from './Screens/HomeScreen/UploadMap/UploadMap';
 import PinCategories from './Screens/AuthScreens/PinCategories/PinCategories';
 import Sights from './Screens/AuthScreens/Sights/Sights';
@@ -124,6 +125,9 @@ const userStack = createStackNavigator(
     },
     MapList: {
       screen: MapList,
+    },
+    MapView: {
+      screen: MapView,
     },
     PinCategories: {
       screen: PinCategories,

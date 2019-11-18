@@ -28,6 +28,7 @@ class MapList extends React.Component {
     };
     constructor(props) {
         super(props);
+        console.log("props => ",props)
         this.state = {
             showTripList: false,
             carouselItems: [
@@ -64,8 +65,10 @@ class MapList extends React.Component {
             ],
         };
     }
-
-    _renderItem({ item, index }) {
+    navigateToMap(){
+        this.props.navigation.navigate('MapView')
+    }
+    _renderItem(item, index) {
         var Star = [];
         for (var i = 0; i < item.star; i++) {
             Star.push(
@@ -85,7 +88,7 @@ class MapList extends React.Component {
                     </Button>
                     <Image style={styles.mapSlideCardImg} source={item.image} />
                     <View style={styles.mapSlideCardImg_overlay} />
-                    <Button style={styles.mapButton}>
+                    <Button style={styles.mapButton} onPress={()=> this.navigateToMap()}>
                         <Feather style={styles.shareButtonText} name="map" />
                     </Button>
                 </View>
@@ -181,23 +184,6 @@ class MapList extends React.Component {
                     showsHorizontalScrollIndicator={false}
                 >
                     <View style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', paddingHorizontal: 20 }}>
-                        {/* <View style={styles.searchbarCard}>
-
-                            <Item style={styles.searchbarInputBox}>
-                                <Feather style={styles.searchbarIcon} name="search" />
-                                <Input
-                                    style={styles.searchbarInput}
-                                    placeholder="Search your maps"
-                                />
-                            </Item>
-                            <Button style={styles.searchbarCardButton}>
-                                <Feather
-                                    style={styles.searchbarCardButtonIcon}
-                                    name="arrow-right"
-                                />
-                            </Button>
-
-                        </View> */}
 
                         <View style={styles.searchSection}>
                             <Feather style={styles.searchbarIcon} name="search" />
@@ -230,7 +216,7 @@ class MapList extends React.Component {
                             firstItem={1}
                             inactiveSlideOpacity={1}
                             inactiveSlideScale={1}
-                            renderItem={this._renderItem}
+                            renderItem={({item,index})=> this._renderItem(item,index)}
                         />
                     </View>
                 </ScrollView>
