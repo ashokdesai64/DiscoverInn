@@ -1,13 +1,16 @@
 import React, { Fragment } from 'react';
-import { View, Dimensions, StyleSheet, Image } from 'react-native';
+import { View, Dimensions, StyleSheet, Image, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Carousel from 'react-native-snap-carousel';
 
 import exampleIcon from './marker.png';
+import exampleIcon1 from './marker1.png';
 
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const DEVICE_WIDTH = Dimensions.get('window').width;
 
 import MapboxGL from '@react-native-mapbox-gl/maps';
+import { ScrollView } from 'react-native-gesture-handler';
 
 MapboxGL.setAccessToken('pk.eyJ1IjoiYWJyaWxsbyIsImEiOiJjanNlbHVjb28wanFwNDNzNzkyZzFnczNpIn0.39svco2wAZvwcrFD6qOlMw')
 
@@ -64,8 +67,35 @@ class MapView extends React.Component {
                     },
                     geometry: {
                         type: "Point",
-                        coordinates: [this.state.currentLong, this.state.currentLat],
+                        coordinates: [this.state.currentLong, this.state.currentLat]
+                    }
+                },
+                {
+                    type: "Feature",
+                    id: `asdf`,
+                    properties: {
+                        id: `asdf`
                     },
+                    geometry: {
+                        type: "Point",
+                        coordinates: [this.state.currentLat, this.state.currentLong]
+                    }
+                }
+            ]
+        }
+        const featureCollection1 = {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    type: "Feature",
+                    id: `asdf`,
+                    properties: {
+                        id: `asdf`
+                    },
+                    geometry: {
+                        type: "Point",
+                        coordinates: [72.9583783, 21.1998507]
+                    }
                 }
             ]
         }
@@ -77,13 +107,13 @@ class MapView extends React.Component {
                         styleURL={MapboxGL.StyleURL.Light}
                         logoEnabled={false}
                         attributionEnabled={false}
-                        compassEnabled={true}
                     >
                         <MapboxGL.Camera
                             centerCoordinate={[this.state.currentLong, this.state.currentLat]}
                             zoomLevel={10}
                             animationMode={'flyTo'}
                         />
+
                         <MapboxGL.ShapeSource
                             id="symbolLocationSource"
                             hitbox={{ width: 20, height: 20 }}
@@ -92,11 +122,22 @@ class MapView extends React.Component {
                             <MapboxGL.SymbolLayer
                                 id="symbolLocationSymbols"
                                 minZoomLevel={1}
-                                style={{ iconImage: exampleIcon, iconAllowOverlap: true,iconSize:0.05 }}
-                            >
-                                <Image source={exampleIcon} style={{ width: 10, height: 10 }} />
-                            </MapboxGL.SymbolLayer>
+                                style={{ iconImage: exampleIcon, iconAllowOverlap: true, iconSize: 0.05 }}
+                            />
                         </MapboxGL.ShapeSource>
+
+                        <MapboxGL.ShapeSource
+                            id="symbolLocationSource1"
+                            hitbox={{ width: 20, height: 20 }}
+                            shape={featureCollection1}
+                        >
+                            <MapboxGL.SymbolLayer
+                                id="symbolLocationSymbols1"
+                                minZoomLevel={1}
+                                style={{ iconImage: exampleIcon1, iconAllowOverlap: true, iconSize: 0.05 }}
+                            />
+                        </MapboxGL.ShapeSource>
+
                     </MapboxGL.MapView>
                 </View>
             </View>
