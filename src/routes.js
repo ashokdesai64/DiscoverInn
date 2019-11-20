@@ -21,6 +21,7 @@ import SetPassScreen from './Screens/UnauthScreens/SetPassScreen';
 import MyMapShareList from './Screens/ShareList/MyMapShareList';
 import MapList from './Screens/MapList/MapList';
 import MapView from './Screens/MapView/MapView';
+import PinView from './Screens/PinView/PinView';
 import UploadMap from './Screens/HomeScreen/UploadMap/UploadMap';
 import PinCategories from './Screens/AuthScreens/PinCategories/PinCategories';
 import Sights from './Screens/AuthScreens/Sights/Sights';
@@ -140,6 +141,9 @@ const userStack = createStackNavigator(
     },
     UploadMap: {
       screen: UploadMap,
+    },
+    PinView: {
+      screen: PinView,
     },
     // <Scene key="EditProfile" component={EditProfile} hideNavBar={true} />
     // <Scene key="EditMymaps" component={EditMymaps} hideNavBar={true} />
