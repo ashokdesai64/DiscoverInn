@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3F4F6',
   },
   homeHeadingCard: {
-    paddingTop: 10,
+    paddingTop: 20,
     paddingBottom: 30,
     paddingLeft: 15,
     paddingRight: 15,
@@ -162,6 +162,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: '#fff',
     borderBottomWidth: 0,
+    shadowColor: '#000000',
+    shadowOpacity: 0.05,
+    shadowOffset: {width: 0, height: 4},
+    shadowRadius: 10,
   },
   searchbarInputBox: {
     flex: 1,

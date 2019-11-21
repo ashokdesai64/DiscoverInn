@@ -4,15 +4,20 @@ import {Dimensions} from 'react-native';
 const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   headerContainer: {
-    height: 50,
-    // width: '90%',
-    // marginLeft: '5%',
-    paddingHorizontal:15,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    width: '100%',
     textAlign: 'center',
     alignItems: 'center',
-    backgroundColor:'transparent',
+    backgroundColor: 'transparent',
+  },
+  headerContainerInner: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
   },
   headerLeftIcon: {
     height: 30,
@@ -20,13 +25,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  headerLeftIcons: {
+    color: '#333333',
+  },
   headerLeftIconImage: {
     height: 30,
     width: 30,
   },
   headerTitle: {
-    color: '#333',
-    fontSize: 20,
+    color: '#4F4F4F',
+    fontSize: 16,
     fontWeight: '600',
     fontFamily: 'Montserrat-Medium',
   },

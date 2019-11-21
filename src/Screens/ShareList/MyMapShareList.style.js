@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -6,7 +6,11 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     paddingRight: 0,
-    marginRight: 0
+    marginRight: 0,
+    backgroundColor: '#F3F4F6',
+  },
+  bgHeader: {
+    backgroundColor: '#F3F4F6',
   },
   pageContent: {
     paddingVertical: 5,
@@ -14,13 +18,14 @@ const styles = StyleSheet.create({
   searchbarCard: {
     marginHorizontal: 15,
     marginVertical: 0,
+    flexWrap: 'nowrap',
     flexDirection: 'row',
-    borderColor: '#ccc',
-    borderWidth: 1,
-    elevation: 1,
-    shadowColor: 'black',
-    shadowOpacity: 0.26,
-    shadowOffset: { width: 0, height: 2 },
+    borderRadius: 5,
+    backgroundColor: '#fff',
+    borderBottomWidth: 0,
+    shadowColor: '#000000',
+    shadowOpacity: 0.05,
+    shadowOffset: {width: 0, height: 4},
     shadowRadius: 10,
   },
   searchbarInputBox: {
@@ -65,7 +70,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 15,
-    marginRight: 15
+    marginRight: 15,
   },
   mapSlideCardImg: {
     width: 300,
@@ -99,9 +104,9 @@ const styles = StyleSheet.create({
     marginRight: 0,
     width: 300,
     elevation: 5,
-    shadowColor: 'black',
-    shadowOpacity: 0.26,
-    shadowOffset: { width: 0, height: 2 },
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowOffset: {width: 0, height: 4},
     shadowRadius: 10,
   },
   mapSlideBadgeGroup: {
@@ -160,6 +165,8 @@ const styles = StyleSheet.create({
   },
   shareMapContant: {
     paddingTop: 20,
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start'
   },
   mapShareDescText: {
     color: '#BDBDBD',

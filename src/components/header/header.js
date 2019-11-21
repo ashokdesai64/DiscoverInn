@@ -1,14 +1,21 @@
-import React, { Component } from 'react';
-import { View, Text, Image, SafeAreaView, TouchableOpacity, Dimensions, } from 'react-native';
+import React, {Component} from 'react';
+import {
+  View,
+  Text,
+  Image,
+  SafeAreaView,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MenuIcon from './../../Images/hamburger.png';
 import colors from './../../config/colors';
-import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog';
+import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
 import styles from './header.style.js';
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 //REDUX
 // import { connect } from 'react-redux';
@@ -24,11 +31,10 @@ class Header extends Component {
     this.popupDialog = null;
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   goToSignup() {
-    this.setState({ authModal: false }, () => {
+    this.setState({authModal: false}, () => {
       setTimeout(() => {
         this.props.navigation.navigate('SignupScreen');
       }, 100);
@@ -36,7 +42,7 @@ class Header extends Component {
   }
 
   goToLogin() {
-    this.setState({ authModal: false }, () => {
+    this.setState({authModal: false}, () => {
       setTimeout(() => {
         this.props.navigation.navigate('LoginScreen');
       }, 100);
@@ -44,52 +50,55 @@ class Header extends Component {
   }
 
   render() {
-    let headerStyles = { ...styles.headerContainer };
+    let headerStyles = {...styles.headerContainer};
     if (this.props.style) {
-      headerStyles = { ...headerStyles, ...this.props.style }
+      headerStyles = {...headerStyles, ...this.props.style};
     }
-
-    let rightTextStyles = { ...styles.headerRightText };
+    let headerStylesInner = {...styles.headerContainerInner};
+    if (this.props.style) {
+      headerStylesInner = {...headerStylesInner, ...this.props.style};
+    }
+    let rightTextStyles = {...styles.headerRightText};
     if (this.props.rightTextStyle) {
-      rightTextStyles = { ...rightTextStyles, ...this.props.rightTextStyle }
+      rightTextStyles = {...rightTextStyles, ...this.props.rightTextStyle};
     }
     return (
       <SafeAreaView style={headerStyles}>
-        {this.props.showBack ? (
-          <TouchableOpacity
-            style={styles.headerLeftIcon}
-            onPress={() => this.props.navigation.goBack()}>
-            <MaterialIcons name={'arrow-back'} size={25} />
-          </TouchableOpacity>
-        ) : this.props.showMenu ? (
-          <TouchableOpacity
-            style={[styles.headerLeftIcon, styles.headerLeftIconMenu]}
-            onPress={() => this.props.navigation.openDrawer()}>
-            <Image source={MenuIcon} style={styles.headerLeftIconImage} />
-          </TouchableOpacity>
-        ) : (
-              <View></View>
-            )}
-
-        <Text style={styles.headerTitle}>{this.props.title}</Text>
-
-        {this.props.showRightButton ? (
-          <TouchableOpacity
-            onPress={() => this.props.onRightPress && this.props.onRightPress()}
-            style={styles.headerRightIcon}>
-            <Text
-              style={rightTextStyles}>
-              {this.props.rightButtonText}
-            </Text>
-          </TouchableOpacity>
-        ) : (
+        <View style={headerStylesInner}>
+          {this.props.showBack ? (
             <TouchableOpacity
-              onPress={() => this.setState({ authModal: true })}
+              style={styles.headerLeftIcon}
+              onPress={() => this.props.navigation.goBack()}>
+              <MaterialIcons name={'arrow-back'} size={25} style={styles.headerLeftIcons} />
+            </TouchableOpacity>
+          ) : this.props.showMenu ? (
+            <TouchableOpacity
+              style={[styles.headerLeftIcon, styles.headerLeftIconMenu]}
+              onPress={() => this.props.navigation.openDrawer()}>
+              <Image source={MenuIcon} style={styles.headerLeftIconImage} />
+            </TouchableOpacity>
+          ) : (
+            <View></View>
+          )}
+
+          <Text style={styles.headerTitle}>{this.props.title}</Text>
+
+          {this.props.showRightButton ? (
+            <TouchableOpacity
+              onPress={() =>
+                this.props.onRightPress && this.props.onRightPress()
+              }
+              style={styles.headerRightIcon}>
+              <Text style={rightTextStyles}>{this.props.rightButtonText}</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => this.setState({authModal: true})}
               style={styles.headerUserIcon}>
               <Icon name={'user'} size={20} color={colors.themeColor} />
             </TouchableOpacity>
           )}
-
+        </View>
         <Dialog
           rounded={false}
           visible={this.state.authModal}
@@ -99,7 +108,7 @@ class Header extends Component {
           }}
           animationDuration={1}
           onTouchOutside={() => {
-            this.setState({ authModal: false });
+            this.setState({authModal: false});
           }}
           dialogAnimation={
             new FadeAnimation({
@@ -109,7 +118,7 @@ class Header extends Component {
             })
           }
           onHardwareBackPress={() => {
-            this.setState({ authModal: false });
+            this.setState({authModal: false});
             return true;
           }}
           dialogStyle={{
@@ -124,7 +133,7 @@ class Header extends Component {
             borderColor: '#ccc',
             shadowColor: 'black',
             shadowOpacity: 0.26,
-            shadowOffset: { width: 0, height: 2 },
+            shadowOffset: {width: 0, height: 2},
             shadowRadius: 10,
           }}>
           <DialogContent style={styles.loginDialogContent}>

@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
+    backgroundColor: '#F3F4F6',
   },
   searchbarCard: {
     flexWrap: 'nowrap',
