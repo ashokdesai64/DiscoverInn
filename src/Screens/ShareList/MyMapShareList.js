@@ -1,6 +1,6 @@
-import React, { Fragment } from 'react';
-import { View, Text, ScrollView, Image, Dimensions } from 'react-native';
-import { Item, Input, Button } from 'native-base';
+import React, {Fragment} from 'react';
+import {View, Text, ScrollView, Image, Dimensions} from 'react-native';
+import {Item, Input, Button} from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import styles from './MyMapShareList.style';
 import Carousel from 'react-native-snap-carousel';
@@ -63,7 +63,7 @@ class MyMapShareList extends React.Component {
     };
   }
 
-  _renderItem({ item, index }) {
+  _renderItem({item, index}) {
     var Star = [];
     for (var i = 0; i < item.star; i++) {
       Star.push(
@@ -76,7 +76,7 @@ class MyMapShareList extends React.Component {
       );
     }
     return (
-      <View style={[styles.mapSlideCard,{height:height-220}]}>
+      <View style={[styles.mapSlideCard, {height: height - 220}]}>
         <View style={styles.mapSlideCardHeader}>
           <Image style={styles.mapSlideCardImg} source={item.image} />
           <View style={styles.mapSlideCardImg_overlay} />
@@ -111,10 +111,15 @@ class MyMapShareList extends React.Component {
   }
 
   render() {
-    const { width } = Dimensions.get('window');
+    const {width} = Dimensions.get('window');
     return (
       <Fragment>
-        <Header showMenu={true} title={'My Maps'} {...this.props} />
+        <Header
+          showMenu={true}
+          title={'My Maps'}
+          {...this.props}
+          style={styles.bgHeader}
+        />
         <ScrollView
           style={styles.scrollView}
           showsHorizontalScrollIndicator={false}>

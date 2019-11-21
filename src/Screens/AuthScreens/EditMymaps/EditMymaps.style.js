@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { Row } from 'native-base';
+import {StyleSheet} from 'react-native';
+import {Row} from 'native-base';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -9,6 +9,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     flex: 1,
   },
+  scrollView: {
+    flex: 1,
+    backgroundColor: '#F3F4F6',
+  },
+  bgTransfrent: {
+    backgroundColor: '#f3f4f6',
+  },
   searchbarCard: {
     marginVertical: 0,
     flexWrap: 'nowrap',
@@ -17,11 +24,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderBottomWidth: 0,
     flex: 1,
-    shadowColor: 'black',
-    shadowOpacity: 0.26,
-    shadowOffset: { width: 0, height: 2 },
+    shadowColor: '#000000',
+    shadowOpacity: 0.05,
+    shadowOffset: {width: 0, height: 4},
     shadowRadius: 10,
-    elevation: 5
+    elevation: 5,
   },
   searchbarInputBox: {
     flex: 1,
@@ -68,8 +75,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 10,
     paddingVertical: 15,
+    alignItems: 'center',
     backgroundColor: '#ffffff',
-    borderBottomColor:'#E0E0E0',
+    borderBottomColor: '#E0E0E0',
     borderRadius: 5,
     zIndex: 1,
   },
@@ -106,12 +114,12 @@ const styles = StyleSheet.create({
   mymapsCard: {
     borderTopColor: '#E0E0E0',
     borderTopWidth: 1,
-    marginHorizontal: 15,
+    marginHorizontal: 0,
   },
   mymapsItem: {
     paddingVertical: 10,
     paddingLeft: 0,
-    marginHorizontal: 0,
+    marginHorizontal: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

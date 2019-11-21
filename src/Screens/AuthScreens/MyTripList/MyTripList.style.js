@@ -5,6 +5,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  scrollView: {
+    flex: 1,
+    backgroundColor: '#F3F4F6',
+  },
   menuWrapper: {
     paddingTop: 10,
     backgroundColor:'white'

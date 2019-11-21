@@ -1,6 +1,7 @@
 import React, {Fragment} from 'react';
-import {View, Text} from 'react-native';
+import {View, ScrollView} from 'react-native';
 import styles from './MyTripList.style';
+import Header from './../../../components/header/header';
 
 class MyTripList extends React.Component {
   static navigationOptions = {
@@ -8,10 +9,18 @@ class MyTripList extends React.Component {
   };
   render() {
     return (
-      <Fragment>
-        <View style={styles.container}>
-          <Text>This is Edit MyTripList</Text>
-        </View>
+      <Fragment style={styles.homePage}>
+        <Header
+          showBack={true}
+          title={'MyTrip List'}
+          {...this.props}
+          style={{backgroundColor: '#F3F4F6'}}
+        />
+        <ScrollView
+          style={styles.scrollView}
+          showsHorizontalScrollIndicator={false}>
+          <View style={styles.container}></View>
+        </ScrollView>
       </Fragment>
     );
   }

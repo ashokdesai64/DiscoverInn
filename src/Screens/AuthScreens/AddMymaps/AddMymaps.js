@@ -11,8 +11,8 @@ import {
 } from 'react-native';
 import { ListItem, CheckBox, Picker, Textarea } from 'native-base';
 import Icon from 'react-native-vector-icons/Feather';
-import styles from './AddMymaps.style';
 import Header from './../../../components/header/header';
+import styles from './AddMymaps.style';
 class AddMymaps extends React.Component {
   constructor(props) {
     super(props);
@@ -80,7 +80,7 @@ class AddMymaps extends React.Component {
         <ImageBackground
           source={require('../../../Images/map-bg.png')}
           style={{ width: '100%', height: '100%' }}>
-          <Header showBack={true} title={'Add Map'} {...this.props} rightEmpty={false}/>
+          <Header showBack={true} title={'Add Map'} {...this.props} rightEmpty={false} style={styles.bgTransfrent}/>
           <View style={styles.container}>
             <View style={styles.pageContent}>
               <ScrollView

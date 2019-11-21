@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
+    backgroundColor: '#F3F4F6',
   },
   cateCardRow: {
     flex: 1,
@@ -27,7 +28,7 @@ const styles = StyleSheet.create({
     width: '50%',
   },
   cateSlideInner: {
-    width: 164,
+    width: '100%',
     height: 180,
     justifyContent: 'center',
     alignItems: 'center',

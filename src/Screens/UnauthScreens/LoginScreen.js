@@ -5,6 +5,7 @@ import {
   ImageBackground,
   Image,
   TextInput,
+  SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
 import styles from './Unauthscreens.style';
@@ -57,7 +58,7 @@ class LoginScreen extends React.Component {
 
   render() {
     return (
-      <>
+      <Fragment>
         <ImageBackground
           source={require('../../Images/login-bg.jpg')}
           style={{
@@ -69,67 +70,73 @@ class LoginScreen extends React.Component {
             source={require('./../../Images/login-overlay.png')}
             resizeMode="stretch"
           />
-          <View style={styles.container}>
-            <View style={styles.unauthContent}>
-              <Text style={styles.logoText}>Discover - Inn</Text>
-              <View style={styles.unauthForm}>
-                <Text style={styles.formTitle}>Sign in</Text>
-                <View style={styles.formGroup}>
-                  <Text style={styles.formLabel}>Email</Text>
-                  <TextInput
-                    style={styles.formControl}
-                    onChangeText={email => {
-                      this.setState({email: email.trim()});
-                    }}
-                    autoCapitalize={'none'}
-                  />
-                </View>
-                <View style={styles.formGroup}>
-                  <Text style={styles.formLabel}>
-                    Password
-                    <Text
-                      style={styles.restoreLink}
-                      onPress={() =>
-                        this.props.navigation.navigate('ForgotPassScreen')
-                      }>
-                      {' '}
-                      Forgot?
+          <SafeAreaView
+            style={{
+              width: '100%',
+              height: '100%',
+            }}>
+            <View style={styles.container}>
+              <View style={styles.unauthContent}>
+                <Text style={styles.logoText}>Discover - Inn</Text>
+                <View style={styles.unauthForm}>
+                  <Text style={styles.formTitle}>Sign in</Text>
+                  <View style={styles.formGroup}>
+                    <Text style={styles.formLabel}>Email</Text>
+                    <TextInput
+                      style={styles.formControl}
+                      onChangeText={email => {
+                        this.setState({email: email.trim()});
+                      }}
+                      autoCapitalize={'none'}
+                    />
+                  </View>
+                  <View style={styles.formGroup}>
+                    <Text style={styles.formLabel}>
+                      Password
+                      <Text
+                        style={styles.restoreLink}
+                        onPress={() =>
+                          this.props.navigation.navigate('ForgotPassScreen')
+                        }>
+                        {' '}
+                        Forgot?
+                      </Text>
                     </Text>
-                  </Text>
-                  <TextInput
-                    secureTextEntry={true}
-                    style={styles.formControl}
-                    onChangeText={password => {
-                      this.setState({password: password.trim()});
-                    }}
-                    autoCapitalize={'none'}
-                  />
+                    <TextInput
+                      secureTextEntry={true}
+                      style={styles.formControl}
+                      onChangeText={password => {
+                        this.setState({password: password.trim()});
+                      }}
+                      autoCapitalize={'none'}
+                    />
+                  </View>
+                  <TouchableOpacity
+                    style={[styles.button, styles.buttonPrimary]}
+                    onPress={() => {
+                      this.login();
+                    }}>
+                    <Text style={styles.buttonText}>Sign In</Text>
+                  </TouchableOpacity>
                 </View>
-                <TouchableOpacity
-                  style={[styles.button, styles.buttonPrimary]}
-                  onPress={() => {
-                    this.login();
-                  }}>
-                  <Text style={styles.buttonText}>Sign In</Text>
-                </TouchableOpacity>
+              </View>
+              <View style={styles.unauthBottomText}>
+                <Text style={styles.toggleText}>
+                  New User?
+                  <Text
+                    style={styles.toggleTextLink}
+                    onPress={() =>
+                      this.props.navigation.navigate('SignupScreen')
+                    }>
+                    {' '}
+                    SignUp
+                  </Text>
+                </Text>
               </View>
             </View>
-            <View style={styles.unauthBottomText}>
-              <Text style={styles.toggleText}>
-                New User?
-                <Text
-                  style={styles.toggleTextLink}
-                  onPress={() =>
-                    this.props.navigation.navigate('SignupScreen')
-                  }>
-                  {' '}
-                  SignUp
-                </Text>
-              </Text>
-            </View>
-          </View>
+          </SafeAreaView>
         </ImageBackground>
-      </>
+      </Fragment>
     );
   }
 }
