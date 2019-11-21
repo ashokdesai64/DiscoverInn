@@ -7,7 +7,7 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import {Item, Input, Button} from 'native-base';
+import { Item, Input, Button } from 'native-base';
 import styles from './HomeScreen.style';
 import Carousel from 'react-native-snap-carousel';
 import Feather from 'react-native-vector-icons/Feather';
@@ -220,7 +220,7 @@ class HomeScreen extends React.Component {
     const { width } = Dimensions.get("window");
     return (
       <Fragment style={styles.homePage}>
-        <Header showMenu={true} title={'Discover Inn'} {...this.props} style={{backgroundColor:'#F3F4F6'}}/>
+        <Header showMenu={true} title={'Discover Inn'} {...this.props} style={{ backgroundColor: '#F3F4F6' }} />
         <ScrollView
           style={styles.scrollView}
           showsHorizontalScrollIndicator={false}

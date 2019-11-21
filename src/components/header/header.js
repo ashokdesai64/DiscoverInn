@@ -73,22 +73,25 @@ class Header extends Component {
 
         <Text style={styles.headerTitle}>{this.props.title}</Text>
 
-        {this.props.showRightButton ? (
-          <TouchableOpacity
-            onPress={() => this.props.onRightPress && this.props.onRightPress()}
-            style={styles.headerRightIcon}>
-            <Text
-              style={rightTextStyles}>
-              {this.props.rightButtonText}
-            </Text>
-          </TouchableOpacity>
-        ) : (
+        {
+          this.props.rightEmpty ?
+          this.props.showRightButton ? (
             <TouchableOpacity
-              onPress={() => this.setState({ authModal: true })}
-              style={styles.headerUserIcon}>
-              <Icon name={'user'} size={20} color={colors.themeColor} />
+              onPress={() => this.props.onRightPress && this.props.onRightPress()}
+              style={styles.headerRightIcon}>
+              <Text
+                style={rightTextStyles}>
+                {this.props.rightButtonText}
+              </Text>
             </TouchableOpacity>
-          )}
+          ) : (
+              <TouchableOpacity
+                onPress={() => this.setState({ authModal: true })}
+                style={styles.headerUserIcon}>
+                <Icon name={'user'} size={20} color={colors.themeColor} />
+              </TouchableOpacity>
+            ) : <View><Text> </Text></View>
+        }
 
         <Dialog
           rounded={false}

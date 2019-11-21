@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
   },
   menuWrapper: {
     paddingTop: 10,
+    backgroundColor:'white'
   },
   profileHeader: {
     flexDirection: 'row',

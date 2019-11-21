@@ -7,7 +7,8 @@ const styles = StyleSheet.create({
     scrollView: {
         paddingRight: 0,
         marginRight: 0,
-        paddingVertical: 5
+        paddingVertical: 5,
+        backgroundColor: '#F3F4F6'
     },
     searchSection: {
         flex: 1,
@@ -15,48 +16,67 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#fff',
-        borderWidth:1,
-        borderColor:'#ddd',
-        marginRight:10
+        borderWidth: 1,
+        borderColor: '#ddd',
+        marginRight: 10
     },
-    filterButton:{
-        borderColor:'#ddd',
-        paddingHorizontal:10,
-        padding:5,
-        borderWidth:1,
-        justifyContent:'center',
-        alignItems:'center',
-        height:40
+    orDivider: {
+        textAlign: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginVertical: 15,
+    },
+    orDividerText: {
+        fontSize: 14,
+        fontFamily: 'Montserrat-Regular',
+        color: '#333333',
+        paddingHorizontal: 10,
+        backgroundColor: 'white',
+        zIndex: 7,
+    },
+    orDividerBorder: {
+        position: 'absolute',
+        width: '100%',
+        height: 1,
+        zIndex: 6,
+        borderStyle: 'dashed',
+        backgroundColor: '#C4C4C4'
+    },
+    filterButton: {
+        borderColor: '#ddd',
+        paddingHorizontal: 10,
+        padding: 5,
+        borderWidth: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 40
     },
     searchIcon: {
         padding: 10,
     },
     input: {
         flex: 1,
-        padding:5,
+        padding: 5,
         backgroundColor: '#fff',
         color: '#424242'
     },
     searchbarCard: {
-        marginHorizontal: 15,
+        marginHorizontal: 5,
+        marginLeft: 15,
         marginVertical: 0,
         flexDirection: 'row',
-        borderColor: '#ccc',
-        borderWidth: 1,
-        elevation: 1,
-        shadowColor: 'black',
-        shadowOpacity: 0.26,
-        shadowOffset: { width: 0, height: 2 },
-        shadowRadius: 10,
+        borderRadius: 5,
+        backgroundColor: '#fff'
     },
     searchbarInputBox: {
         flex: 1,
         borderBottomWidth: 0,
     },
     searchbarIcon: {
-        fontSize: 15,
+        fontSize: 16,
         borderBottomWidth: 0,
-        paddingHorizontal:15
+        paddingLeft: 10,
+        paddingRight: 5,
     },
     searchbarInput: {
         backgroundColor: 'transparent',
@@ -68,7 +88,6 @@ const styles = StyleSheet.create({
     searchbarFilter: {
         fontSize: 16,
         borderBottomWidth: 0,
-        paddingRight: 5,
         color: '#828282',
     },
     searchbarCardButton: {
@@ -169,22 +188,22 @@ const styles = StyleSheet.create({
         color: '#333333',
         fontFamily: 'Montserrat-Medium',
         marginBottom: 5,
-        fontWeight:'600'
+        fontWeight: '600'
     },
-    mapPins:{
-        justifyContent:'flex-start',
-        alignItems:'center',
-        flexDirection:'row'
+    mapPins: {
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        flexDirection: 'row'
     },
-    singlePin:{
-        color:'white',
-        fontSize:14,
-        height:30,
-        width:30,
-        justifyContent:'center',
-        alignItems:'center',
-        borderRadius:5,
-        marginRight:8
+    singlePin: {
+        color: 'white',
+        fontSize: 14,
+        height: 30,
+        width: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+        marginRight: 8
     },
     rateList: {
         flexDirection: 'row',
@@ -200,7 +219,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
     shareMapContant: {
-        paddingTop: 10,
+        paddingTop: 0,
     },
     mapShareDescText: {
         color: '#BDBDBD',
@@ -212,6 +231,7 @@ const styles = StyleSheet.create({
         left: 15,
         top: 0,
         backgroundColor: 'transparent',
+        zIndex:99999
     },
     mapButton: {
         position: 'absolute',

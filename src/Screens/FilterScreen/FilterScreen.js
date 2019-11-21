@@ -1,19 +1,20 @@
-import React, {Fragment} from 'react';
-import {View, Text, ScrollView, TouchableOpacity, Image} from 'react-native';
-import {ListItem, Icon} from 'native-base';
+import React, { Fragment } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { ListItem, Icon } from 'native-base';
 import styles from './FilterScreen.style.js';
+import Header from './../../components/header/header'
 class AddMymaps extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       categories: [
-        {cate_icon: require('./../../Images/sights.png')},
-        {cate_icon: require('./../../Images/activities.png')},
-        {cate_icon: require('./../../Images/restaurants.png')},
-        {cate_icon: require('./../../Images/nightlife.png')},
-        {cate_icon: require('./../../Images/transportations.png')},
-        {cate_icon: require('./../../Images/shopping.png')},
-        {cate_icon: require('./../../Images/other.png')},
+        { cate_icon: require('./../../Images/sights.png') },
+        { cate_icon: require('./../../Images/activities.png') },
+        { cate_icon: require('./../../Images/restaurants.png') },
+        { cate_icon: require('./../../Images/nightlife.png') },
+        { cate_icon: require('./../../Images/transportations.png') },
+        { cate_icon: require('./../../Images/shopping.png') },
+        { cate_icon: require('./../../Images/other.png') },
       ],
       travel_type: [
         'Couple',
@@ -32,14 +33,21 @@ class AddMymaps extends React.Component {
         '45 To 60',
         'Above 60',
       ],
+      created_within: [
+        '3 Months',
+        '6 Months',
+        '1 Year',
+        '2 Years',
+        '5 Years'
+      ],
     };
   }
 
   change_month = month => {
-    this.setState({month: month});
+    this.setState({ month: month });
   };
   change_date = date => {
-    this.setState({date: date});
+    this.setState({ date: date });
   };
 
   static navigationOptions = {
@@ -61,6 +69,7 @@ class AddMymaps extends React.Component {
     return (
       <Fragment>
         <View style={styles.container}>
+          <Header showBack={true} title={'Filter'} {...this.props} rightEmpty={false} />
           <View style={styles.pageContent}>
             <ScrollView
               style={styles.scrollView}
@@ -78,7 +87,7 @@ class AddMymaps extends React.Component {
                             : styles.UnCheckboxBlue,
                         ]}
                         onPress={() =>
-                          this.setState({categories_select: cate_icon})
+                          this.setState({ categories_select: cate_icon })
                         }>
                         <Image
                           source={cate_icon}
@@ -103,7 +112,7 @@ class AddMymaps extends React.Component {
                             : styles.UnCheckboxBlue,
                         ]}
                         onPress={() =>
-                          this.setState({travel_type_select: title})
+                          this.setState({ travel_type_select: title })
                         }>
                         <Text
                           style={[
@@ -132,7 +141,7 @@ class AddMymaps extends React.Component {
                             ? styles.CheckboxGreen
                             : styles.UnCheckboxGreen,
                         ]}
-                        onPress={() => this.setState({budget_select: title})}>
+                        onPress={() => this.setState({ budget_select: title })}>
                         <Text
                           style={[
                             styles.checkboxCustomText,
@@ -156,14 +165,41 @@ class AddMymaps extends React.Component {
                         style={[
                           styles.checkboxCustom,
                           this.state.budget_select == title
-                            ? styles.CheckboxYellow
-                            : styles.UnCheckboxYellow,
+                            ? styles.CheckboxOrange
+                            : styles.UnCheckboxOrange,
                         ]}
-                        onPress={() => this.setState({budget_select: title})}>
+                        onPress={() => this.setState({ budget_select: title })}>
                         <Text
                           style={[
                             styles.checkboxCustomText,
                             this.state.budget_select == title
+                              ? styles.CheckboxOrangeText
+                              : styles.UnCheckboxOrangeText,
+                          ]}>
+                          {title}
+                        </Text>
+                      </TouchableOpacity>
+                    </ListItem>
+                  ))}
+                </View>
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Created Within</Text>
+                <View style={styles.checkboxCard}>
+                  {this.state.created_within.map(title => (
+                    <ListItem style={styles.checkboxItem}>
+                      <TouchableOpacity
+                        style={[
+                          styles.checkboxCustom,
+                          this.state.created_select == title
+                            ? styles.CheckboxYellow
+                            : styles.UnCheckboxYellow,
+                        ]}
+                        onPress={() => this.setState({ created_select: title })}>
+                        <Text
+                          style={[
+                            styles.checkboxCustomText,
+                            this.state.created_select == title
                               ? styles.CheckboxYellowText
                               : styles.UnCheckboxYellowText,
                           ]}>
@@ -184,7 +220,7 @@ class AddMymaps extends React.Component {
                 styles.filterButtonCancel,
                 styles.buttonOutline,
               ]}
-              onPress={() => {}}>
+              onPress={() => { }}>
               <Text style={[styles.buttonText, styles.buttonTextWhite]}>
                 Undo
               </Text>
@@ -196,7 +232,7 @@ class AddMymaps extends React.Component {
                 styles.filterButtonSubmit,
                 styles.buttonPrimary,
               ]}
-              onPress={() => {}}>
+              onPress={() => { }}>
               <Text style={styles.buttonText}>Apply</Text>
             </TouchableOpacity>
           </View>

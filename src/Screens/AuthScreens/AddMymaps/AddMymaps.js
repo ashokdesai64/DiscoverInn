@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   Text,
@@ -9,9 +9,10 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from 'react-native';
-import {ListItem, CheckBox, Picker, Textarea} from 'native-base';
+import { ListItem, CheckBox, Picker, Textarea } from 'native-base';
 import Icon from 'react-native-vector-icons/Feather';
 import styles from './AddMymaps.style';
+import Header from './../../../components/header/header';
 class AddMymaps extends React.Component {
   constructor(props) {
     super(props);
@@ -51,10 +52,10 @@ class AddMymaps extends React.Component {
   // };
 
   change_month = month => {
-    this.setState({month: month});
+    this.setState({ month: month });
   };
   change_date = date => {
-    this.setState({date: date});
+    this.setState({ date: date });
   };
 
   static navigationOptions = {
@@ -78,7 +79,8 @@ class AddMymaps extends React.Component {
       <Fragment>
         <ImageBackground
           source={require('../../../Images/map-bg.png')}
-          style={{width: '100%', height: '100%'}}>
+          style={{ width: '100%', height: '100%' }}>
+          <Header showBack={true} title={'Add Map'} {...this.props} rightEmpty={false}/>
           <View style={styles.container}>
             <View style={styles.pageContent}>
               <ScrollView
@@ -109,7 +111,7 @@ class AddMymaps extends React.Component {
                               : styles.UnCheckboxBlue,
                           ]}
                           onPress={() =>
-                            this.setState({travel_type_select: title})
+                            this.setState({ travel_type_select: title })
                           }>
                           <Text
                             style={[
@@ -154,7 +156,7 @@ class AddMymaps extends React.Component {
                               ? styles.CheckboxGreen
                               : styles.UnCheckboxGreen,
                           ]}
-                          onPress={() => this.setState({budget_select: title})}>
+                          onPress={() => this.setState({ budget_select: title })}>
                           <Text
                             style={[
                               styles.checkboxCustomText,
@@ -199,7 +201,7 @@ class AddMymaps extends React.Component {
                               ? styles.CheckboxYellow
                               : styles.UnCheckboxYellow,
                           ]}
-                          onPress={() => this.setState({budget_select: title})}>
+                          onPress={() => this.setState({ budget_select: title })}>
                           <Text
                             style={[
                               styles.checkboxCustomText,
@@ -219,7 +221,7 @@ class AddMymaps extends React.Component {
                   <View style={styles.formGroup}>
                     <Picker
                       style={styles.formDropdown}
-                      placeholderStyle={{color: '#2874F0'}}
+                      placeholderStyle={{ color: '#2874F0' }}
                       selectedValue={this.state.month}
                       textStyle={styles.dropdownText}
                       onValueChange={this.change_month}
@@ -262,7 +264,7 @@ class AddMymaps extends React.Component {
             <View style={styles.footerButton}>
               <TouchableOpacity
                 style={[styles.button, styles.buttonPrimary]}
-                onPress={() => {}}>
+                onPress={() => { }}>
                 <Text style={styles.buttonText}>Next</Text>
               </TouchableOpacity>
             </View>

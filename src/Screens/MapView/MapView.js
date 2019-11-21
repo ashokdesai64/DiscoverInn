@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { View, Dimensions, StyleSheet, Image, Text,ScrollView,TouchableOpacity } from 'react-native';
+import { View, Dimensions, StyleSheet, Image, Text, ScrollView, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Carousel from 'react-native-snap-carousel';
@@ -132,6 +132,11 @@ class MapView extends React.Component {
         return (
             <View style={styles.page}>
                 <View style={styles.container}>
+                    <View style={{ top: 20, zIndex: 9999999, backgroundCoor: 'red', position: 'absolute', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: DEVICE_WIDTH, padding: 15 }}>
+                        <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+                            <Icon name={'arrow-back'} size={25} color={'black'} />
+                        </TouchableOpacity>
+                    </View>
                     <MapboxGL.MapView
                         style={styles.map}
                         styleURL={MapboxGL.StyleURL.Light}
@@ -175,15 +180,15 @@ class MapView extends React.Component {
                         {
                             [1, 2, 3, 4, 5].map((i) => {
                                 return (
-                                    <TouchableOpacity style={styles1.mapSlidCard} onPress={()=> this.props.navigation.navigate('PinView')}>
+                                    <TouchableOpacity activeOpacity={0.8} style={styles1.mapSlidCard} onPress={() => this.props.navigation.navigate('PinView')}>
                                         <Image
                                             style={styles1.mapSlideCardImg}
                                             source={require("./../../Images/login-bg.jpg")}
                                         />
                                         <View style={{ backgroundColor: 'white', width: 200, padding: 10, justifyContent: 'center', alignItems: 'flex-start', borderTopRightRadius: 10, borderBottomRightRadius: 10 }}>
-                                            <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',width:200-20}}>
+                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: 200 - 20 }}>
                                                 <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: 14, fontWeight: '500' }}>Planet - Bangkok</Text>
-                                                <SimpleLineIcons name={'heart'} size={15} color={'#EB5757'}/>
+                                                <SimpleLineIcons name={'heart'} size={15} color={'#EB5757'} />
                                             </View>
                                             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: 5 }}>
                                                 <Icon name={'camera'} />

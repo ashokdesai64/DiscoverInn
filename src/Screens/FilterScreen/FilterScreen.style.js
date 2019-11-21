@@ -91,20 +91,35 @@ const styles = StyleSheet.create({
   UnCheckboxGreenText: {
     color: '#27AE60',
   },
-  CheckboxYellow: {
+  CheckboxOrange: {
     borderColor: '#F2994A',
     backgroundColor: 'rgba(242, 153, 74, 1)',
     color: '#F2994A',
   },
-  UnCheckboxYellow: {
+  UnCheckboxOrange: {
     backgroundColor: 'rgba(242, 153, 74, 0.2)',
     borderColor: '#F2994A',
+  },
+  CheckboxOrangeText: {
+    color: '#fff',
+  },
+  UnCheckboxOrangeText: {
+    color: '#F2994A',
+  },
+  UnCheckboxYellow: {
+    borderColor: '#F2C94C',
+    backgroundColor: 'rgba(242, 201, 76, 0.2)',
+    color: '#F2C94C',
+  },
+  CheckboxYellow: {
+    backgroundColor: '#F2C94C',
+    borderColor: 'rgba(242, 201, 76, 0.2)',
   },
   CheckboxYellowText: {
     color: '#fff',
   },
   UnCheckboxYellowText: {
-    color: '#F2994A',
+    color: '#F2C94C',
   },
   footerButton: {
     flexDirection: 'row',
