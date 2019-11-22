@@ -1,5 +1,4 @@
 import {StyleSheet} from 'react-native';
-import {Row} from 'native-base';
 const styles = StyleSheet.create({
   container: {
     flex: 1,

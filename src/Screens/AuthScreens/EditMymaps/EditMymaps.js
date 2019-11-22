@@ -174,7 +174,12 @@ class EditMymaps extends React.Component {
   render() {
     return (
       <Fragment style={styles.editMaps}>
-        <Header showBack={true} title={'My Maps'} {...this.props} style={styles.bgTransfrent} />
+        <Header
+          showBack={true}
+          title={'My Maps'}
+          {...this.props}
+          style={styles.bgTransfrent}
+        />
         <ScrollView
           style={styles.scrollView}
           showsHorizontalScrollIndicator={false}>
