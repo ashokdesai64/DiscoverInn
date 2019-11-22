@@ -77,17 +77,15 @@ class PinCategories extends React.Component {
 
   render() {
     return (
-      <ScrollView
-        style={styles.scrollView}
-        showsHorizontalScrollIndicator={false}>
-        <Header showBack={true} title={'Pin Categories'} {...this.props}/>
-        <View style={styles.container}>
+      <View style={styles.scrollView} >
+        <Header showBack={true} title={'Pin Categories'} {...this.props} rightEmpty={true} showRightButton={false} />
+        <ScrollView style={styles.container} showsHorizontalScrollIndicator={false}>
           <View style={styles.pageContent}>
             <View style={styles.cateCardRow}>
               {this.state.pincategories.map(item => (
                 <TouchableOpacity
                   style={styles.cateCard}
-                  onPress={() => this.props.navigation.navigate('Sights')}>
+                  onPress={() => this.props.navigation.navigate('SinglePinView',{headerTitle:item.title})}>
                   <View style={styles.cateSlideInner}>
                     <View style={styles.badge}>
                       <Text style={[styles.badgeText]}>{item.text}</Text>
@@ -105,8 +103,8 @@ class PinCategories extends React.Component {
               ))}
             </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     );
   }
 }

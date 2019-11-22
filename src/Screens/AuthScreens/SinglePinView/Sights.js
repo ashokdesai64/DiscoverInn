@@ -10,7 +10,7 @@ import {
 import {Item, Input, Button, Content, Accordion, Picker} from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import styles from './Sights.style';
-import Header from './../../../components/header/header';
+import Header from '../../../components/header/header';
 
 class Sights extends React.Component {
   static navigationOptions = {

@@ -100,7 +100,9 @@ class Header extends Component {
                     style={styles.headerUserIcon}>
                     <Icon name={'user'} size={20} color={colors.themeColor} />
                   </TouchableOpacity>
-                ) : <View><Text> </Text></View>
+                ) 
+            : 
+            <View><Text> </Text></View>
           }
 
           <Dialog

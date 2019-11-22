@@ -80,7 +80,7 @@ class AddMymaps extends React.Component {
         <ImageBackground
           source={require('../../../Images/map-bg.png')}
           style={{ width: '100%', height: '100%' }}>
-          <Header showBack={true} title={'Add Map'} {...this.props} rightEmpty={false} style={styles.bgTransfrent}/>
+          <Header showBack={true} title={'Add Map'} {...this.props} rightEmpty={true} showRightButton={false} style={styles.bgTransfrent}/>
           <View style={styles.container}>
             <View style={styles.pageContent}>
               <ScrollView
@@ -133,22 +133,6 @@ class AddMymaps extends React.Component {
                     {this.state.budget.map(title => (
                       <ListItem
                         style={[styles.checkboxItem, styles.checkboxItemGreen]}>
-                        {/* <CheckBox
-                          style={[
-                            styles.customCheckbox,
-                            styles.customCheckboxGreen,
-                          ]}
-                          title={title}
-                          checked={this.state.budget_select == title}
-                          onPress={() => this.setState({budget_select: title})}
-                        />
-                        <Text
-                          style={[
-                            styles.customCheckboxText,
-                            styles.customCheckboxTextGreen,
-                          ]}>
-                          {title}
-                        </Text> */}
                         <TouchableOpacity
                           style={[
                             styles.checkboxCustom,
@@ -176,24 +160,6 @@ class AddMymaps extends React.Component {
                   <View style={styles.checkboxCard}>
                     {this.state.age_at_travel.map(title => (
                       <ListItem style={styles.checkboxItem}>
-                        {/* <CheckBox
-                          style={[
-                            styles.customCheckbox,
-                            styles.customCheckboxYellow,
-                          ]}
-                          title={title}
-                          checked={this.state.age_at_travel_check == title}
-                          onPress={() =>
-                            this.setState({age_at_travel_check: title})
-                          }
-                        />
-                        <Text
-                          style={[
-                            styles.customCheckboxText,
-                            styles.customCheckboxTextYellow,
-                          ]}>
-                          {title}
-                        </Text> */}
                         <TouchableOpacity
                           style={[
                             styles.checkboxCustom,
@@ -218,7 +184,7 @@ class AddMymaps extends React.Component {
                 </View>
                 <Text style={styles.formLabel}>Date of travel</Text>
                 <View style={styles.dropdownGroup__vertical}>
-                  <View style={styles.formGroup}>
+                  <View style={[styles.formGroup,styles.picker]}>
                     <Picker
                       style={styles.formDropdown}
                       placeholderStyle={{ color: '#2874F0' }}
@@ -226,33 +192,34 @@ class AddMymaps extends React.Component {
                       textStyle={styles.dropdownText}
                       onValueChange={this.change_month}
                       mode="dropdown"
+                      iosHeader="Select Month"
                       iosIcon={
                         <Icon
                           name="chevron-down"
                           style={styles.formDropdownIcon}
                         />
                       }>
-                      <Picker.Item label="Month" value="select month" />
+                      <Picker.Item label="Month" value="" />
                       <Picker.Item label="01" value="01" />
                       <Picker.Item label="02" value="02" />
                       <Picker.Item label="03" value="03" />
                     </Picker>
                   </View>
-                  <View style={styles.formGroup}>
+                  <View style={[styles.formGroup,styles.picker]}>
                     <Picker
                       style={styles.formDropdown}
                       selectedValue={this.state.date}
                       onValueChange={this.change_date}
                       textStyle={styles.dropdownText}
                       mode="dropdown"
-                      iosHeader="Select your SIM"
+                      iosHeader="Select Year"
                       iosIcon={
                         <Icon
                           name="chevron-down"
                           style={styles.formDropdownIcon}
                         />
                       }>
-                      <Picker.Item label="Year" value="select date" />
+                      <Picker.Item label="Year" value="" />
                       <Picker.Item label="2017" value="2017" />
                       <Picker.Item label="2018" value="2018" />
                       <Picker.Item label="2019" value="2019" />
@@ -264,7 +231,7 @@ class AddMymaps extends React.Component {
             <View style={styles.footerButton}>
               <TouchableOpacity
                 style={[styles.button, styles.buttonPrimary]}
-                onPress={() => { }}>
+                onPress={() => {this.props.navigation.navigate('AddMapDetail') }}>
                 <Text style={styles.buttonText}>Next</Text>
               </TouchableOpacity>
             </View>

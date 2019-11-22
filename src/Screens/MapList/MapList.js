@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { View, Text, ScrollView, Image, Dimensions, TouchableOpacity, TextInput } from 'react-native';
 import { Item, Input, Button, Icon } from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './MapList.style';
 import Carousel from 'react-native-snap-carousel';
 import Header from './../../components/header/header';
@@ -82,7 +83,7 @@ class MapList extends React.Component {
             );
         }
         return (
-            <View style={[styles.mapSlideCard, { height: height - 190 }]}>
+            <TouchableOpacity style={[styles.mapSlideCard, { height: height - 190 }]} activeOpacity={0.8} onPress={() => this.setState({ mapDetailsModal: true })}>
                 <View style={styles.mapSlideCardHeader}>
                     <Button style={styles.shareButton} onPress={() => this.setState({ shareModal: true })}>
                         <Feather style={styles.shareButtonText} name="share-2" />
@@ -107,10 +108,10 @@ class MapList extends React.Component {
                         </View>
                     </View>
                     <Text style={styles.mapSlideCardTitle}>{item.title}</Text>
-                    <View style={styles.rateList}>
+                    <TouchableOpacity style={styles.rateList} onPress={() => this.setState({ showReviewModal: true })}>
                         {Star}
                         <Text style={styles.rateListCount}>({item.review} Reviews)</Text>
-                    </View>
+                    </TouchableOpacity>
                     <View style={styles.mapPins}>
                         <View style={[styles.singlePin, { backgroundColor: '#2F80ED' }]}>
                             <Feather size={14} name="camera" color={'white'} />
@@ -174,7 +175,7 @@ class MapList extends React.Component {
                     </View>
                 </View>
 
-            </View>
+            </TouchableOpacity>
         );
     }
 
@@ -438,7 +439,7 @@ class MapList extends React.Component {
                                     borderColor: '#BDBDBD',
                                     borderRadius: 5,
                                     padding: 10,
-                                    paddingVertical:7,
+                                    paddingVertical: 7,
                                     justifyContent: 'flex-start'
                                 }}
                                 placeholder={'Type your review'}
@@ -454,7 +455,7 @@ class MapList extends React.Component {
                                     borderColor: '#BDBDBD',
                                     borderRadius: 5,
                                     padding: 10,
-                                    paddingVertical:7,
+                                    paddingVertical: 7,
                                     justifyContent: 'flex-start'
                                 }}
                                 placeholder={'Type your review'}
@@ -469,6 +470,137 @@ class MapList extends React.Component {
                             <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: 12, color: 'white' }}>Submit</Text>
                         </TouchableOpacity>
 
+                    </DialogContent>
+                </Dialog>
+
+                <Dialog
+                    rounded={false}
+                    visible={this.state.mapDetailsModal}
+                    hasOverlay={true}
+                    animationDuration={1}
+                    onTouchOutside={() => {
+                        this.setState({ mapDetailsModal: false });
+                    }}
+                    dialogAnimation={
+                        new FadeAnimation({
+                            initialValue: 0, // optional
+                            animationDuration: 150, // optional
+                            useNativeDriver: true, // optional
+                        })
+                    }
+                    onHardwareBackPress={() => {
+                        this.setState({ mapDetailsModal: false });
+                        return true;
+                    }}
+                    dialogStyle={{
+                        width: width,
+                        height: 470,
+                        position: 'absolute',
+                        bottom: 0,
+                        elevation: 5,
+                        borderWidth: 1,
+                        borderColor: '#ccc',
+                        borderTopRightRadius: 20,
+                        borderTopLeftRadius: 20,
+                        shadowColor: 'black',
+                        shadowOpacity: 0.26,
+                        shadowOffset: { width: 0, height: 2 },
+                        shadowRadius: 10,
+                    }}>
+                    <DialogContent style={{ padding: 20, paddingBottom: 5 }}>
+
+                        <ScrollView style={{ borderRadius: 20, backgroundColor: 'white' }} showsVerticalScrollIndicator={false}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <Text style={{ fontSize: 16, fontWeight: '600', fontFamily: 'Montserrat-Regular' }}>Map Details</Text>
+                                <TouchableOpacity onPress={() => this.setState({ mapDetailsModal: false })}>
+                                    <Icon name={'close'} color={'black'} />
+                                </TouchableOpacity>
+                            </View>
+
+                            <View style={{ marginTop: 20 }}>
+                                <Image resizeMode={'stretch'} style={{ height: 180, width: null }} source={require('./../../Images/place.jpg')} />
+                            </View>
+
+                            <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: 18, fontWeight: '500', marginTop: 15 }}>Planet - Bangkok</Text>
+                            <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', marginBottom: 15 }}>
+                                <Text style={{ color: 'black', fontFamily: 'Montserrat-Regular', fontSize: 12 }}>Traveller: </Text>
+                                <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: 12, color: '#828282' }}> Admin Discover</Text>
+                            </View>
+                            <Text style={{ fontSize: 12, fontFamily: 'Montserrat-Regular', color: '#828282' }}>This imposing early-20th-century Italianate stone mansion, set discreetly back from the street, belonged to Don José Lázaro Galdiano (1862–1947), a successful businessman and passionate patron of the arts. His astonishing private collection, which he bequeathed to the city upon his death, includes 13,000 works of art and objets d’art, a quarter of which are on show at any time. This imposing early-20th-century Italianate stone mansion, set discreetly back from the street, belonged to Don José Lázaro Galdiano (1862–1947), a successful businessman and passionate patron of the arts. His astonishing private collection, essful businessman and passionate patron of the arts. His astonishing private collection, which he bequeathed to the city upon his death, includes 13,000 works of art and objets d’art, a quarter of which are on show at any time. This imposing early-20th-century Italianate stone mansion, set discreetly back from the street, belonged to Don José Lázaro Galdiano (1862–1947), a successful businessman and passionate patron of the arts. His astonishing private collection,which he bequeathed to the city upon his death, includes 13,000 works of art and objets d’art, a quarter of which are on show at any time.</Text>
+                        </ScrollView>
+
+                    </DialogContent>
+                </Dialog>
+
+                <Dialog
+                    rounded={false}
+                    visible={this.state.showReviewModal}
+                    hasOverlay={true}
+                    animationDuration={1}
+                    onTouchOutside={() => {
+                        this.setState({ showReviewModal: false });
+                    }}
+                    dialogAnimation={
+                        new FadeAnimation({
+                            initialValue: 0, // optional
+                            animationDuration: 150, // optional
+                            useNativeDriver: true, // optional
+                        })
+                    }
+                    onHardwareBackPress={() => {
+                        this.setState({ showReviewModal: false });
+                        return true;
+                    }}
+                    dialogStyle={{
+                        width: width,
+                        height: 320,
+                        position: 'absolute',
+                        bottom: 0,
+                        elevation: 5,
+                        borderWidth: 1,
+                        borderColor: '#ccc',
+                        borderTopRightRadius: 20,
+                        borderTopLeftRadius: 20,
+                        shadowColor: 'black',
+                        shadowOpacity: 0.26,
+                        shadowOffset: { width: 0, height: 2 },
+                        shadowRadius: 10,
+                    }}>
+                    <DialogContent style={{ padding: 20, paddingBottom: 5 }}>
+
+                        <View style={{ borderRadius: 20, backgroundColor: 'white' }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <Text style={{ fontSize: 16, fontWeight: '600', fontFamily: 'Montserrat-Regular' }}>Map Review</Text>
+                                <TouchableOpacity onPress={() => this.setState({ showReviewModal: false })}>
+                                    <Icon name={'close'} color={'black'} />
+                                </TouchableOpacity>
+                            </View>
+
+                            <View style={{ marginTop: 20, elevation: 3, shadowColor: 'black', shadowOpacity: 0.26, shadowOffset: { width: 0, height: 2 }, shadowRadius: 10,  padding: 13,borderRadius:10,backgroundColor:'white' }}>
+
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                                        <Image style={{ height: 36, width: 36, borderRadius: 36, marginRight: 10 }} source={require('./../../Images/place.jpg')} />
+                                        <View>
+                                            <Text style={{ color: 'black', fontFamily: 'Montserrat-Regular', fontSize: 12 }}>Meadow Rain Walker</Text>
+                                            <View style={{ flexDirection: 'row' }}>
+                                                <MaterialIcons style={styles.starIcon} name="star" size={15} color="#FFAF2C" />
+                                                <MaterialIcons style={styles.starIcon} name="star" size={15} color="#FFAF2C" />
+                                                <MaterialIcons style={styles.starIcon} name="star" size={15} color="#FFAF2C" />
+                                                <MaterialIcons style={styles.starIcon} name="star" size={15} color="#FFAF2C" />
+                                                <MaterialIcons style={styles.starIcon} name="star" size={15} color="#FFAF2C" />
+                                            </View>
+                                        </View>
+                                    </View>
+
+                                    <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: 12, color: '#BDBDBD' }}>4 Weeks</Text>
+                                </View>
+                                <View style={{ backgroundColor: 'rgba(242, 242, 242, 0.5)', padding: 10,marginTop:15,borderRadius:15 }}>
+                                    <Text style={{fontFamily: 'Montserrat-Regular', fontSize: 12, color: '#BDBDBD'}}> The sun soaked in the sea and sands of Goa beckon a thirsty traveler(pun intended) from around the world, including yours truly! I have been to Goa at least four times but this was my first visit after eight long years. Yes friends, the waitwas excruciating for the sun, sand and the beer lover </Text>
+                                </View>
+                            </View>
+                        </View>
+                        <Text style={{color:'red',alignSelf:'flex-end',marginTop:10,fontFamily: 'Montserrat-Regular', fontSize: 12}}>Report Abuse</Text>
                     </DialogContent>
                 </Dialog>
 

@@ -126,6 +126,12 @@ const styles = StyleSheet.create({
   CheckboxYellowText: {
     color: '#fff',
   },
+  picker:{
+    borderWidth: 1,
+    borderColor: '#BDBDBD',
+    marginRight:5,
+    borderRadius:5
+  },
   UnCheckboxYellowText: {
     color: '#F2994A',
   },
@@ -135,12 +141,10 @@ const styles = StyleSheet.create({
   formDropdown: {
     height: 40,
     fontSize: 12,
-    borderWidth: 1,
-    borderColor: '#BDBDBD',
+    width:120,
     borderRadius: 5,
     fontFamily: 'Montserrat-Medium',
     padding: 5,
-    marginRight: 10,
   },
   formDropdownIcon: {
     color: '#828282',
