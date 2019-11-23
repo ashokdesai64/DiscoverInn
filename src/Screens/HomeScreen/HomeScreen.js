@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, {Fragment} from 'react';
 import {
   View,
   Text,
@@ -7,93 +7,94 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import { Item, Input, Button } from 'native-base';
+import {Item, Input, Button} from 'native-base';
 import styles from './HomeScreen.style';
 import Carousel from 'react-native-snap-carousel';
 import Feather from 'react-native-vector-icons/Feather';
 import Header from './../../components/header/header';
 //REDUX
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
-import * as authActions from "./../../actions/authActions";
+import * as authActions from './../../actions/authActions';
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
-    title: "Discover Inn"
+    title: 'Discover Inn',
   };
   constructor(props) {
     super(props);
     this.state = {
-      userData: { userName: "test" },
+      showSorting:false,
+      userData: {userName: 'test'},
       carouselItems: [
         {
-          title: "Lonely Planet - Bangkok"
+          title: 'Lonely Planet - Bangkok',
         },
         {
-          title: "Lonely Planet - Franch"
+          title: 'Lonely Planet - Franch',
         },
         {
-          title: "Lonely Planet - Maxico"
+          title: 'Lonely Planet - Maxico',
         },
         {
-          title: "Lonely Planet - India"
-        }
+          title: 'Lonely Planet - India',
+        },
       ],
       carouselItemsTop: [
         {
-          title: "Lonely Planet - Bangkok"
+          title: 'Lonely Planet - Bangkok',
         },
         {
-          title: "Lonely Planet - Franch"
+          title: 'Lonely Planet - Franch',
         },
         {
-          title: "Lonely Planet - Maxico"
+          title: 'Lonely Planet - Maxico',
         },
         {
-          title: "Lonely Planet - India"
-        }
+          title: 'Lonely Planet - India',
+        },
       ],
       carouselCateItems: [
         {
-          title: "Sights",
-          icon: require("./../../Images/sights.png")
+          title: 'Sights',
+          icon: require('./../../Images/sights.png'),
         },
         {
-          title: "Activities",
-          icon: require("./../../Images/activities.png")
+          title: 'Activities',
+          icon: require('./../../Images/activities.png'),
         },
         {
-          title: "Restaurants",
-          icon: require("./../../Images/restaurants.png")
+          title: 'Restaurants',
+          icon: require('./../../Images/restaurants.png'),
         },
         {
-          title: "Nightlife",
-          icon: require("./../../Images/nightlife.png")
+          title: 'Nightlife',
+          icon: require('./../../Images/nightlife.png'),
         },
         {
-          title: "Transportations",
-          icon: require("./../../Images/transportations.png")
+          title: 'Transportations',
+          icon: require('./../../Images/transportations.png'),
         },
         {
-          title: "Shopping",
-          icon: require("./../../Images/shopping.png")
+          title: 'Shopping',
+          icon: require('./../../Images/shopping.png'),
         },
         {
-          title: "Other",
-          icon: require("./../../Images/other.png")
-        }
-      ]
+          title: 'Other',
+          icon: require('./../../Images/other.png'),
+        },
+      ],
     };
   }
 
-  _renderItem({ item, index }) {
+  _renderItem({item, index}) {
     return (
       <View style={styles.mapSlidCard}>
         <View style={styles.mapSlidCardInner}>
           <Image
             style={styles.mapSlideCardImg}
-            source={require("./../../Images/login-bg.jpg")}
+            source={require('./../../Images/login-bg.jpg')}
           />
           <View style={styles.mapSlideCardImg_overlay} />
           <View style={styles.mapSlideCardContent}>
@@ -142,13 +143,13 @@ class HomeScreen extends React.Component {
     );
   }
 
-  _renderItemTop({ item, index }) {
+  _renderItemTop({item, index}) {
     return (
       <View style={styles.mapSlidCard}>
         <View style={styles.mapSlidCardInner}>
           <Image
             style={styles.mapSlideCardImg}
-            source={require("./../../Images/login-bg.jpg")}
+            source={require('./../../Images/login-bg.jpg')}
           />
           <View style={styles.mapSlideCardImg_overlay} />
           <View style={styles.mapSlideCardContent}>
@@ -197,11 +198,10 @@ class HomeScreen extends React.Component {
     );
   }
 
-  _renderItemCate = ({ item, index }) => {
+  _renderItemCate = ({item, index}) => {
     return (
       <TouchableOpacity
-        onPress={() => this.props.navigation.navigate("PinCategories")}
-      >
+        onPress={() => this.props.navigation.navigate('PinCategories')}>
         <View style={styles.cateSlideCard}>
           <View style={styles.cateSlideCardContent}>
             <Image
@@ -217,14 +217,18 @@ class HomeScreen extends React.Component {
   };
 
   render() {
-    const { width } = Dimensions.get("window");
+    const {width} = Dimensions.get('window');
     return (
       <Fragment style={styles.homePage}>
-        <Header showMenu={true} title={'Discover Inn'} {...this.props} style={{ backgroundColor: '#F3F4F6' }} />
+        <Header
+          showMenu={true}
+          title={'Discover Inn'}
+          {...this.props}
+          style={{backgroundColor: '#F3F4F6'}}
+        />
         <ScrollView
           style={styles.scrollView}
-          showsHorizontalScrollIndicator={false}
-        >
+          showsHorizontalScrollIndicator={false}>
           <View style={styles.container}>
             <View style={styles.homeHeadingCard}>
               <Text style={styles.homeHeadingText}>
@@ -239,21 +243,78 @@ class HomeScreen extends React.Component {
                   placeholder="Type in your next destination!"
                 />
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate("FilterScreen")}
-                >
+                  onPress={() =>
+                    this.setState({showSorting: !this.state.showSorting})
+                  }>
                   <Feather style={styles.searchbarFilter} name="sliders" />
                 </TouchableOpacity>
               </Item>
               <Button
                 style={styles.searchbarCardButton}
-                onPress={() => this.props.navigation.navigate("MapList")}
-              >
+                onPress={() => this.props.navigation.navigate('MapList')}>
                 <Feather
                   style={styles.searchbarCardButtonIcon}
                   name="arrow-right"
                 />
               </Button>
             </View>
+
+            {this.state.showSorting && (
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                }}>
+                <TouchableOpacity
+                  style={{
+                    paddingVertical: 10,
+                    paddingHorizontal: 30,
+                    marginTop: 15,
+                    backgroundColor: '#2F80ED',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    alignSelf: 'center',
+                    marginRight: 10,
+                    borderRadius: 5,
+                    borderWidth: 1,
+                    borderColor: '#2F80ED',
+                  }}>
+                  <Text
+                    style={{
+                      fontFamily: 'Montserrat-Regular',
+                      fontSize: 12,
+                      color: 'white',
+                    }}>
+                    Discover
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    paddingVertical: 10,
+                    paddingHorizontal: 30,
+                    marginTop: 15,
+                    backgroundColor: 'rgba(47, 128, 237, 0.1)',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    alignSelf: 'center',
+                    borderRadius: 5,
+                    borderWidth: 1,
+                    borderColor: '#2F80ED',
+                  }}
+                  onPress={() => this.setState({saveToListModal: false})}>
+                  <Text
+                    style={{
+                      fontFamily: 'Montserrat-Regular',
+                      fontSize: 12,
+                      color: '#2F80ED',
+                    }}>
+                    Inn
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
             <View style={styles.cateCard}>
               <Text style={styles.sectionTitle}>Categories</Text>
             </View>
@@ -309,12 +370,12 @@ class HomeScreen extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    userData: state.user.userData
+    userData: state.user.userData,
   };
 }
 function mapDispatchToProps(dispatch) {
   return {
-    authAction: bindActionCreators(authActions, dispatch)
+    authAction: bindActionCreators(authActions, dispatch),
   };
 }
 
