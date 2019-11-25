@@ -25,7 +25,7 @@ class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showSorting:false,
+      showSorting: false,
       userData: {userName: 'test'},
       carouselItems: [
         {
@@ -260,55 +260,24 @@ class HomeScreen extends React.Component {
             </View>
 
             {this.state.showSorting && (
-              <View
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  flexDirection: 'row',
-                }}>
-                <TouchableOpacity
-                  style={{
-                    paddingVertical: 10,
-                    paddingHorizontal: 30,
-                    marginTop: 15,
-                    backgroundColor: '#2F80ED',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    alignSelf: 'center',
-                    marginRight: 10,
-                    borderRadius: 5,
-                    borderWidth: 1,
-                    borderColor: '#2F80ED',
-                  }}>
-                  <Text
-                    style={{
-                      fontFamily: 'Montserrat-Regular',
-                      fontSize: 12,
-                      color: 'white',
-                    }}>
-                    Discover
-                  </Text>
+              <View style={styles.categoryDropdown}>
+                <TouchableOpacity style={[styles.button, styles.buttonPrimary]}>
+                  <Text style={styles.buttonText}>Discover</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={{
-                    paddingVertical: 10,
-                    paddingHorizontal: 30,
-                    marginTop: 15,
-                    backgroundColor: 'rgba(47, 128, 237, 0.1)',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    alignSelf: 'center',
-                    borderRadius: 5,
-                    borderWidth: 1,
-                    borderColor: '#2F80ED',
-                  }}
+                  style={[
+                    styles.button,
+                    styles.buttonOutlinePrimary,
+                    styles.buttonDisabled,
+                  ]}
                   onPress={() => this.setState({saveToListModal: false})}>
                   <Text
-                    style={{
-                      fontFamily: 'Montserrat-Regular',
-                      fontSize: 12,
-                      color: '#2F80ED',
-                    }}>
+                    style={
+                      ([styles.buttonText],
+                      {
+                        color: '#2F80ED',
+                      })
+                    }>
                     Inn
                   </Text>
                 </TouchableOpacity>

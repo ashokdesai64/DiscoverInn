@@ -578,62 +578,42 @@ class MapList extends React.Component {
             </View>
 
             <View style={styles.reviewCard}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
+              <View style={styles.reviewCardHeader}>
+                <View style={styles.reviewCardHeaderLeft}>
                   <Image
-                    style={{
-                      height: 36,
-                      width: 36,
-                      borderRadius: 36,
-                      marginRight: 10,
-                    }}
+                    style={styles.reviewCardAvatar}
                     source={require('./../../Images/place.jpg')}
                   />
-                  <View >
-                    <Text
-                      style={{
-                        color: 'black',
-                        fontFamily: 'Montserrat-Regular',
-                        fontSize: 12,
-                      }}>
+                  <View style={styles.reviewCardHeading}>
+                    <Text style={styles.reviewCardTitle}>
                       Meadow Rain Walker
                     </Text>
-                    <View style={{flexDirection: 'row'}}>
-                      <MaterialIcons
+                    <View style={styles.reviewCardRateList}>
+                      <Feather
                         style={styles.starIcon}
                         name="star"
                         size={15}
                         color="#FFAF2C"
                       />
-                      <MaterialIcons
+                      <Feather
                         style={styles.starIcon}
                         name="star"
                         size={15}
                         color="#FFAF2C"
                       />
-                      <MaterialIcons
+                      <Feather
                         style={styles.starIcon}
                         name="star"
                         size={15}
                         color="#FFAF2C"
                       />
-                      <MaterialIcons
+                      <Feather
                         style={styles.starIcon}
                         name="star"
                         size={15}
                         color="#FFAF2C"
                       />
-                      <MaterialIcons
+                      <Feather
                         style={styles.starIcon}
                         name="star"
                         size={15}
@@ -643,28 +623,14 @@ class MapList extends React.Component {
                   </View>
                 </View>
 
-                <Text
-                  style={{
-                    fontFamily: 'Montserrat-Regular',
-                    fontSize: 12,
-                    color: '#BDBDBD',
-                  }}>
-                  4 Weeks
-                </Text>
+                <Text style={styles.reviewTime}>4 Weeks</Text>
               </View>
-              <View
-                style={{
-                  backgroundColor: 'rgba(242, 242, 242, 0.5)',
-                  padding: 10,
-                  marginTop: 15,
-                  borderRadius: 15,
-                }}>
-                <Text
-                  style={{
-                    fontFamily: 'Montserrat-Regular',
-                    fontSize: 12,
-                    color: '#BDBDBD',
-                  }}>
+              <View style={styles.reviewCardBody}>
+                <Image
+                  style={styles.reviewExclamationmark}
+                  source={require('./../../Images/exclamation.png')}
+                />
+                <Text style={styles.reviewCardText}>
                   {' '}
                   The sun soaked in the sea and sands of Goa beckon a thirsty
                   traveler(pun intended) from around the world, including yours

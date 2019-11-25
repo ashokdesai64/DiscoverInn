@@ -473,10 +473,61 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: '#fff',
     shadowColor: '#000000',
-    shadowOpacity: 0.09,
+    shadowOpacity: 0.05,
     shadowOffset: {width: 0, height: 0},
     shadowRadius: 10,
     padding: 10,
+  },
+  reviewCardHeader: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  reviewCardHeaderLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  reviewCardHeading: {
+    marginLeft: 10,
+  },
+  reviewCardAvatar: {
+    width: 44,
+    height: 44,
+    borderWidth: 4,
+    borderColor: '#F3F4F6',
+    borderRadius: 44,
+  },
+  reviewCardTitle: {
+    fontSize: 12,
+    fontFamily: 'Montserrat-Medium',
+    color: '#333333',
+    marginBottom: 5,
+  },
+  reviewCardRateList: {
+    flexDirection: 'row',
+  },
+  reviewTime: {
+    color: '#BDBDBD',
+    fontFamily: 'Montserrat-Medium',
+    fontSize: 10,
+  },
+  reviewCardBody: {
+    backgroundColor: 'rgba(242, 242, 242, 0.5)',
+    borderRadius: 5,
+    padding: 10,
+  },
+  reviewCardText: {
+    fontFamily: 'Montserrat-Medium',
+    color: '#828282',
+    fontSize: 10,
+    zIndex: 7,
+  },
+  reviewExclamationmark: {
+    position: 'absolute',
+    zIndex: 5,
+    width: 56,
+    top: -20,
   },
 });
 

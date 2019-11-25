@@ -205,6 +205,40 @@ const styles = StyleSheet.create({
     height: 18,
     color: 'rgba(47, 128, 237, 1)',
   },
+  categoryDropdown: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 5,
+  },
+  button: {
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    height: 30,
+    alignSelf: 'center',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'transparent',
+    marginHorizontal: 5,
+  },
+  buttonPrimary: {
+    backgroundColor: '#2F80ED',
+    borderColor: '#2F80ED',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 12,
+    fontFamily: 'Montserrat-Medium',
+  },
+  buttonOutlinePrimary: {
+    backgroundColor: 'rgba(47, 128, 237, 0.2)',
+    borderColor: '#2F80ED',
+  },
+  buttonDisabled: {
+    opacity: 0.2,
+  },
 });
 
 export default styles;
