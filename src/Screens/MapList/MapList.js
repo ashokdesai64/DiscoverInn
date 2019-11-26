@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import {Item, Input, Button, Icon, Textarea} from 'native-base';
+import {Item, Input, Button, Icon, Textarea, List, ListItem} from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './MapList.style';
@@ -285,23 +285,41 @@ class MapList extends React.Component {
             this.setState({showTripList: false});
             return true;
           }}
-          dialogStyle={{
-            width: width - 40,
-            height: 250,
-            position: 'absolute',
-            bottom: (height - 250) / 2,
-            elevation: 5,
-            borderWidth: 1,
-            borderColor: '#ccc',
-            shadowColor: 'black',
-            shadowOpacity: 0.26,
-            shadowOffset: {width: 0, height: 2},
-            shadowRadius: 10,
-          }}>
-          <DialogContent style={{flexDirection: 'row', flex: 1}}>
-            <View
-              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <Text>+ Create Trip</Text>
+          dialogStyle={styles.customPopup}>
+          <DialogContent style={styles.customPopupContent}>
+            <View style={styles.customPopupHeader}>
+              <Text style={styles.customPopupHeaderTitle}>
+                Select Trip List
+              </Text>
+              <TouchableOpacity
+                style={styles.buttonClose}
+                onPress={() => this.setState({showTripList: false})}>
+                <Feather name={'x'} style={styles.buttonCloseIcon} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.createListButton}>
+              <TouchableOpacity style={[styles.button, styles.buttonPrimary]}>
+                <Text style={styles.buttonText}>Create a New List</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.orDivider}>
+              <Text style={styles.orDividerBorder}></Text>
+              <Text style={styles.orDividerText}>OR</Text>
+            </View>
+
+            <View style={styles.selectList}>
+              <View style={styles.selectListItem}>
+                <Text style={styles.selectListText}>Manali</Text>
+              </View>
+              <View style={styles.selectListItem}>
+                <Text style={styles.selectListText}>Leh Ladakh</Text>
+              </View>
+              <View style={styles.selectListItem}>
+                <Text style={styles.selectListText}>Karala</Text>
+              </View>
+              <View style={styles.selectListItem}>
+                <Text style={styles.selectListText}>Sikkim</Text>
+              </View>
             </View>
           </DialogContent>
         </Dialog>

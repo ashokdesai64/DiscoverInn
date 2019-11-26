@@ -9,9 +9,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Feather from 'react-native-vector-icons/Feather';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Carousel from 'react-native-snap-carousel';
 import styles1 from './MapView.style';
+import Header from './../../components/header/header';
 import exampleIcon from './marker.png';
 import exampleIcon1 from './marker1.png';
 
@@ -144,18 +146,15 @@ class MapView extends React.Component {
         <View style={styles.container}>
           <View
             style={{
-              top: 20,
-              zIndex: 9999999,
-              backgroundCoor: 'red',
               position: 'absolute',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              width: DEVICE_WIDTH,
+              backgroundColor: 'transparent',
+              width: '100%',
+              top: 25,
               padding: 15,
+              zIndex: 999,
             }}>
             <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-              <Icon name={'arrow-back'} size={25} color={'black'} />
+              <Feather name={'arrow-left'} size={25} color={'#333333'} />
             </TouchableOpacity>
           </View>
           <MapboxGL.MapView
@@ -206,68 +205,27 @@ class MapView extends React.Component {
             {[1, 2, 3, 4, 5].map(i => {
               return (
                 <TouchableOpacity
-                  activeOpacity={0.8}
-                  style={styles1.mapSlidCard}
+                  activeOpacity={1}
+                  style={styles1.pinSlideCard}
                   onPress={() => this.props.navigation.navigate('PinView')}>
                   <Image
-                    style={styles1.mapSlideCardImg}
+                    style={styles1.pinSlideCardImg}
                     source={require('./../../Images/login-bg.jpg')}
                   />
-                  <View
-                    style={{
-                      backgroundColor: 'white',
-                      width: 200,
-                      padding: 10,
-                      justifyContent: 'center',
-                      alignItems: 'flex-start',
-                      borderTopRightRadius: 10,
-                      borderBottomRightRadius: 10,
-                    }}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        width: 200 - 20,
-                      }}>
-                      <Text
-                        style={{
-                          fontFamily: 'Montserrat-Regular',
-                          fontSize: 14,
-                          fontWeight: '500',
-                        }}>
-                        Planet - Bangkok
-                      </Text>
+                  <View style={styles.pinSlideBody}>
+                    <View style={styles.pinSlideCardHeader}>
+                      <Text style={styles.pinSlideTitle}>Planet - Bangkok</Text>
                       <SimpleLineIcons
                         name={'heart'}
                         size={15}
                         color={'#EB5757'}
                       />
                     </View>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginBottom: 5,
-                      }}>
+                    <View style={styles.pinSlideCate}>
                       <Icon name={'camera'} />
-                      <Text
-                        style={{
-                          fontFamily: 'Montserrat-Regular',
-                          fontSize: 12,
-                          color: '#828282',
-                        }}>
-                        {' '}
-                        Sights
-                      </Text>
+                      <Text style={styles.pinSlideCateText}> Sights</Text>
                     </View>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        fontFamily: 'Montserrat-Regular',
-                        color: '#828282',
-                      }}>
+                    <Text style={styles.pinSlideText}>
                       Australian chef-author David Thompson is the man behind
                       one of Bangkok's
                     </Text>

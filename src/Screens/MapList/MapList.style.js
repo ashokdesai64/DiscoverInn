@@ -416,6 +416,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     flex: 1,
     marginVertical: 20,
+    marginHorizontal: 15,
   },
   orDividerText: {
     fontSize: 14,
@@ -528,6 +529,20 @@ const styles = StyleSheet.create({
     zIndex: 5,
     width: 56,
     top: -20,
+  },
+  createListButton: {
+    marginTop: 10,
+  },
+  selectListItem: {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F2F2F2',
+  },
+  selectListText: {
+    fontSize: 14,
+    color: '#BDBDBD',
+    fontFamily: 'Montserrat-Medium',
   },
 });
 
