@@ -71,7 +71,9 @@ class SinglePinView extends React.Component {
                     <Text style={styles.categorypinTitle}>{item}</Text>
                     <View style={styles.categorypinAction}>
                       <Button
-                        style={[styles.iconButton, styles.iconButtonPrimary]}>
+                        style={[styles.iconButton, styles.iconButtonPrimary]}
+                        onPress={()=> this.props.navigation.navigate('MapView')}
+                      >
                         <Feather
                           style={[
                             styles.iconButtonIcon,
@@ -81,7 +83,9 @@ class SinglePinView extends React.Component {
                         />
                       </Button>
                       <Button
-                        style={[styles.iconButton, styles.iconButtonWarning]}>
+                        style={[styles.iconButton, styles.iconButtonWarning]}
+                        onPress={()=> this.props.navigation.navigate('EditCategories')}
+                      >
                         <Feather
                           style={[
                             styles.iconButtonIcon,

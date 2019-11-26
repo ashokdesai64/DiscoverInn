@@ -416,7 +416,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     flex: 1,
     marginVertical: 20,
-    marginHorizontal: 15,
+    // marginHorizontal: 15,
   },
   orDividerText: {
     fontSize: 14,
@@ -535,9 +535,10 @@ const styles = StyleSheet.create({
   },
   selectListItem: {
     paddingVertical: 10,
-    paddingHorizontal: 15,
+    paddingHorizontal: 0,
     borderBottomWidth: 1,
     borderBottomColor: '#F2F2F2',
+    flexDirection:'row'
   },
   selectListText: {
     fontSize: 14,

@@ -3,6 +3,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 
 import HomeScreen from './Screens/HomeScreen/HomeScreen';
+import EditCategories from './Screens/EditCategories/EditCategories';
 import EditProfile from './Screens/AuthScreens/EditProfile/EditProfile';
 import AddMymaps from './Screens/AuthScreens/AddMymaps/AddMymaps';
 import AddMapDetail from './Screens/AuthScreens/AddMymaps/AddMapDetail';
@@ -29,6 +30,9 @@ const userStack = createStackNavigator(
   {
     Home: {
       screen: HomeScreen,
+    },
+    EditCategories:{
+      screen:EditCategories
     },
     EditProfile: {
       screen: EditProfile,

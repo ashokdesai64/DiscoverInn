@@ -54,7 +54,7 @@ class PinView extends React.Component {
       <SafeAreaView>
         <View
           style={{
-            top: 20,
+            top: 15,
             zIndex: 9999999,
             backgroundCoor: 'red',
             position: 'absolute',
@@ -124,7 +124,7 @@ class PinView extends React.Component {
             backgroundColor: 'white',
             position: 'absolute',
             top: 450,
-            marginTop: -100,
+            marginTop: -100
           }}>
           <Text
             style={{
@@ -351,7 +351,7 @@ class PinView extends React.Component {
               />
               <View
                 style={{
-                  backgroundColor: 'white',
+                  backgroundColor: 'rgba(242, 242, 242, 0.5)',
                   width: 200,
                   padding: 10,
                   justifyContent: 'center',
