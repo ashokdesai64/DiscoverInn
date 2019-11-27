@@ -157,14 +157,13 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   formGroup: {
-    marginBottom: 15,
+    marginHorizontal: 15,
+    justifyContent:'center',
+    alignItems:'center'
   },
   formLabel: {
-    color: '#4F4F4F',
-    fontSize: 14,
     fontFamily: 'Montserrat-Medium',
     marginBottom: 5,
-    paddingLeft: 7,
   },
   formControl: {
     borderWidth: 1,

@@ -178,9 +178,10 @@ const styles = StyleSheet.create({
   },
   dropdownText: {
     color: '#4F4F4F',
-    fontSize: 12,
+    fontSize: 10,
     fontFamily: 'Montserrat-Medium',
-    marginRight: 0,
+    margin: 0,
+    padding:0
   },
   dropdownArrow: {
     fontSize: 14,
@@ -196,16 +197,20 @@ const styles = StyleSheet.create({
   mymapsItemDropdown: {
     fontSize: 12,
     height: 25,
-    flexGrow: 1,
-    paddingRight: 30,
+    // flexGrow: 1,
+    // padding: 10,
     position: 'relative',
   },
   editImage: {
-    position: 'absolute',
-    top: 5,
-    right: 0,
-    width: 15,
-    height: 15,
+    // position: 'absolute',
+    // top: 5,
+    // right: 0,
+    // width: 15,
+    // height: 15,
+    // width:150,
+    flexDirection:'row',
+    justifyContent:'center',
+    alignItems:'center'
   },
   editImageIcon: {
     color: '#2F80ED',
