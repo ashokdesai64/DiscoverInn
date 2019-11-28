@@ -19,9 +19,7 @@ import {bindActionCreators} from 'redux';
 import * as authActions from './../../actions/authActions';
 
 class HomeScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Discover Inn',
-  };
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -86,11 +84,13 @@ class HomeScreen extends React.Component {
         },
       ],
     };
+    this._renderItemTop = this._renderItemTop.bind(this)
+    this._renderItem = this._renderItem.bind(this)
   }
 
   _renderItem({item, index}) {
     return (
-      <View style={styles.mapSlidCard}>
+      <TouchableOpacity style={styles.mapSlidCard} onPress={()=> this.props.navigation.navigate('MapView')}>
         <View style={styles.mapSlidCardInner}>
           <Image
             style={styles.mapSlideCardImg}
@@ -139,13 +139,13 @@ class HomeScreen extends React.Component {
             </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 
   _renderItemTop({item, index}) {
     return (
-      <View style={styles.mapSlidCard}>
+      <TouchableOpacity style={styles.mapSlidCard} onPress={()=> this.props.navigation.navigate('MapView')}>
         <View style={styles.mapSlidCardInner}>
           <Image
             style={styles.mapSlideCardImg}
@@ -194,7 +194,7 @@ class HomeScreen extends React.Component {
             </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 
@@ -225,10 +225,12 @@ class HomeScreen extends React.Component {
           title={'Discover Inn'}
           {...this.props}
           style={{backgroundColor: '#F3F4F6'}}
+          rightEmpty={true}
+          showRightButton={false}
         />
         <ScrollView
           style={styles.scrollView}
-          showsHorizontalScrollIndicator={false}>
+          showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
           <View style={styles.container}>
             <View style={styles.homeHeadingCard}>
               <Text style={styles.homeHeadingText}>
@@ -300,7 +302,7 @@ class HomeScreen extends React.Component {
             />
             <View style={styles.cateCard}>
               <Text style={styles.sectionTitle}>Most Popular</Text>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=> this.props.navigation.navigate('MapView')}>
                 <Text style={styles.seeAll}>See All</Text>
               </TouchableOpacity>
             </View>
@@ -317,7 +319,9 @@ class HomeScreen extends React.Component {
             </View>
             <View style={styles.cateCard}>
               <Text style={styles.sectionTitle}>Top Rated</Text>
-              <Text style={styles.seeAll}>See All</Text>
+              <TouchableOpacity onPress={()=> this.props.navigation.navigate('MapView')}>
+                <Text style={styles.seeAll}>See All</Text>
+              </TouchableOpacity>
             </View>
             <View style={styles.carouselMapView}>
               <Carousel

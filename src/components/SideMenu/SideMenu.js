@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
-import {View, ScrollView, Text, Image, SafeAreaView} from 'react-native';
+import React, { Component } from 'react';
+import { View, ScrollView, Text, Image, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import styles from '../../Screens/AuthScreens/MyTripList/MyTripList.style';
-import {Actions} from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
 
 //REDUX
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import * as authActions from './../../actions/authActions';
 
 class SideMenu extends Component {
@@ -103,6 +103,20 @@ class SideMenu extends Component {
                   this.props.navigation.navigate('MyMapShareList')
                 }>
                 <Text style={styles.menuList_LinkText}>Shared Zone</Text>
+              </Icon.Button>
+            </View>
+            <View style={styles.menuList_Item}>
+              <Icon.Button
+                style={styles.menuList_Link}
+                color="#828282"
+                name="key"
+                size={12}
+                paddingRight={0}
+                backgroundColor="#ffffff"
+                onPress={() =>
+                  this.props.navigation.navigate('ChangePassword')
+                }>
+                <Text style={styles.menuList_LinkText}>Change Password</Text>
               </Icon.Button>
             </View>
             {/* 

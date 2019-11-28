@@ -14,6 +14,7 @@ import TripPinList from './Screens/AuthScreens/TripPinList/TripPinList';
 import LoginScreen from './Screens/UnauthScreens/LoginScreen';
 import SignupScreen from './Screens/UnauthScreens/SignupScreen';
 import ForgotPassScreen from './Screens/UnauthScreens/ForgotPassScreen';
+import ChangePassword from './Screens/UnauthScreens/ChangePassword';
 import SetPassScreen from './Screens/UnauthScreens/SetPassScreen';
 import MyMapShareList from './Screens/ShareList/MyMapShareList';
 import MapList from './Screens/MapList/MapList';
@@ -24,7 +25,7 @@ import PinCategories from './Screens/AuthScreens/PinCategories/PinCategories';
 import SinglePinView from './Screens/AuthScreens/SinglePinView/SinglePinView';
 import FilterScreen from './Screens/FilterScreen/FilterScreen';
 import SideMenu from './components/SideMenu/SideMenu';
-import {Router, Scene, Stack, Drawer} from 'react-native-router-flux';
+import { Router, Scene, Stack, Drawer } from 'react-native-router-flux';
 import MenuIcon from '../src/Images/hamburger.png';
 
 const userStack = createStackNavigator(
@@ -32,11 +33,14 @@ const userStack = createStackNavigator(
     Home: {
       screen: HomeScreen,
     },
-    EditCategories:{
-      screen:EditCategories
+    ChangePassword: {
+      screen: ChangePassword
     },
-    TripPinList:{
-      screen:TripPinList
+    EditCategories: {
+      screen: EditCategories
+    },
+    TripPinList: {
+      screen: TripPinList
     },
     EditProfile: {
       screen: EditProfile,
@@ -77,8 +81,8 @@ const userStack = createStackNavigator(
     PinView: {
       screen: PinView,
     },
-    AddMapDetail:{
-      screen:AddMapDetail
+    AddMapDetail: {
+      screen: AddMapDetail
     }
   },
   {
@@ -109,7 +113,7 @@ const authStack = createStackNavigator(
 
 const DrawerStack = createDrawerNavigator(
   {
-    userStack: {screen: userStack},
+    userStack: { screen: userStack },
   },
   {
     gesturesEnabled: false,
