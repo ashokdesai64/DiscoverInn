@@ -1,18 +1,17 @@
-import React, { Fragment } from 'react';
-import { View, Text, ScrollView, Switch, Dimensions, Image } from 'react-native';
-import { Item, Input, Button, Content, Accordion, Picker } from 'native-base';
+import React, {Fragment} from 'react';
+import {View, Text, ScrollView, Switch, Dimensions, Image} from 'react-native';
+import {Item, Input, Button, Content, Accordion, Picker} from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import styles from './EditMymaps.style';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import Header from './../../../components/header/header';
-import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog';
+import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
 
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const DEVICE_WIDTH = Dimensions.get('window').width;
 
 class EditMymaps extends React.Component {
-
   constructor(props) {
     super(props);
   }
@@ -53,7 +52,7 @@ class EditMymaps extends React.Component {
   };
 
   _updateSections = activeSections => {
-    this.setState({ activeSections });
+    this.setState({activeSections});
   };
 
   _renderHeader(item, expanded) {
@@ -70,14 +69,14 @@ class EditMymaps extends React.Component {
         {expanded ? (
           <Feather style={styles.accordionCardHeaderIcon} name="chevron-up" />
         ) : (
-            <Feather style={styles.accordionCardHeaderIcon} name="chevron-down" />
-          )}
+          <Feather style={styles.accordionCardHeaderIcon} name="chevron-down" />
+        )}
       </View>
     );
   }
 
   _renderContent = item => {
-    var commentIndex = this.state.dataArray.findIndex(function (c) {
+    var commentIndex = this.state.dataArray.findIndex(function(c) {
       return c.title == item.title;
     });
     return (
@@ -135,10 +134,28 @@ class EditMymaps extends React.Component {
                 ))}
               </Picker> */}
 
-              <TouchableOpacity style={styles.editImage} onPress={() => { this.setState({ showChangeCoverModal: true }) }}>
-                <Text style={{ color: '#4F4F4F', fontFamily: 'Montserrat-Medium', fontSize: 12 }}>Changes Picture</Text>
-                <Feather style={{ color: '#828282', fontSize: 12, marginRight: 10 }} name="chevron-down" />
-                <Feather style={styles.editImageIcon} name="edit-2" color={'#2F80ED'} />
+              <TouchableOpacity
+                style={styles.editImage}
+                onPress={() => {
+                  this.setState({showChangeCoverModal: true});
+                }}>
+                <Text
+                  style={{
+                    color: '#4F4F4F',
+                    fontFamily: 'Montserrat-Medium',
+                    fontSize: 12,
+                  }}>
+                  Changes Picture
+                </Text>
+                <Feather
+                  style={{color: '#828282', fontSize: 12, marginRight: 10}}
+                  name="chevron-down"
+                />
+                <Feather
+                  style={styles.editImageIcon}
+                  name="edit-2"
+                  color={'#2F80ED'}
+                />
               </TouchableOpacity>
             </View>
           </View>
@@ -146,17 +163,17 @@ class EditMymaps extends React.Component {
         <View style={styles.mymapsAction}>
           <TouchableOpacity
             style={[styles.button, styles.buttonPrimary]}
-            onPress={() => { }}>
+            onPress={() => {}}>
             <Text style={styles.buttonText}>View</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, styles.buttonSuccess]}
-            onPress={() => { }}>
+            onPress={() => {}}>
             <Text style={styles.buttonText}>Edit</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, styles.buttonDanger]}
-            onPress={() => { }}>
+            onPress={() => {}}>
             <Text style={styles.buttonText}>Delete</Text>
           </TouchableOpacity>
         </View>
@@ -169,7 +186,7 @@ class EditMymaps extends React.Component {
       <Fragment style={styles.editMaps}>
         <Header
           showBack={true}
-          title={'My Maps'}
+          title={'Edit MyMaps'}
           {...this.props}
           style={styles.bgTransfrent}
         />
@@ -200,7 +217,7 @@ class EditMymaps extends React.Component {
                   renderHeader={this._renderHeader}
                   renderContent={this._renderContent}
                   onChange={this._updateSections}
-                  contentStyle={{ marginBottom: 10 }}
+                  contentStyle={{marginBottom: 10}}
                 />
               </Content>
             </View>
@@ -213,7 +230,7 @@ class EditMymaps extends React.Component {
           hasOverlay={true}
           animationDuration={1}
           onTouchOutside={() => {
-            this.setState({ showChangeCoverModal: false });
+            this.setState({showChangeCoverModal: false});
           }}
           dialogAnimation={
             new FadeAnimation({
@@ -223,31 +240,81 @@ class EditMymaps extends React.Component {
             })
           }
           onHardwareBackPress={() => {
-            this.setState({ showChangeCoverModal: false });
+            this.setState({showChangeCoverModal: false});
             return true;
           }}
-          dialogStyle={{ width: DEVICE_WIDTH,height:260, padding: 0, position: 'absolute', bottom: 0, elevation: 5, borderWidth: 1, borderColor: '#ccc', borderTopRightRadius: 20, borderTopLeftRadius: 20, shadowColor: '#000', shadowOpacity: 0.05, shadowOffset: { width: 0, height: -2 }, shadowRadius: 10 }}
-        >
-          <DialogContent style={{ paddingTop: 20, paddingHorizontal: 5 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, }}>
-              <Text style={{ fontSize: 16, fontFamily: 'Montserrat-SemiBold', color: '#333333', }}>
+          dialogStyle={{
+            width: DEVICE_WIDTH,
+            height: 260,
+            padding: 0,
+            position: 'absolute',
+            bottom: 0,
+            elevation: 5,
+            borderWidth: 1,
+            borderColor: '#ccc',
+            borderTopRightRadius: 20,
+            borderTopLeftRadius: 20,
+            shadowColor: '#000',
+            shadowOpacity: 0.05,
+            shadowOffset: {width: 0, height: -2},
+            shadowRadius: 10,
+          }}>
+          <DialogContent style={{paddingTop: 20, paddingHorizontal: 5}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: 20,
+              }}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontFamily: 'Montserrat-SemiBold',
+                  color: '#333333',
+                }}>
                 Upload Map Cover Image
               </Text>
               <TouchableOpacity
-                style={{ width: 24, height: 24, }}
-                onPress={() => this.setState({ showChangeCoverModal: false })}>
-                <Feather name={'x'} style={{ color: '#BDBDBD', fontSize: 24, }} />
+                style={{width: 24, height: 24}}
+                onPress={() => this.setState({showChangeCoverModal: false})}>
+                <Feather name={'x'} style={{color: '#BDBDBD', fontSize: 24}} />
               </TouchableOpacity>
             </View>
 
-            <View style={{ width: DEVICE_WIDTH - 40, height: 120 }}>
+            <View style={{width: DEVICE_WIDTH - 40, height: 120}}>
               <Image
-                style={{ height: 120, width: DEVICE_WIDTH - 40, borderRadius: 10, borderWidth: 1, borderColor: '#2F80ED' }}
+                style={{
+                  height: 120,
+                  width: DEVICE_WIDTH - 40,
+                  borderRadius: 10,
+                  borderWidth: 1,
+                  borderColor: '#2F80ED',
+                }}
                 source={require('./../../../Images/place.jpg')}
               />
-              <View style={{ position: 'absolute', top: 0, left: 0, height: 120, width: DEVICE_WIDTH - 40, backgroundColor: 'rgba(47, 128, 237, 0.1)', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginBottom: 20 }}>
+              <View
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  height: 120,
+                  width: DEVICE_WIDTH - 40,
+                  backgroundColor: 'rgba(47, 128, 237, 0.1)',
+                  borderRadius: 10,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginBottom: 20,
+                }}>
                 <AntDesign name={'pluscircleo'} size={36} color={'#fff'} />
-                <Text style={{ color: '#fff', fontSize: 14, fontFamily: 'Montserrat-Regular' }}>Add Cover Image</Text>
+                <Text
+                  style={{
+                    color: '#fff',
+                    fontSize: 14,
+                    fontFamily: 'Montserrat-Regular',
+                  }}>
+                  Add Cover Image
+                </Text>
               </View>
             </View>
             <TouchableOpacity
@@ -262,7 +329,7 @@ class EditMymaps extends React.Component {
                 alignSelf: 'center',
                 borderRadius: 5,
               }}
-              onPress={() => this.setState({ saveToListModal: false })}>
+              onPress={() => this.setState({saveToListModal: false})}>
               <Text
                 style={{
                   fontFamily: 'Montserrat-Regular',
@@ -274,7 +341,6 @@ class EditMymaps extends React.Component {
             </TouchableOpacity>
           </DialogContent>
         </Dialog>
-
       </Fragment>
     );
   }

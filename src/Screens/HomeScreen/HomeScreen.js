@@ -19,7 +19,6 @@ import {bindActionCreators} from 'redux';
 import * as authActions from './../../actions/authActions';
 
 class HomeScreen extends React.Component {
-  
   constructor(props) {
     super(props);
     this.state = {
@@ -84,13 +83,15 @@ class HomeScreen extends React.Component {
         },
       ],
     };
-    this._renderItemTop = this._renderItemTop.bind(this)
-    this._renderItem = this._renderItem.bind(this)
+    this._renderItemTop = this._renderItemTop.bind(this);
+    this._renderItem = this._renderItem.bind(this);
   }
 
   _renderItem({item, index}) {
     return (
-      <TouchableOpacity style={styles.mapSlidCard} onPress={()=> this.props.navigation.navigate('MapView')}>
+      <TouchableOpacity
+        style={styles.mapSlidCard}
+        onPress={() => this.props.navigation.navigate('MapView')}>
         <View style={styles.mapSlidCardInner}>
           <Image
             style={styles.mapSlideCardImg}
@@ -145,7 +146,9 @@ class HomeScreen extends React.Component {
 
   _renderItemTop({item, index}) {
     return (
-      <TouchableOpacity style={styles.mapSlidCard} onPress={()=> this.props.navigation.navigate('MapView')}>
+      <TouchableOpacity
+        style={styles.mapSlidCard}
+        onPress={() => this.props.navigation.navigate('MapView')}>
         <View style={styles.mapSlidCardInner}>
           <Image
             style={styles.mapSlideCardImg}
@@ -201,7 +204,7 @@ class HomeScreen extends React.Component {
   _renderItemCate = ({item, index}) => {
     return (
       <TouchableOpacity
-        onPress={() => this.props.navigation.navigate('PinCategories')}>
+        onPress={() => this.props.navigation.navigate('MapList')}>
         <View style={styles.cateSlideCard}>
           <View style={styles.cateSlideCardContent}>
             <Image
@@ -230,7 +233,8 @@ class HomeScreen extends React.Component {
         />
         <ScrollView
           style={styles.scrollView}
-          showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}>
           <View style={styles.container}>
             <View style={styles.homeHeadingCard}>
               <Text style={styles.homeHeadingText}>
@@ -302,7 +306,8 @@ class HomeScreen extends React.Component {
             />
             <View style={styles.cateCard}>
               <Text style={styles.sectionTitle}>Most Popular</Text>
-              <TouchableOpacity onPress={()=> this.props.navigation.navigate('MapView')}>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('MapList')}>
                 <Text style={styles.seeAll}>See All</Text>
               </TouchableOpacity>
             </View>
@@ -319,7 +324,8 @@ class HomeScreen extends React.Component {
             </View>
             <View style={styles.cateCard}>
               <Text style={styles.sectionTitle}>Top Rated</Text>
-              <TouchableOpacity onPress={()=> this.props.navigation.navigate('MapView')}>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('MapList')}>
                 <Text style={styles.seeAll}>See All</Text>
               </TouchableOpacity>
             </View>

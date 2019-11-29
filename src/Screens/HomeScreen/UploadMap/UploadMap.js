@@ -18,7 +18,7 @@ class UploadMap extends React.Component {
   }
 
   static navigationOptions = {
-    header:null,
+    header: null,
     title: 'UploadMap',
     headerStyle: {
       backgroundColor: '#F3F4F6',
@@ -38,7 +38,12 @@ class UploadMap extends React.Component {
   render() {
     return (
       <Fragment>
-        <Header showBack={true} title={'Discover Inn'} style={{backgroundColor:'#F3F4F6'}} {...this.props}/>
+        <Header
+          showBack={true}
+          title={'Discover Inn'}
+          style={{backgroundColor: '#F3F4F6'}}
+          {...this.props}
+        />
         <ScrollView
           style={styles.scrollView}
           showsHorizontalScrollIndicator={false}>

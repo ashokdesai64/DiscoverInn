@@ -115,8 +115,8 @@ class MyMapShareList extends React.Component {
     return (
       <Fragment>
         <Header
-          showMenu={true}
-          title={'My Maps'}
+          showBack={true}
+          title={'Shared Zone'}
           {...this.props}
           style={styles.bgHeader}
         />

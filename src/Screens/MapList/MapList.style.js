@@ -416,7 +416,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     flex: 1,
     marginVertical: 20,
-    // marginHorizontal: 15,
+    marginHorizontal: 15,
   },
   orDividerText: {
     fontSize: 14,
@@ -538,12 +538,41 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     borderBottomWidth: 1,
     borderBottomColor: '#F2F2F2',
-    flexDirection:'row'
+    flexDirection: 'row',
   },
   selectListText: {
     fontSize: 14,
     color: '#BDBDBD',
     fontFamily: 'Montserrat-Medium',
+    paddingLeft: 10,
+  },
+  reviewReport: {
+    color: '#EB5757',
+    alignSelf: 'flex-end',
+    marginTop: 10,
+    fontFamily: 'Montserrat-Medium',
+    fontSize: 12,
+  },
+  buttonCTGroup: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  buttonCT: {
+    flex: 1,
+  },
+  buttonCTCancel: {
+    marginRight: 10,
+  },
+  buttonCTSubmit: {
+    marginLeft: 10,
+  },
+  buttonOutline: {
+    borderColor: '#BDBDBD',
+    borderWidth: 1,
+    color: '#fff',
+  },
+  buttonTextDark: {
+    color: '#333333',
   },
 });
 
