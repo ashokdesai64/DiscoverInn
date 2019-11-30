@@ -24,7 +24,7 @@ class SignupScreen extends React.Component {
     return (
       <Fragment>
         <ImageBackground
-          source={require('../../Images/signup-bg.jpg')}
+          source={require('../../Images/signup-bg.png')}
           style={{
             width: '100%',
             height: '100%',

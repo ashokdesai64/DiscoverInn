@@ -11,6 +11,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Feather from 'react-native-vector-icons/Feather';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
@@ -43,7 +44,7 @@ class PinView extends React.Component {
   _renderItemCate = ({item, index}) => {
     return (
       <Image
-        source={require('./../../Images/signup-bg.jpg')}
+        source={require('./../../Images/signup-bg.png')}
         style={styles.cateSlideCardIcon}
       />
     );
@@ -52,24 +53,13 @@ class PinView extends React.Component {
   render() {
     return (
       <SafeAreaView>
-        <View
-          style={{
-            top: 15,
-            zIndex: 9999999,
-            backgroundCoor: 'red',
-            position: 'absolute',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            width: DEVICE_WIDTH,
-            padding: 15,
-          }}>
+        <View style={[styles.pinHeader]}>
           <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-            <Icon name={'arrow-back'} size={20} color={'white'} />
+            <Feather name={'arrow-left'} size={24} color={'white'} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => this.setState({saveToListModal: true})}>
-            <SimpleLineIcons name={'heart'} size={20} color={'white'} />
+            <Feather name={'heart'} size={24} color={'white'} />
           </TouchableOpacity>
         </View>
         <Carousel
@@ -80,7 +70,6 @@ class PinView extends React.Component {
           inactiveSlideScale={1}
           containerCustomStyle={{
             height: 450,
-            // zIndex: 999999,
             width: DEVICE_WIDTH,
             top: 0,
             position: 'absolute',
@@ -111,21 +100,11 @@ class PinView extends React.Component {
             height: 3,
             backgroundColor: 'white',
             margin: 0,
-            // Define styles for inactive dots here
           }}
           inactiveDotScale={1}
         />
 
-        <ScrollView
-          style={{
-            padding: 20,
-            height: DEVICE_HEIGHT - 450,
-            borderRadius: 20,
-            backgroundColor: 'white',
-            position: 'absolute',
-            top: 450,
-            marginTop: -100
-          }}>
+        <ScrollView style={styles.pinScrollView}>
           <Text
             style={{
               fontFamily: 'Montserrat-Regular',
@@ -192,113 +171,51 @@ class PinView extends React.Component {
             this.setState({saveToListModal: false});
             return true;
           }}
-          dialogStyle={{
-            width: DEVICE_WIDTH,
-            height: 530,
-            position: 'absolute',
-            bottom: 0,
-            elevation: 5,
-            borderWidth: 1,
-            borderColor: '#ccc',
-            borderTopRightRadius: 20,
-            borderTopLeftRadius: 20,
-            shadowColor: 'black',
-            shadowOpacity: 0.26,
-            shadowOffset: {width: 0, height: 2},
-            shadowRadius: 10,
-          }}>
-          <DialogContent style={{padding: 20}}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <Text
-                style={{
-                  fontSize: 16,
-                  fontWeight: '600',
-                  fontFamily: 'Montserrat-Regular',
-                }}>
-                Save to list
-              </Text>
+          dialogStyle={styles.customPopup}>
+          <DialogContent style={styles.customPopupContent}>
+            <View style={styles.customPopupHeader}>
+              <Text style={styles.customPopupHeaderTitle}>Save to list</Text>
               <TouchableOpacity
+                style={styles.buttonClose}
                 onPress={() => this.setState({saveToListModal: false})}>
-                <Icon name={'close'} color={'#BDBDBD'} size={20} />
+                <Feather style={styles.buttonCloseIcon} name={'x'} />
               </TouchableOpacity>
             </View>
-            <View style={{marginTop: 25, marginBottom: 5}}>
-              <Text style={{color: '#4F4F4F', fontSize: 14, marginBottom: 5}}>
-                Name
-              </Text>
+            <View style={styles.formGroup}>
+              <Text style={styles.formLabel}>Name</Text>
               <TextInput
-                style={{
-                  borderWidth: 1,
-                  borderColor: '#BDBDBD',
-                  borderRadius: 5,
-                  padding: 10,
-                  justifyContent: 'flex-start',
-                }}
+                style={styles.formControl}
                 placeholder={'Enter trip list name'}
                 placeholderTextColor={'#828894'}
               />
             </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
+            <View style={styles.buttonCTGroup}>
               <TouchableOpacity
-                style={{
-                  paddingVertical: 10,
-                  paddingHorizontal: 30,
-                  marginTop: 15,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  width: 140,
-                  alignSelf: 'center',
-                  borderRadius: 5,
-                  borderWidth: 1,
-                  borderColor: '#BDBDBD',
-                }}
+                style={[
+                  styles.button,
+                  styles.buttonCT,
+                  styles.buttonCTCancel,
+                  styles.buttonOutline,
+                ]}
                 onPress={() => this.setState({saveToListModal: false})}>
-                <Text
-                  style={{
-                    fontFamily: 'Montserrat-Regular',
-                    fontSize: 12,
-                    color: '#333',
-                  }}>
+                <Text style={[styles.buttonText, styles.buttonTextDark]}>
                   Cancel
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={{
-                  paddingVertical: 10,
-                  paddingHorizontal: 30,
-                  marginTop: 15,
-                  backgroundColor: '#2F80ED',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  width: 140,
-                  alignSelf: 'center',
-                  borderRadius: 5,
-                }}
+                style={[
+                  styles.button,
+                  styles.buttonCT,
+                  styles.buttonCTSubmit,
+                  styles.buttonPrimary,
+                ]}
                 onPress={() => this.setState({saveToListModal: false})}>
-                <Text
-                  style={{
-                    fontFamily: 'Montserrat-Regular',
-                    fontSize: 12,
-                    color: 'white',
-                  }}>
-                  Submit
-                </Text>
+                <Text style={styles.buttonText}>Submit</Text>
               </TouchableOpacity>
             </View>
-
             <View style={styles.orDivider}>
+              <Text style={styles.orDividerBorder}></Text>
               <Text style={styles.orDividerText}>OR</Text>
-              <View style={styles.orDividerBorder}></View>
             </View>
 
             <View
@@ -434,7 +351,6 @@ class PinView extends React.Component {
     );
   }
 }
-
 const styles = StyleSheet.create({
   page: {
     justifyContent: 'center',
@@ -443,6 +359,25 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
+  },
+  pinScrollView: {
+    padding: 20,
+    height: DEVICE_HEIGHT - 450,
+    borderRadius: 20,
+    backgroundColor: 'white',
+    position: 'absolute',
+    top: 450,
+    marginTop: -100,
+  },
+  pinHeader: {
+    top: 20,
+    zIndex: 9999,
+    position: 'absolute',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: DEVICE_WIDTH,
+    padding: 15,
   },
   cateSlideCard: {
     height: 375,
@@ -473,24 +408,126 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 25,
+    position: 'relative',
+    flex: 1,
+    marginVertical: 20,
+    marginHorizontal: 15,
   },
   orDividerText: {
     fontSize: 14,
     fontFamily: 'Montserrat-Regular',
     color: '#333333',
     paddingHorizontal: 10,
-    backgroundColor: 'white',
     zIndex: 7,
+    backgroundColor: '#ffffff',
   },
   orDividerBorder: {
     position: 'absolute',
     width: '100%',
     height: 1,
     zIndex: 6,
-    borderStyle: 'dashed',
     backgroundColor: '#C4C4C4',
   },
+  button: {
+    paddingVertical: 5,
+    paddingHorizontal: 30,
+    height: 40,
+    alignSelf: 'center',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonPrimary: {
+    backgroundColor: '#2F80ED',
+  },
+  buttonReview: {
+    marginTop: 15,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 12,
+    fontFamily: 'Montserrat-Medium',
+  },
+  customPopup: {
+    width: DEVICE_WIDTH,
+    padding: 0,
+    position: 'absolute',
+    bottom: 0,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowOffset: {width: 0, height: -2},
+    shadowRadius: 10,
+    maxHeight: DEVICE_HEIGHT - 190,
+  },
+  customPopupContent: {
+    paddingVertical: 20,
+    paddingHorizontal: 5,
+  },
+  customPopupHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  customPopupHeaderTitle: {
+    fontSize: 16,
+    fontFamily: 'Montserrat-SemiBold',
+    color: '#333333',
+  },
+  buttonClose: {
+    width: 24,
+    height: 24,
+  },
+  buttonCloseIcon: {
+    color: '#BDBDBD',
+    fontSize: 24,
+  },
+  formGroup: {
+    marginBottom: 15,
+  },
+  formLabel: {
+    color: '#4F4F4F',
+    fontSize: 14,
+    fontFamily: 'Montserrat-Medium',
+    marginBottom: 5,
+    paddingLeft: 7,
+  },
+  formControl: {
+    borderWidth: 1,
+    borderColor: '#BDBDBD',
+    borderRadius: 5,
+    height: 48,
+    paddingLeft: 25,
+    paddingRight: 25,
+    fontFamily: 'Montserrat-Medium',
+    color: '#4F4F4F',
+    fontSize: 14,
+  },
+  buttonCTGroup: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  buttonCT: {
+    flex: 1,
+  },
+  buttonCTCancel: {
+    marginRight: 10,
+  },
+  buttonCTSubmit: {
+    marginLeft: 10,
+  },
+  buttonOutline: {
+    borderColor: '#BDBDBD',
+    borderWidth: 1,
+    color: '#fff',
+  },
+  buttonTextDark: {
+    color: '#333333',
+  },
 });
-
 export default PinView;
