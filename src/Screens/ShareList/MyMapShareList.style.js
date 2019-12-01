@@ -68,10 +68,11 @@ const styles = StyleSheet.create({
     color: 'rgba(47, 128, 237, 1)',
   },
   mapSlideCard: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: 15,
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
     marginRight: 15,
+    width: 295,
+    marginBottom: 10,
   },
   mapSlideCardImg: {
     width: 300,

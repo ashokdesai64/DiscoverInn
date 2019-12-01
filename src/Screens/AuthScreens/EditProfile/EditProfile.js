@@ -41,25 +41,6 @@ class EditProfile extends React.Component {
     };
   }
 
-  static navigationOptions = {
-    title: 'Edit Profile',
-    header: null,
-    headerStyle: {
-      backgroundColor: 'transparent',
-      borderBottomWidth: 0,
-      paddingLeft: 15,
-    },
-    headerTitleStyle: {
-      color: '#333333',
-      fontSize: 16,
-      fontFamily: 'Montserrat-Semibold',
-    },
-    headerTintColor: '#333333',
-    headerLeftContainerStyle: {
-      paddingLeft: 10,
-    },
-  };
-
   handleCheckBox = () =>
     this.setState({ termsAccepted: !this.state.termsAccepted });
 
@@ -77,9 +58,10 @@ class EditProfile extends React.Component {
           title={'Edit Profile'}
           style={{ backgroundColor: '#F3F4F6' }}
           showRightButton={true}
+          rightEmpty={true}
           rightButtonText={'Save'}
           onRightPress={()=> this.saveProfile()}
-          rightTextStyle={{ color: '#27AE60' }}
+          rightTextStyle={{ color: '#27AE60', fontFamily: 'Montserrat-Regular' }}
           {...this.props}
         />
         <View style={styles.container}>

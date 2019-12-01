@@ -90,15 +90,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginLeft: 15,
     marginRight: 15,
-    width: 320,
-    flexDirection: 'row',
-    elevation: 3,
+    width:320,
+    flexDirection:'row',
+    elevation:3
   },
   mapSlideCardImg: {
     width: 120,
     height: 95,
     borderTopLeftRadius: 10,
-    borderBottomLeftRadius: 10,
+    borderBottomLeftRadius:10
   },
   mapSlideCardImg_overlay: {
     flex: 1,
@@ -204,15 +204,6 @@ const styles = StyleSheet.create({
     width: 18,
     height: 18,
     color: 'rgba(47, 128, 237, 1)',
-  },
-  vmSilideContent: {
-    backgroundColor: 'white',
-    width: 220,
-    padding: 10,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    borderTopRightRadius: 10,
-    borderBottomRightRadius: 10,
   },
 });
 

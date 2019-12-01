@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   Dimensions,
@@ -66,7 +66,7 @@ class MapView extends React.Component {
         coordinate={[this.state.currentLong, this.state.currentLat]}>
         <Image
           source={require('./../../Images/transportations1.png')}
-          style={{height: 16, width: 16}}
+          style={{ height: 16, width: 16 }}
         />
         {/* <Icon style={styles.search} name="location-on" size={16} color="red" /> */}
         <MapboxGL.Callout title={'From'} />
@@ -79,7 +79,7 @@ class MapView extends React.Component {
     console.log('You pressed a layer here is your feature', feature); // eslint-disable-line
   }
 
-  _renderItem({item, index}) {
+  _renderItem({ item, index }) {
     return (
       <View style={styles1.mapSlidCard}>
         <View style={styles1.mapSlidCardInner}>
@@ -131,6 +131,7 @@ class MapView extends React.Component {
           id: `asdf`,
           properties: {
             id: `asdf`,
+            description: "<strong>Big Backyard Beach Bash and Wine Fest</strong><p>EatBar (2761 Washington Boulevard Arlington VA) is throwing a <a href=\"http://tallulaeatbar.ticketleap.com/2012beachblanket/\" target=\"_blank\" title=\"Opens in a new window\">Big Backyard Beach Bash and Wine Fest</a> on Saturday, serving up conch fritters, fish tacos and crab sliders, and Red Apron hot dogs. 12:00-3:00 p.m. $25.grill hot dogs.</p>",
           },
           geometry: {
             type: 'Point',
@@ -160,8 +161,13 @@ class MapView extends React.Component {
 
             <MapboxGL.ShapeSource
               id="symbolLocationSource"
-              hitbox={{width: 20, height: 20}}
-              shape={featureCollection}>
+              hitbox={{ width: 20, height: 20 }}
+              shape={featureCollection}
+              cluster={true}
+              onPress={(e) => {
+                this.props.navigation.navigate('PinView')
+              }}
+            >
               <MapboxGL.SymbolLayer
                 id="symbolLocationSymbols"
                 minZoomLevel={1}
@@ -170,13 +176,22 @@ class MapView extends React.Component {
                   iconAllowOverlap: true,
                   iconSize: 0.4,
                 }}
+
+              />
+              <MapboxGL.Callout
+                title='Rivadavia 1841, 7º Piso, Of. 749.'
               />
             </MapboxGL.ShapeSource>
 
             <MapboxGL.ShapeSource
               id="symbolLocationSource1"
-              hitbox={{width: 20, height: 20}}
-              shape={featureCollection1}>
+              hitbox={{ width: 20, height: 20 }}
+              shape={featureCollection1}
+              cluster={true}
+              onPress={(e) => {
+                this.props.navigation.navigate('PinView')
+              }}
+            >
               <MapboxGL.SymbolLayer
                 id="symbolLocationSymbols1"
                 minZoomLevel={1}
@@ -185,92 +200,45 @@ class MapView extends React.Component {
                   iconAllowOverlap: true,
                   iconSize: 0.4,
                 }}
+              >
+                <View style={{ width: 20, height: 20, backgroundColor: 'red' }}>
+                  <Text>5</Text>
+                </View>
+              </MapboxGL.SymbolLayer>
+              <MapboxGL.Callout
+                title='Rivadavia 1841, 7º Piso, Of. 749.'
               />
             </MapboxGL.ShapeSource>
           </MapboxGL.MapView>
           <ScrollView
             horizontal={true}
-            style={{
-              height: 105,
-              position: 'absolute',
-              bottom: 20,
-              paddingBottom: 15,
-            }}>
-            {[1, 2, 3, 4, 5].map(i => {
-              return (
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  style={styles1.mapSlidCard}
-                  onPress={() => this.props.navigation.navigate('PinView')}>
-                  <Image
-                    style={styles1.mapSlideCardImg}
-                    source={require('./../../Images/login-bg.jpg')}
-                  />
-                  <View
-                    style={{
-                      backgroundColor: 'white',
-                      width: 215,
-                      padding: 10,
-                      justifyContent: 'center',
-                      alignItems: 'flex-start',
-                      borderTopRightRadius: 10,
-                      borderBottomRightRadius: 10,
-                    }}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        width: 215 - 20,
-                      }}>
-                      <Text
-                        style={{
-                          fontFamily: 'Montserrat-Medium',
-                          fontSize: 14,
-                          fontWeight: '500',
-                        }}>
-                        Planet - Bangkok
-                      </Text>
-                      <SimpleLineIcons
-                        name={'heart'}
-                        size={15}
-                        color={'#EB5757'}
-                      />
+            style={{ height: 95, position: 'absolute', bottom: 30, }}
+          >
+            {
+              [1, 2, 3, 4, 5].map((i) => {
+                return (
+                  <TouchableOpacity activeOpacity={0.8} style={styles1.mapSlidCard} onPress={() => this.props.navigation.navigate('PinView')}>
+                    <Image
+                      style={styles1.mapSlideCardImg}
+                      source={require("./../../Images/login-bg.jpg")}
+                    />
+                    <View style={{ backgroundColor: 'white', width: 200, padding: 10, justifyContent: 'center', alignItems: 'flex-start', borderTopRightRadius: 10, borderBottomRightRadius: 10 }}>
+                      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: 200 - 20 }}>
+                        <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: 14, fontWeight: '500' }}>Planet - Bangkok</Text>
+                        <SimpleLineIcons name={'heart'} size={15} color={'#EB5757'} />
+                      </View>
+                      <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: 5 }}>
+                        <Icon name={'camera'} />
+                        <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: 12, color: '#828282' }}>  Sights</Text>
+                      </View>
+                      <Text style={{ fontSize: 12, fontFamily: 'Montserrat-Regular', color: '#828282' }}>Australian chef-author David Thompson is the man behind one of Bangkok's</Text>
                     </View>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginBottom: 5,
-                      }}>
-                      <Icon
-                        name={'camera'}
-                        style={{color: '#2F80ED', fontSize: 12}}
-                      />
-                      <Text
-                        style={{
-                          fontFamily: 'Montserrat-Regular',
-                          fontSize: 10,
-                          color: '#828282',
-                        }}>
-                        {' '}
-                        Sights
-                      </Text>
-                    </View>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        fontFamily: 'Montserrat-Regular',
-                        color: '#828282',
-                      }}>
-                      Australian chef-author David Thompson is the man behind
-                      one of Bangkok's
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              );
-            })}
+                  </TouchableOpacity>
+                )
+              })
+            }
+
+
           </ScrollView>
           {/* <Carousel
                         data={this.state.carouselItems}
@@ -291,6 +259,21 @@ class MapView extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  annotationContainer: {
+    width: 30,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    borderRadius: 15,
+  },
+  annotationFill: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: 'red',
+    transform: [{ scale: 0.6 }],
+  },
   page: {
     flex: 1,
     justifyContent: 'center',

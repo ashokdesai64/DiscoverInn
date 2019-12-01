@@ -1,6 +1,6 @@
-import React, {Fragment} from 'react';
-import {View, Text, ScrollView, Image, Dimensions} from 'react-native';
-import {Item, Input, Button} from 'native-base';
+import React, { Fragment } from 'react';
+import { View, Text, ScrollView, Image, Dimensions } from 'react-native';
+import { Item, Input, Button } from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import styles from './MyMapShareList.style';
 import Carousel from 'react-native-snap-carousel';
@@ -63,7 +63,7 @@ class MyMapShareList extends React.Component {
     };
   }
 
-  _renderItem({item, index}) {
+  _renderItem({ item, index }) {
     var Star = [];
     for (var i = 0; i < item.star; i++) {
       Star.push(
@@ -76,7 +76,7 @@ class MyMapShareList extends React.Component {
       );
     }
     return (
-      <View style={[styles.mapSlideCard, {height: height - 220}]}>
+      <View style={[styles.mapSlideCard]}>
         <View style={styles.mapSlideCardHeader}>
           <Image style={styles.mapSlideCardImg} source={item.image} />
           <View style={styles.mapSlideCardImg_overlay} />
@@ -111,50 +111,47 @@ class MyMapShareList extends React.Component {
   }
 
   render() {
-    const {width} = Dimensions.get('window');
+    const { width } = Dimensions.get('window');
     return (
-      <Fragment>
+      <ScrollView
+        style={styles.scrollView}
+        showsHorizontalScrollIndicator={false}>
         <Header
           showBack={true}
           title={'Shared Zone'}
           {...this.props}
           style={styles.bgHeader}
         />
-        <ScrollView
-          style={styles.scrollView}
-          showsHorizontalScrollIndicator={false}>
-          <View style={styles.container}>
-            <View style={styles.pageContent}>
-              <View searchBar style={styles.searchbarCard}>
-                <Item style={styles.searchbarInputBox}>
-                  <Feather style={styles.searchbarIcon} name="search" />
-                  <Input
-                    style={styles.searchbarInput}
-                    placeholder="Search your maps"
-                  />
-                </Item>
-                <Button style={styles.searchbarCardButton}>
-                  <Feather
-                    style={styles.searchbarCardButtonIcon}
-                    name="arrow-right"
-                  />
-                </Button>
-              </View>
-              <View style={styles.shareMapContant}>
-                <Carousel
-                  data={this.state.carouselItems}
-                  sliderWidth={width}
-                  itemWidth={310}
-                  firstItem={1}
-                  inactiveSlideOpacity={1}
-                  inactiveSlideScale={1}
-                  renderItem={this._renderItem}
-                />
-              </View>
-            </View>
+        <View style={styles.pageContent}>
+          <View searchBar style={styles.searchbarCard}>
+            <Item style={styles.searchbarInputBox}>
+              <Feather style={styles.searchbarIcon} name="search" />
+              <Input
+                style={styles.searchbarInput}
+                placeholder="Search your maps"
+              />
+            </Item>
+            <Button style={styles.searchbarCardButton}>
+              <Feather
+                style={styles.searchbarCardButtonIcon}
+                name="arrow-right"
+              />
+            </Button>
           </View>
-        </ScrollView>
-      </Fragment>
+          <View style={{paddingTop:20}}>
+            <Carousel
+              data={this.state.carouselItems}
+              sliderWidth={width}
+
+              itemWidth={310}
+              firstItem={1}
+              inactiveSlideOpacity={1}
+              inactiveSlideScale={1}
+              renderItem={this._renderItem}
+            />
+          </View>
+        </View>
+      </ScrollView>
     );
   }
 }

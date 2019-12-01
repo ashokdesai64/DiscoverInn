@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   Text,
@@ -7,12 +7,15 @@ import {
   TextInput,
   SafeAreaView,
   TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView
 } from 'react-native';
 import styles from './Unauthscreens.style';
 
 //REDUX
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import * as authActions from './../../actions/authActions';
 
 class LoginScreen extends React.Component {
@@ -46,7 +49,9 @@ class LoginScreen extends React.Component {
   }
 
   login() {
-    let {email, password} = this.state;
+    this.props.navigation.navigate('Home');
+    return
+    let { email, password } = this.state;
     if (!email) {
       return alert('Please enter email');
     }
@@ -70,12 +75,12 @@ class LoginScreen extends React.Component {
             source={require('./../../Images/login-overlay.png')}
             resizeMode="stretch"
           />
-          <SafeAreaView
-            style={{
-              width: '100%',
-              height: '100%',
-            }}>
-            <View style={styles.container}>
+          <SafeAreaView style={styles.container}>
+            <KeyboardAvoidingView
+              style={{ flex: 1 }}
+              behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+              keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
+            >
               <View style={styles.unauthContent}>
                 <Text style={styles.logoText}>Discover - Inn</Text>
                 <View style={styles.unauthForm}>
@@ -85,7 +90,7 @@ class LoginScreen extends React.Component {
                     <TextInput
                       style={styles.formControl}
                       onChangeText={email => {
-                        this.setState({email: email.trim()});
+                        this.setState({ email: email.trim() });
                       }}
                       autoCapitalize={'none'}
                     />
@@ -106,7 +111,7 @@ class LoginScreen extends React.Component {
                       secureTextEntry={true}
                       style={styles.formControl}
                       onChangeText={password => {
-                        this.setState({password: password.trim()});
+                        this.setState({ password: password.trim() });
                       }}
                       autoCapitalize={'none'}
                     />
@@ -119,8 +124,6 @@ class LoginScreen extends React.Component {
                     <Text style={styles.buttonText}>Sign In</Text>
                   </TouchableOpacity>
                 </View>
-              </View>
-              <View style={styles.unauthBottomText}>
                 <Text style={styles.toggleText}>
                   New User?
                   <Text
@@ -133,7 +136,7 @@ class LoginScreen extends React.Component {
                   </Text>
                 </Text>
               </View>
-            </View>
+            </KeyboardAvoidingView>
           </SafeAreaView>
         </ImageBackground>
       </Fragment>

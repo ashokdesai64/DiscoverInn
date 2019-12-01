@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   Text,
@@ -24,7 +24,7 @@ class SignupScreen extends React.Component {
     return (
       <Fragment>
         <ImageBackground
-          source={require('../../Images/signup-bg.png')}
+          source={require('../../Images/signup-bg-dark.jpg')}
           style={{
             width: '100%',
             height: '100%',
@@ -59,8 +59,6 @@ class SignupScreen extends React.Component {
                     <Text style={styles.buttonText}>Next</Text>
                   </TouchableOpacity>
                 </View>
-              </View>
-              <View style={styles.unauthBottomText}>
                 <Text style={styles.toggleText}>
                   Are you already registered?
                   <Text

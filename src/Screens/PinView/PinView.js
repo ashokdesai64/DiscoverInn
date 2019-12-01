@@ -44,7 +44,7 @@ class PinView extends React.Component {
   _renderItemCate = ({item, index}) => {
     return (
       <Image
-        source={require('./../../Images/signup-bg.png')}
+        source={require('./../../Images/signup-bg-dark.jpg')}
         style={styles.cateSlideCardIcon}
       />
     );

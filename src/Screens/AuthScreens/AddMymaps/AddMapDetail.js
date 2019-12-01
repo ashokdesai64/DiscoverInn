@@ -105,18 +105,9 @@ class AddMapDetail extends React.Component {
                         </View>
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-                            <TouchableOpacity
-                                style={{ paddingVertical: 10, paddingHorizontal: 30, width: (DEVICE_WIDTH - 60) / 2, justifyContent: 'center', alignItems: 'center', alignSelf: 'center', borderRadius: 5, borderWidth: 1, borderColor: '#BDBDBD' }}
-                                onPress={() => this.setState({ saveToListModal: false })}
-                            >
-                                <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: 12, color: '#333' }}>Pin Latitude</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={{ paddingVertical: 10, paddingHorizontal: 30, width: (DEVICE_WIDTH - 60) / 2, justifyContent: 'center', alignItems: 'center', alignSelf: 'center', borderRadius: 5, borderWidth: 1, borderColor: '#BDBDBD' }}
-                                onPress={() => this.setState({ saveToListModal: false })}
-                            >
-                                <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: 12, color: '#333' }}>Pin Longitude</Text>
-                            </TouchableOpacity>
+                            <TextInput style={{ height: 40, paddingHorizontal: 5, width: (DEVICE_WIDTH - 60) / 2, fontFamily: 'Montserrat-Regular', fontSize: 12, color: '#333', textAlign: 'center', padding: 0, borderRadius: 5, borderWidth: 1, borderColor: '#BDBDBD' }} placeholder={'Pin Latitude'} />
+
+                            <TextInput style={{ height: 40, paddingHorizontal: 5, width: (DEVICE_WIDTH - 60) / 2, fontFamily: 'Montserrat-Regular', fontSize: 12, color: '#333', textAlign: 'center', padding: 0, borderRadius: 5, borderWidth: 1, borderColor: '#BDBDBD' }} placeholder={'Pin Longitude'} />
                         </View>
 
                         <View style={styles.mapPins}>
@@ -172,7 +163,7 @@ class AddMapDetail extends React.Component {
                                 placeholderTextColor={'#828894'}
                             />
                         </View>
-                        
+
 
                         <View style={styles.footerButton}>
                             <TouchableOpacity

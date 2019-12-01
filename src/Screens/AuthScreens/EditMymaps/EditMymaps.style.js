@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     flex: 1,
     shadowColor: '#000000',
     shadowOpacity: 0.05,
-    shadowOffset: {width: 0, height: 4},
+    shadowOffset: { width: 0, height: 4 },
     shadowRadius: 10,
     elevation: 5,
   },
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontFamily: 'Montserrat-Medium',
     margin: 0,
-    padding:0
+    padding: 0
   },
   dropdownArrow: {
     fontSize: 14,
@@ -208,13 +208,39 @@ const styles = StyleSheet.create({
     // width: 15,
     // height: 15,
     // width:150,
-    flexDirection:'row',
-    justifyContent:'center',
-    alignItems:'center'
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   editImageIcon: {
     color: '#2F80ED',
     fontSize: 14,
+  },
+  formGroup: {
+    marginBottom: 15,
+  },
+  customPopupContent: {
+    paddingVertical: 20,
+    paddingHorizontal: 5,
+  },
+  customPopupHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  customPopupHeaderTitle: {
+    fontSize: 16,
+    fontFamily: 'Montserrat-SemiBold',
+    color: '#333333',
+  },
+  buttonClose: {
+    width: 24,
+    height: 24,
+  },
+  buttonCloseIcon: {
+    color: '#BDBDBD',
+    fontSize: 24,
   },
 });
 

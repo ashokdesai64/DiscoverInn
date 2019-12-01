@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
   },
   unauthContent: {
     padding: 30,
+    paddingBottom:0,
     flex: 1,
   },
   logoText: {
@@ -83,14 +84,20 @@ const styles = StyleSheet.create({
   },
   unauthBottomText: {
     color: '#fff',
-    height: 50,
-    justifyContent: 'center',
+    // height: 50,
+    justifyContent: 'flex-end',
+    position:'absolute',
+    bottom:30,
     alignItems: 'center',
   },
   toggleText: {
     color: '#fff',
     fontSize: 14,
+    flex:1,
+    alignSelf:'center',
     fontFamily: 'Montserrat-Medium',
+    textAlignVertical:'bottom',
+    marginBottom:20,
   },
   toggleTextLink: {
     fontFamily: 'Montserrat-SemiBold',
