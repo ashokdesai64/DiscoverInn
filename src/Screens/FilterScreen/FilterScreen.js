@@ -2,7 +2,12 @@ import React, { Fragment } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { ListItem, Icon } from 'native-base';
 import styles from './FilterScreen.style.js';
-import Header from './../../components/header/header'
+import Header from './../../components/header/header';
+
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import fontelloConfig from './../../selection.json';
+const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
+
 class AddMymaps extends React.Component {
   constructor(props) {
     super(props);
@@ -76,27 +81,31 @@ class AddMymaps extends React.Component {
               showsHorizontalScrollIndicator={false}>
               <View style={styles.formGroup}>
                 <Text style={styles.formLabel}>Categories</Text>
-                <View style={styles.checkboxCard}>
-                  {this.state.categories.map(cate_icon => (
-                    <ListItem style={[styles.checkboxItem]}>
-                      <TouchableOpacity
-                        style={[
-                          styles.checkboxIcon,
-                          this.state.categories_select == cate_icon
-                            ? styles.CheckboxBlue
-                            : styles.UnCheckboxBlue,
-                        ]}
-                        onPress={() =>
-                          this.setState({ categories_select: cate_icon })
-                        }>
-                        <Image
-                          source={cate_icon}
-                          style={styles.cateSlideCardIcon}
-                          resizeMode="contain"
-                        />
-                      </TouchableOpacity>
-                    </ListItem>
-                  ))}
+                <View style={styles.mapPins}>
+
+                  <View style={[styles.singlePin, { backgroundColor: '#2F80ED' }]}>
+                    <IconMoon size={14} name="sights" color={'white'} />
+                  </View>
+                  <View style={[styles.singlePin, { backgroundColor: 'rgba(47, 128, 237, 0.1)' }]}>
+                    <IconMoon size={14} name="activities" color={'#2F80ED'} />
+                  </View>
+                  <View style={[styles.singlePin, { backgroundColor: 'rgba(47, 128, 237, 0.1)' }]}>
+                    <IconMoon size={14} name="restaurants" color={'#2F80ED'} />
+                  </View>
+                  <View style={[styles.singlePin, { backgroundColor: 'rgba(47, 128, 237, 0.1)' }]}>
+                    <IconMoon size={14} name="nightlife" color={'#2F80ED'} />
+                  </View>
+
+                  <View style={[styles.singlePin, { backgroundColor: 'rgba(47, 128, 237, 0.1)' }]}>
+                    <IconMoon size={14} name="transportations" color={'#2F80ED'} />
+                  </View>
+                  <View style={[styles.singlePin, { backgroundColor: 'rgba(47, 128, 237, 0.1)' }]}>
+                    <IconMoon size={14} name="shopping" color={'#2F80ED'} />
+                  </View>
+                  <View style={[styles.singlePin, { backgroundColor: 'rgba(47, 128, 237, 0.1)' }]}>
+                    <IconMoon size={14} name="other" color={'#2F80ED'} />
+                  </View>
+
                 </View>
               </View>
               <View style={styles.formGroup}>

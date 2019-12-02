@@ -15,6 +15,10 @@ import Icon from 'react-native-vector-icons/Feather';
 import Header from './../../../components/header/header';
 import styles from './AddMapDetail.style';
 
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import fontelloConfig from './../../../selection.json';
+const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
+
 const DEVICE_WIDTH = Dimensions.get('window').width;
 
 class AddMapDetail extends React.Component {
@@ -112,25 +116,26 @@ class AddMapDetail extends React.Component {
 
                         <View style={styles.mapPins}>
                             <View style={[styles.singlePin, { backgroundColor: '#2F80ED' }]}>
-                                <Icon size={14} name="camera" color={'white'} />
-                            </View>
-                            <View style={[styles.singlePin, { backgroundColor: '#2F80ED' }]}>
-                                <Icon size={14} name="map-pin" color={'white'} />
-                            </View>
-                            <View style={[styles.singlePin, { backgroundColor: '#2F80ED' }]}>
-                                <Icon size={14} name="coffee" color={'white'} />
-                            </View>
-                            <View style={[styles.singlePin, { backgroundColor: '#2F80ED' }]}>
-                                <Icon size={14} name="music" color={'white'} />
+                                <IconMoon size={14} name="sights" color={'white'} />
                             </View>
                             <View style={[styles.singlePin, { backgroundColor: 'rgba(47, 128, 237, 0.1)' }]}>
-                                <Icon size={14} name="smile" color={'#2F80ED'} />
+                                <IconMoon size={14} name="activities" color={'#2F80ED'} />
                             </View>
                             <View style={[styles.singlePin, { backgroundColor: 'rgba(47, 128, 237, 0.1)' }]}>
-                                <Icon size={14} name="speaker" color={'#2F80ED'} />
+                                <IconMoon size={14} name="restaurants" color={'#2F80ED'} />
                             </View>
                             <View style={[styles.singlePin, { backgroundColor: 'rgba(47, 128, 237, 0.1)' }]}>
-                                <Icon size={14} name="save" color={'#2F80ED'} />
+                                <IconMoon size={14} name="nightlife" color={'#2F80ED'} />
+                            </View>
+                            
+                            <View style={[styles.singlePin, { backgroundColor: 'rgba(47, 128, 237, 0.1)' }]}>
+                                <IconMoon size={14} name="transportations" color={'#2F80ED'} />
+                            </View>
+                            <View style={[styles.singlePin, { backgroundColor: 'rgba(47, 128, 237, 0.1)' }]}>
+                                <IconMoon size={14} name="shopping" color={'#2F80ED'} />
+                            </View>
+                            <View style={[styles.singlePin, { backgroundColor: 'rgba(47, 128, 237, 0.1)' }]}>
+                                <IconMoon size={14} name="other" color={'#2F80ED'} />
                             </View>
                         </View>
 

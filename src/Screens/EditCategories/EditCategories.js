@@ -15,6 +15,10 @@ import Icon from 'react-native-vector-icons/Feather';
 import Header from './../../components/header/header';
 import styles from './EditCategories.style';
 
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import fontelloConfig from './../../selection.json';
+const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
+
 const DEVICE_WIDTH = Dimensions.get('window').width;
 
 class EditCategories extends React.Component {
@@ -101,27 +105,30 @@ class EditCategories extends React.Component {
                         <View>
                             <Text style={{ color: '#4F4F4F', fontSize: 14, fontFamily: 'Montserrat-Regular', marginBottom: 10 }}>Categories</Text>
                             <View style={styles.mapPins}>
+
                                 <View style={[styles.singlePin, { backgroundColor: '#2F80ED' }]}>
-                                    <Icon size={14} name="camera" color={'white'} />
-                                </View>
-                                <View style={[styles.singlePin, { backgroundColor: '#2F80ED' }]}>
-                                    <Icon size={14} name="map-pin" color={'white'} />
-                                </View>
-                                <View style={[styles.singlePin, { backgroundColor: '#2F80ED' }]}>
-                                    <Icon size={14} name="coffee" color={'white'} />
-                                </View>
-                                <View style={[styles.singlePin, { backgroundColor: '#2F80ED' }]}>
-                                    <Icon size={14} name="music" color={'white'} />
+                                    <IconMoon size={14} name="sights" color={'white'} />
                                 </View>
                                 <View style={[styles.singlePin, { backgroundColor: 'rgba(47, 128, 237, 0.1)' }]}>
-                                    <Icon size={14} name="smile" color={'#2F80ED'} />
+                                    <IconMoon size={14} name="activities" color={'#2F80ED'} />
                                 </View>
                                 <View style={[styles.singlePin, { backgroundColor: 'rgba(47, 128, 237, 0.1)' }]}>
-                                    <Icon size={14} name="speaker" color={'#2F80ED'} />
+                                    <IconMoon size={14} name="restaurants" color={'#2F80ED'} />
                                 </View>
                                 <View style={[styles.singlePin, { backgroundColor: 'rgba(47, 128, 237, 0.1)' }]}>
-                                    <Icon size={14} name="save" color={'#2F80ED'} />
+                                    <IconMoon size={14} name="nightlife" color={'#2F80ED'} />
                                 </View>
+
+                                <View style={[styles.singlePin, { backgroundColor: 'rgba(47, 128, 237, 0.1)' }]}>
+                                    <IconMoon size={14} name="transportations" color={'#2F80ED'} />
+                                </View>
+                                <View style={[styles.singlePin, { backgroundColor: 'rgba(47, 128, 237, 0.1)' }]}>
+                                    <IconMoon size={14} name="shopping" color={'#2F80ED'} />
+                                </View>
+                                <View style={[styles.singlePin, { backgroundColor: 'rgba(47, 128, 237, 0.1)' }]}>
+                                    <IconMoon size={14} name="other" color={'#2F80ED'} />
+                                </View>
+
                             </View>
                         </View>
 
@@ -201,16 +208,16 @@ class EditCategories extends React.Component {
                             </View>
 
                         </View>
-                        <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',marginBottom:15}}>
-                            <Icon name={'map-pin'} color={'#2F80ED'} size={18} style={{marginRight:10}}/>
-                            <Text style={{color: '#828282', fontSize:13, fontFamily: 'Montserrat-Regular'}}>44.8498935 , -0.56082170000002</Text>
+                        <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', marginBottom: 15 }}>
+                            <Icon name={'map-pin'} color={'#2F80ED'} size={18} style={{ marginRight: 10 }} />
+                            <Text style={{ color: '#828282', fontSize: 13, fontFamily: 'Montserrat-Regular' }}>44.8498935 , -0.56082170000002</Text>
                         </View>
                         <View
                             style={{
                                 flexDirection: 'row',
                                 justifyContent: 'space-between',
                                 alignItems: 'center',
-                                marginBottom:20
+                                marginBottom: 20
                             }}>
 
                             <TouchableOpacity

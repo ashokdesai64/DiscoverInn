@@ -106,6 +106,21 @@ const styles = StyleSheet.create({
   UnCheckboxOrangeText: {
     color: '#F2994A',
   },
+  mapPins: {
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  singlePin: {
+    color: 'white',
+    fontSize: 14,
+    height: 30,
+    width: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+    marginRight: 8,
+  },
   UnCheckboxYellow: {
     borderColor: '#F2C94C',
     backgroundColor: 'rgba(242, 201, 76, 0.2)',
