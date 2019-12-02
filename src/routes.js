@@ -1,6 +1,6 @@
-import { createAppContainer, createSwitchNavigator, } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
-import { createDrawerNavigator } from 'react-navigation-drawer';
+import {createAppContainer, createSwitchNavigator} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
+import {createDrawerNavigator} from 'react-navigation-drawer';
 
 import HomeScreen from './Screens/HomeScreen/HomeScreen';
 import EditCategories from './Screens/EditCategories/EditCategories';
@@ -24,8 +24,11 @@ import UploadMap from './Screens/HomeScreen/UploadMap/UploadMap';
 import PinCategories from './Screens/AuthScreens/PinCategories/PinCategories';
 import SinglePinView from './Screens/AuthScreens/SinglePinView/SinglePinView';
 import FilterScreen from './Screens/FilterScreen/FilterScreen';
+import AboutUsScreen from './Screens/AboutUsScreen/AboutUsScreen';
+import PrivacyPolicyScreen from './Screens/PrivacyPolicyScreen/PrivacyPolicyScreen';
+import TermsConditionScreen from './Screens/TermsConditionScreen/TermsConditionScreen';
 import SideMenu from './components/SideMenu/SideMenu';
-import { Router, Scene, Stack, Drawer } from 'react-native-router-flux';
+import {Router, Scene, Stack, Drawer} from 'react-native-router-flux';
 import MenuIcon from '../src/Images/hamburger.png';
 
 const userStack = createStackNavigator(
@@ -34,13 +37,13 @@ const userStack = createStackNavigator(
       screen: HomeScreen,
     },
     ChangePassword: {
-      screen: ChangePassword
+      screen: ChangePassword,
     },
     EditCategories: {
-      screen: EditCategories
+      screen: EditCategories,
     },
     TripPinList: {
-      screen: TripPinList
+      screen: TripPinList,
     },
     EditProfile: {
       screen: EditProfile,
@@ -82,8 +85,17 @@ const userStack = createStackNavigator(
       screen: PinView,
     },
     AddMapDetail: {
-      screen: AddMapDetail
-    }
+      screen: AddMapDetail,
+    },
+    AboutUsScreen: {
+      screen: AboutUsScreen,
+    },
+    PrivacyPolicyScreen: {
+      screen: PrivacyPolicyScreen,
+    },
+    TermsConditionScreen: {
+      screen: TermsConditionScreen,
+    },
   },
   {
     headerMode: 'none',
@@ -113,7 +125,7 @@ const authStack = createStackNavigator(
 
 const DrawerStack = createDrawerNavigator(
   {
-    userStack: { screen: userStack },
+    userStack: {screen: userStack},
   },
   {
     gesturesEnabled: false,

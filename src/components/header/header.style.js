@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     fontFamily: 'Montserrat-Medium',
+    textAlign: 'center',
   },
   headerRightIcon: {
     justifyContent: 'center',

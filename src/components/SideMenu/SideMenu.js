@@ -8,6 +8,7 @@ import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as authActions from './../../actions/authActions';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 class SideMenu extends Component {
   render() {
@@ -179,11 +180,28 @@ class SideMenu extends Component {
             </View> */}
           </View>
           <View style={styles.staticMenu}>
-            <Text style={styles.staticMenu_Link}>About</Text>
-            <Text style={styles.staticMenu_Link}>Terms & Conditions</Text>
-            <Text style={styles.staticMenu_Link}>Privacy Policy</Text>
-            <Text style={styles.staticMenu_Link}>FAQ</Text>
-            <Text style={styles.staticMenu_Link}>How It Works</Text>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('AboutUsScreen')}>
+              <Text style={styles.staticMenu_Link}>About Us</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                this.props.navigation.navigate('TermsConditionScreen')
+              }>
+              <Text style={styles.staticMenu_Link}>Terms & Conditions</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                this.props.navigation.navigate('PrivacyPolicyScreen')
+              }>
+              <Text style={styles.staticMenu_Link}>Privacy Policy</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                this.props.navigation.navigate('HowItWorksScreen')
+              }>
+              <Text style={styles.staticMenu_Link}>How It Works</Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </SafeAreaView>
