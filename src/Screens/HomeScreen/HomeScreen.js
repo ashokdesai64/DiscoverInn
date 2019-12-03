@@ -12,6 +12,11 @@ import styles from './HomeScreen.style';
 import Carousel from 'react-native-snap-carousel';
 import Feather from 'react-native-vector-icons/Feather';
 import Header from './../../components/header/header';
+
+import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
+import fontelloConfig from './../../selection.json';
+const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
+
 //REDUX
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -55,31 +60,31 @@ class HomeScreen extends React.Component {
       carouselCateItems: [
         {
           title: 'Sights',
-          icon: require('./../../Images/sights.png'),
+          icon: 'sights',
         },
         {
           title: 'Activities',
-          icon: require('./../../Images/activities.png'),
+          icon: 'activities',
         },
         {
           title: 'Restaurants',
-          icon: require('./../../Images/restaurants.png'),
+          icon: 'restaurants',
         },
         {
           title: 'Nightlife',
-          icon: require('./../../Images/nightlife.png'),
+          icon: 'nightlife',
         },
         {
           title: 'Transportations',
-          icon: require('./../../Images/transportations.png'),
+          icon: 'transportations',
         },
         {
           title: 'Shopping',
-          icon: require('./../../Images/shopping.png'),
+          icon: 'shopping',
         },
         {
           title: 'Other',
-          icon: require('./../../Images/other.png'),
+          icon: 'other',
         },
       ],
     };
@@ -207,11 +212,8 @@ class HomeScreen extends React.Component {
         onPress={() => this.props.navigation.navigate('MapList')}>
         <View style={styles.cateSlideCard}>
           <View style={styles.cateSlideCardContent}>
-            <Image
-              source={item.icon}
-              style={styles.cateSlideCardIcon}
-              resizeMode="contain"
-            />
+            <IconMoon name={item.icon} style={styles.cateSlideCardIcon} />
+
             <Text style={styles.cateSlideCardTitle}>{item.title}</Text>
           </View>
         </View>
@@ -329,7 +331,7 @@ class HomeScreen extends React.Component {
                 <Text style={styles.seeAll}>See All</Text>
               </TouchableOpacity>
             </View>
-            <View style={styles.carouselMapView}>
+            <View style={[styles.carouselMapView, styles.carouselMapViewRated]}>
               <Carousel
                 data={this.state.carouselItemsTop}
                 sliderWidth={width}

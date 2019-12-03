@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, {Fragment} from 'react';
 import {
   View,
   Dimensions,
@@ -11,15 +11,14 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Carousel from 'react-native-snap-carousel';
-import styles1 from './MapView.style';
+import styles from './MapView.style';
 import exampleIcon from './../../Images/transportations1.png';
 import exampleIcon1 from './../../Images/sights1.png';
-
-const DEVICE_HEIGHT = Dimensions.get('window').height;
-const DEVICE_WIDTH = Dimensions.get('window').width;
-
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
+import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
+import fontelloConfig from './../../selection.json';
+const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 MapboxGL.setAccessToken(
   'pk.eyJ1IjoiYWJyaWxsbyIsImEiOiJjanNlbHVjb28wanFwNDNzNzkyZzFnczNpIn0.39svco2wAZvwcrFD6qOlMw',
 );
@@ -66,7 +65,7 @@ class MapView extends React.Component {
         coordinate={[this.state.currentLong, this.state.currentLat]}>
         <Image
           source={require('./../../Images/transportations1.png')}
-          style={{ height: 16, width: 16 }}
+          style={{height: 16, width: 16}}
         />
         {/* <Icon style={styles.search} name="location-on" size={16} color="red" /> */}
         <MapboxGL.Callout title={'From'} />
@@ -79,21 +78,21 @@ class MapView extends React.Component {
     console.log('You pressed a layer here is your feature', feature); // eslint-disable-line
   }
 
-  _renderItem({ item, index }) {
-    return (
-      <View style={styles1.mapSlidCard}>
-        <View style={styles1.mapSlidCardInner}>
-          <Image
-            style={styles1.mapSlideCardImg}
-            source={require('./../../Images/login-bg.jpg')}
-          />
-          <View style={styles1.mapSlideCardContent}>
-            <Text style={styles1.mapSlideCardTitle}>{item.title}</Text>
-          </View>
-        </View>
-      </View>
-    );
-  }
+  // _renderItem({item, index}) {
+  //   return (
+  //     <View style={styles.mapSlidCard}>
+  //       <View style={styles.mapSlidCardInner}>
+  //         <Image
+  //           style={styles.mapViewCardImg}
+  //           source={require('./../../Images/login-bg.jpg')}
+  //         />
+  //         <View style={styles.mapViewCardContent}>
+  //           <Text style={styles.mapViewCardTitle}>{item.title}</Text>
+  //         </View>
+  //       </View>
+  //     </View>
+  //   );
+  // }
 
   render() {
     const featureCollection = {
@@ -131,7 +130,8 @@ class MapView extends React.Component {
           id: `asdf`,
           properties: {
             id: `asdf`,
-            description: "<strong>Big Backyard Beach Bash and Wine Fest</strong><p>EatBar (2761 Washington Boulevard Arlington VA) is throwing a <a href=\"http://tallulaeatbar.ticketleap.com/2012beachblanket/\" target=\"_blank\" title=\"Opens in a new window\">Big Backyard Beach Bash and Wine Fest</a> on Saturday, serving up conch fritters, fish tacos and crab sliders, and Red Apron hot dogs. 12:00-3:00 p.m. $25.grill hot dogs.</p>",
+            description:
+              '<strong>Big Backyard Beach Bash and Wine Fest</strong><p>EatBar (2761 Washington Boulevard Arlington VA) is throwing a <a href="http://tallulaeatbar.ticketleap.com/2012beachblanket/" target="_blank" title="Opens in a new window">Big Backyard Beach Bash and Wine Fest</a> on Saturday, serving up conch fritters, fish tacos and crab sliders, and Red Apron hot dogs. 12:00-3:00 p.m. $25.grill hot dogs.</p>',
           },
           geometry: {
             type: 'Point',
@@ -161,13 +161,12 @@ class MapView extends React.Component {
 
             <MapboxGL.ShapeSource
               id="symbolLocationSource"
-              hitbox={{ width: 20, height: 20 }}
+              hitbox={{width: 20, height: 20}}
               shape={featureCollection}
               cluster={true}
-              onPress={(e) => {
-                this.props.navigation.navigate('PinView')
-              }}
-            >
+              onPress={e => {
+                this.props.navigation.navigate('PinView');
+              }}>
               <MapboxGL.SymbolLayer
                 id="symbolLocationSymbols"
                 minZoomLevel={1}
@@ -176,22 +175,18 @@ class MapView extends React.Component {
                   iconAllowOverlap: true,
                   iconSize: 0.4,
                 }}
-
               />
-              <MapboxGL.Callout
-                title='Rivadavia 1841, 7º Piso, Of. 749.'
-              />
+              <MapboxGL.Callout title="Rivadavia 1841, 7º Piso, Of. 749." />
             </MapboxGL.ShapeSource>
 
             <MapboxGL.ShapeSource
               id="symbolLocationSource1"
-              hitbox={{ width: 20, height: 20 }}
+              hitbox={{width: 20, height: 20}}
               shape={featureCollection1}
               cluster={true}
-              onPress={(e) => {
-                this.props.navigation.navigate('PinView')
-              }}
-            >
+              onPress={e => {
+                this.props.navigation.navigate('PinView');
+              }}>
               <MapboxGL.SymbolLayer
                 id="symbolLocationSymbols1"
                 minZoomLevel={1}
@@ -199,46 +194,50 @@ class MapView extends React.Component {
                   iconImage: exampleIcon1,
                   iconAllowOverlap: true,
                   iconSize: 0.4,
-                }}
-              >
-                <View style={{ width: 20, height: 20, backgroundColor: 'red' }}>
+                }}>
+                <View style={{width: 20, height: 20, backgroundColor: 'red'}}>
                   <Text>5</Text>
                 </View>
               </MapboxGL.SymbolLayer>
-              <MapboxGL.Callout
-                title='Rivadavia 1841, 7º Piso, Of. 749.'
-              />
+              <MapboxGL.Callout title="Rivadavia 1841, 7º Piso, Of. 749." />
             </MapboxGL.ShapeSource>
           </MapboxGL.MapView>
           <ScrollView
             horizontal={true}
-            style={{ height: 95, position: 'absolute', bottom: 30, }}
-          >
-            {
-              [1, 2, 3, 4, 5].map((i) => {
-                return (
-                  <TouchableOpacity activeOpacity={0.8} style={styles1.mapSlidCard} onPress={() => this.props.navigation.navigate('PinView')}>
-                    <Image
-                      style={styles1.mapSlideCardImg}
-                      source={require("./../../Images/login-bg.jpg")}
-                    />
-                    <View style={{ backgroundColor: 'white', width: 200, padding: 10, justifyContent: 'center', alignItems: 'flex-start', borderTopRightRadius: 10, borderBottomRightRadius: 10 }}>
-                      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: 200 - 20 }}>
-                        <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: 14, fontWeight: '500' }}>Planet - Bangkok</Text>
-                        <SimpleLineIcons name={'heart'} size={15} color={'#EB5757'} />
-                      </View>
-                      <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: 5 }}>
-                        <Icon name={'camera'} />
-                        <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: 12, color: '#828282' }}>  Sights</Text>
-                      </View>
-                      <Text style={{ fontSize: 12, fontFamily: 'Montserrat-Regular', color: '#828282' }}>Australian chef-author David Thompson is the man behind one of Bangkok's</Text>
+            style={{height: 95, position: 'absolute', bottom: 30}}>
+            {[1, 2, 3, 4, 5].map(i => {
+              return (
+                <TouchableOpacity
+                  activeOpacity={0.9}
+                  style={styles.mapViewCard}
+                  onPress={() => this.props.navigation.navigate('PinView')}>
+                  <Image
+                    style={styles.mapViewCardImg}
+                    source={require('./../../Images/login-bg.jpg')}
+                  />
+                  <View style={styles.mapViewCardContent}>
+                    <View style={styles.mapViewTitle}>
+                      <Text style={styles.mapViewTitleText}>
+                        Planet - Bangkok
+                      </Text>
+                      <SimpleLineIcons
+                        name={'heart'}
+                        size={15}
+                        color={'#EB5757'}
+                      />
                     </View>
-                  </TouchableOpacity>
-                )
-              })
-            }
-
-
+                    <View style={styles.mapViewCate}>
+                      <IconMoon name="sights" style={styles.mapViewCateIcon} />
+                      <Text style={styles.mapViewCateText}> Sights</Text>
+                    </View>
+                    <Text style={styles.mapViewContentText}>
+                      Australian chef-author David Thompson is the man behind
+                      one of Bangkok's
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
           </ScrollView>
           {/* <Carousel
                         data={this.state.carouselItems}
@@ -257,46 +256,4 @@ class MapView extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  annotationContainer: {
-    width: 30,
-    height: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'white',
-    borderRadius: 15,
-  },
-  annotationFill: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    backgroundColor: 'red',
-    transform: [{ scale: 0.6 }],
-  },
-  page: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  container: {
-    height: DEVICE_HEIGHT,
-    width: DEVICE_WIDTH,
-  },
-  viewMapHeader: {
-    top: 20,
-    position: 'absolute',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: DEVICE_WIDTH,
-    padding: 15,
-    zIndex: 9999,
-  },
-  map: {
-    flex: 1,
-  },
-});
-
 export default MapView;

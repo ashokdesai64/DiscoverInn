@@ -25,6 +25,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  menuIcon: {
+    transform: [{rotate: '90deg'}],
+  },
   headerLeftIcons: {
     color: '#333333',
   },
@@ -49,42 +52,67 @@ const styles = StyleSheet.create({
   },
   headerUserIcon: {
     borderWidth: 2,
-    height: 30,
-    width: 30,
+    height: 28,
+    width: 28,
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: colors.themeColor,
   },
-  loginDialogContent: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    width: width,
-    borderRadius: 10,
-    flexWrap: 'wrap',
-    padding: 15,
-  },
-  loginDialogContentInner: {
-    padding: 25,
-  },
   loginDialogLink: {
     justifyContent: 'flex-start',
     alignItems: 'center',
     flexDirection: 'row',
-    marginBottom: 20,
+    marginBottom: 0,
     borderBottomColor: '#F2F2F2',
     borderBottomWidth: 1,
-    width: width - 100,
-    paddingBottom: 10,
+    paddingVertical: 10,
+  },
+  loginDialogLinkLast: {
+    borderBottomWidth: 0,
   },
   loginDialogLinkIcon: {
-    marginRight: 25,
+    marginRight: 10,
   },
   loginDialogLinkText: {
-    fontSize: 18,
+    fontSize: 14,
     color: '#828282',
     fontFamily: 'Montserrat-Medium',
+  },
+  customPopup: {
+    width: width,
+    padding: 0,
+    position: 'absolute',
+    bottom: 0,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    maxHeight: height - 20,
+  },
+  customPopupContent: {
+    paddingVertical: 20,
+    paddingHorizontal: 5,
+  },
+  customPopupHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  customPopupHeaderTitle: {
+    fontSize: 16,
+    fontFamily: 'Montserrat-SemiBold',
+    color: '#333333',
+  },
+  buttonClose: {
+    width: 24,
+    height: 24,
+  },
+  buttonCloseIcon: {
+    color: '#BDBDBD',
+    fontSize: 24,
   },
 });
 

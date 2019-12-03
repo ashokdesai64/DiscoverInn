@@ -253,11 +253,16 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 15,
     top: 2,
+
     backgroundColor: 'transparent',
   },
   shareButtonText: {
     color: '#fff',
     fontSize: 16,
+    width: 20,
+    height: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   mapDetaileGrid: {
     marginTop: 10,

@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
+import Feather from 'react-native-vector-icons/Feather';
 import styles from './Unauthscreens.style';
 
 class ForgotPassScreen extends React.Component {
@@ -39,6 +40,11 @@ class ForgotPassScreen extends React.Component {
               width: '100%',
               height: '100%',
             }}>
+            <View style={[styles.pinHeader]}>
+              <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+                <Feather name={'arrow-left'} size={24} color={'white'} />
+              </TouchableOpacity>
+            </View>
             <View style={styles.container}>
               <View style={styles.unauthContent}>
                 <Text style={styles.logoText}>Discover - Inn</Text>

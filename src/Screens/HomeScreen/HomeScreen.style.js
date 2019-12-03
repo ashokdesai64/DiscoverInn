@@ -66,9 +66,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     borderRadius: 5,
   },
+  cateSlideCardContent: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   cateSlideCardIcon: {
-    width: 50,
-    height: 28,
+    margin: 'auto',
+    fontSize: 26,
     alignSelf: 'center',
     color: '#2F80ED',
   },
@@ -79,6 +83,9 @@ const styles = StyleSheet.create({
     marginTop: 10,
     color: '#333333',
     textAlign: 'center',
+  },
+  carouselMapViewRated: {
+    paddingBottom: 50,
   },
   carouselItems: {
     display: 'flex',

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   View,
   Text,
@@ -13,9 +13,9 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MenuIcon from './../../Images/hamburger.png';
 import colors from './../../config/colors';
-import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog';
+import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
 import styles from './header.style.js';
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 //REDUX
 // import { connect } from 'react-redux';
@@ -31,10 +31,10 @@ class Header extends Component {
     this.popupDialog = null;
   }
 
-  componentDidMount() { }
+  componentDidMount() {}
 
   goToSignup() {
-    this.setState({ authModal: false }, () => {
+    this.setState({authModal: false}, () => {
       setTimeout(() => {
         this.props.navigation.navigate('SignupScreen');
       }, 100);
@@ -42,7 +42,7 @@ class Header extends Component {
   }
 
   goToLogin() {
-    this.setState({ authModal: false }, () => {
+    this.setState({authModal: false}, () => {
       setTimeout(() => {
         this.props.navigation.navigate('LoginScreen');
       }, 100);
@@ -50,17 +50,17 @@ class Header extends Component {
   }
 
   render() {
-    let headerStyles = { ...styles.headerContainer };
+    let headerStyles = {...styles.headerContainer};
     if (this.props.style) {
-      headerStyles = { ...headerStyles, ...this.props.style };
+      headerStyles = {...headerStyles, ...this.props.style};
     }
-    let headerStylesInner = { ...styles.headerContainerInner };
+    let headerStylesInner = {...styles.headerContainerInner};
     if (this.props.style) {
-      headerStylesInner = { ...headerStylesInner, ...this.props.style };
+      headerStylesInner = {...headerStylesInner, ...this.props.style};
     }
-    let rightTextStyles = { ...styles.headerRightText };
+    let rightTextStyles = {...styles.headerRightText};
     if (this.props.rightTextStyle) {
-      rightTextStyles = { ...rightTextStyles, ...this.props.rightTextStyle };
+      rightTextStyles = {...rightTextStyles, ...this.props.rightTextStyle};
     }
     return (
       <SafeAreaView style={headerStyles}>
@@ -69,41 +69,52 @@ class Header extends Component {
             <TouchableOpacity
               style={styles.headerLeftIcon}
               onPress={() => this.props.navigation.goBack()}>
-              <MaterialIcons name={'arrow-back'} size={25} style={styles.headerLeftIcons} />
+              <MaterialIcons
+                name={'arrow-back'}
+                size={25}
+                style={styles.headerLeftIcons}
+              />
             </TouchableOpacity>
           ) : this.props.showMenu ? (
             <TouchableOpacity
               style={[styles.headerLeftIcon, styles.headerLeftIconMenu]}
               onPress={() => this.props.navigation.openDrawer()}>
-              <Image source={MenuIcon} style={styles.headerLeftIconImage} />
+              <Icon
+                name={'bar-chart-2'}
+                size={25}
+                color={colors.themeColor}
+                style={styles.menuIcon}
+              />
             </TouchableOpacity>
           ) : (
-                <View></View>
-              )}
+            <View></View>
+          )}
 
           <Text style={styles.headerTitle}>{this.props.title}</Text>
 
-          {
-            this.props.rightEmpty ?
-              this.props.showRightButton ? (
-                <TouchableOpacity
-                  onPress={() => this.props.onRightPress && this.props.onRightPress()}
-                  style={styles.headerRightIcon}>
-                  <Text
-                    style={rightTextStyles}>
-                    {this.props.rightButtonText}
-                  </Text>
-                </TouchableOpacity>
-              ) : (
-                  <TouchableOpacity
-                    onPress={() => this.setState({ authModal: true })}
-                    style={styles.headerUserIcon}>
-                    <Icon name={'user'} size={20} color={colors.themeColor} />
-                  </TouchableOpacity>
-                ) 
-            : 
-            <View><Text> </Text></View>
-          }
+          {this.props.rightEmpty ? (
+            this.props.showRightButton ? (
+              <TouchableOpacity
+                onPress={() =>
+                  this.props.onRightPress && this.props.onRightPress()
+                }
+                style={styles.headerRightIcon}>
+                <Text style={rightTextStyles}>
+                  {this.props.rightButtonText}
+                </Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={() => this.setState({authModal: true})}
+                style={styles.headerUserIcon}>
+                <Icon name={'user'} size={20} color={colors.themeColor} />
+              </TouchableOpacity>
+            )
+          ) : (
+            <View>
+              <Text> </Text>
+            </View>
+          )}
 
           <Dialog
             rounded={false}
@@ -114,7 +125,7 @@ class Header extends Component {
             }}
             animationDuration={1}
             onTouchOutside={() => {
-              this.setState({ authModal: false });
+              this.setState({authModal: false});
             }}
             dialogAnimation={
               new FadeAnimation({
@@ -124,25 +135,11 @@ class Header extends Component {
               })
             }
             onHardwareBackPress={() => {
-              this.setState({ authModal: false });
+              this.setState({authModal: false});
               return true;
             }}
-            dialogStyle={{
-              width: width,
-              borderTopRightRadius: 25,
-              borderTopLeftRadius: 25,
-              height: 220,
-              position: 'absolute',
-              bottom: -5,
-              elevation: 5,
-              borderWidth: 1,
-              borderColor: '#ccc',
-              shadowColor: 'black',
-              shadowOpacity: 0.26,
-              shadowOffset: { width: 0, height: 2 },
-              shadowRadius: 10,
-            }}>
-            <DialogContent style={styles.loginDialogContent}>
+            dialogStyle={styles.customPopup}>
+            <DialogContent style={styles.customPopupContent}>
               <View style={styles.loginDialogContentInner}>
                 <TouchableOpacity
                   onPress={() => this.goToLogin()}
@@ -151,7 +148,7 @@ class Header extends Component {
                     name={'login'}
                     color={'#828282'}
                     style={styles.loginDialogLinkIcon}
-                    size={25}
+                    size={18}
                   />
                   <Text style={styles.loginDialogLinkText}>Sign In</Text>
                 </TouchableOpacity>
@@ -163,19 +160,19 @@ class Header extends Component {
                     name={'user-plus'}
                     color={'#828282'}
                     style={styles.loginDialogLinkIcon}
-                    size={25}
+                    size={18}
                   />
                   <Text style={styles.loginDialogLinkText}>Sign Up</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   onPress={() => console.log('test')}
-                  style={styles.loginDialogLink}>
+                  style={[styles.loginDialogLink, styles.loginDialogLinkLast]}>
                   <AntDesign
                     name={'customerservice'}
                     color={'#828282'}
                     style={styles.loginDialogLinkIcon}
-                    size={25}
+                    size={18}
                   />
                   <Text style={styles.loginDialogLinkText}>How It Work</Text>
                 </TouchableOpacity>

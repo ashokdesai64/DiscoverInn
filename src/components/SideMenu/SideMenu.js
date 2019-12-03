@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, ScrollView, Text, Image, SafeAreaView} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import styles from '../../Screens/AuthScreens/MyTripList/MyTripList.style';
+import styles from './SideMenu.style';
 import {Actions} from 'react-native-router-flux';
 
 //REDUX

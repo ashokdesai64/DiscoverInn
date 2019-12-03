@@ -1,18 +1,24 @@
-import React, { Fragment } from 'react';
+import React, {Fragment} from 'react';
 import {
   View,
   Text,
   Button,
   KeyboardAvoidingView,
   TextInput,
+  Dimensions,
   ScrollView,
+  Image,
   ImageBackground,
   TouchableOpacity,
 } from 'react-native';
-import { ListItem, CheckBox, Picker, Textarea } from 'native-base';
-import Icon from 'react-native-vector-icons/Feather';
+import {ListItem, CheckBox, Picker, Textarea} from 'native-base';
+import Feather from 'react-native-vector-icons/Feather';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Header from './../../../components/header/header';
+import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
 import styles from './AddMymaps.style';
+const DEVICE_HEIGHT = Dimensions.get('window').height;
+const DEVICE_WIDTH = Dimensions.get('window').width;
 class AddMymaps extends React.Component {
   constructor(props) {
     super(props);
@@ -52,10 +58,10 @@ class AddMymaps extends React.Component {
   // };
 
   change_month = month => {
-    this.setState({ month: month });
+    this.setState({month: month});
   };
   change_date = date => {
-    this.setState({ date: date });
+    this.setState({date: date});
   };
 
   static navigationOptions = {
@@ -79,8 +85,15 @@ class AddMymaps extends React.Component {
       <Fragment>
         <ImageBackground
           source={require('../../../Images/map-bg.png')}
-          style={{ width: '100%', height: '100%' }}>
-          <Header showBack={true} title={'Add Map'} {...this.props} rightEmpty={true} showRightButton={false} style={styles.bgTransfrent}/>
+          style={{width: '100%', height: '100%'}}>
+          <Header
+            showBack={true}
+            title={'Add Map'}
+            {...this.props}
+            rightEmpty={true}
+            showRightButton={false}
+            style={styles.bgTransfrent}
+          />
           <View style={styles.container}>
             <View style={styles.pageContent}>
               <ScrollView
@@ -111,7 +124,7 @@ class AddMymaps extends React.Component {
                               : styles.UnCheckboxBlue,
                           ]}
                           onPress={() =>
-                            this.setState({ travel_type_select: title })
+                            this.setState({travel_type_select: title})
                           }>
                           <Text
                             style={[
@@ -140,7 +153,7 @@ class AddMymaps extends React.Component {
                               ? styles.CheckboxGreen
                               : styles.UnCheckboxGreen,
                           ]}
-                          onPress={() => this.setState({ budget_select: title })}>
+                          onPress={() => this.setState({budget_select: title})}>
                           <Text
                             style={[
                               styles.checkboxCustomText,
@@ -167,7 +180,7 @@ class AddMymaps extends React.Component {
                               ? styles.CheckboxYellow
                               : styles.UnCheckboxYellow,
                           ]}
-                          onPress={() => this.setState({ budget_select: title })}>
+                          onPress={() => this.setState({budget_select: title})}>
                           <Text
                             style={[
                               styles.checkboxCustomText,
@@ -184,17 +197,17 @@ class AddMymaps extends React.Component {
                 </View>
                 <Text style={styles.formLabel}>Date of travel</Text>
                 <View style={styles.dropdownGroup__vertical}>
-                  <View style={[styles.formGroup,styles.picker]}>
+                  <View style={[styles.formGroup, styles.picker]}>
                     <Picker
                       style={styles.formDropdown}
-                      placeholderStyle={{ color: '#2874F0' }}
+                      placeholderStyle={{color: '#2874F0'}}
                       selectedValue={this.state.month}
                       textStyle={styles.dropdownText}
                       onValueChange={this.change_month}
                       mode="dropdown"
                       iosHeader="Select Month"
                       iosIcon={
-                        <Icon
+                        <Feather
                           name="chevron-down"
                           style={styles.formDropdownIcon}
                         />
@@ -205,7 +218,7 @@ class AddMymaps extends React.Component {
                       <Picker.Item label="03" value="03" />
                     </Picker>
                   </View>
-                  <View style={[styles.formGroup,styles.picker]}>
+                  <View style={[styles.formGroup, styles.picker]}>
                     <Picker
                       style={styles.formDropdown}
                       selectedValue={this.state.date}
@@ -214,7 +227,7 @@ class AddMymaps extends React.Component {
                       mode="dropdown"
                       iosHeader="Select Year"
                       iosIcon={
-                        <Icon
+                        <Feather
                           name="chevron-down"
                           style={styles.formDropdownIcon}
                         />
@@ -226,17 +239,77 @@ class AddMymaps extends React.Component {
                     </Picker>
                   </View>
                 </View>
+                <View style={styles.addCoverImages}>
+                  <TouchableOpacity
+                    style={[styles.button, styles.buttonPrimary]}
+                    onPress={() => {
+                      this.setState({showChangeCoverModal: true});
+                    }}>
+                    <Text style={styles.buttonText}>Upload Cover Image</Text>
+                  </TouchableOpacity>
+                </View>
               </ScrollView>
             </View>
             <View style={styles.footerButton}>
               <TouchableOpacity
-                style={[styles.button, styles.buttonPrimary]}
-                onPress={() => {this.props.navigation.navigate('AddMapDetail') }}>
-                <Text style={styles.buttonText}>Next</Text>
+                style={[styles.button, styles.buttonPrimary, {flex: 1}]}
+                onPress={() => {
+                  this.props.navigation.navigate('AddMapDetail');
+                }}>
+                <Text style={styles.buttonText}>Next | Add Pin</Text>
               </TouchableOpacity>
             </View>
           </View>
         </ImageBackground>
+        <Dialog
+          rounded={false}
+          visible={this.state.showChangeCoverModal}
+          hasOverlay={true}
+          animationDuration={1}
+          onTouchOutside={() => {
+            this.setState({showChangeCoverModal: false});
+          }}
+          dialogAnimation={
+            new FadeAnimation({
+              initialValue: 0, // optional
+              animationDuration: 200, // optional
+              useNativeDriver: true, // optional
+            })
+          }
+          onHardwareBackPress={() => {
+            this.setState({showChangeCoverModal: false});
+            return true;
+          }}
+          dialogStyle={styles.customPopup}>
+          <DialogContent style={styles.customPopupContent}>
+            <View style={styles.customPopupHeader}>
+              <Text style={styles.customPopupHeaderTitle}>
+                Upload Map Cover Image
+              </Text>
+              <TouchableOpacity
+                style={styles.buttonClose}
+                onPress={() => this.setState({showChangeCoverModal: false})}>
+                <Feather name={'x'} style={styles.buttonCloseIcon} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.uploadCoverCard}>
+              <View style={styles.uploadCoverCardInner}>
+                <AntDesign name={'pluscircleo'} size={36} color={'#2F80ED'} />
+                <Text style={styles.uploadCoverText}>Add Cover Image</Text>
+              </View>
+            </View>
+            <View
+              style={{
+                marginTop: 25,
+              }}>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonPrimary]}
+                onPress={() => this.setState({saveToListModal: false})}>
+                <Text style={styles.buttonText}>Upload Image</Text>
+              </TouchableOpacity>
+            </View>
+          </DialogContent>
+        </Dialog>
       </Fragment>
     );
   }

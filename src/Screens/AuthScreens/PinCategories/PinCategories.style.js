@@ -40,9 +40,13 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0, 0, 0, 0.05);',
     shadowOpacity: 1,
   },
+  cateSlideCardContent: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   cateCardIcon: {
-    width: 48,
-    height: 48,
+    margin: 'auto',
+    fontSize: 42,
     alignSelf: 'center',
     color: '#2F80ED',
   },
@@ -71,6 +75,32 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#2F80ED',
     borderRadius: 5,
+    fontFamily: 'Montserrat-Medium',
+  },
+  footerButton: {
+    flexDirection: 'row',
+    marginTop: 0,
+    marginHorizontal: 15,
+    alignItems: 'flex-end',
+    marginBottom: 20,
+  },
+  button: {
+    paddingVertical: 5,
+    paddingHorizontal: 30,
+    height: 40,
+    alignSelf: 'center',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  buttonPrimary: {
+    backgroundColor: '#2F80ED',
+    color: '#fff',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 12,
     fontFamily: 'Montserrat-Medium',
   },
 });

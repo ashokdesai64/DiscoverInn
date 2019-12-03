@@ -1,4 +1,6 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
+const height = Dimensions.get('window').height;
+const width = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -126,11 +128,11 @@ const styles = StyleSheet.create({
   CheckboxYellowText: {
     color: '#fff',
   },
-  picker:{
+  picker: {
     borderWidth: 1,
     borderColor: '#BDBDBD',
-    marginRight:5,
-    borderRadius:5
+    marginRight: 5,
+    borderRadius: 5,
   },
   UnCheckboxYellowText: {
     color: '#F2994A',
@@ -138,10 +140,13 @@ const styles = StyleSheet.create({
   dropdownGroup__vertical: {
     flexDirection: 'row',
   },
+  addCoverImages: {
+    flexDirection: 'row',
+  },
   formDropdown: {
     height: 40,
     fontSize: 12,
-    width:120,
+    width: 120,
     borderRadius: 5,
     fontFamily: 'Montserrat-Medium',
     padding: 5,
@@ -171,7 +176,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    flex: 1,
   },
   buttonPrimary: {
     backgroundColor: '#2F80ED',
@@ -181,6 +185,65 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 12,
     fontFamily: 'Montserrat-Medium',
+  },
+  customPopup: {
+    width: width,
+    padding: 0,
+    position: 'absolute',
+    bottom: 0,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowOffset: {width: 0, height: -2},
+    shadowRadius: 10,
+    maxHeight: height - 190,
+  },
+  customPopupContent: {
+    paddingVertical: 20,
+    paddingHorizontal: 5,
+  },
+  customPopupHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  customPopupHeaderTitle: {
+    fontSize: 16,
+    fontFamily: 'Montserrat-SemiBold',
+    color: '#333333',
+  },
+  buttonClose: {
+    width: 24,
+    height: 24,
+  },
+  buttonCloseIcon: {
+    color: '#BDBDBD',
+    fontSize: 24,
+  },
+  uploadCoverCard: {
+    width: width - 40,
+    height: 120,
+  },
+  uploadCoverCardInner: {
+    height: 120,
+    width: width - 40,
+    backgroundColor: 'rgba(47, 128, 237, 0.1)',
+    borderWidth: 1,
+    borderColor: '#2F80ED',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  uploadCoverText: {
+    color: '#2F80ED',
+    fontSize: 14,
+    fontFamily: 'Montserrat-Regular',
   },
 });
 

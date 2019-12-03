@@ -15,6 +15,9 @@ import Feather from 'react-native-vector-icons/Feather';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
+import fontelloConfig from './../../selection.json';
+const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
+import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
 
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const DEVICE_WIDTH = Dimensions.get('window').width;
@@ -105,38 +108,13 @@ class PinView extends React.Component {
         />
 
         <ScrollView style={styles.pinScrollView}>
-          <Text
-            style={{
-              fontFamily: 'Montserrat-Regular',
-              fontSize: 24,
-              fontWeight: '500',
-            }}>
-            Planet - Bangkok
-          </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-              marginBottom: 15,
-            }}>
-            <Icon name={'camera'} />
-            <Text
-              style={{
-                fontFamily: 'Montserrat-Regular',
-                fontSize: 12,
-                color: '#828282',
-              }}>
-              {' '}
-              Sights
-            </Text>
+          <Text style={styles.pinViewTitle}>Planet - Bangkok</Text>
+          <View style={styles.pinViewCate}>
+            <IconMoon name="sights" style={styles.pinViewCateIcon} />
+
+            <Text style={styles.pinViewCateText}> Sights</Text>
           </View>
-          <Text
-            style={{
-              fontSize: 12,
-              fontFamily: 'Montserrat-Regular',
-              color: '#828282',
-            }}>
+          <Text style={styles.pinViewContent}>
             This imposing early-20th-century Italianate stone mansion, set
             discreetly back from the street, belonged to Don José Lázaro
             Galdiano (1862–1947), a successful businessman and passionate patron
@@ -217,106 +195,32 @@ class PinView extends React.Component {
               <Text style={styles.orDividerBorder}></Text>
               <Text style={styles.orDividerText}>OR</Text>
             </View>
-
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                paddingBottom: 10,
-                borderBottomWidth: 1,
-                borderBottomColor: '#F2F2F2',
-                marginBottom: 15,
-              }}>
-              <Text style={{color: '#BDBDBD', fontSize: 14, fontWeight: '500'}}>
-                London
-              </Text>
-              <SimpleLineIcons name={'heart'} color={'#2F80ED'} size={15} />
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <Text style={{color: '#BDBDBD', fontSize: 14, fontWeight: '500'}}>
-                London
-              </Text>
-              <SimpleLineIcons name={'heart'} color={'#2F80ED'} size={15} />
+            <View style={styles.MVTripList}>
+              <View style={styles.MVTripListItem}>
+                <Text style={styles.MVTripListItemTitle}>London</Text>
+                <SimpleLineIcons name={'heart'} color={'#2F80ED'} size={15} />
+              </View>
+              <View style={[styles.MVTripListItem, {borderBottomWidth: 0}]}>
+                <Text style={styles.MVTripListItemTitle}>London</Text>
+                <SimpleLineIcons name={'heart'} color={'#2F80ED'} size={15} />
+              </View>
             </View>
 
-            <View
-              activeOpacity={0.8}
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginLeft: 15,
-                marginRight: 15,
-                flexDirection: 'row',
-                elevation: 3,
-                marginTop: 20,
-              }}
-              onPress={() => this.props.navigation.navigate('PinView')}>
+            <View activeOpacity={0.9} style={styles.mapViewCard}>
               <Image
-                style={{
-                  width: 120,
-                  height: 95,
-                  borderTopLeftRadius: 10,
-                  borderBottomLeftRadius: 10,
-                }}
+                style={styles.mapViewCardImg}
                 source={require('./../../Images/login-bg.jpg')}
               />
-              <View
-                style={{
-                  backgroundColor: 'rgba(242, 242, 242, 0.5)',
-                  width: 200,
-                  padding: 10,
-                  justifyContent: 'center',
-                  alignItems: 'flex-start',
-                  borderTopRightRadius: 10,
-                  borderBottomRightRadius: 10,
-                }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    width: 200 - 20,
-                  }}>
-                  <Text
-                    style={{
-                      fontFamily: 'Montserrat-Regular',
-                      fontSize: 14,
-                      fontWeight: '500',
-                    }}>
-                    Planet - Bangkok
-                  </Text>
+              <View style={styles.mapViewCardContent}>
+                <View style={styles.mapViewTitle}>
+                  <Text style={styles.mapViewTitleText}>Planet - Bangkok</Text>
                   <SimpleLineIcons name={'heart'} size={15} color={'#EB5757'} />
                 </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginBottom: 5,
-                  }}>
-                  <Icon name={'camera'} />
-                  <Text
-                    style={{
-                      fontFamily: 'Montserrat-Regular',
-                      fontSize: 12,
-                      color: '#828282',
-                    }}>
-                    {' '}
-                    Sights
-                  </Text>
+                <View style={styles.mapViewCate}>
+                  <IconMoon name="sights" style={styles.mapViewCateIcon} />
+                  <Text style={styles.mapViewCateText}> Sights</Text>
                 </View>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    fontFamily: 'Montserrat-Regular',
-                    color: '#828282',
-                  }}>
+                <Text style={styles.mapViewContentText}>
                   Australian chef-author David Thompson is the man behind one of
                   Bangkok's
                 </Text>
@@ -368,6 +272,31 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 450,
     marginTop: -100,
+  },
+  pinViewTitle: {
+    fontFamily: 'Montserrat-Medium',
+    fontSize: 24,
+    marginBottom: 5,
+  },
+  pinViewCate: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  pinViewCateIcon: {
+    color: '#2F80ED',
+    fontSize: 13,
+  },
+  pinViewCateText: {
+    fontSize: 12,
+    color: '#828282',
+    fontFamily: 'Montserrat-Regular',
+  },
+  pinViewContent: {
+    fontSize: 12,
+    fontFamily: 'Montserrat-Medium',
+    color: '#4F4F4F',
   },
   pinHeader: {
     top: 20,
@@ -462,7 +391,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowOffset: {width: 0, height: -2},
     shadowRadius: 10,
-    maxHeight: DEVICE_HEIGHT - 190,
+    maxHeight: DEVICE_HEIGHT - 100,
+    overflow: 'scroll',
   },
   customPopupContent: {
     paddingVertical: 20,
@@ -528,6 +458,75 @@ const styles = StyleSheet.create({
   },
   buttonTextDark: {
     color: '#333333',
+  },
+  mapViewCard: {
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    width: DEVICE_WIDTH - 40,
+    flexDirection: 'row',
+    elevation: 3,
+    overflow: 'hidden',
+    borderRadius: 10,
+    backgroundColor: 'rgba(242, 242, 242, 0.5)',
+  },
+  mapViewCardImg: {
+    width: 120,
+    height: 95,
+  },
+  mapViewCardContent: {
+    width: DEVICE_WIDTH - 120,
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    borderTopRightRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+  mapViewTitle: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: DEVICE_WIDTH - 20,
+  },
+  mapViewTitleText: {
+    fontFamily: 'Montserrat-Regular',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  mapViewCate: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 5,
+  },
+  mapViewCateIcon: {
+    color: '#2F80ED',
+    fontSize: 13,
+  },
+  mapViewCateText: {
+    fontSize: 12,
+    color: '#828282',
+    fontFamily: 'Montserrat-Regular',
+  },
+  mapViewContentText: {
+    fontSize: 12,
+    fontFamily: 'Montserrat-Regular',
+    color: '#828282',
+  },
+  MVTripList: {
+    marginBottom: 20,
+  },
+  MVTripListItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderBottomColor: '#F2F2F2',
+    borderBottomWidth: 1,
+  },
+  MVTripListItemTitle: {
+    color: '#BDBDBD',
+    fontSize: 14,
+    fontFamily: 'Montserrat-Medium',
   },
 });
 export default PinView;
