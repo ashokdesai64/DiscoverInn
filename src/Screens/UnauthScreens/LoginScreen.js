@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   Text,
@@ -9,14 +9,13 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
+  ActivityIndicator
 } from 'react-native';
-import Feather from 'react-native-vector-icons/Feather';
 import styles from './Unauthscreens.style';
 
 //REDUX
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import * as authActions from './../../actions/authActions';
 
 class LoginScreen extends React.Component {
@@ -32,8 +31,9 @@ class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      password: '',
+      email: 'ketanlathiya@gmail.com',
+      password: 'admin@1234',
+      loggingIn:false
     };
     this.checkLogin(props);
   }
@@ -50,16 +50,20 @@ class LoginScreen extends React.Component {
   }
 
   login() {
-    this.props.navigation.navigate('Home');
-    return;
-    let {email, password} = this.state;
+    // this.props.navigation.navigate('Home');
+    // return
+    this.setState({loggingIn:true})
+    let { email, password } = this.state;
     if (!email) {
       return alert('Please enter email');
     }
     if (!password) {
       return alert('Please enter password');
     }
-    this.props.authAction.userLogin(email, password);
+    this.props.authAction.userLogin(email, password).catch((e)=>{
+      alert(e);
+      this.setState({loggingIn:false})
+    });
   }
 
   render() {
@@ -78,9 +82,10 @@ class LoginScreen extends React.Component {
           />
           <SafeAreaView style={styles.container}>
             <KeyboardAvoidingView
-              style={{flex: 1}}
+              style={{ flex: 1 }}
               behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-              keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}>
+              keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
+            >
               <View style={styles.unauthContent}>
                 <Text style={styles.logoText}>Discover - Inn</Text>
                 <View style={styles.unauthForm}>
@@ -90,8 +95,9 @@ class LoginScreen extends React.Component {
                     <TextInput
                       style={styles.formControl}
                       onChangeText={email => {
-                        this.setState({email: email.trim()});
+                        this.setState({ email: email.trim() });
                       }}
+                      value={this.state.email}
                       autoCapitalize={'none'}
                     />
                   </View>
@@ -111,8 +117,9 @@ class LoginScreen extends React.Component {
                       secureTextEntry={true}
                       style={styles.formControl}
                       onChangeText={password => {
-                        this.setState({password: password.trim()});
+                        this.setState({ password: password.trim() });
                       }}
+                      value={this.state.password}
                       autoCapitalize={'none'}
                     />
                   </View>
@@ -121,11 +128,14 @@ class LoginScreen extends React.Component {
                     onPress={() => {
                       this.login();
                     }}>
-                    <Text style={styles.buttonText}>Sign In</Text>
+                    {
+                      this.state.loggingIn ?
+                        <ActivityIndicator size="small" color="#fff" />
+                        :
+                        <Text style={styles.buttonText}>Sign In</Text>
+                    }
                   </TouchableOpacity>
                 </View>
-              </View>
-              <View style={styles.unauthBottomText}>
                 <Text style={styles.toggleText}>
                   New User?
                   <Text

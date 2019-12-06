@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -13,14 +13,14 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MenuIcon from './../../Images/hamburger.png';
 import colors from './../../config/colors';
-import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
+import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog';
 import styles from './header.style.js';
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 //REDUX
-// import { connect } from 'react-redux';
-// import { bindActionCreators } from 'redux';
-// import * as authActions from './../../actions/authActions';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as authActions from './../../actions/authActions';
 
 class Header extends Component {
   constructor(props) {
@@ -31,10 +31,10 @@ class Header extends Component {
     this.popupDialog = null;
   }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   goToSignup() {
-    this.setState({authModal: false}, () => {
+    this.setState({ authModal: false }, () => {
       setTimeout(() => {
         this.props.navigation.navigate('SignupScreen');
       }, 100);
@@ -42,25 +42,35 @@ class Header extends Component {
   }
 
   goToLogin() {
-    this.setState({authModal: false}, () => {
+    this.setState({ authModal: false }, () => {
       setTimeout(() => {
         this.props.navigation.navigate('LoginScreen');
       }, 100);
     });
   }
 
+  signOut() {
+    this.props.authAction.userLogout();
+    this.setState({ authModal: false }, () => {
+      setTimeout(() => {
+        this.props.navigation.navigate('Auth')
+      }, 100);
+    });
+  }
+
   render() {
-    let headerStyles = {...styles.headerContainer};
+    const { userData } = this.props;
+    let headerStyles = { ...styles.headerContainer };
     if (this.props.style) {
-      headerStyles = {...headerStyles, ...this.props.style};
+      headerStyles = { ...headerStyles, ...this.props.style };
     }
-    let headerStylesInner = {...styles.headerContainerInner};
+    let headerStylesInner = { ...styles.headerContainerInner };
     if (this.props.style) {
-      headerStylesInner = {...headerStylesInner, ...this.props.style};
+      headerStylesInner = { ...headerStylesInner, ...this.props.style };
     }
-    let rightTextStyles = {...styles.headerRightText};
+    let rightTextStyles = { ...styles.headerRightText };
     if (this.props.rightTextStyle) {
-      rightTextStyles = {...rightTextStyles, ...this.props.rightTextStyle};
+      rightTextStyles = { ...rightTextStyles, ...this.props.rightTextStyle };
     }
     return (
       <SafeAreaView style={headerStyles}>
@@ -87,8 +97,8 @@ class Header extends Component {
               />
             </TouchableOpacity>
           ) : (
-            <View></View>
-          )}
+                <View></View>
+              )}
 
           <Text style={styles.headerTitle}>{this.props.title}</Text>
 
@@ -104,17 +114,24 @@ class Header extends Component {
                 </Text>
               </TouchableOpacity>
             ) : (
-              <TouchableOpacity
-                onPress={() => this.setState({authModal: true})}
-                style={styles.headerUserIcon}>
-                <Icon name={'user'} size={20} color={colors.themeColor} />
-              </TouchableOpacity>
-            )
+                <TouchableOpacity
+                  onPress={() => this.setState({ authModal: true })}
+                >
+                  {
+                    userData && userData.image ?
+                      <Image source={{ uri: userData.image }} style={[styles.headerUserIcon, { height: 30, width: 30, borderWidth: 0 }]} />
+                      :
+                      <View style={styles.headerUserIcon}>
+                        <Icon name={'user'} size={20} color={colors.themeColor} />
+                      </View>
+                  }
+                </TouchableOpacity>
+              )
           ) : (
-            <View>
-              <Text> </Text>
-            </View>
-          )}
+              <View>
+                <Text> </Text>
+              </View>
+            )}
 
           <Dialog
             rounded={false}
@@ -125,7 +142,7 @@ class Header extends Component {
             }}
             animationDuration={1}
             onTouchOutside={() => {
-              this.setState({authModal: false});
+              this.setState({ authModal: false });
             }}
             dialogAnimation={
               new FadeAnimation({
@@ -135,35 +152,52 @@ class Header extends Component {
               })
             }
             onHardwareBackPress={() => {
-              this.setState({authModal: false});
+              this.setState({ authModal: false });
               return true;
             }}
             dialogStyle={styles.customPopup}>
             <DialogContent style={styles.customPopupContent}>
               <View style={styles.loginDialogContentInner}>
-                <TouchableOpacity
-                  onPress={() => this.goToLogin()}
-                  style={styles.loginDialogLink}>
-                  <SimpleLineIcons
-                    name={'login'}
-                    color={'#828282'}
-                    style={styles.loginDialogLinkIcon}
-                    size={18}
-                  />
-                  <Text style={styles.loginDialogLinkText}>Sign In</Text>
-                </TouchableOpacity>
 
-                <TouchableOpacity
-                  onPress={() => this.goToSignup()}
-                  style={styles.loginDialogLink}>
-                  <Icon
-                    name={'user-plus'}
-                    color={'#828282'}
-                    style={styles.loginDialogLinkIcon}
-                    size={18}
-                  />
-                  <Text style={styles.loginDialogLinkText}>Sign Up</Text>
-                </TouchableOpacity>
+                {
+                  this.props.userData ?
+                    <TouchableOpacity
+                      onPress={() => this.signOut()}
+                      style={styles.loginDialogLink}>
+                      <SimpleLineIcons
+                        name={'login'}
+                        color={'#828282'}
+                        style={styles.loginDialogLinkIcon}
+                        size={18}
+                      />
+                      <Text style={styles.loginDialogLinkText}>Sign Out</Text>
+                    </TouchableOpacity>
+                    :
+                    <>
+                      <TouchableOpacity
+                        onPress={() => this.goToLogin()}
+                        style={styles.loginDialogLink}>
+                        <SimpleLineIcons
+                          name={'login'}
+                          color={'#828282'}
+                          style={styles.loginDialogLinkIcon}
+                          size={18}
+                        />
+                        <Text style={styles.loginDialogLinkText}>Sign In</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => this.goToSignup()}
+                        style={styles.loginDialogLink}>
+                        <Icon
+                          name={'user-plus'}
+                          color={'#828282'}
+                          style={styles.loginDialogLinkIcon}
+                          size={18}
+                        />
+                        <Text style={styles.loginDialogLinkText}>Sign Up</Text>
+                      </TouchableOpacity>
+                    </>
+                }
 
                 <TouchableOpacity
                   onPress={() => console.log('test')}
@@ -184,16 +218,15 @@ class Header extends Component {
     );
   }
 }
-export default Header;
-// function mapStateToProps(state) {
-//     return {
-//         userData: state.user.userData,
-//     };
-// }
-// function mapDispatchToProps(dispatch) {
-//     return {
-//         authAction: bindActionCreators(authActions, dispatch),
-//     };
-// }
+function mapStateToProps(state) {
+  return {
+    userData: state.user.userData,
+  };
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    authAction: bindActionCreators(authActions, dispatch),
+  };
+}
 
-// export default connect(mapStateToProps, mapDispatchToProps)(SideMenu);
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

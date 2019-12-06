@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   Text,
@@ -7,8 +7,8 @@ import {
   TextInput,
   SafeAreaView,
   TouchableOpacity,
+  KeyboardAvoidingView
 } from 'react-native';
-import Feather from 'react-native-vector-icons/Feather';
 import styles from './Unauthscreens.style';
 
 class ForgotPassScreen extends React.Component {
@@ -40,41 +40,41 @@ class ForgotPassScreen extends React.Component {
               width: '100%',
               height: '100%',
             }}>
-            <View style={[styles.pinHeader]}>
-              <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                <Feather name={'arrow-left'} size={24} color={'white'} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.container}>
-              <View style={styles.unauthContent}>
-                <Text style={styles.logoText}>Discover - Inn</Text>
-                <View style={styles.unauthForm}>
-                  <Text style={styles.formTitle}>Forgot Password</Text>
-                  <View style={styles.formGroup}>
-                    <Text style={styles.formLabel}>Email</Text>
-                    <TextInput style={styles.formControl} />
+            <KeyboardAvoidingView
+              style={{ flex: 1 }}
+              behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+              keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
+            >
+             
+              <View style={styles.container}>
+                <View style={styles.unauthContent}>
+                  <Text style={styles.logoText}>Discover - Inn</Text>
+                  <View style={styles.unauthForm}>
+                    <Text style={styles.formTitle}>Forgot Password</Text>
+                    <View style={styles.formGroup}>
+                      <Text style={styles.formLabel}>Email</Text>
+                      <TextInput style={styles.formControl} />
+                    </View>
+                    <TouchableOpacity
+                      style={[styles.button, styles.buttonPrimary]}
+                      onPress={() => { }}>
+                      <Text style={styles.buttonText}>Submit</Text>
+                    </TouchableOpacity>
                   </View>
-                  <TouchableOpacity
-                    style={[styles.button, styles.buttonPrimary]}
-                    onPress={() => {}}>
-                    <Text style={styles.buttonText}>Submit</Text>
-                  </TouchableOpacity>
+                  <Text style={styles.toggleText}>
+                    Back to?
+                  <Text
+                      style={styles.toggleTextLink}
+                      onPress={() =>
+                        this.props.navigation.navigate('LoginScreen')
+                      }>
+                      {' '}
+                      SignIn
+                  </Text>
+                  </Text>
                 </View>
               </View>
-              <View style={styles.unauthBottomText}>
-                <Text style={styles.toggleText}>
-                  Back to?
-                  <Text
-                    style={styles.toggleTextLink}
-                    onPress={() =>
-                      this.props.navigation.navigate('LoginScreen')
-                    }>
-                    {' '}
-                    SignIn
-                  </Text>
-                </Text>
-              </View>
-            </View>
+            </KeyboardAvoidingView>
           </SafeAreaView>
         </ImageBackground>
       </Fragment>

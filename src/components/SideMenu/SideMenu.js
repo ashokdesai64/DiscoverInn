@@ -1,34 +1,40 @@
-import React, {Component} from 'react';
-import {View, ScrollView, Text, Image, SafeAreaView} from 'react-native';
+import React, { Component } from 'react';
+import { View, ScrollView, Text, Image, SafeAreaView,TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import styles from './SideMenu.style';
-import {Actions} from 'react-native-router-flux';
-
+import colors from './../../config/colors'
 //REDUX
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import * as authActions from './../../actions/authActions';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 class SideMenu extends Component {
   render() {
+    const { userData } = this.props;
     return (
       <SafeAreaView style={styles.menuWrapper}>
         <ScrollView>
           <View style={styles.profileHeader}>
             <View style={styles.profileHeader_img}>
-              <Image
-                source={require('../../Images/profile.png')}
-                style={styles.profileAvatar}
-              />
+              {
+                userData && userData.image ?
+                  <Image source={{ uri: userData.image }} style={styles.profileAvatar} />
+                  :
+                  <View style={styles.profileAvatar}>
+                    <Icon name={'user'} size={20} color={colors.themeColor} />
+                  </View>
+              }
             </View>
             <View style={styles.profileHeader_text}>
               <Text style={styles.profileHeader_name}>
-                Welcome, Kylie Jenner!
+                Welcome, {userData ? (userData.firstname || '') + ' ' + (userData.lastname || '') : 'Guest'}!
               </Text>
-              <Text style={styles.profileHeader_email}>
-                kyliejenner@gmail.com
+              {
+                userData && userData.email &&
+                <Text style={styles.profileHeader_email}>
+                  {userData.email}
               </Text>
+              }
               <Icon.Button
                 style={styles.profileHeader_button}
                 name="edit-2"

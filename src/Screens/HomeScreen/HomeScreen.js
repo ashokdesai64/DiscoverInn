@@ -224,7 +224,7 @@ class HomeScreen extends React.Component {
   render() {
     const {width} = Dimensions.get('window');
     return (
-      <Fragment style={styles.homePage}>
+      <Fragment >
         <Header
           showMenu={true}
           title={'Discover Inn'}

@@ -1,6 +1,6 @@
-import {createAppContainer, createSwitchNavigator} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
-import {createDrawerNavigator} from 'react-navigation-drawer';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createDrawerNavigator } from 'react-navigation-drawer';
 
 import HomeScreen from './Screens/HomeScreen/HomeScreen';
 import EditCategories from './Screens/EditCategories/EditCategories';
@@ -28,7 +28,9 @@ import AboutUsScreen from './Screens/AboutUsScreen/AboutUsScreen';
 import PrivacyPolicyScreen from './Screens/PrivacyPolicyScreen/PrivacyPolicyScreen';
 import TermsConditionScreen from './Screens/TermsConditionScreen/TermsConditionScreen';
 import SideMenu from './components/SideMenu/SideMenu';
-import {Router, Scene, Stack, Drawer} from 'react-native-router-flux';
+
+import DefaultScreen from './Screens/DefaultScreen'
+import { Router, Scene, Stack, Drawer } from 'react-native-router-flux';
 import MenuIcon from '../src/Images/hamburger.png';
 
 const userStack = createStackNavigator(
@@ -96,6 +98,9 @@ const userStack = createStackNavigator(
     TermsConditionScreen: {
       screen: TermsConditionScreen,
     },
+    DefaultScreen: {
+      screen: DefaultScreen
+    },
   },
   {
     headerMode: 'none',
@@ -103,7 +108,7 @@ const userStack = createStackNavigator(
   },
 );
 
-const authStack = createStackNavigator(
+const AuthStack = createStackNavigator(
   {
     LoginScreen: {
       screen: LoginScreen,
@@ -119,27 +124,34 @@ const authStack = createStackNavigator(
     },
   },
   {
+    initialRouteName: 'LoginScreen',
     headerMode: 'none',
   },
 );
 
 const DrawerStack = createDrawerNavigator(
   {
-    userStack: {screen: userStack},
+    userStack: { screen: userStack },
   },
   {
     gesturesEnabled: false,
     contentComponent: SideMenu,
+    initialRouteName:'userStack'
   },
 );
 
 const App = createSwitchNavigator({
-  DrawerStack: {
+  AuthLoading: {
+    screen: DefaultScreen
+  },
+  App: {
     screen: DrawerStack,
   },
   Auth: {
-    screen: authStack,
-  },
+    screen: AuthStack,
+  }
+},{
+  initialRouteName:'AuthLoading'
 });
 
 export default createAppContainer(App);
