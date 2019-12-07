@@ -89,7 +89,7 @@ class TripPinList extends React.Component {
               </View>
 
               <View style={styles.formGroup}>
-                <Text style={[styles.formLabel, { fontSize: 18, fontWeight: '600', color: '#333', textAlign: 'center' }]}>Are you sure you want to remove this review ?</Text>
+                <Text style={[styles.formLabel, { fontSize: 18, fontWeight: '600', color: '#333', textAlign: 'center' }]}>Are you sure you want to remove this pin ?</Text>
               </View>
 
               <View

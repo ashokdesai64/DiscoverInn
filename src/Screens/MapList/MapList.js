@@ -80,20 +80,23 @@ class MapList extends React.Component {
     return (
       <View style={[styles.mapSlideCard]}>
         <View style={styles.mapSlideCardHeader}>
-          <Button
+        <TouchableOpacity
+            activeOpacity={0.8}
             style={styles.shareButton}
             onPress={() => this.setState({shareModal: true})}>
             <Feather style={styles.shareButtonText} name="share-2" />
-          </Button>
+          </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.8}
-            onPress={() => this.setState({mapDetailsModal: true})}>
+            onPress={() => this.navigateToMap()}>
             <Image style={styles.mapSlideCardImg} source={item.image} />
             <View style={styles.mapSlideCardImg_overlay} />
           </TouchableOpacity>
-          <Button style={styles.mapButton} onPress={() => this.navigateToMap()}>
-            <Feather style={styles.shareButtonText} name="map" />
-          </Button>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.mapButton} onPress={() => this.setState({mapDetailsModal: true})}>
+            <Feather style={[styles.shareButtonText,{fontSize:18}]} name="info" />
+          </TouchableOpacity>
         </View>
         <View style={styles.mapSlideCardBody}>
           <View style={styles.mapSlideBadgeGroup}>

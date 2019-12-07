@@ -150,7 +150,7 @@ class MapView extends React.Component {
           </View>
           <MapboxGL.MapView
             style={styles.map}
-            styleURL={MapboxGL.StyleURL.Light}
+            styleURL={MapboxGL.StyleURL.Street}
             logoEnabled={false}
             attributionEnabled={false}>
             <MapboxGL.Camera

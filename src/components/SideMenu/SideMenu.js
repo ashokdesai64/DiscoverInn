@@ -60,7 +60,7 @@ class SideMenu extends Component {
                 paddingRight={0}
                 backgroundColor="#ffffff"
                 onPress={() => this.props.navigation.navigate('UploadMap')}>
-                <Text style={styles.menuList_LinkText}>Upload Map</Text>
+                <Text style={styles.menuList_LinkText}>My Travel</Text>
               </Icon.Button>
             </View>
             <View style={styles.menuList_Item}>
@@ -72,7 +72,7 @@ class SideMenu extends Component {
                 paddingRight={0}
                 backgroundColor="#ffffff"
                 onPress={() => this.props.navigation.navigate('EditMymaps')}>
-                <Text style={styles.menuList_LinkText}>Edit Mymaps</Text>
+                <Text style={styles.menuList_LinkText}>Edit MyMaps</Text>
               </Icon.Button>
             </View>
             <View style={styles.menuList_Item}>
@@ -122,7 +122,7 @@ class SideMenu extends Component {
                 onPress={() =>
                   this.props.navigation.navigate('MyMapShareList')
                 }>
-                <Text style={styles.menuList_LinkText}>Shared Zone</Text>
+                <Text style={styles.menuList_LinkText}>Offline Maps</Text>
               </Icon.Button>
             </View>
             <View style={styles.menuList_Item}>

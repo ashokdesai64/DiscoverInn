@@ -245,15 +245,13 @@ const styles = StyleSheet.create({
   shareButton: {
     position: 'absolute',
     left: 15,
-    top: 2,
-    backgroundColor: 'transparent',
+    top: 15,
     zIndex: 99999,
   },
   mapButton: {
     position: 'absolute',
     right: 15,
-    top: 2,
-
+    top: 15,
     backgroundColor: 'transparent',
   },
   shareButtonText: {

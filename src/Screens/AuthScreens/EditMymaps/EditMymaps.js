@@ -168,7 +168,7 @@ class EditMymaps extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, styles.buttonSuccess]}
-            onPress={() => { this.props.navigation.navigate('AddMapDetail') }}>
+            onPress={() => { this.props.navigation.navigate('AddMapDetail',{type:'edit'}) }}>
             <Text style={styles.buttonText}>Edit</Text>
           </TouchableOpacity>
           <TouchableOpacity

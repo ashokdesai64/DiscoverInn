@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   Text,
@@ -9,13 +9,13 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from 'react-native';
-import {ListItem, CheckBox, Picker, Textarea} from 'native-base';
+import { ListItem, CheckBox, Picker, Textarea } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Icon from 'react-native-vector-icons/Feather';
 import Header from './../../../components/header/header';
 import styles from './AddMapDetail.style';
 
-import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import fontelloConfig from './../../../selection.json';
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 
@@ -48,6 +48,7 @@ class AddMapDetail extends React.Component {
       month: 'select month',
       date: 'select date',
     };
+    console.log(props);
   }
 
   // chnage_checkboxvalue = (statename, value) => {
@@ -60,21 +61,22 @@ class AddMapDetail extends React.Component {
   // };
 
   change_month = month => {
-    this.setState({month: month});
+    this.setState({ month: month });
   };
   change_date = date => {
-    this.setState({date: date});
+    this.setState({ date: date });
   };
 
   render() {
+    const { params } = this.props.navigation.state;
     return (
       <Fragment>
         <ImageBackground
           source={require('../../../Images/map-bg.png')}
-          style={{width: '100%', height: '100%'}}>
+          style={{ width: '100%', height: '100%' }}>
           <Header
             showBack={true}
-            title={'Add Map'}
+            title={params && params.type == 'edit' ? 'Edit Map' : 'Add Map'}
             {...this.props}
             rightEmpty={true}
             showRightButton={false}
@@ -117,11 +119,11 @@ class AddMapDetail extends React.Component {
                 <View
                   style={
                     (styles.formGroup,
-                    {
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      marginBottom: 20,
-                    })
+                      {
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        marginBottom: 20,
+                      })
                   }>
                   <TextInput
                     style={[
@@ -149,27 +151,27 @@ class AddMapDetail extends React.Component {
                 </View>
                 <View style={styles.mapPins}>
                   <View
-                    style={[styles.singlePin, {backgroundColor: '#2F80ED'}]}>
+                    style={[styles.singlePin, { backgroundColor: '#2F80ED' }]}>
                     <IconMoon size={14} name="sights" color={'white'} />
                   </View>
                   <View
                     style={[
                       styles.singlePin,
-                      {backgroundColor: 'rgba(47, 128, 237, 0.1)'},
+                      { backgroundColor: 'rgba(47, 128, 237, 0.1)' },
                     ]}>
                     <IconMoon size={14} name="activities" color={'#2F80ED'} />
                   </View>
                   <View
                     style={[
                       styles.singlePin,
-                      {backgroundColor: 'rgba(47, 128, 237, 0.1)'},
+                      { backgroundColor: 'rgba(47, 128, 237, 0.1)' },
                     ]}>
                     <IconMoon size={14} name="restaurants" color={'#2F80ED'} />
                   </View>
                   <View
                     style={[
                       styles.singlePin,
-                      {backgroundColor: 'rgba(47, 128, 237, 0.1)'},
+                      { backgroundColor: 'rgba(47, 128, 237, 0.1)' },
                     ]}>
                     <IconMoon size={14} name="nightlife" color={'#2F80ED'} />
                   </View>
@@ -177,7 +179,7 @@ class AddMapDetail extends React.Component {
                   <View
                     style={[
                       styles.singlePin,
-                      {backgroundColor: 'rgba(47, 128, 237, 0.1)'},
+                      { backgroundColor: 'rgba(47, 128, 237, 0.1)' },
                     ]}>
                     <IconMoon
                       size={14}
@@ -188,14 +190,14 @@ class AddMapDetail extends React.Component {
                   <View
                     style={[
                       styles.singlePin,
-                      {backgroundColor: 'rgba(47, 128, 237, 0.1)'},
+                      { backgroundColor: 'rgba(47, 128, 237, 0.1)' },
                     ]}>
                     <IconMoon size={14} name="shopping" color={'#2F80ED'} />
                   </View>
                   <View
                     style={[
                       styles.singlePin,
-                      {backgroundColor: 'rgba(47, 128, 237, 0.1)'},
+                      { backgroundColor: 'rgba(47, 128, 237, 0.1)' },
                     ]}>
                     <IconMoon size={14} name="other" color={'#2F80ED'} />
                   </View>
@@ -229,7 +231,7 @@ class AddMapDetail extends React.Component {
             </View>
             <View style={styles.footerButton}>
               <TouchableOpacity
-                style={[styles.button, styles.buttonPrimary, {flex: 1}]}
+                style={[styles.button, styles.buttonPrimary, { flex: 1 }]}
                 onPress={() => {
                   this.props.navigation.navigate('PinCategories');
                 }}>

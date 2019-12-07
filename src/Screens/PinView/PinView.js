@@ -72,7 +72,7 @@ class PinView extends React.Component {
           inactiveSlideOpacity={1}
           inactiveSlideScale={1}
           containerCustomStyle={{
-            height: 450,
+            height: 400,
             width: DEVICE_WIDTH,
             top: 0,
             position: 'absolute',
@@ -87,7 +87,7 @@ class PinView extends React.Component {
           activeDotIndex={this.state.activeSlide}
           containerStyle={{
             position: 'absolute',
-            top: 300,
+            top: 250,
             left: -5,
             zIndex: 999999,
           }}
@@ -266,11 +266,11 @@ const styles = StyleSheet.create({
   },
   pinScrollView: {
     padding: 20,
-    height: DEVICE_HEIGHT - 450,
+    height: 'auto',
     borderRadius: 20,
     backgroundColor: 'white',
     position: 'absolute',
-    top: 450,
+    top: 400,
     marginTop: -100,
   },
   pinViewTitle: {
