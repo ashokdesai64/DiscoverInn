@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   formLabel: {
     color: '#BDBDBD',
     fontSize: 12,
-    fontFamily: 'Montserrat-Regular',
+    fontFamily: 'Montserrat-Medium',
     marginBottom: 5,
     paddingLeft: 10,
   },

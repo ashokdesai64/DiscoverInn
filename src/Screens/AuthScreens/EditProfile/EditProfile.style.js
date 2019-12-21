@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F3F4F6'
+    backgroundColor: '#F3F4F6',
   },
   pageContent: {
     paddingVertical: 10,
@@ -10,6 +10,12 @@ const styles = StyleSheet.create({
   },
   formGroup: {
     marginBottom: 15,
+  },
+  formGroupEdit: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 15,
+    marginTop: 5,
   },
   formLabel: {
     color: '#4F4F4F',
