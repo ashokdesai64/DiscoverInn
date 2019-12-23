@@ -1,5 +1,6 @@
-import {StyleSheet} from 'react-native';
-import {Right} from 'native-base';
+import { StyleSheet, Dimensions } from 'react-native';
+const DEVICE_HEIGHT = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
   unauthContent: {
     padding: 30,
     paddingBottom: 0,
-    flex: 1,
+    flex:1
   },
   logoText: {
     fontSize: 36,
@@ -104,6 +105,16 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Medium',
     textAlignVertical: 'bottom',
     marginBottom: 20,
+  },
+  fixedFooter: {
+    position: 'absolute',
+    top: DEVICE_HEIGHT - 100,
+    color: 'white',
+    color: '#fff',
+    fontSize: 14,
+    alignSelf: 'center',
+    textAlign: 'center',
+    fontFamily: 'Montserrat-Medium',
   },
   toggleTextLink: {
     fontFamily: 'Montserrat-SemiBold',

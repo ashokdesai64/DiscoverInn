@@ -19,15 +19,6 @@ import { bindActionCreators } from 'redux';
 import * as authActions from './../../actions/authActions';
 
 class LoginScreen extends React.Component {
-  static navigationOptions = {
-    title: '',
-    headerStyle: {
-      backgroundColor: 'transparent',
-      borderBottomWidth: 0,
-    },
-    headerTintColor: '#fff',
-  };
-
   constructor(props) {
     super(props);
     this.state = {

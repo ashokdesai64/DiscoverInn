@@ -7,20 +7,41 @@ import {
   TextInput,
   SafeAreaView,
   TouchableOpacity,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  ActivityIndicator
 } from 'react-native';
 import styles from './Unauthscreens.style';
 
+//REDUX
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as authActions from './../../actions/authActions';
+
 class ForgotPassScreen extends React.Component {
-  static navigationOptions = {
-    header: null,
-    title: '',
-    headerStyle: {
-      backgroundColor: 'transfrent',
-      borderBottomWidth: 0,
-    },
-    headerTintColor: '#fff',
-  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: 'tony@stark.com',
+      inProgress: false
+    }
+
+  }
+
+  forgotPassword() {
+    if (!this.state.email) {
+      alert("Please enter email."); return
+    }
+    this.setState({ inProgress: true });
+    this.props.authAction.forgotPassword({ email: this.state.email }).then((msg) => {
+      alert(msg);
+      this.setState({ inProgress: false })
+    }).catch((e) => {
+      alert(e);
+      this.setState({ inProgress: false })
+    });
+  }
+
   render() {
     return (
       <Fragment>
@@ -45,7 +66,7 @@ class ForgotPassScreen extends React.Component {
               behavior={Platform.OS === 'ios' ? 'padding' : undefined}
               keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
             >
-             
+
               <View style={styles.container}>
                 <View style={styles.unauthContent}>
                   <Text style={styles.logoText}>Discover - Inn</Text>
@@ -53,12 +74,17 @@ class ForgotPassScreen extends React.Component {
                     <Text style={styles.formTitle}>Forgot Password</Text>
                     <View style={styles.formGroup}>
                       <Text style={styles.formLabel}>Email</Text>
-                      <TextInput style={styles.formControl} />
+                      <TextInput style={styles.formControl} value={this.state.email} onChangeText={(email) => { this.setState({ email: email.trim() }) }} />
                     </View>
                     <TouchableOpacity
                       style={[styles.button, styles.buttonPrimary]}
-                      onPress={() => { }}>
-                      <Text style={styles.buttonText}>Submit</Text>
+                      onPress={() => this.forgotPassword()}>
+                      {
+                        this.state.inProgress ?
+                          <ActivityIndicator size="small" color="#fff" />
+                          :
+                          <Text style={styles.buttonText}>Submit</Text>
+                      }
                     </TouchableOpacity>
                   </View>
                   <Text style={styles.toggleText}>
@@ -81,4 +107,16 @@ class ForgotPassScreen extends React.Component {
     );
   }
 }
-export default ForgotPassScreen;
+
+function mapStateToProps(state) {
+  return {
+    userData: state.user.userData,
+  };
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    authAction: bindActionCreators(authActions, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ForgotPassScreen);

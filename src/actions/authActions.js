@@ -1,8 +1,9 @@
 import { callAPI } from './../Services/network';
 import { apiUrls } from './../config/api';
+
 export function userLogin(email, password) {
   return async function (dispatch, getState) {
-    return new Promise(async(resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       let postData = { email, password };
       let response = await callAPI(
         apiUrls.login,
@@ -22,7 +23,66 @@ export function userLogin(email, password) {
 
     })
   };
+}
 
+export function userSignup(postData) {
+  return async function (dispatch, getState) {
+    return new Promise(async (resolve, reject) => {
+      let response = await callAPI(
+        apiUrls.signup,
+        postData,
+      );
+      console.log('signup response =>< ', response);
+
+      if (response.status) {
+        dispatch({
+          type: 'userLogin',
+          userData: response.data,
+          subtype: !!response && response.status ? 'success' : 'error',
+        });
+      } else {
+        reject(response.message)
+      }
+
+    })
+  };
+}
+
+export function forgotPassword(postData) {
+  return async function (dispatch, getState) {
+    return new Promise(async (resolve, reject) => {
+      let response = await callAPI(
+        apiUrls.forgotPassword,
+        postData,
+      );
+      console.log('forgot pass response =>< ', response);
+
+      if (response.status) {
+        resolve(response.message)
+      } else {
+        reject(response.message)
+      }
+
+    })
+  }
+}
+export function changePassword(postData) {
+  return async function (dispatch, getState) {
+    return new Promise(async (resolve, reject) => {
+      let response = await callAPI(
+        apiUrls.changePassword,
+        postData,
+      );
+      console.log('change pass response =>< ', response);
+
+      if (response.status) {
+        resolve(response.message)
+      } else {
+        reject(response.message)
+      }
+
+    })
+  }
 }
 
 export function userLogout() {
