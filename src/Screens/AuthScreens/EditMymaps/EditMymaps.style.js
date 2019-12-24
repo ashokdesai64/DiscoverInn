@@ -1,4 +1,8 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
+
+const DEVICE_HEIGHT = Dimensions.get('window').height;
+const DEVICE_WIDTH = Dimensions.get('window').width;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -25,7 +29,7 @@ const styles = StyleSheet.create({
     flex: 1,
     shadowColor: '#000000',
     shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: {width: 0, height: 4},
     shadowRadius: 10,
     elevation: 5,
   },
@@ -145,13 +149,15 @@ const styles = StyleSheet.create({
   button: {
     paddingVertical: 5,
     paddingHorizontal: 30,
-    height: 30,
-    // width: 100,
+    height: 40,
     alignSelf: 'center',
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
+  },
+  buttonSm: {
+    height: 30,
   },
   buttonPrimary: {
     backgroundColor: '#2F80ED',
@@ -181,7 +187,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontFamily: 'Montserrat-Medium',
     margin: 0,
-    padding: 0
+    padding: 0,
   },
   dropdownArrow: {
     fontSize: 14,
@@ -197,20 +203,12 @@ const styles = StyleSheet.create({
   mymapsItemDropdown: {
     fontSize: 12,
     height: 25,
-    // flexGrow: 1,
-    // padding: 10,
     position: 'relative',
   },
   editImage: {
-    // position: 'absolute',
-    // top: 5,
-    // right: 0,
-    // width: 15,
-    // height: 15,
-    // width:150,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   editImageIcon: {
     color: '#2F80ED',
@@ -218,6 +216,22 @@ const styles = StyleSheet.create({
   },
   formGroup: {
     marginBottom: 15,
+  },
+  customPopup: {
+    width: DEVICE_WIDTH,
+    padding: 0,
+    position: 'absolute',
+    bottom: 0,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowOffset: {width: 0, height: -2},
+    shadowRadius: 10,
+    maxHeight: DEVICE_HEIGHT - 190,
   },
   customPopupContent: {
     paddingVertical: 20,
@@ -241,6 +255,50 @@ const styles = StyleSheet.create({
   buttonCloseIcon: {
     color: '#BDBDBD',
     fontSize: 24,
+  },
+  coverImageCard: {
+    width: DEVICE_WIDTH - 40,
+    height: 120,
+  },
+  coverImageCardBox: {
+    height: 120,
+    width: DEVICE_WIDTH - 40,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#2F80ED',
+  },
+  addPlusIcon: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    height: 120,
+    width: DEVICE_WIDTH - 40,
+    backgroundColor: 'rgba(47, 128, 237, 0.1)',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  addPlusText: {
+    color: '#fff',
+    fontSize: 14,
+    fontFamily: 'Montserrat-Medium',
+  },
+  footerButton: {
+    flexDirection: 'row',
+    marginTop: 0,
+    marginHorizontal: 15,
+    alignItems: 'flex-end',
+    marginBottom: 20,
+    justifyContent: 'space-between',
+  },
+  buttonOutline: {
+    borderColor: '#BDBDBD',
+    borderWidth: 1,
+    color: '#fff',
+  },
+  buttonTextGray: {
+    color: '#333333',
   },
 });
 
