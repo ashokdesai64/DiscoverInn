@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react';
 import {View, Text, ScrollView, Switch, Dimensions, Image} from 'react-native';
-import {Item, Input, Button, Content, Accordion, Picker} from 'native-base';
+import {Item, Input, Button, Content, Accordion, CheckBox} from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import styles from './EditMymaps.style';
@@ -85,8 +85,12 @@ class EditMymaps extends React.Component {
           <View style={styles.mymapsItem}>
             <Text style={styles.mymapsItemTitle}>Public</Text>
             <Switch
-              style={styles.mymapsItemSwitch}
+              style={[
+                styles.mymapsItemSwitch,
+                {transform: [{scaleX: 0.7}, {scaleY: 0.7}]},
+              ]}
               value={item.public}
+              trackColor={{true: '#fff', false: '#fff'}}
               thumbColor={'#2F80ED'}
               onValueChange={value =>
                 (this.state.dataArray[commentIndex].public = item.public
@@ -137,7 +141,7 @@ class EditMymaps extends React.Component {
               <TouchableOpacity
                 style={styles.editImage}
                 onPress={() => {
-                  this.setState({showChangeCoverModal: true});
+                  this.setState({changeCoverModal: true});
                 }}>
                 <Text
                   style={{
@@ -227,11 +231,67 @@ class EditMymaps extends React.Component {
 
         <Dialog
           rounded={false}
-          visible={this.state.showChangeCoverModal}
+          visible={this.state.changeCoverModal}
           hasOverlay={true}
           animationDuration={1}
           onTouchOutside={() => {
-            this.setState({showChangeCoverModal: false});
+            this.setState({changeCoverModal: false});
+          }}
+          dialogAnimation={
+            new FadeAnimation({
+              initialValue: 0, // optional
+              animationDuration: 150, // optional
+              useNativeDriver: true, // optional
+            })
+          }
+          onHardwareBackPress={() => {
+            this.setState({changeCoverModal: false});
+            return true;
+          }}
+          dialogStyle={styles.customPopup}>
+          <DialogContent style={styles.customPopupContent}>
+            <View style={styles.customPopupHeader}>
+              <Text style={styles.customPopupHeaderTitle}>
+                Change A Picture
+              </Text>
+              <TouchableOpacity
+                style={styles.buttonClose}
+                onPress={() => this.setState({changeCoverModal: false})}>
+                <Feather name={'x'} style={styles.buttonCloseIcon} />
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.changeCoverModalBody}>
+              <Button
+                style={[
+                  styles.button,
+                  styles.buttonPrimary,
+                  styles.buttonUpload,
+                ]}
+                onPress={() => {
+                  this.setState({uploadCoverModal: true});
+                }}>
+                <Text style={styles.buttonText}>Upload Image</Text>
+              </Button>
+              <View style={styles.defaultImageCheck}>
+                <CheckBox
+                  checked={false}
+                  color={'#BDBDBD'}
+                  style={{borderRadius: 3, marginRight: 20}}
+                />
+                <Text style={styles.defaultImageCheckText}>Default Image</Text>
+              </View>
+            </View>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog
+          rounded={false}
+          visible={this.state.uploadCoverModal}
+          hasOverlay={true}
+          animationDuration={1}
+          onTouchOutside={() => {
+            this.setState({uploadCoverModal: false});
           }}
           dialogAnimation={
             new FadeAnimation({
@@ -241,7 +301,7 @@ class EditMymaps extends React.Component {
             })
           }
           onHardwareBackPress={() => {
-            this.setState({showChangeCoverModal: false});
+            this.setState({uploadCoverModal: false});
             return true;
           }}
           dialogStyle={styles.customPopup}>
@@ -252,7 +312,7 @@ class EditMymaps extends React.Component {
               </Text>
               <TouchableOpacity
                 style={styles.buttonClose}
-                onPress={() => this.setState({showChangeCoverModal: false})}>
+                onPress={() => this.setState({uploadCoverModal: false})}>
                 <Feather name={'x'} style={styles.buttonCloseIcon} />
               </TouchableOpacity>
             </View>
@@ -316,28 +376,24 @@ class EditMymaps extends React.Component {
               </Text>
             </View>
 
-            <View style={[styles.footerButton, {flex: 1}]}>
-              <TouchableOpacity
+            <View style={[styles.footerButton]}>
+              <Button
                 style={[
                   styles.button,
                   styles.buttonOutline,
                   styles.buttonOutlineGray,
-                  {flex: 1, marginRight: 10},
+                  styles.buttonDecline,
                 ]}
                 onPress={() => {}}>
                 <Text style={[styles.buttonText, styles.buttonTextGray]}>
                   Decline
                 </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.button,
-                  styles.buttonDanger,
-                  {flex: 1, marginLeft: 10},
-                ]}
+              </Button>
+              <Button
+                style={[styles.button, styles.buttonDanger, styles.buttonSave]}
                 onPress={() => {}}>
                 <Text style={styles.buttonText}>Yes Sure</Text>
-              </TouchableOpacity>
+              </Button>
             </View>
           </DialogContent>
         </Dialog>

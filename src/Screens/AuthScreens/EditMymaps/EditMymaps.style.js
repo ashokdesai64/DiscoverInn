@@ -130,6 +130,12 @@ const styles = StyleSheet.create({
     flexWrap: 'nowrap',
     borderColor: '#F2F2F2',
   },
+  mymapsItemSwitch: {
+    borderColor: '#DADBDF',
+    borderWidth: 1,
+    borderRadius: 15,
+    padding: 5,
+  },
   mymapsItemTitle: {
     color: '#BDBDBD',
     fontSize: 14,
@@ -287,18 +293,51 @@ const styles = StyleSheet.create({
   footerButton: {
     flexDirection: 'row',
     marginTop: 0,
-    marginHorizontal: 15,
     alignItems: 'flex-end',
     marginBottom: 20,
     justifyContent: 'space-between',
   },
   buttonOutline: {
     borderColor: '#BDBDBD',
+    backgroundColor: '#fff',
     borderWidth: 1,
     color: '#fff',
   },
+  buttonDecline: {
+    flex: 1,
+    marginRight: 15,
+  },
+  buttonSave: {
+    flex: 1,
+    marginLeft: 15,
+  },
   buttonTextGray: {
     color: '#333333',
+  },
+  deleteModalBody: {
+    paddingTop: 20,
+    paddingHorizontal: 35,
+    paddingBottom: 50,
+  },
+  deleteModalBodyText: {
+    fontSize: 18,
+    fontFamily: 'Montserrat-SemiBold',
+    textAlign: 'center',
+  },
+  changeCoverModalBody: {
+    paddingTop: 15,
+    paddingBottom: 25,
+  },
+  defaultImageCheck: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  defaultImageCheckText: {
+    fontSize: 14,
+    fontFamily: 'Montserrat-Medium',
+    color: '#4F4F4F',
   },
 });
 
