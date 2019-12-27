@@ -12,7 +12,6 @@ import styles from './HomeScreen.style';
 import Carousel from 'react-native-snap-carousel';
 import Feather from 'react-native-vector-icons/Feather';
 import Header from './../../components/header/header';
-import DocumentPicker from 'react-native-document-picker';
 
 import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
 import fontelloConfig from './../../selection.json';
@@ -92,25 +91,7 @@ class HomeScreen extends React.Component {
     this._renderItemTop = this._renderItemTop.bind(this);
     this._renderItem = this._renderItem.bind(this);
   }
-  async componentDidMount() {
-    try {
-      const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.allFiles],
-      });
-      console.log(
-        res.uri,
-        res.type, // mime type
-        res.name,
-        res.size,
-      );
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        // User cancelled the picker, exit any dialogs or menus and move on
-      } else {
-        throw err;
-      }
-    }
-  }
+  
   _renderItem({item, index}) {
     return (
       <TouchableOpacity

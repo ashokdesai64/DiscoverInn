@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -16,6 +16,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 15,
     marginTop: 5,
+  },
+  button: {
+    paddingVertical: 5,
+    paddingHorizontal: 30,
+    width: 150,
+    height: 40,
+    marginTop:20,
+    alignSelf: 'center',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 12,
+    fontFamily: 'Montserrat-Medium',
+  },
+  buttonPrimary: {
+    backgroundColor: '#2F80ED',
   },
   formLabel: {
     color: '#4F4F4F',
