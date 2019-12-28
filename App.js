@@ -19,7 +19,7 @@ import reducer from './src/reducers';
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['user'],
+  whitelist: ['user','maps'],
 };
 const persistedReducer = persistReducer(persistConfig, reducer);
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);

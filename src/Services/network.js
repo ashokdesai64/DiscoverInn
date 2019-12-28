@@ -20,6 +20,7 @@ export async function callAPI(url, data, method = 'POST') {
 
     let response = await fetch(url, apiSkeleton);
     let apiResponse = await response.json();
+    console.log("url "+url+" => ",apiResponse)
     resolve(apiResponse);
   });
 }

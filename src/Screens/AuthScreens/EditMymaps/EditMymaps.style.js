@@ -272,6 +272,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#2F80ED',
+    zIndex:9999
   },
   addPlusIcon: {
     position: 'absolute',

@@ -4,6 +4,7 @@ import { NavigationActions, StackActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as userActions from './../actions/authActions';
+import * as mapActions from './../actions/mapActions';
 
 class DefaultScreen extends Component {
 
@@ -25,7 +26,13 @@ class DefaultScreen extends Component {
     }
 
     componentDidMount() {
+        this.fetchInitialData()
         this.redirectToApp(this.props);
+    }
+
+    fetchInitialData(){
+        this.props.mapAction.loadPopularAndRated();
+        this.props.mapAction.loadCategories();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -50,6 +57,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         userAction: bindActionCreators(userActions, dispatch),
+        mapAction: bindActionCreators(mapActions, dispatch),
     };
 }
 
