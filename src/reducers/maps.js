@@ -26,6 +26,24 @@ export default function maps(state = initialState, action = {}) {
                 ownMaps: action.ownMaps || (state.ownMaps || {}),
             };
         }
+        case 'tripList': {
+            return {
+                ...state,
+                tripList: action.tripList || (state.tripList || {}),
+            };
+        }
+        case 'mapList': {
+            return {
+                ...state,
+                mapList: action.mapList || (state.mapList || {}),
+            };
+        }
+        case 'mapListCount': {
+            return {
+                ...state,
+                mapListCount: action.mapListCount || (state.mapListCount || 0),
+            };
+        }
         default:
             return state;
     }

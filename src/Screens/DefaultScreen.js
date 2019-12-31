@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { View } from "react-native";
-import { NavigationActions, StackActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as userActions from './../actions/authActions';
@@ -33,10 +32,10 @@ class DefaultScreen extends Component {
     fetchInitialData(){
         this.props.mapAction.loadPopularAndRated();
         this.props.mapAction.loadCategories();
+        this.props.mapAction.fetchTripList();
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log("nextProps => ",nextProps)
         this.redirectToApp(nextProps)
     }
 
@@ -48,7 +47,6 @@ class DefaultScreen extends Component {
 }
 
 function mapStateToProps(state) {
-    console.log("inside map state to props => ", state)
     return {
         userData: state.user && state.user.userData
     };

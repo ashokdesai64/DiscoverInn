@@ -23,6 +23,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as authActions from './../../actions/authActions';
+import * as mapActions from './../../actions/mapActions';
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -211,7 +212,7 @@ class HomeScreen extends React.Component {
     return (
       <TouchableOpacity
         style={styles.mapSlidCard}
-        onPress={() => this.props.navigation.navigate('MapList')}
+        onPress={() => this.fetchCategoryMaps(item.id)}
         activeOpacity={0.8}>
         <View style={styles.cateSlideCard}>
           <View style={styles.cateSlideCardContent}>
@@ -222,6 +223,12 @@ class HomeScreen extends React.Component {
       </TouchableOpacity>
     );
   };
+  
+  fetchCategoryMaps(categoryID){
+    let userID = this.props.userData && this.props.userData.id;
+    this.props.mapAction.fetchMapList({categorie:categoryID,page:1,sort_by:'rating',user_id:userID});
+    this.props.navigation.navigate('MapList',{category:categoryID});
+  }
 
   render() {
     const { width } = Dimensions.get('window');
@@ -362,7 +369,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     authAction: bindActionCreators(authActions, dispatch),
+    mapAction: bindActionCreators(mapActions, dispatch),
   };
 }
 
-export default connect(mapStateToProps, null)(HomeScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

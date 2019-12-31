@@ -26,7 +26,7 @@ class EditMymaps extends React.Component {
   pageNo = 1;
   state = {
     pageNo: 1,
-    search: 'title',
+    search: '',
     currentMap: {},
     selected: 'User Picture',
     dataArray: [
@@ -91,10 +91,6 @@ class EditMymaps extends React.Component {
       </View>
     );
   }
-
-  // searchContact = _.debounce(() => {
-  //   this.props.onContactSearch(this.state.searchText)
-  // }, 250)
 
   _renderContent = item => {
     var commentIndex = this.state.dataArray.findIndex(function (c) {
@@ -209,7 +205,6 @@ class EditMymaps extends React.Component {
   };
 
   fetchMaps() {
-    console.log("-------fetch maps-------")
     this.props.mapAction.fetchMyMaps({ user_id: this.props.userData.id, search: this.state.search, page: this.pageNo });
   }
 
@@ -225,12 +220,13 @@ class EditMymaps extends React.Component {
         <ScrollView
           style={styles.scrollView}
           showsHorizontalScrollIndicator={false}
-          onScroll={({ nativeEvent }) => {
-            if (isCloseToBottom(nativeEvent)) {
-              this.pageNo += 1;
-              this.fetchMaps();
-            }
-          }}
+          keyboardShouldPersistTaps={'always'}
+          // onScroll={({ nativeEvent }) => {
+          //   if (isCloseToBottom(nativeEvent)) {
+          //     this.pageNo += 1;
+          //     this.fetchMaps();
+          //   }
+          // }}
           scrollEventThrottle={400}
         >
           <View style={styles.container}>

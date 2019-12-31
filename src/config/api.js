@@ -7,4 +7,6 @@ export const apiUrls = {
     popularAndRated:'https://discover-inn.com/api/v1/popular_top_rated_maps',
     getCategories:'https://discover-inn.com/api/v1/categories',
     myMaps:'https://discover-inn.com/api/v1/own_maps',
+    tripList:'https://discover-inn.com/api/v1/trip_list',
+    mapList:'https://discover-inn.com/api/v1/map_list'
 }
