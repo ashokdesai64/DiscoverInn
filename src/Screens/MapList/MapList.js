@@ -20,6 +20,7 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import fontelloConfig from './../../selection.json';
 import moment from 'moment';
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
+import { NavigationEvents } from 'react-navigation';
 
 const height = Dimensions.get('window').height;
 
@@ -37,7 +38,7 @@ class MapList extends React.Component {
     this.state = {
       showTripList: false,
       shareModal: false,
-      searchTerm:'',
+      searchTerm: '',
       carouselItems: [
         {
           image: require('./../../Images/login-bg.jpg'),
@@ -100,6 +101,12 @@ class MapList extends React.Component {
           icon: 'other',
         },
       ],
+      selectedAge: '',
+      selectedBudget: '',
+      selectedCategory: '',
+      selectedCreatedWithin: '',
+      selectedTravelType: '',
+      addReviewValue: 0
     };
   }
 
@@ -226,29 +233,52 @@ class MapList extends React.Component {
     );
   }
 
-  sortBy(sortBy){
-    this.setState({sortBy:sortBy == this.state.sortBy ? null:sortBy,sortByModal:false},()=>{
+  sortBy(sortBy) {
+    this.setState({ sortBy: sortBy == this.state.sortBy ? null : sortBy, sortByModal: false }, () => {
       this.fetchMapList();
     })
   }
 
-  fetchMapList(){
-    const {params} = this.props.navigation.state;
+  fetchMapList() {
+    const { params } = this.props.navigation.state;
+    const { selectedAge, selectedBudget, selectedCategory, selectedCreatedWithin, selectedTravelType } = this.state;
+
     let apiData = {
-      user_id:this.props.userData.id,
-      sort_by:this.state.sortBy || 'rating',
-      page:1,
-      search:this.state.searchTerm || '',
+      user_id: this.props.userData.id,
+      sort_by: this.state.sortBy || 'rating',
+      page: 1,
+      search: this.state.searchTerm || '',
     };
-    if(params && params.category){
-      apiData['categorie'] = params.category;
+    if ((params && params.category) || selectedCategory) {
+      apiData['categorie'] = selectedCategory || (params && params.category);
     }
+    if (selectedAge) {
+      apiData['age_at_travel'] = selectedAge
+    }
+    if (selectedBudget) {
+      apiData['budget_limit'] = selectedBudget
+    }
+    if (selectedCreatedWithin) {
+      apiData['when_travel'] = selectedCreatedWithin
+    }
+    if (selectedTravelType) {
+      apiData['travel_type'] = selectedTravelType
+    }
+    // apiData['latitude']
+    // apiData['longitude']
 
     this.props.mapAction.fetchMapList(apiData)
   }
 
+  setParams = (filterParams) => {
+    this.setState({ ...filterParams }, () => {
+      this.fetchMapList();
+    });
+  }
+
   render() {
     const { width } = Dimensions.get('window');
+    const { selectedAge, selectedBudget, selectedCategory, selectedCreatedWithin, selectedTravelType, addReviewValue } = this.state;
     return (
       <Fragment>
         <Header
@@ -270,7 +300,7 @@ class MapList extends React.Component {
                   style={styles.searchbarInput}
                   placeholder="Type in your next destination!"
                   value={this.state.searchTerm}
-                  onChangeText={(searchTerm)=>this.setState({searchTerm})}
+                  onChangeText={(searchTerm) => this.setState({ searchTerm })}
                 />
               </Item>
               <Button
@@ -300,7 +330,7 @@ class MapList extends React.Component {
                   styles.iconbuttonFilter,
                 ]}
                 activeOpacity={0.8}
-                onPress={() => this.props.navigation.navigate('FilterScreen')}>
+                onPress={() => this.props.navigation.navigate('FilterScreen', { setParams: this.setParams, selectedAge, selectedBudget, selectedCategory, selectedCreatedWithin, selectedTravelType })}>
                 <Feather style={styles.iconButtonIcon} name="filter" />
               </TouchableOpacity>
             </View>
@@ -394,7 +424,7 @@ class MapList extends React.Component {
                           checked={this.state.selectedTripID == tripID}
                           color={'#2F80ED'}
                           style={[styles.selectListRadioButton, { marginRight: 10 }]}
-                          onPress={()=> this.setState({selectedTripID : this.state.selectedTripID == tripID ? null : tripID})}
+                          onPress={() => this.setState({ selectedTripID: this.state.selectedTripID == tripID ? null : tripID })}
                         />
                         <Text style={styles.selectListText}>{trip.name}</Text>
                       </View>
@@ -551,7 +581,7 @@ class MapList extends React.Component {
                   checked={this.state.sortBy == 'popularity'}
                   color={'#2F80ED'}
                   style={[styles.selectListRadioButton, { marginRight: 10 }]}
-                  onPress={()=> this.sortBy('popularity')}
+                  onPress={() => this.sortBy('popularity')}
                 />
                 <Text style={styles.selectListText}>Popularity</Text>
               </View>
@@ -560,7 +590,7 @@ class MapList extends React.Component {
                   checked={this.state.sortBy == 'rating'}
                   color={'#2F80ED'}
                   style={[styles.selectListRadioButton, { marginRight: 10 }]}
-                  onPress={()=> this.sortBy('rating')}
+                  onPress={() => this.sortBy('rating')}
                 />
                 <Text style={styles.selectListText}>Rating</Text>
               </View>
@@ -569,7 +599,7 @@ class MapList extends React.Component {
                   checked={this.state.sortBy == 'distance'}
                   color={'#2F80ED'}
                   style={[styles.selectListRadioButton, { marginRight: 10 }]}
-                  onPress={()=> this.sortBy('distance')}
+                  onPress={() => this.sortBy('distance')}
                 />
                 <Text style={styles.selectListText}>Distance</Text>
               </View>
@@ -610,36 +640,19 @@ class MapList extends React.Component {
             <View style={styles.formGroup}>
               <Text style={styles.formLabel}>Rating</Text>
               <View style={{ flexDirection: 'row' }}>
-                <Feather
-                  style={styles.starIcon}
-                  name="star"
-                  size={20}
-                  color="#FFAF2C"
-                />
-                <Feather
-                  style={styles.starIcon}
-                  name="star"
-                  size={20}
-                  color="#FFAF2C"
-                />
-                <Feather
-                  style={styles.starIcon}
-                  name="star"
-                  size={20}
-                  color="#FFAF2C"
-                />
-                <Feather
-                  style={styles.starIcon}
-                  name="star"
-                  size={20}
-                  color="#FFAF2C"
-                />
-                <Feather
-                  style={styles.starIcon}
-                  name="star"
-                  size={20}
-                  color="#FFAF2C"
-                />
+                {
+                  Array(5).fill(1).map((d,i) => {
+                    return (
+                      <MaterialCommunityIcons
+                        onPress={()=> this.setState({addReviewValue:(i+1)})}
+                        style={styles.starIcon}
+                        name={addReviewValue >= (i+1) ? "star" : 'star-outline'}
+                        size={22}
+                        color="#FFAF2C"
+                      />
+                    )
+                  })
+                }
               </View>
             </View>
             <View>

@@ -11,6 +11,7 @@ const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 class AddMymaps extends React.Component {
   constructor(props) {
     super(props);
+    const {params} = props.navigation.state;
     this.state = {
       categories: [
         { cate_icon: require('./../../Images/sights.png') },
@@ -21,6 +22,7 @@ class AddMymaps extends React.Component {
         { cate_icon: require('./../../Images/shopping.png') },
         { cate_icon: require('./../../Images/other.png') },
       ],
+      selectedCategory: params.selectedCategory || '',
       travel_type: [
         'Couple',
         'Solo',
@@ -29,7 +31,9 @@ class AddMymaps extends React.Component {
         'Family',
         'Off the beaten track',
       ],
+      selectedTravelType:params.selectedTravelType || '',
       budget: ['$', '$$', '$$$', '$$$$'],
+      selectedBudget:params.selectedBudget || '',
       age_at_travel: [
         'Below 18',
         '18 To 25',
@@ -38,6 +42,7 @@ class AddMymaps extends React.Component {
         '45 To 60',
         'Above 60',
       ],
+      selectedAge:params.selectedAge || '',
       created_within: [
         '3 Months',
         '6 Months',
@@ -45,6 +50,7 @@ class AddMymaps extends React.Component {
         '2 Years',
         '5 Years'
       ],
+      selectedCreatedWithin:params.selectedCreatedWithin || ''
     };
   }
 
@@ -55,22 +61,18 @@ class AddMymaps extends React.Component {
     this.setState({ date: date });
   };
 
-  static navigationOptions = {
-    title: 'Filter',
-    headerStyle: {
-      borderBottomWidth: 0,
-    },
-    headerTitleStyle: {
-      color: '#333333',
-      fontSize: 16,
-      fontFamily: 'Montserrat-Semibold',
-    },
-    headerTintColor: '#333333',
-    headerLeftContainerStyle: {
-      paddingLeft: 10,
-    },
-  };
+  setParamsToParent() {
+    const {selectedAge,selectedBudget,selectedCategory,selectedCreatedWithin,selectedTravelType} = this.state;
+    this.props.navigation.state.params.setParams({selectedAge,selectedBudget,selectedCategory,selectedCreatedWithin,selectedTravelType});
+    this.props.navigation.goBack()
+  }
+
+  toggleCategory(category) {
+    this.setState({ selectedCategory: category });
+  }
+
   render() {
+    const {selectedCategory} = this.state;
     return (
       <Fragment>
         <View style={styles.container}>
@@ -83,28 +85,55 @@ class AddMymaps extends React.Component {
                 <Text style={styles.formLabel}>Categories</Text>
                 <View style={styles.mapPins}>
 
-                  <View style={[styles.singlePin, { backgroundColor: '#2F80ED' }]}>
-                    <IconMoon size={14} name="sights" color={'white'} />
-                  </View>
-                  <View style={[styles.singlePin, { backgroundColor: 'rgba(47, 128, 237, 0.1)' }]}>
-                    <IconMoon size={14} name="activities" color={'#2F80ED'} />
-                  </View>
-                  <View style={[styles.singlePin, { backgroundColor: 'rgba(47, 128, 237, 0.1)' }]}>
-                    <IconMoon size={14} name="restaurants" color={'#2F80ED'} />
-                  </View>
-                  <View style={[styles.singlePin, { backgroundColor: 'rgba(47, 128, 237, 0.1)' }]}>
-                    <IconMoon size={14} name="nightlife" color={'#2F80ED'} />
-                  </View>
+                  <TouchableOpacity
+                    onPress={() => { this.toggleCategory('sights') }}
+                    style={[styles.singlePin, { backgroundColor:selectedCategory == 'sights' ? '#2F80ED' : 'rgba(47, 128, 237, 0.1)' }]}
+                  >
+                    <IconMoon size={14} name="sights" color={selectedCategory == 'sights' ? 'white' : '#2F80ED'} />
+                  </TouchableOpacity>
 
-                  <View style={[styles.singlePin, { backgroundColor: 'rgba(47, 128, 237, 0.1)' }]}>
-                    <IconMoon size={14} name="transportations" color={'#2F80ED'} />
-                  </View>
-                  <View style={[styles.singlePin, { backgroundColor: 'rgba(47, 128, 237, 0.1)' }]}>
-                    <IconMoon size={14} name="shopping" color={'#2F80ED'} />
-                  </View>
-                  <View style={[styles.singlePin, { backgroundColor: 'rgba(47, 128, 237, 0.1)' }]}>
-                    <IconMoon size={14} name="other" color={'#2F80ED'} />
-                  </View>
+                  <TouchableOpacity
+                    onPress={() => { this.toggleCategory('activities') }}
+                    style={[styles.singlePin, { backgroundColor:selectedCategory == 'activities' ? '#2F80ED' : 'rgba(47, 128, 237, 0.1)' }]}
+                  >
+                    <IconMoon size={14} name="activities" color={selectedCategory == 'activities' ? 'white' : '#2F80ED'} />
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={() => { this.toggleCategory('restaurants') }}
+                    style={[styles.singlePin, { backgroundColor:selectedCategory == 'restaurants' ? '#2F80ED' : 'rgba(47, 128, 237, 0.1)' }]}
+                  >
+                    <IconMoon size={14} name="restaurants" color={selectedCategory == 'restaurants' ? 'white' : '#2F80ED'} />
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={() => { this.toggleCategory('nightlife') }}
+                    style={[styles.singlePin, { backgroundColor:selectedCategory == 'nightlife' ? '#2F80ED' : 'rgba(47, 128, 237, 0.1)' }]}
+                  >
+                    <IconMoon size={14} name="nightlife" color={selectedCategory == 'nightlife' ? 'white' : '#2F80ED'} />
+                  </TouchableOpacity>
+
+
+                  <TouchableOpacity
+                    onPress={() => { this.toggleCategory('transportations') }}
+                    style={[styles.singlePin, { backgroundColor:selectedCategory == 'transportations' ? '#2F80ED' : 'rgba(47, 128, 237, 0.1)' }]}
+                  >
+                    <IconMoon size={14} name="transportations" color={selectedCategory == 'transportations' ? 'white' : '#2F80ED'} />
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={() => { this.toggleCategory('shopping') }}
+                    style={[styles.singlePin, { backgroundColor:selectedCategory == 'shopping' ? '#2F80ED' : 'rgba(47, 128, 237, 0.1)' }]}
+                  >
+                    <IconMoon size={14} name="shopping" color={selectedCategory == 'shopping' ? 'white' : '#2F80ED'} />
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={() => { this.toggleCategory('other') }}
+                    style={[styles.singlePin, { backgroundColor:selectedCategory == 'other' ? '#2F80ED' : 'rgba(47, 128, 237, 0.1)' }]}
+                  >
+                    <IconMoon size={14} name="other" color={selectedCategory == 'other' ? 'white' : '#2F80ED'} />
+                  </TouchableOpacity>
 
                 </View>
               </View>
@@ -116,17 +145,17 @@ class AddMymaps extends React.Component {
                       <TouchableOpacity
                         style={[
                           styles.checkboxCustom,
-                          this.state.travel_type_select == title
+                          this.state.selectedTravelType == title
                             ? styles.CheckboxBlue
                             : styles.UnCheckboxBlue,
                         ]}
                         onPress={() =>
-                          this.setState({ travel_type_select: title })
+                          this.setState({ selectedTravelType: title })
                         }>
                         <Text
                           style={[
                             styles.checkboxCustomText,
-                            this.state.travel_type_select == title
+                            this.state.selectedTravelType == title
                               ? styles.CheckboxBlueText
                               : styles.UnCheckboxBlueText,
                           ]}>
@@ -146,15 +175,15 @@ class AddMymaps extends React.Component {
                       <TouchableOpacity
                         style={[
                           styles.checkboxCustom,
-                          this.state.budget_select == title
+                          this.state.selectedBudget == title
                             ? styles.CheckboxGreen
                             : styles.UnCheckboxGreen,
                         ]}
-                        onPress={() => this.setState({ budget_select: title })}>
+                        onPress={() => this.setState({ selectedBudget: title })}>
                         <Text
                           style={[
                             styles.checkboxCustomText,
-                            this.state.budget_select == title
+                            this.state.selectedBudget == title
                               ? styles.CheckboxGreenText
                               : styles.UnCheckboxGreenText,
                           ]}>
@@ -173,15 +202,15 @@ class AddMymaps extends React.Component {
                       <TouchableOpacity
                         style={[
                           styles.checkboxCustom,
-                          this.state.budget_select == title
+                          this.state.selectedAge == title
                             ? styles.CheckboxOrange
                             : styles.UnCheckboxOrange,
                         ]}
-                        onPress={() => this.setState({ budget_select: title })}>
+                        onPress={() => this.setState({ selectedAge: title })}>
                         <Text
                           style={[
                             styles.checkboxCustomText,
-                            this.state.budget_select == title
+                            this.state.selectedAge == title
                               ? styles.CheckboxOrangeText
                               : styles.UnCheckboxOrangeText,
                           ]}>
@@ -200,15 +229,15 @@ class AddMymaps extends React.Component {
                       <TouchableOpacity
                         style={[
                           styles.checkboxCustom,
-                          this.state.created_select == title
+                          this.state.selectedCreatedWithin == title
                             ? styles.CheckboxYellow
                             : styles.UnCheckboxYellow,
                         ]}
-                        onPress={() => this.setState({ created_select: title })}>
+                        onPress={() => this.setState({ selectedCreatedWithin: title })}>
                         <Text
                           style={[
                             styles.checkboxCustomText,
-                            this.state.created_select == title
+                            this.state.selectedCreatedWithin == title
                               ? styles.CheckboxYellowText
                               : styles.UnCheckboxYellowText,
                           ]}>
@@ -241,7 +270,7 @@ class AddMymaps extends React.Component {
                 styles.filterButtonSubmit,
                 styles.buttonPrimary,
               ]}
-              onPress={() => { }}>
+              onPress={() => this.setParamsToParent()}>
               <Text style={styles.buttonText}>Apply</Text>
             </TouchableOpacity>
           </View>
