@@ -17,10 +17,12 @@ export async function callAPI(url, data, method = 'POST') {
       });
       apiSkeleton['body'] = formdata;
     }
-
+    console.log('formData => ', formdata);
     let response = await fetch(url, apiSkeleton);
+    console.log('response => ', response);
+
     let apiResponse = await response.json();
-    console.log("url "+url+" => ",apiResponse)
+    console.log('url ' + url + ' => ', apiResponse);
     resolve(apiResponse);
   });
 }
