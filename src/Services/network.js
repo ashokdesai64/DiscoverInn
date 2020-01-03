@@ -9,7 +9,6 @@ export async function callAPI(url, data, method = 'POST') {
         header: 'a2309455-13c0-4b5a-b9c1-5e9e65dc0704'
       },
     };
-    console.log("data => ",data)
     let keys = Object.keys(data);
     if (keys.length > 0) {
       keys.forEach(key => {
@@ -19,13 +18,12 @@ export async function callAPI(url, data, method = 'POST') {
         } else {
           formData.append(key, data[key]);
         }
-         console.log("fromdata => ",formData)
         
       });
       apiSkeleton['body'] = formData;
     }
-
     let response = await fetch(url, apiSkeleton);
+
     let apiResponse = await response.json();
     console.log("url " + url + " => ", apiResponse)
     resolve(apiResponse);

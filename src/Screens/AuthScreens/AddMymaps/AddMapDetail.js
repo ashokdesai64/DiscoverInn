@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, {Fragment} from 'react';
 import {
   View,
   Text,
@@ -9,17 +9,36 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from 'react-native';
-import { ListItem, CheckBox, Picker, Textarea } from 'native-base';
+import {ListItem, CheckBox, Picker, Textarea} from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Icon from 'react-native-vector-icons/Feather';
+import Feather from 'react-native-vector-icons/Feather';
 import Header from './../../../components/header/header';
 import styles from './AddMapDetail.style';
-
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
 import fontelloConfig from './../../../selection.json';
-const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 
+const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 const DEVICE_WIDTH = Dimensions.get('window').width;
+
+const LocationCheckbox = ({
+  selected,
+  onPress,
+  style,
+  textStyle,
+  size = 22,
+  text = '',
+  ...props
+}) => (
+  <TouchableOpacity style={styles.useLoaction} onPress={onPress} {...props}>
+    <Feather
+      size={size}
+      color={selected ? '#BDBDBD' : '#2F80ED'}
+      name={selected ? 'square' : 'check-square'}
+    />
+
+    <Text style={styles.useLoactionText}> {text} </Text>
+  </TouchableOpacity>
+);
 
 class AddMapDetail extends React.Component {
   constructor(props) {
@@ -61,19 +80,26 @@ class AddMapDetail extends React.Component {
   // };
 
   change_month = month => {
-    this.setState({ month: month });
+    this.setState({month: month});
   };
   change_date = date => {
-    this.setState({ date: date });
+    this.setState({date: date});
   };
+  state = {
+    locationAccepted: false,
+    photo: null,
+  };
+  handleCheckBox = () =>
+    this.setState({locationAccepted: !this.state.locationAccepted});
 
   render() {
-    const { params } = this.props.navigation.state;
+    const {params} = this.props.navigation.state;
+
     return (
       <Fragment>
         <ImageBackground
           source={require('../../../Images/map-bg.png')}
-          style={{ width: '100%', height: '100%' }}>
+          style={{width: '100%', height: '100%'}}>
           <Header
             showBack={true}
             title={params && params.type == 'edit' ? 'Edit Map' : 'Add Map'}
@@ -85,93 +111,57 @@ class AddMapDetail extends React.Component {
           <View style={styles.container}>
             <View style={styles.pageContent}>
               <ScrollView>
-                <View style={styles.formGroup}>
-                  <Text style={styles.formLabel}>Add Pin</Text>
-                  <View style={[styles.formGroup, styles.picker]}>
-                    <Picker
-                      style={styles.formDropdown}
-                      selectedValue={this.state.date}
-                      textStyle={styles.dropdownText}
-                      mode="dropdown"
-                      iosHeader="Select Year"
-                      iosIcon={
-                        <Icon
-                          name="chevron-down"
-                          style={styles.formDropdownIcon}
-                        />
-                      }>
-                      <Picker.Item
-                        label="Start By Creating Your Own Trip List"
-                        value=""
-                      />
-                      <Picker.Item label="2017" value="2017" />
-                      <Picker.Item label="2018" value="2018" />
-                      <Picker.Item label="2019" value="2019" />
-                    </Picker>
-                  </View>
+                <View style={[styles.uploadCoverCard]}>
+                  <AntDesign name={'pluscircleo'} size={36} color={'#2F80ED'} />
+                  <Text style={[styles.uploadCoverCardText]}>
+                    Add Cover Image
+                  </Text>
                 </View>
-
-                <View style={styles.orDivider}>
-                  <Text style={styles.orDividerBorder}></Text>
-                  <Text style={styles.orDividerText}>OR</Text>
-                </View>
-
-                <View
-                  style={
-                    (styles.formGroup,
-                      {
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        marginBottom: 20,
-                      })
-                  }>
-                  <TextInput
-                    style={[
-                      styles.formControl,
-                      {
-                        width: (DEVICE_WIDTH - 60) / 2,
-                        height: 40,
-                        textAlign: 'center',
-                      },
-                    ]}
-                    placeholder={'Pin Latitude'}
+                <View>
+                  <LocationCheckbox
+                    selected={this.state.locationAccepted}
+                    onPress={this.handleCheckBox}
+                    text="Use photo location"
                   />
-
+                </View>
+                <View style={styles.ckaiush}></View>
+                <View style={styles.formGroup}>
+                  <Text style={styles.formLabel}>
+                    Location Name{' '}
+                    <Feather
+                      size={12}
+                      name="alert-triangle"
+                      color={'#F2994A'}
+                    />
+                  </Text>
                   <TextInput
-                    style={[
-                      styles.formControl,
-                      {
-                        width: (DEVICE_WIDTH - 60) / 2,
-                        height: 40,
-                        textAlign: 'center',
-                      },
-                    ]}
-                    placeholder={'Pin Longitude'}
+                    style={styles.formControl}
+                    placeholderTextColor={'#828894'}
                   />
                 </View>
                 <View style={styles.mapPins}>
                   <View
-                    style={[styles.singlePin, { backgroundColor: '#2F80ED' }]}>
+                    style={[styles.singlePin, {backgroundColor: '#2F80ED'}]}>
                     <IconMoon size={14} name="sights" color={'white'} />
                   </View>
                   <View
                     style={[
                       styles.singlePin,
-                      { backgroundColor: 'rgba(47, 128, 237, 0.1)' },
+                      {backgroundColor: 'rgba(47, 128, 237, 0.1)'},
                     ]}>
                     <IconMoon size={14} name="activities" color={'#2F80ED'} />
                   </View>
                   <View
                     style={[
                       styles.singlePin,
-                      { backgroundColor: 'rgba(47, 128, 237, 0.1)' },
+                      {backgroundColor: 'rgba(47, 128, 237, 0.1)'},
                     ]}>
                     <IconMoon size={14} name="restaurants" color={'#2F80ED'} />
                   </View>
                   <View
                     style={[
                       styles.singlePin,
-                      { backgroundColor: 'rgba(47, 128, 237, 0.1)' },
+                      {backgroundColor: 'rgba(47, 128, 237, 0.1)'},
                     ]}>
                     <IconMoon size={14} name="nightlife" color={'#2F80ED'} />
                   </View>
@@ -179,7 +169,7 @@ class AddMapDetail extends React.Component {
                   <View
                     style={[
                       styles.singlePin,
-                      { backgroundColor: 'rgba(47, 128, 237, 0.1)' },
+                      {backgroundColor: 'rgba(47, 128, 237, 0.1)'},
                     ]}>
                     <IconMoon
                       size={14}
@@ -190,14 +180,14 @@ class AddMapDetail extends React.Component {
                   <View
                     style={[
                       styles.singlePin,
-                      { backgroundColor: 'rgba(47, 128, 237, 0.1)' },
+                      {backgroundColor: 'rgba(47, 128, 237, 0.1)'},
                     ]}>
                     <IconMoon size={14} name="shopping" color={'#2F80ED'} />
                   </View>
                   <View
                     style={[
                       styles.singlePin,
-                      { backgroundColor: 'rgba(47, 128, 237, 0.1)' },
+                      {backgroundColor: 'rgba(47, 128, 237, 0.1)'},
                     ]}>
                     <IconMoon size={14} name="other" color={'#2F80ED'} />
                   </View>
@@ -212,28 +202,21 @@ class AddMapDetail extends React.Component {
                 </View>
 
                 <View style={styles.formGroup}>
-                  <Text style={styles.formLabel}>Review:</Text>
-                  <TextInput
+                  <Text style={styles.formLabel}>Description:</Text>
+                  <Textarea
                     numberOfLines={4}
-                    style={styles.formControl}
+                    style={[styles.formControlTextarea]}
                     textAlignVertical={'top'}
                     placeholderTextColor={'#828894'}
                   />
-                </View>
-
-                <View style={[styles.uploadCoverCard]}>
-                  <AntDesign name={'pluscircleo'} size={36} color={'#2F80ED'} />
-                  <Text style={[styles.uploadCoverCardText]}>
-                    Add Cover Image
-                  </Text>
                 </View>
               </ScrollView>
             </View>
             <View style={styles.footerButton}>
               <TouchableOpacity
-                style={[styles.button, styles.buttonPrimary, { flex: 1 }]}
+                style={[styles.button, styles.buttonPrimary, {flex: 1}]}
                 onPress={() => {
-                  this.props.navigation.navigate('PinCategories');
+                  this.props.navigation.navigate('SinglePinView');
                 }}>
                 <Text style={styles.buttonText}>Add Pin</Text>
               </TouchableOpacity>

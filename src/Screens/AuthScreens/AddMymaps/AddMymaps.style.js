@@ -160,6 +160,22 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Medium',
     marginRight: 0,
   },
+  uploadCoverCard: {
+    height: 120,
+    backgroundColor: 'rgba(47, 128, 237, 0.1)',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#2F80ED',
+    borderStyle: 'dashed',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  uploadCoverCardText: {
+    color: '#2F80ED',
+    fontSize: 14,
+    fontFamily: 'Montserrat-Regular',
+  },
   footerButton: {
     flexDirection: 'row',
     marginTop: 0,
@@ -224,21 +240,6 @@ const styles = StyleSheet.create({
   buttonCloseIcon: {
     color: '#BDBDBD',
     fontSize: 24,
-  },
-  uploadCoverCard: {
-    width: width - 40,
-    height: 120,
-  },
-  uploadCoverCardInner: {
-    height: 120,
-    width: width - 40,
-    backgroundColor: 'rgba(47, 128, 237, 0.1)',
-    borderWidth: 1,
-    borderColor: '#2F80ED',
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
   },
   uploadCoverText: {
     color: '#2F80ED',

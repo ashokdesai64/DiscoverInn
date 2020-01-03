@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {Row} from 'native-base';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -54,6 +55,17 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Regular',
     color: '#4F4F4F',
     fontSize: 14,
+  },
+  useLoaction: {
+    flexDirection: 'row',
+    marginBottom: 15,
+    alignItems: 'center',
+  },
+  useLoactionText: {
+    color: '#4F4F4F',
+    fontSize: 14,
+    fontFamily: 'Montserrat-Medium',
+    marginLeft: 3,
   },
   checkboxCard: {
     alignItems: 'flex-start',
@@ -125,37 +137,6 @@ const styles = StyleSheet.create({
   },
   CheckboxYellowText: {
     color: '#fff',
-  },
-  picker: {
-    borderWidth: 1,
-    borderColor: '#BDBDBD',
-    marginRight: 5,
-    borderRadius: 5,
-  },
-  orDivider: {
-    textAlign: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative',
-    flex: 1,
-    marginBottom: 25,
-    marginTop: 0,
-    marginHorizontal: 15,
-  },
-  orDividerText: {
-    fontSize: 14,
-    fontFamily: 'Montserrat-Regular',
-    color: '#333333',
-    paddingHorizontal: 10,
-    zIndex: 7,
-    backgroundColor: '#ffffff',
-  },
-  orDividerBorder: {
-    position: 'absolute',
-    width: '100%',
-    height: 1,
-    zIndex: 6,
-    backgroundColor: '#C4C4C4',
   },
   UnCheckboxYellowText: {
     color: '#F2994A',
@@ -233,7 +214,7 @@ const styles = StyleSheet.create({
     borderStyle: 'dashed',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 15,
   },
   uploadCoverCardText: {
     color: '#2F80ED',
