@@ -252,20 +252,18 @@ class MapList extends React.Component {
     if ((params && params.category) || selectedCategory) {
       apiData['categorie'] = selectedCategory || (params && params.category);
     }
-    if (selectedAge) {
+    if (selectedAge && !!selectedAge.length) {
       apiData['age_at_travel'] = selectedAge
     }
-    if (selectedBudget) {
+    if (selectedBudget && !!selectedBudget.length) {
       apiData['budget_limit'] = selectedBudget
     }
-    if (selectedCreatedWithin) {
+    if (selectedCreatedWithin && !!selectedCreatedWithin.length) {
       apiData['when_travel'] = selectedCreatedWithin
     }
-    if (selectedTravelType) {
+    if (selectedTravelType && !!selectedTravelType.length) {
       apiData['travel_type'] = selectedTravelType
     }
-    // apiData['latitude']
-    // apiData['longitude']
 
     this.props.mapAction.fetchMapList(apiData)
   }

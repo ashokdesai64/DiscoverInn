@@ -29,10 +29,29 @@ class DefaultScreen extends Component {
         this.redirectToApp(this.props);
     }
 
-    fetchInitialData(){
+    fetchInitialData() {
         this.props.mapAction.loadPopularAndRated();
-        this.props.mapAction.loadCategories();
         this.props.mapAction.fetchTripList();
+
+        if (this.props && !this.props.categories) {
+            this.props.mapAction.loadCategories();
+        }
+
+        if (this.props && !this.props.travelTypes) {
+            this.props.mapAction.loadTravelTypes();
+        }
+
+        if (this.props && !this.props.budgetLists) {
+            this.props.mapAction.loadBudgetList();
+        }
+
+        if (this.props && !this.props.ageLists) {
+            this.props.mapAction.loadAgeList();
+        }
+
+        if (this.props && !this.props.createdWithins) {
+            this.props.mapAction.loadCreatedWithin();
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -48,7 +67,12 @@ class DefaultScreen extends Component {
 
 function mapStateToProps(state) {
     return {
-        userData: state.user && state.user.userData
+        userData: state.user && state.user.userData,
+        categories: state.maps.categories,
+        travelTypes: state.maps.travelTypes,
+        budgetLists: state.maps.budgetLists,
+        ageLists: state.maps.ageLists,
+        createdWithins: state.maps.createdWithins,
     };
 }
 

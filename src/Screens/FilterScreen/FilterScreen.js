@@ -8,10 +8,14 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import fontelloConfig from './../../selection.json';
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 
+//REDUX
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
 class AddMymaps extends React.Component {
   constructor(props) {
     super(props);
-    const {params} = props.navigation.state;
+    const { params } = props.navigation.state;
     this.state = {
       categories: [
         { cate_icon: require('./../../Images/sights.png') },
@@ -22,7 +26,7 @@ class AddMymaps extends React.Component {
         { cate_icon: require('./../../Images/shopping.png') },
         { cate_icon: require('./../../Images/other.png') },
       ],
-      selectedCategory: params.selectedCategory || '',
+      selectedCategory: params.selectedCategory || [],
       travel_type: [
         'Couple',
         'Solo',
@@ -31,9 +35,9 @@ class AddMymaps extends React.Component {
         'Family',
         'Off the beaten track',
       ],
-      selectedTravelType:params.selectedTravelType || '',
+      selectedTravelType: params.selectedTravelType || [],
       budget: ['$', '$$', '$$$', '$$$$'],
-      selectedBudget:params.selectedBudget || '',
+      selectedBudget: params.selectedBudget || [],
       age_at_travel: [
         'Below 18',
         '18 To 25',
@@ -42,7 +46,7 @@ class AddMymaps extends React.Component {
         '45 To 60',
         'Above 60',
       ],
-      selectedAge:params.selectedAge || '',
+      selectedAge: params.selectedAge || [],
       created_within: [
         '3 Months',
         '6 Months',
@@ -50,7 +54,7 @@ class AddMymaps extends React.Component {
         '2 Years',
         '5 Years'
       ],
-      selectedCreatedWithin:params.selectedCreatedWithin || ''
+      selectedCreatedWithin: params.selectedCreatedWithin || []
     };
   }
 
@@ -62,17 +66,27 @@ class AddMymaps extends React.Component {
   };
 
   setParamsToParent() {
-    const {selectedAge,selectedBudget,selectedCategory,selectedCreatedWithin,selectedTravelType} = this.state;
-    this.props.navigation.state.params.setParams({selectedAge,selectedBudget,selectedCategory,selectedCreatedWithin,selectedTravelType});
+    const { selectedAge, selectedBudget, selectedCategory, selectedCreatedWithin, selectedTravelType } = this.state;
+    this.props.navigation.state.params.setParams({ selectedAge, selectedBudget, selectedCategory, selectedCreatedWithin, selectedTravelType });
     this.props.navigation.goBack()
   }
 
-  toggleCategory(category) {
-    this.setState({ selectedCategory: category });
+  toggleFilterValue(filterType, value) {
+    let filterValues = this.state[filterType];
+
+    let filterValueIndex = filterValues.indexOf(value);
+
+    let newValues = [...filterValues];
+    if (filterValueIndex >= 0) {
+      newValues.splice(filterValueIndex, 1)
+    } else {
+      newValues.push(value);
+    }
+    this.setState({ [filterType]: newValues });
   }
 
   render() {
-    const {selectedCategory} = this.state;
+    const { selectedCategory, selectedTravelType, selectedBudget, selectedAge, selectedCreatedWithin } = this.state;
     return (
       <Fragment>
         <View style={styles.container}>
@@ -85,167 +99,134 @@ class AddMymaps extends React.Component {
                 <Text style={styles.formLabel}>Categories</Text>
                 <View style={styles.mapPins}>
 
-                  <TouchableOpacity
-                    onPress={() => { this.toggleCategory('sights') }}
-                    style={[styles.singlePin, { backgroundColor:selectedCategory == 'sights' ? '#2F80ED' : 'rgba(47, 128, 237, 0.1)' }]}
-                  >
-                    <IconMoon size={14} name="sights" color={selectedCategory == 'sights' ? 'white' : '#2F80ED'} />
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    onPress={() => { this.toggleCategory('activities') }}
-                    style={[styles.singlePin, { backgroundColor:selectedCategory == 'activities' ? '#2F80ED' : 'rgba(47, 128, 237, 0.1)' }]}
-                  >
-                    <IconMoon size={14} name="activities" color={selectedCategory == 'activities' ? 'white' : '#2F80ED'} />
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    onPress={() => { this.toggleCategory('restaurants') }}
-                    style={[styles.singlePin, { backgroundColor:selectedCategory == 'restaurants' ? '#2F80ED' : 'rgba(47, 128, 237, 0.1)' }]}
-                  >
-                    <IconMoon size={14} name="restaurants" color={selectedCategory == 'restaurants' ? 'white' : '#2F80ED'} />
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    onPress={() => { this.toggleCategory('nightlife') }}
-                    style={[styles.singlePin, { backgroundColor:selectedCategory == 'nightlife' ? '#2F80ED' : 'rgba(47, 128, 237, 0.1)' }]}
-                  >
-                    <IconMoon size={14} name="nightlife" color={selectedCategory == 'nightlife' ? 'white' : '#2F80ED'} />
-                  </TouchableOpacity>
-
-
-                  <TouchableOpacity
-                    onPress={() => { this.toggleCategory('transportations') }}
-                    style={[styles.singlePin, { backgroundColor:selectedCategory == 'transportations' ? '#2F80ED' : 'rgba(47, 128, 237, 0.1)' }]}
-                  >
-                    <IconMoon size={14} name="transportations" color={selectedCategory == 'transportations' ? 'white' : '#2F80ED'} />
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    onPress={() => { this.toggleCategory('shopping') }}
-                    style={[styles.singlePin, { backgroundColor:selectedCategory == 'shopping' ? '#2F80ED' : 'rgba(47, 128, 237, 0.1)' }]}
-                  >
-                    <IconMoon size={14} name="shopping" color={selectedCategory == 'shopping' ? 'white' : '#2F80ED'} />
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    onPress={() => { this.toggleCategory('other') }}
-                    style={[styles.singlePin, { backgroundColor:selectedCategory == 'other' ? '#2F80ED' : 'rgba(47, 128, 237, 0.1)' }]}
-                  >
-                    <IconMoon size={14} name="other" color={selectedCategory == 'other' ? 'white' : '#2F80ED'} />
-                  </TouchableOpacity>
+                  {
+                    this.props.categories && this.props.categories.map((category) => {
+                      let isCategorySelected = selectedCategory.indexOf(category.id) >= 0;
+                      return (
+                        <TouchableOpacity
+                          onPress={() => { this.toggleFilterValue('selectedCategory', category.id) }}
+                          style={[styles.singlePin, { backgroundColor: isCategorySelected ? '#2F80ED' : 'rgba(47, 128, 237, 0.1)' }]}
+                        >
+                          <IconMoon size={14} name={category.name.toLowerCase()} color={isCategorySelected ? 'white' : '#2F80ED'} />
+                        </TouchableOpacity>
+                      )
+                    })
+                  }
 
                 </View>
               </View>
               <View style={styles.formGroup}>
                 <Text style={styles.formLabel}>Travel Type</Text>
                 <View style={styles.checkboxCard}>
-                  {this.state.travel_type.map(title => (
-                    <ListItem style={[styles.checkboxItem]}>
-                      <TouchableOpacity
-                        style={[
-                          styles.checkboxCustom,
-                          this.state.selectedTravelType == title
-                            ? styles.CheckboxBlue
-                            : styles.UnCheckboxBlue,
-                        ]}
-                        onPress={() =>
-                          this.setState({ selectedTravelType: title })
-                        }>
-                        <Text
-                          style={[
-                            styles.checkboxCustomText,
-                            this.state.selectedTravelType == title
-                              ? styles.CheckboxBlueText
-                              : styles.UnCheckboxBlueText,
-                          ]}>
-                          {title}
-                        </Text>
-                      </TouchableOpacity>
-                    </ListItem>
-                  ))}
+                  {
+                    this.props.travelTypes && this.props.travelTypes.map((travelType) => {
+                      let isTravelSelected = selectedTravelType.indexOf(travelType.id) >= 0;
+                      return (
+                        <ListItem style={[styles.checkboxItem]}>
+                          <TouchableOpacity
+                            style={[
+                              styles.checkboxCustom,
+                              isTravelSelected ? styles.CheckboxBlue : styles.UnCheckboxBlue
+                            ]}
+                            onPress={() => { this.toggleFilterValue('selectedTravelType', travelType.id) }}
+                          >
+                            <Text
+                              style={[
+                                styles.checkboxCustomText,
+                                isTravelSelected ? styles.CheckboxBlueText : styles.UnCheckboxBlueText,
+                              ]}>
+                              {travelType.name}
+                            </Text>
+                          </TouchableOpacity>
+                        </ListItem>
+                      )
+                    })
+                  }
                 </View>
               </View>
               <View style={styles.formGroup}>
                 <Text style={styles.formLabel}>Budget</Text>
                 <View style={styles.checkboxCard}>
-                  {this.state.budget.map(title => (
-                    <ListItem
-                      style={[styles.checkboxItem, styles.checkboxItemGreen]}>
-                      <TouchableOpacity
-                        style={[
-                          styles.checkboxCustom,
-                          this.state.selectedBudget == title
-                            ? styles.CheckboxGreen
-                            : styles.UnCheckboxGreen,
-                        ]}
-                        onPress={() => this.setState({ selectedBudget: title })}>
-                        <Text
-                          style={[
-                            styles.checkboxCustomText,
-                            this.state.selectedBudget == title
-                              ? styles.CheckboxGreenText
-                              : styles.UnCheckboxGreenText,
-                          ]}>
-                          {title}
-                        </Text>
-                      </TouchableOpacity>
-                    </ListItem>
-                  ))}
+                  {
+                    this.props.budgetLists && this.props.budgetLists.map(budget => {
+                      let isBudgetSelected = selectedBudget.indexOf(budget.value) >= 0;
+                      return (
+                        < ListItem
+                          style={[styles.checkboxItem, styles.checkboxItemGreen]}>
+                          <TouchableOpacity
+                            style={[
+                              styles.checkboxCustom,
+                              isBudgetSelected ? styles.CheckboxGreen : styles.UnCheckboxGreen,
+                            ]}
+                            onPress={() => { this.toggleFilterValue('selectedBudget', budget.value) }}>
+                            <Text
+                              style={[
+                                styles.checkboxCustomText,
+                                isBudgetSelected ? styles.CheckboxGreenText : styles.UnCheckboxGreenText,
+                              ]}>
+                              {budget.name}
+                            </Text>
+                          </TouchableOpacity>
+                        </ListItem>
+                      )
+                    })
+                  }
                 </View>
               </View>
               <View style={styles.formGroup}>
                 <Text style={styles.formLabel}>Age at travel</Text>
                 <View style={styles.checkboxCard}>
-                  {this.state.age_at_travel.map(title => (
-                    <ListItem style={styles.checkboxItem}>
-                      <TouchableOpacity
-                        style={[
-                          styles.checkboxCustom,
-                          this.state.selectedAge == title
-                            ? styles.CheckboxOrange
-                            : styles.UnCheckboxOrange,
-                        ]}
-                        onPress={() => this.setState({ selectedAge: title })}>
-                        <Text
-                          style={[
-                            styles.checkboxCustomText,
-                            this.state.selectedAge == title
-                              ? styles.CheckboxOrangeText
-                              : styles.UnCheckboxOrangeText,
-                          ]}>
-                          {title}
-                        </Text>
-                      </TouchableOpacity>
-                    </ListItem>
-                  ))}
+                  {
+                    this.props.ageLists && this.props.ageLists.map(age => {
+                      let isAgeSelected = selectedAge.indexOf(age.value) >= 0;
+                      return (
+                        <ListItem style={styles.checkboxItem}>
+                          <TouchableOpacity
+                            style={[
+                              styles.checkboxCustom,
+                              isAgeSelected ? styles.CheckboxOrange : styles.UnCheckboxOrange,
+                            ]}
+                            onPress={() => { this.toggleFilterValue('selectedAge', age.value) }}>
+                            <Text
+                              style={[
+                                styles.checkboxCustomText,
+                                isAgeSelected ? styles.CheckboxOrangeText : styles.UnCheckboxOrangeText,
+                              ]}>
+                              {age.name}
+                            </Text>
+                          </TouchableOpacity>
+                        </ListItem>
+                      )
+                    })
+                  }
                 </View>
               </View>
               <View style={styles.formGroup}>
                 <Text style={styles.formLabel}>Created Within</Text>
                 <View style={styles.checkboxCard}>
-                  {this.state.created_within.map(title => (
-                    <ListItem style={styles.checkboxItem}>
-                      <TouchableOpacity
-                        style={[
-                          styles.checkboxCustom,
-                          this.state.selectedCreatedWithin == title
-                            ? styles.CheckboxYellow
-                            : styles.UnCheckboxYellow,
-                        ]}
-                        onPress={() => this.setState({ selectedCreatedWithin: title })}>
-                        <Text
-                          style={[
-                            styles.checkboxCustomText,
-                            this.state.selectedCreatedWithin == title
-                              ? styles.CheckboxYellowText
-                              : styles.UnCheckboxYellowText,
-                          ]}>
-                          {title}
-                        </Text>
-                      </TouchableOpacity>
-                    </ListItem>
-                  ))}
+                  {
+                    this.props.createdWithins && this.props.createdWithins.map(createdWithin => {
+                      let isCreatedWithinSelected = selectedCreatedWithin.indexOf(createdWithin.value) >= 0;
+                      return (
+                        <ListItem style={styles.checkboxItem}>
+                          <TouchableOpacity
+                            style={[
+                              styles.checkboxCustom,
+                              isCreatedWithinSelected ? styles.CheckboxYellow : styles.UnCheckboxYellow,
+                            ]}
+                            onPress={() => { this.toggleFilterValue('selectedCreatedWithin', createdWithin.value) }}>
+                            <Text
+                              style={[
+                                styles.checkboxCustomText,
+                                isCreatedWithinSelected ? styles.CheckboxYellowText : styles.UnCheckboxYellowText,
+                              ]}>
+                              {createdWithin.name}
+                            </Text>
+                          </TouchableOpacity>
+                        </ListItem>
+                      )
+                    })
+                  }
                 </View>
               </View>
             </ScrollView>
@@ -275,8 +256,19 @@ class AddMymaps extends React.Component {
             </TouchableOpacity>
           </View>
         </View>
-      </Fragment>
+      </Fragment >
     );
   }
 }
-export default AddMymaps;
+
+function mapStateToProps(state) {
+  return {
+    categories: state.maps.categories,
+    travelTypes: state.maps.travelTypes,
+    budgetLists: state.maps.budgetLists,
+    ageLists: state.maps.ageLists,
+    createdWithins: state.maps.createdWithins,
+  };
+}
+
+export default connect(mapStateToProps, null)(AddMymaps);

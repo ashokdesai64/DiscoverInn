@@ -20,6 +20,30 @@ export default function maps(state = initialState, action = {}) {
                 categories: action.categories || (state.categories || {}),
             };
         }
+        case 'travelTypes': {
+            return {
+                ...state,
+                travelTypes: action.travelTypes || (state.travelTypes || {}),
+            };
+        }
+        case 'budgetLists': {
+            return {
+                ...state,
+                budgetLists: action.budgetLists || (state.budgetLists || {}),
+            };
+        }
+        case 'ageLists': {
+            return {
+                ...state,
+                ageLists: action.ageLists || (state.ageLists || {}),
+            };
+        }
+        case 'createdWithins': {
+            return {
+                ...state,
+                createdWithins: action.createdWithins || (state.createdWithins || {}),
+            };
+        }
         case 'ownMaps': {
             return {
                 ...state,

@@ -226,7 +226,7 @@ class HomeScreen extends React.Component {
   
   fetchCategoryMaps(categoryID){
     let userID = this.props.userData && this.props.userData.id;
-    this.props.mapAction.fetchMapList({categorie:categoryID,page:1,sort_by:'rating',user_id:userID});
+    // this.props.mapAction.fetchMapList({categorie:[categoryID],page:1,sort_by:'rating',user_id:userID});
     this.props.navigation.navigate('MapList',{category:categoryID});
   }
 

@@ -49,6 +49,94 @@ export function loadCategories() {
     };
 }
 
+export function loadTravelTypes() {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.getTravelType,
+                {},
+                'GET'
+            );
+            if (response.status) {
+                console.log("response data => ", response.data)
+                dispatch({
+                    type: 'travelTypes',
+                    travelTypes: response.data
+                });
+                resolve(response.data);
+            } else {
+                reject(response.message)
+            }
+        })
+    };
+}
+
+export function loadBudgetList() {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.getBudgetList,
+                {},
+                'GET'
+            );
+            if (response.status) {
+                console.log("response data => ", response.data)
+                dispatch({
+                    type: 'budgetLists',
+                    budgetLists: response.data
+                });
+                resolve(response.data);
+            } else {
+                reject(response.message)
+            }
+        })
+    };
+}
+
+export function loadAgeList() {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.getAgeList,
+                {},
+                'GET'
+            );
+            if (response.status) {
+                console.log("response data => ", response.data)
+                dispatch({
+                    type: 'ageLists',
+                    ageLists: response.data
+                });
+                resolve(response.data);
+            } else {
+                reject(response.message)
+            }
+        })
+    };
+}
+
+export function loadCreatedWithin() {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.getCreatedWithin,
+                {},
+                'GET'
+            );
+            if (response.status) {
+                console.log("response data => ", response.data)
+                dispatch({
+                    type: 'createdWithins',
+                    createdWithins: response.data
+                });
+                resolve(response.data);
+            } else {
+                reject(response.message)
+            }
+        })
+    };
+}
+
 export function fetchMyMaps(apiData) {
     return function (dispatch, getState) {
         return new Promise(async (resolve, reject) => {
@@ -105,7 +193,6 @@ export function fetchTripList(){
 export function fetchMapList(apiData) {
     return function (dispatch, getState) {
         return new Promise(async (resolve, reject) => {
-            console.log("apiData => ",apiData)
             let response = await callAPI(
                 apiUrls.mapList,
                 apiData

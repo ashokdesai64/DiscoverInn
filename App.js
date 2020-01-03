@@ -20,6 +20,7 @@ const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
   whitelist: ['user','maps'],
+  timeout:10000
 };
 const persistedReducer = persistReducer(persistConfig, reducer);
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
