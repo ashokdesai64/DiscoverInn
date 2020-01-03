@@ -93,6 +93,82 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
+  mapControlButton: {
+    flexDirection: 'row',
+    marginTop: 0,
+    alignItems: 'flex-end',
+    marginBottom: 20,
+    justifyContent: 'space-between',
+    position: 'absolute',
+    paddingHorizontal: 20,
+    bottom: 10,
+  },
+  button: {
+    paddingVertical: 5,
+    paddingHorizontal: 30,
+    height: 40,
+    alignSelf: 'center',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  buttonSm: {
+    height: 30,
+  },
+  buttonPrimary: {
+    backgroundColor: '#2F80ED',
+    color: '#fff',
+  },
+  buttonSuccess: {
+    backgroundColor: '#6FCF97',
+    color: '#fff',
+  },
+  buttonDanger: {
+    backgroundColor: '#EB5757',
+    color: '#fff',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 12,
+    fontFamily: 'Montserrat-Medium',
+  },
+  buttonOutline: {
+    borderColor: '#BDBDBD',
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    color: '#fff',
+  },
+  buttonDecline: {
+    flex: 1,
+    marginRight: 15,
+  },
+  buttonSave: {
+    flex: 1,
+    marginLeft: 15,
+  },
+  buttonTextGray: {
+    color: '#333333',
+  },
+  mapActionButton: {
+    position: 'absolute',
+    right: 20,
+    top: 80,
+  },
+  iconButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 5,
+    backgroundColor: '#ccc',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconButtonPrimary: {
+    backgroundColor: '#2F80ED',
+  },
+  iconButtonView: {
+    marginBottom: 10,
+  },
 });
 
 export default styles;

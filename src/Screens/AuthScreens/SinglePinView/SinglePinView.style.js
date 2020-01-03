@@ -94,7 +94,6 @@ const styles = StyleSheet.create({
   },
   iconButtonPrimary: {
     backgroundColor: 'rgba(47, 128, 237, 0.2)',
-    marginRight: 5,
   },
   iconButtonIconPrimary: {
     color: '#2F80ED',
@@ -104,6 +103,12 @@ const styles = StyleSheet.create({
   },
   iconButtonIconWarning: {
     color: '#F2994A',
+  },
+  iconButtonDanger: {
+    backgroundColor: 'rgba(235, 87, 87, 0.1)',
+  },
+  iconButtonIconDanger: {
+    color: '#EB5757',
   },
 });
 

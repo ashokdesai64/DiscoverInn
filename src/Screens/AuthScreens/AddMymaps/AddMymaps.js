@@ -239,14 +239,11 @@ class AddMymaps extends React.Component {
                     </Picker>
                   </View>
                 </View>
-                <View style={styles.addCoverImages}>
-                  <TouchableOpacity
-                    style={[styles.button, styles.buttonPrimary]}
-                    onPress={() => {
-                      this.setState({showChangeCoverModal: true});
-                    }}>
-                    <Text style={styles.buttonText}>Upload Cover Image</Text>
-                  </TouchableOpacity>
+                <View style={[styles.uploadCoverCard]}>
+                  <AntDesign name={'pluscircleo'} size={36} color={'#2F80ED'} />
+                  <Text style={[styles.uploadCoverCardText]}>
+                    Add Cover Image
+                  </Text>
                 </View>
               </ScrollView>
             </View>
@@ -261,55 +258,6 @@ class AddMymaps extends React.Component {
             </View>
           </View>
         </ImageBackground>
-        <Dialog
-          rounded={false}
-          visible={this.state.showChangeCoverModal}
-          hasOverlay={true}
-          animationDuration={1}
-          onTouchOutside={() => {
-            this.setState({showChangeCoverModal: false});
-          }}
-          dialogAnimation={
-            new FadeAnimation({
-              initialValue: 0, // optional
-              animationDuration: 200, // optional
-              useNativeDriver: true, // optional
-            })
-          }
-          onHardwareBackPress={() => {
-            this.setState({showChangeCoverModal: false});
-            return true;
-          }}
-          dialogStyle={styles.customPopup}>
-          <DialogContent style={styles.customPopupContent}>
-            <View style={styles.customPopupHeader}>
-              <Text style={styles.customPopupHeaderTitle}>
-                Upload Map Cover Image
-              </Text>
-              <TouchableOpacity
-                style={styles.buttonClose}
-                onPress={() => this.setState({showChangeCoverModal: false})}>
-                <Feather name={'x'} style={styles.buttonCloseIcon} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.uploadCoverCard}>
-              <View style={styles.uploadCoverCardInner}>
-                <AntDesign name={'pluscircleo'} size={36} color={'#2F80ED'} />
-                <Text style={styles.uploadCoverText}>Add Cover Image</Text>
-              </View>
-            </View>
-            <View
-              style={{
-                marginTop: 25,
-              }}>
-              <TouchableOpacity
-                style={[styles.button, styles.buttonPrimary]}
-                onPress={() => this.setState({saveToListModal: false})}>
-                <Text style={styles.buttonText}>Upload Image</Text>
-              </TouchableOpacity>
-            </View>
-          </DialogContent>
-        </Dialog>
       </Fragment>
     );
   }

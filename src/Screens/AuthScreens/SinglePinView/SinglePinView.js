@@ -40,12 +40,12 @@ class SinglePinView extends React.Component {
   render() {
     console.log(this.props.navigation);
     const {params} = this.props.navigation.state;
-    let headerText = params.headerTitle;
+    // let headerText = params.headerTitle;
     return (
       <ScrollView
         style={styles.scrollView}
         showsHorizontalScrollIndicator={false}>
-        <Header showBack={true} title={headerText} {...this.props} />
+        <Header showBack={true} title={'MyTravel Pins'} {...this.props} />
         <View style={styles.container}>
           <View style={styles.pageContent}>
             <View searchBar style={styles.searchbarCard}>
@@ -53,7 +53,7 @@ class SinglePinView extends React.Component {
                 <Feather style={styles.searchbarIcon} name="search" />
                 <Input
                   style={styles.searchbarInput}
-                  placeholder="Search your maps"
+                  placeholder="Search MyTravel Pins"
                 />
               </Item>
               <Button style={styles.searchbarCardButton}>
@@ -70,10 +70,24 @@ class SinglePinView extends React.Component {
                     <Feather name="map-pin" style={styles.pinIcon}></Feather>
                     <Text style={styles.categorypinTitle}>{item}</Text>
                     <View style={styles.categorypinAction}>
+                      {/* <Switch
+                        style={[
+                          styles.mymapsItemSwitch,
+                          {transform: [{scaleX: 0.7}, {scaleY: 0.7}]},
+                        ]}
+                        thumbColor={'#2F80ED'}
+                        onValueChange={handlerHere}
+                        value={}
+                      /> */}
                       <Button
-                        style={[styles.iconButton, styles.iconButtonPrimary]}
-                        onPress={()=> this.props.navigation.navigate('MapView')}
-                      >
+                        style={[
+                          styles.iconButton,
+                          styles.iconButtonPrimary,
+                          {marginRight: 5},
+                        ]}
+                        onPress={() =>
+                          this.props.navigation.navigate('MapView')
+                        }>
                         <Feather
                           style={[
                             styles.iconButtonIcon,
@@ -83,15 +97,33 @@ class SinglePinView extends React.Component {
                         />
                       </Button>
                       <Button
-                        style={[styles.iconButton, styles.iconButtonWarning]}
-                        onPress={()=> this.props.navigation.navigate('EditCategories')}
-                      >
+                        style={[
+                          styles.iconButton,
+                          styles.iconButtonWarning,
+                          {marginRight: 5},
+                        ]}
+                        onPress={() =>
+                          this.props.navigation.navigate('EditCategories')
+                        }>
                         <Feather
                           style={[
                             styles.iconButtonIcon,
                             styles.iconButtonIconWarning,
                           ]}
                           name="edit-2"
+                        />
+                      </Button>
+                      <Button
+                        style={[styles.iconButton, styles.iconButtonDanger]}
+                        onPress={() =>
+                          this.props.navigation.navigate('EditCategories')
+                        }>
+                        <Feather
+                          style={[
+                            styles.iconButtonIcon,
+                            styles.iconButtonIconDanger,
+                          ]}
+                          name="trash-2"
                         />
                       </Button>
                     </View>

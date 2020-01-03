@@ -7,10 +7,9 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
+  Button,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import Carousel from 'react-native-snap-carousel';
+import Icon from 'react-native-vector-icons/Feather';
 import styles from './MapView.style';
 import exampleIcon from './../../Images/transportations1.png';
 import exampleIcon1 from './../../Images/sights1.png';
@@ -145,7 +144,7 @@ class MapView extends React.Component {
         <View style={styles.container}>
           <View style={styles.viewMapHeader}>
             <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-              <Icon name={'arrow-back'} size={25} color={'black'} />
+              <Icon name={'arrow-left'} size={24} color={'#333333'} />
             </TouchableOpacity>
           </View>
           <MapboxGL.MapView
@@ -202,7 +201,7 @@ class MapView extends React.Component {
               <MapboxGL.Callout title="Rivadavia 1841, 7º Piso, Of. 749." />
             </MapboxGL.ShapeSource>
           </MapboxGL.MapView>
-          <ScrollView
+          {/* <ScrollView
             horizontal={true}
             style={{height: 95, position: 'absolute', bottom: 30}}>
             {[1, 2, 3, 4, 5].map(i => {
@@ -238,7 +237,44 @@ class MapView extends React.Component {
                 </TouchableOpacity>
               );
             })}
-          </ScrollView>
+          </ScrollView> */}
+          <View style={styles.mapActionButton}>
+            <TouchableOpacity
+              style={[
+                styles.iconButton,
+                styles.iconButtonPrimary,
+                styles.iconButtonView,
+              ]}>
+              <Icon name={'map-pin'} size={24} color={'#FFF'} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.iconButton,
+                styles.iconButtonPrimary,
+                styles.iconButtonAdd,
+              ]}>
+              <Icon name={'plus-circle'} size={24} color={'#FFF'} />
+            </TouchableOpacity>
+          </View>
+          <View style={[styles.mapControlButton]}>
+            <TouchableOpacity
+              style={[
+                styles.button,
+                styles.buttonOutline,
+                styles.buttonOutlineGray,
+                styles.buttonDecline,
+              ]}
+              onPress={() => {}}>
+              <Text style={[styles.buttonText, styles.buttonTextGray]}>
+                Reload Map
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, styles.buttonDanger, styles.buttonSave]}
+              onPress={() => {}}>
+              <Text style={styles.buttonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
           {/* <Carousel
                         data={this.state.carouselItems}
                         sliderWidth={DEVICE_WIDTH}
