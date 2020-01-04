@@ -34,6 +34,7 @@ import * as mapActions from './../../actions/mapActions';
 class MapList extends React.Component {
   constructor(props) {
     super(props);
+    const {params} = props.navigation.state;
     this.state = {
       showTripList: false,
       shareModal: false,
@@ -102,7 +103,7 @@ class MapList extends React.Component {
       ],
       selectedAge: '',
       selectedBudget: '',
-      selectedCategory: '',
+      selectedCategory: params && params.category ? [params.category] : [],
       selectedCreatedWithin: '',
       selectedTravelType: '',
       addReviewValue: 0,
@@ -288,21 +289,22 @@ class MapList extends React.Component {
       search: this.state.searchTerm || '',
     };
     if ((params && params.category) || selectedCategory) {
-      apiData['categorie'] = selectedCategory || (params && params.category);
+      let category = selectedCategory || (params && params.category);
+      apiData['categorie'] = [category];
     }
     if (selectedAge && !!selectedAge.length) {
-      apiData['age_at_travel'] = selectedAge
+      apiData['age_at_travel'] = selectedAge;
     }
     if (selectedBudget && !!selectedBudget.length) {
-      apiData['budget_limit'] = selectedBudget
+      apiData['budget_limit'] = selectedBudget;
     }
     if (selectedCreatedWithin && !!selectedCreatedWithin.length) {
-      apiData['when_travel'] = selectedCreatedWithin
+      apiData['when_travel'] = selectedCreatedWithin;
     }
     if (selectedTravelType && !!selectedTravelType.length) {
-      apiData['travel_type'] = selectedTravelType
+      apiData['travel_type'] = selectedTravelType;
     }
-
+    console.log('data => ', apiData);
     this.props.mapAction.fetchMapList(apiData);
   }
 

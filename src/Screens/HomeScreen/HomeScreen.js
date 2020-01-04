@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, {Fragment} from 'react';
 import {
   View,
   Text,
@@ -7,20 +7,20 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import { Item, Input, Button } from 'native-base';
+import {Item, Input, Button} from 'native-base';
 import styles from './HomeScreen.style';
 import Carousel from 'react-native-snap-carousel';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from './../../components/header/header';
 
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
 import fontelloConfig from './../../selection.json';
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 
 //REDUX
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
 import * as authActions from './../../actions/authActions';
 import * as mapActions from './../../actions/mapActions';
@@ -30,7 +30,7 @@ class HomeScreen extends React.Component {
     super(props);
     this.state = {
       showSorting: false,
-      userData: { userName: 'test' },
+      userData: {userName: 'test'},
       carouselItems: [
         {
           title: 'Lonely Planet - Bangkok',
@@ -94,7 +94,7 @@ class HomeScreen extends React.Component {
     this._renderItem = this._renderItem.bind(this);
   }
 
-  _renderItem({ item, index }) {
+  _renderItem({item, index}) {
     let avgReview = parseInt(item.avrage_review);
 
     return (
@@ -116,8 +116,9 @@ class HomeScreen extends React.Component {
             </View>
             <Text style={styles.mapSlideCardTitle}>{item.name}</Text>
             <View style={styles.rateList}>
-              {
-                Array(avgReview).fill(1).map((d) => {
+              {Array(avgReview)
+                .fill(1)
+                .map(d => {
                   return (
                     <MaterialCommunityIcons
                       style={styles.starIcon}
@@ -125,11 +126,11 @@ class HomeScreen extends React.Component {
                       size={15}
                       color="#FFAF2C"
                     />
-                  )
-                })
-              }
-              {
-                Array(5-avgReview).fill(1).map((d) => {
+                  );
+                })}
+              {Array(5 - avgReview)
+                .fill(1)
+                .map(d => {
                   return (
                     <MaterialCommunityIcons
                       style={styles.starIcon}
@@ -137,10 +138,11 @@ class HomeScreen extends React.Component {
                       size={15}
                       color="#FFAF2C"
                     />
-                  )
-                })
-              }
-              <Text style={styles.rateListCount}>({item.total_review} Reviews)</Text>
+                  );
+                })}
+              <Text style={styles.rateListCount}>
+                ({item.total_review} Reviews)
+              </Text>
             </View>
           </View>
         </View>
@@ -148,7 +150,7 @@ class HomeScreen extends React.Component {
     );
   }
 
-  _renderItemTop({ item, index }) {
+  _renderItemTop({item, index}) {
     return (
       <TouchableOpacity
         style={styles.mapSlidCard}
@@ -206,9 +208,9 @@ class HomeScreen extends React.Component {
     );
   }
 
-  _renderItemCate = ({ item, index }) => {
+  _renderItemCate = ({item, index}) => {
     let category = this.state.carouselCateItems.find(c => c.title == item.name);
-    let iconName = category.icon || 'other'
+    let iconName = category.icon || 'other';
     return (
       <TouchableOpacity
         style={styles.mapSlidCard}
@@ -223,22 +225,27 @@ class HomeScreen extends React.Component {
       </TouchableOpacity>
     );
   };
-  
-  fetchCategoryMaps(categoryID){
+
+  fetchCategoryMaps(categoryID) {
     let userID = this.props.userData && this.props.userData.id;
-    // this.props.mapAction.fetchMapList({categorie:[categoryID],page:1,sort_by:'rating',user_id:userID});
-    this.props.navigation.navigate('MapList',{category:categoryID});
+    this.props.mapAction.fetchMapList({
+      categorie: [categoryID],
+      page: 1,
+      sort_by: 'rating',
+      user_id: userID,
+    });
+    this.props.navigation.navigate('MapList', {category: categoryID});
   }
 
   render() {
-    const { width } = Dimensions.get('window');
+    const {width} = Dimensions.get('window');
     return (
       <Fragment>
         <Header
           showMenu={true}
           title={'Discover Inn'}
           {...this.props}
-          style={{ backgroundColor: '#F3F4F6' }}
+          style={{backgroundColor: '#F3F4F6'}}
           rightEmpty={true}
           showRightButton={false}
         />
@@ -261,7 +268,7 @@ class HomeScreen extends React.Component {
                 />
                 <TouchableOpacity
                   onPress={() =>
-                    this.setState({ showSorting: !this.state.showSorting })
+                    this.setState({showSorting: !this.state.showSorting})
                   }>
                   <Feather style={styles.searchbarFilter} name="sliders" />
                 </TouchableOpacity>
@@ -287,7 +294,7 @@ class HomeScreen extends React.Component {
                     styles.buttonOutlinePrimary,
                     styles.buttonDisabled,
                   ]}
-                  onPress={() => this.setState({ saveToListModal: false })}>
+                  onPress={() => this.setState({saveToListModal: false})}>
                   <Text
                     style={
                       ([styles.buttonText],
@@ -317,10 +324,10 @@ class HomeScreen extends React.Component {
             />
             <View style={styles.cateCard}>
               <Text style={styles.sectionTitle}>Most Popular</Text>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('MapList')}>
                 <Text style={styles.seeAll}>See All</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             <View style={styles.carouselMapView}>
               <Carousel
@@ -335,10 +342,10 @@ class HomeScreen extends React.Component {
             </View>
             <View style={styles.cateCard}>
               <Text style={styles.sectionTitle}>Top Rated</Text>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('MapList')}>
                 <Text style={styles.seeAll}>See All</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             <View style={[styles.carouselMapView, styles.carouselMapViewRated]}>
               <Carousel
