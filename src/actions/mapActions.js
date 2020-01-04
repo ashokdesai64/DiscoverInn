@@ -124,7 +124,6 @@ export function loadCreatedWithin() {
                 'GET'
             );
             if (response.status) {
-                console.log("response data => ", response.data)
                 dispatch({
                     type: 'createdWithins',
                     createdWithins: response.data
@@ -199,7 +198,7 @@ export function fetchMapList(apiData) {
             );
             if (response.status) {
                 dispatch({
-                    type: 'mapList',
+                    type: apiData.page > 1 ? 'mapPagination' : 'mapList',
                     mapList: response.data
                 });
                 dispatch({

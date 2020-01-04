@@ -441,9 +441,9 @@ const styles = StyleSheet.create({
     height: 180,
   },
   mdPopupImages: {
-    maxHeight: 180,
+    height: 180,
     borderRadius: 5,
-    width: '100%',
+    width: '100%'
   },
   mdPopupTitle: {
     color: '#333333',

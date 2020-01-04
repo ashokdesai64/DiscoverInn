@@ -59,7 +59,14 @@ export default function maps(state = initialState, action = {}) {
         case 'mapList': {
             return {
                 ...state,
-                mapList: action.mapList || (state.mapList || {}),
+                mapList: action.mapList || (state.mapList || []),
+            };
+        }
+        case 'mapPagination': {
+            console.log("map pagination called with => ",state.mapList,action.mapList)
+            return {
+                ...state,
+                mapList: [...(state.mapList || []), ...(action.mapList || [])]
             };
         }
         case 'mapListCount': {
