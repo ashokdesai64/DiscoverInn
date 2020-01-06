@@ -70,6 +70,10 @@ class AddMapDetail extends React.Component {
     console.log(props);
   }
 
+  componentDidMount(){
+    console.log(this.props)
+  }
+
   // chnage_checkboxvalue = (statename, value) => {
   //   if (this.state[statename].indexOf(value) != -1) {
   //     this.state[statename].splice(this.state[statename].indexOf(value), 1);
@@ -111,12 +115,12 @@ class AddMapDetail extends React.Component {
           <View style={styles.container}>
             <View style={styles.pageContent}>
               <ScrollView>
-                <View style={[styles.uploadCoverCard]}>
+                <TouchableOpacity onPress={()=> this.setState} style={[styles.uploadCoverCard]}>
                   <AntDesign name={'pluscircleo'} size={36} color={'#2F80ED'} />
                   <Text style={[styles.uploadCoverCardText]}>
                     Add Cover Image
                   </Text>
-                </View>
+                </TouchableOpacity>
                 <View>
                   <LocationCheckbox
                     selected={this.state.locationAccepted}
@@ -137,6 +141,7 @@ class AddMapDetail extends React.Component {
                   <TextInput
                     style={styles.formControl}
                     placeholderTextColor={'#828894'}
+                    onChangeText={(locationName)=> this.setState({locationName})}
                   />
                 </View>
                 <View style={styles.mapPins}>
@@ -198,6 +203,7 @@ class AddMapDetail extends React.Component {
                   <TextInput
                     style={styles.formControl}
                     placeholderTextColor={'#828894'}
+                    onChangeText={(pinTitle)=> this.setState({pinTitle})}
                   />
                 </View>
 
@@ -208,6 +214,7 @@ class AddMapDetail extends React.Component {
                     style={[styles.formControlTextarea]}
                     textAlignVertical={'top'}
                     placeholderTextColor={'#828894'}
+                    onChangeText={(pinDescription)=> this.setState({pinDescription})}
                   />
                 </View>
               </ScrollView>

@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   Dimensions,
@@ -15,7 +15,7 @@ import exampleIcon from './../../Images/transportations1.png';
 import exampleIcon1 from './../../Images/sights1.png';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
-import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import fontelloConfig from './../../selection.json';
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 MapboxGL.setAccessToken(
@@ -49,7 +49,7 @@ class MapView extends React.Component {
     };
   }
   componentDidMount() {
-    console.log('map loaded');
+    console.log('map loaded', this.props);
   }
 
   //pin destination on the map
@@ -64,7 +64,7 @@ class MapView extends React.Component {
         coordinate={[this.state.currentLong, this.state.currentLat]}>
         <Image
           source={require('./../../Images/transportations1.png')}
-          style={{height: 16, width: 16}}
+          style={{ height: 16, width: 16 }}
         />
         {/* <Icon style={styles.search} name="location-on" size={16} color="red" /> */}
         <MapboxGL.Callout title={'From'} />
@@ -94,6 +94,9 @@ class MapView extends React.Component {
   // }
 
   render() {
+    let {params} =  this.props.navigation.state;
+    params = params || {};
+
     const featureCollection = {
       type: 'FeatureCollection',
       features: [
@@ -160,7 +163,7 @@ class MapView extends React.Component {
 
             <MapboxGL.ShapeSource
               id="symbolLocationSource"
-              hitbox={{width: 20, height: 20}}
+              hitbox={{ width: 20, height: 20 }}
               shape={featureCollection}
               cluster={true}
               onPress={e => {
@@ -180,7 +183,7 @@ class MapView extends React.Component {
 
             <MapboxGL.ShapeSource
               id="symbolLocationSource1"
-              hitbox={{width: 20, height: 20}}
+              hitbox={{ width: 20, height: 20 }}
               shape={featureCollection1}
               cluster={true}
               onPress={e => {
@@ -194,7 +197,7 @@ class MapView extends React.Component {
                   iconAllowOverlap: true,
                   iconSize: 0.4,
                 }}>
-                <View style={{width: 20, height: 20, backgroundColor: 'red'}}>
+                <View style={{ width: 20, height: 20, backgroundColor: 'red' }}>
                   <Text>5</Text>
                 </View>
               </MapboxGL.SymbolLayer>
@@ -252,7 +255,9 @@ class MapView extends React.Component {
                 styles.iconButton,
                 styles.iconButtonPrimary,
                 styles.iconButtonAdd,
-              ]}>
+              ]}
+              onPress={()=> this.props.navigation.navigate('AddMapDetail',{...params})}
+            >
               <Icon name={'plus-circle'} size={24} color={'#FFF'} />
             </TouchableOpacity>
           </View>
@@ -264,14 +269,14 @@ class MapView extends React.Component {
                 styles.buttonOutlineGray,
                 styles.buttonDecline,
               ]}
-              onPress={() => {}}>
+              onPress={() => { }}>
               <Text style={[styles.buttonText, styles.buttonTextGray]}>
                 Reload Map
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, styles.buttonDanger, styles.buttonSave]}
-              onPress={() => {}}>
+              onPress={() => { }}>
               <Text style={styles.buttonText}>Close</Text>
             </TouchableOpacity>
           </View>

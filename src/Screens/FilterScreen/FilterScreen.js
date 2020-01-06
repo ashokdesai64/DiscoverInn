@@ -12,7 +12,7 @@ const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-class AddMymaps extends React.Component {
+class FilterScreen extends React.Component {
   constructor(props) {
     super(props);
     const { params } = props.navigation.state;
@@ -271,4 +271,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, null)(AddMymaps);
+export default connect(mapStateToProps, null)(FilterScreen);

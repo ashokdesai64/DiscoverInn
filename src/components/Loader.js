@@ -77,7 +77,7 @@ export default class Spinner extends React.PureComponent {
         animation: 'none',
         color: 'white',
         size: 'large', // 'normal',
-        overlayColor: 'rgba(0, 0, 0, 1)'
+        overlayColor: 'rgba(0, 0, 0, 0.4)'
     };
 
     close() {

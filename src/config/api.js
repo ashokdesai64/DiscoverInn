@@ -13,5 +13,6 @@ export const apiUrls = {
 
     myMaps:'https://discover-inn.com/api/v1/own_maps',
     tripList:'https://discover-inn.com/api/v1/trip_list',
-    mapList:'https://discover-inn.com/api/v1/map_list'
+    mapList:'https://discover-inn.com/api/v1/map_list',
+    addMyMap:'https://discover-inn.com/api/v1/add_map'
 }

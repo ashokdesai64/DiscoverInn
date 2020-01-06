@@ -1,4 +1,4 @@
-import {StyleSheet, Dimensions} from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 const styles = StyleSheet.create({
@@ -171,6 +171,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
+  updateCoverCard: {
+    height: 120,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  coverImage: {
+    height: 120,
+    width:width-30,
+    borderRadius: 10
+  },
   uploadCoverCardText: {
     color: '#2F80ED',
     fontSize: 14,
@@ -214,7 +226,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     shadowColor: '#000',
     shadowOpacity: 0.05,
-    shadowOffset: {width: 0, height: -2},
+    shadowOffset: { width: 0, height: -2 },
     shadowRadius: 10,
     maxHeight: height - 190,
   },

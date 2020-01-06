@@ -220,3 +220,20 @@ export function fetchMapList(apiData) {
         })
     };
 }
+
+export function addMyMap(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.addMyMap,
+                apiData
+            );
+            if (response.status && response.map_id) {
+                resolve({mapID:response.map_id});
+            } else {
+                reject(response.message)
+            }
+        })
+    };
+}
+
