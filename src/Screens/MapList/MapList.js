@@ -7,6 +7,7 @@ import {
   Dimensions,
   TouchableOpacity,
   TextInput,
+  ActivityIndicator
 } from 'react-native';
 import { Item, Input, Button, Icon, Textarea, List, CheckBox } from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
@@ -109,7 +110,8 @@ class MapList extends React.Component {
       selectedCreatedWithin: '',
       selectedTravelType: '',
       addReviewValue: 0,
-      selectedMap: null
+      selectedMap: null,
+      addingReview: false
     };
   }
 
@@ -259,7 +261,7 @@ class MapList extends React.Component {
 
             <TouchableOpacity
               style={[styles.button, styles.buttonReview, styles.buttonPrimary]}
-              onPress={() => this.setState({ showAddReviewModal: true })}>
+              onPress={() => this.setState({ showAddReviewModal: true, selectedMap: item })}>
               <Text style={styles.buttonText}>Add Review</Text>
             </TouchableOpacity>
           </View>
@@ -328,6 +330,28 @@ class MapList extends React.Component {
       this.fetchMapList();
     }
 
+  }
+
+  addReview() {
+    const { reviewText, addReviewValue, selectedMap } = this.state;
+    console.log("reviewText =<> ", reviewText)
+    if (!reviewText || !reviewText.trim()) {
+      alert("Review can't be empty");
+      return
+    }
+    if (!addReviewValue) {
+      alert("Please select review rate");
+      return
+    }
+    this.setState({ addingReview: true })
+    console.log("selectedmap => ", selectedMap)
+    this.props.mapAction.addReview({ map_id: selectedMap.id, user_id: this.props.userData.id, ratings: addReviewValue, review: reviewText.trim() }).then((data) => {
+      this.setState({ addingReview: false,showAddReviewModal:false })
+    }).catch((err) => {
+      console.log("err => ", err);
+      alert(err);
+      this.setState({ addingReview: false })
+    })
   }
 
   render() {
@@ -746,13 +770,19 @@ class MapList extends React.Component {
                 placeholderTextColor={'#828894'}
                 rowSpan={5}
                 style={styles.formControlTextarea}
+                onChangeText={(reviewText) => this.setState({ reviewText })}
               />
             </View>
             <View style={styles.customPopupFooter}>
               <TouchableOpacity
                 style={[styles.button, styles.buttonPrimary]}
-                onPress={() => this.setState({ showAddReviewModal: false })}>
-                <Text style={styles.buttonText}>Submit</Text>
+                onPress={() => this.addReview()}>
+                {
+                  this.state.addingReview ?
+                    <ActivityIndicator size="small" color="#fff" />
+                    :
+                    <Text style={styles.buttonText}>Submit</Text>
+                }
               </TouchableOpacity>
             </View>
           </DialogContent>

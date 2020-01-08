@@ -92,6 +92,9 @@ const styles = StyleSheet.create({
     paddingLeft: 25,
     paddingRight: 25,
     height: 90,
+    fontFamily: 'Montserrat-Regular',
+    color: '#4F4F4F',
+    fontSize: 14,
   },
   textStyle: {
     fontFamily: 'Montserrat-Medium',

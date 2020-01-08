@@ -20,6 +20,8 @@ export async function callAPI(url, data, method = 'POST') {
       });
       apiSkeleton['body'] = formData;
     }
+
+    console.log("formdata => ",formData)
     let response = await fetch(url, apiSkeleton);
 
     let apiResponse = await response.json();

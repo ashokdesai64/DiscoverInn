@@ -10,9 +10,29 @@ export const apiUrls = {
     getBudgetList:'https://discover-inn.com/api/v1/budget_list',
     getAgeList:'https://discover-inn.com/api/v1/age_list',
     getCreatedWithin:'https://discover-inn.com/api/v1/created_within',
-
     myMaps:'https://discover-inn.com/api/v1/own_maps',
     tripList:'https://discover-inn.com/api/v1/trip_list',
     mapList:'https://discover-inn.com/api/v1/map_list',
-    addMyMap:'https://discover-inn.com/api/v1/add_map'
+    addMyMap:'https://discover-inn.com/api/v1/add_map',
+    addMapPin:'https://discover-inn.com/api/v1/add_map_pin',
+    getMapPins:'https://discover-inn.com/api/v1/pin_list',
+
+    //remaining
+    sharedMaps:'https://discover-inn.com/api/v1/shared_maps',
+    addReview:'https://discover-inn.com/api/v1/add_review',
+    mapRemove:'https://discover-inn.com/api/v1/map_remove',
+    createFavouriteList:'https://discover-inn.com/api/v1/create_favorite_list',
+    updateFavouriteList:'https://discover-inn.com/api/v1/update_favorite_list',
+    deleteFavouriteList:'https://discover-inn.com/api/v1/delete_favorite_list',
+    favouritePins:'https://discover-inn.com/api/v1/favorites_pin',
+    singleFavouritePinList:'https://discover-inn.com/api/v1/single_favorite_pin_list',
+    addRemovePinToFavourite:'https://discover-inn.com/api/v1/add_remove_pin_to_favourite',
+    addPinFromTripList:'https://discover-inn.com/api/v1/add_pin_from_trip_list',
+    updateMap:'https://discover-inn.com/api/v1/update_map',
+    updateMapPin:'https://discover-inn.com/api/v1/update_map_pin',
+    pinsFromCategory:'https://discover-inn.com/api/v1/pins_from_category',
+    changeMapStatus:'https://discover-inn.com/api/v1/change_map_status',
+    changeMapCover:'https://discover-inn.com/api/v1/change_map_cover',
+    visitorReviews:'https://discover-inn.com/api/v1/visitor_reviews',
+    yourReviews:'https://discover-inn.com/api/v1/your_reviews'
 }

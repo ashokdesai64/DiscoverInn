@@ -14,6 +14,9 @@ import styles from './MapView.style';
 import exampleIcon from './../../Images/transportations1.png';
 import exampleIcon1 from './../../Images/sights1.png';
 import MapboxGL from '@react-native-mapbox-gl/maps';
+import Spinner from './../../components/Loader';
+
+import { NavigationEvents } from 'react-navigation'
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import fontelloConfig from './../../selection.json';
@@ -21,6 +24,13 @@ const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 MapboxGL.setAccessToken(
   'pk.eyJ1IjoiYWJyaWxsbyIsImEiOiJjanNlbHVjb28wanFwNDNzNzkyZzFnczNpIn0.39svco2wAZvwcrFD6qOlMw',
 );
+
+//REDUX
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import * as mapActions from './../../actions/mapActions';
+
 
 class MapView extends React.Component {
   constructor(props) {
@@ -46,6 +56,7 @@ class MapView extends React.Component {
           title: 'Lonely Planet - India',
         },
       ],
+      mapPinsInProgress: false
     };
   }
   componentDidMount() {
@@ -72,29 +83,23 @@ class MapView extends React.Component {
     );
   };
 
-  onSourceLayerPress(e) {
-    const feature = e.nativeEvent.payload;
-    console.log('You pressed a layer here is your feature', feature); // eslint-disable-line
+  loadMapPins(payload) {
+    console.log("payload", payload);
+    console.log("this.props", this.props);
+    let mapID = payload.state.params && payload.state.params.mapID;
+    // this.setState({ mapPinsInProgress: true })
+    if (mapID) {
+      this.props.mapAction.getMapPins({ map_id: mapID, user_id: this.props.userData.id }).then((data) => {
+        this.setState({ mapPinsInProgress: false })
+      }).catch((err) => {
+        console.log("error => ",err)
+        this.setState({ mapPinsInProgress: false })
+      })
+    }
   }
 
-  // _renderItem({item, index}) {
-  //   return (
-  //     <View style={styles.mapSlidCard}>
-  //       <View style={styles.mapSlidCardInner}>
-  //         <Image
-  //           style={styles.mapViewCardImg}
-  //           source={require('./../../Images/login-bg.jpg')}
-  //         />
-  //         <View style={styles.mapViewCardContent}>
-  //           <Text style={styles.mapViewCardTitle}>{item.title}</Text>
-  //         </View>
-  //       </View>
-  //     </View>
-  //   );
-  // }
-
   render() {
-    let {params} =  this.props.navigation.state;
+    let { params } = this.props.navigation.state;
     params = params || {};
 
     const featureCollection = {
@@ -144,7 +149,15 @@ class MapView extends React.Component {
     };
     return (
       <View style={styles.page}>
+        <NavigationEvents
+          onWillFocus={payload => this.loadMapPins(payload)}
+        />
         <View style={styles.container}>
+          <Spinner
+            visible={this.state.mapPinsInProgress}
+            textContent={'Fetching Pins...'}
+            textStyle={{ color: '#fff' }}
+          />
           <View style={styles.viewMapHeader}>
             <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
               <Icon name={'arrow-left'} size={24} color={'#333333'} />
@@ -256,7 +269,7 @@ class MapView extends React.Component {
                 styles.iconButtonPrimary,
                 styles.iconButtonAdd,
               ]}
-              onPress={()=> this.props.navigation.navigate('AddMapDetail',{...params})}
+              onPress={() => this.props.navigation.navigate('AddMapDetail', { ...params })}
             >
               <Icon name={'plus-circle'} size={24} color={'#FFF'} />
             </TouchableOpacity>
@@ -297,4 +310,16 @@ class MapView extends React.Component {
     );
   }
 }
-export default MapView;
+
+function mapStateToProps(state) {
+  return {
+    categories: state.maps.categories,
+    userData: state.user.userData,
+  };
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    mapAction: bindActionCreators(mapActions, dispatch),
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(MapView);

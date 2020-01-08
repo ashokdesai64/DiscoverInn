@@ -160,15 +160,15 @@ export function fetchMyMaps(apiData) {
     };
 }
 
-export function fetchTripList(){
+export function fetchTripList() {
     return function (dispatch, getState) {
         return new Promise(async (resolve, reject) => {
             let userData = getState().user && getState().user.userData;
 
-            if(userData && userData.id){
+            if (userData && userData.id) {
                 let response = await callAPI(
                     apiUrls.tripList,
-                    {user_id:userData.id}
+                    { user_id: userData.id }
                 );
                 if (response.status) {
                     dispatch({
@@ -184,7 +184,7 @@ export function fetchTripList(){
                     reject(response.message)
                 }
             }
-            
+
         })
     };
 }
@@ -229,7 +229,7 @@ export function addMyMap(apiData) {
                 apiData
             );
             if (response.status && response.map_id) {
-                resolve({mapID:response.map_id});
+                resolve({ mapID: response.map_id });
             } else {
                 reject(response.message)
             }
@@ -237,3 +237,59 @@ export function addMyMap(apiData) {
     };
 }
 
+export function addMapPin(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+
+            let response = await callAPI(
+                apiUrls.addMapPin,
+                apiData
+            );
+
+            if (response.status) {
+                resolve({ mapID: response.data });
+            } else {
+                reject(response.message)
+            }
+
+        })
+    };
+}
+
+export function getMapPins(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+
+            let response = await callAPI(
+                apiUrls.getMapPins,
+                apiData
+            );
+
+            if (response.status) {
+                resolve({ mapID: response.data });
+            } else {
+                reject(response.message)
+            }
+
+        })
+    };
+}
+
+export function addReview(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+
+            let response = await callAPI(
+                apiUrls.addReview,
+                apiData
+            );
+
+            if (response.status) {
+                resolve({ mapID: response.data });
+            } else {
+                reject(response.message)
+            }
+
+        })
+    };
+}

@@ -19,7 +19,8 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import fontelloConfig from './../../../selection.json';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog';
-import ImagePicker from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
+import Spinner from './../../../components/Loader';
 
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 const DEVICE_WIDTH = Dimensions.get('window').width;
@@ -27,6 +28,8 @@ const DEVICE_WIDTH = Dimensions.get('window').width;
 //REDUX
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+
+import * as mapActions from './../../../actions/mapActions';
 
 const LocationCheckbox = ({
   selected,
@@ -53,18 +56,12 @@ class AddMapDetail extends React.Component {
     this.state = {
       pinImages: [],
       imageSelected: false,
+      locationAccepted: false,
+      listViewDisplayed: false,
+      addPinInProgress: false
     };
     console.log(props);
   }
-
-  componentDidMount() {
-    console.log(this.props)
-  }
-
-  state = {
-    locationAccepted: false,
-    photo: null,
-  };
 
   handleCheckBox = () => {
     this.setState({ locationAccepted: !this.state.locationAccepted });
@@ -73,31 +70,71 @@ class AddMapDetail extends React.Component {
   showPicker(type) {
 
     if (type == 'gallery') {
-      const options = {
-        title: 'Select Avatar',
-        customButtons: [{ name: 'fb', title: 'Choose Photo from Gallery' }],
-        permissionDenied: {
-          title: 'Give permission',
-          text: 'Text',
-          reTryTitle: 'reTryTitle',
-          okTitle: 'okTitle',
-        },
-        quality: 0.3,
-      };
 
-      ImagePicker.launchImageLibrary(options, response => {
-        console.log('response => ', response);
-        let selectedImage = {
-          imagePath: response.uri,
-          fileName: response.fileName,
-          fileType: response.type,
-        };
-        this.setState({ imageSelected: true, pinImages: [...this.state.pinImages, selectedImage] });
-      });
+      ImagePicker.openPicker({
+        multiple: true,
+        waitAnimationEnd: false,
+        includeExif: false,
+        forceJpg: true,
+        compressImageQuality: 0.7
+      }).then(response => {
+        let tempArray = []
+        console.log("responseimage-------", response)
+        response.forEach((item) => {
+          let image = {
+            imagePath: item.path,
+            fileName: item.path.split('/').slice(-1)[0] || `${+new Date}.jpg`,
+            fileType: item.mime,
+          }
+          tempArray.push(image)
+        });
+        this.setState({ pinImages: [...this.state.pinImages, ...tempArray] })
+      }).catch(e => alert(e));
+
     } else {
 
     }
 
+  }
+
+  removeSelectedImage(imageData) {
+    let images = [...this.state.pinImages];
+    let removeIndex = images.findIndex(image => image.imagePath == imageData.imagePath);
+    images.splice(removeIndex, 1);
+    this.setState({ pinImages: images });
+  }
+
+  addPin() {
+    const { pinImages, selectedLocation, selectedCategory, pinTitle, pinDescription } = this.state;
+    const { params } = this.props.navigation.state;
+
+    let apiData = {
+      map_id: params.mapID,
+      user_id: this.props.userData.id,
+      pin_title: pinTitle,
+      category: selectedCategory
+    };
+
+    if (pinDescription) {
+      apiData['pin_description'] = pinDescription;
+    }
+    if (pinImages) {
+      apiData['pin_image'] = pinImages;
+    }
+    if (selectedLocation && selectedLocation.lat && selectedLocation.lng) {
+      apiData['latitude'] = selectedLocation.lat;
+      apiData['longitude'] = selectedLocation.lng;
+    }
+    this.props.mapAction.addMapPin(apiData).then((data) => {
+      console.log("pin added");
+      this.setState({ addPinInProgress: false },()=>{
+        this.props.navigation.navigate('MapView',{mapID:params.mapID});
+      })
+    }).catch((err) => {
+      this.setState({ addPinInProgress: false })
+      alert(err);
+    });
+    // anita ravi sojitra
   }
 
   render() {
@@ -115,6 +152,11 @@ class AddMapDetail extends React.Component {
             showRightButton={false}
             style={styles.bgTransfrent}
           />
+          <Spinner
+            visible={this.state.addPinInProgress}
+            textContent={'Adding Pin...'}
+            textStyle={{ color: '#fff' }}
+          />
           <View style={styles.container}>
             <View style={styles.pageContent}>
               <ScrollView keyboardShouldPersistTaps={'always'}>
@@ -127,19 +169,19 @@ class AddMapDetail extends React.Component {
                             <View style={{ marginRight: 13, marginBottom: 15 }}>
                               <Image
                                 style={{ height: 80, width: 80, borderRadius: 5 }}
-                                source={{uri:image.imagePath}}
+                                source={{ uri: image.imagePath }}
                               />
-                              <View style={{ backgroundColor: 'white', height: 20, width: 20, position: 'absolute', top: -5, right: -5, borderRadius: 10, justifyContent: 'center', alignItems: 'center', elevation: 5, shadowColor: '#000000', shadowOpacity: 0.05, shadowOffset: { width: 0, height: 4 }, shadowRadius: 10 }}>
+                              <TouchableOpacity onPress={() => this.removeSelectedImage(image)} style={{ backgroundColor: 'white', height: 20, width: 20, position: 'absolute', top: -5, right: -5, borderRadius: 10, justifyContent: 'center', alignItems: 'center', elevation: 5, shadowColor: '#000000', shadowOpacity: 0.05, shadowOffset: { width: 0, height: 4 }, shadowRadius: 10 }}>
                                 <Feather name={'x'} color={'red'} />
-                              </View>
+                              </TouchableOpacity>
                             </View>
                           )
                         })
                       }
-                      <View style={{ marginRight: 13, marginBottom: 15, borderWidth: 1, borderColor: '#2F80ED', borderStyle: 'dashed', height: 80, width: 80, borderRadius: 5, justifyContent: 'center', alignItems: 'center' }}>
-                        <Feather name={'plus'} color={'#2F80ED'} />
+                      <TouchableOpacity onPress={() => this.setState({ showPickerDialog: true })} style={{ marginRight: 13, marginBottom: 15, borderWidth: 1, borderColor: '#2F80ED', borderStyle: 'dashed', height: 80, width: 80, borderRadius: 5, justifyContent: 'center', alignItems: 'center' }}>
+                        <Feather name={'plus'} color={'#2F80ED'} size={18} />
                         <Text style={{ color: '#828282', fontSize: 8, fontFamily: 'Montserrat-Regular', textAlign: 'center', marginRight: 0, }}>Choose Files</Text>
-                      </View>
+                      </TouchableOpacity>
                     </View>
                     :
                     <TouchableOpacity onPress={() => this.setState({ showPickerDialog: true })} style={[styles.uploadCoverCard]}>
@@ -181,6 +223,7 @@ class AddMapDetail extends React.Component {
                     returnKeyType={'default'}
                     fetchDetails={true}
                     enablePoweredByContainer={false}
+                    listViewDisplayed={this.state.listViewDisplayed}
                     styles={{
 
                       textInputContainer: {
@@ -210,7 +253,7 @@ class AddMapDetail extends React.Component {
                     onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
                       console.log("test")
                       console.log(data, details);
-                      this.setState({ selectedLocation: details.geometry.location, selectedAddress: details.formatted_address })
+                      this.setState({ listViewDisplayed: false, selectedLocation: details.geometry.location, selectedAddress: details.formatted_address })
                     }}
                   />
                 </View>
@@ -259,7 +302,8 @@ class AddMapDetail extends React.Component {
               <TouchableOpacity
                 style={[styles.button, styles.buttonPrimary, { flex: 1 }]}
                 onPress={() => {
-                  this.props.navigation.navigate('SinglePinView');
+                  this.addPin();
+                  // this.props.navigation.navigate('SinglePinView');
                 }}>
                 <Text style={styles.buttonText}>Add Pin</Text>
               </TouchableOpacity>
@@ -325,8 +369,13 @@ class AddMapDetail extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    categories: state.maps.categories
+    categories: state.maps.categories,
+    userData: state.user.userData,
   };
 }
-
-export default connect(mapStateToProps, null)(AddMapDetail);
+function mapDispatchToProps(dispatch) {
+  return {
+    mapAction: bindActionCreators(mapActions, dispatch),
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(AddMapDetail);
