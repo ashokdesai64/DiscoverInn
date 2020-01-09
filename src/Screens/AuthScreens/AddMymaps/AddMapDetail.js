@@ -8,7 +8,7 @@ import {
   ScrollView,
   ImageBackground,
   TouchableOpacity,
-  Image
+  Image,
 } from 'react-native';
 import { ListItem, CheckBox, Picker, Textarea } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -65,47 +65,53 @@ class AddMapDetail extends React.Component {
 
   handleCheckBox = () => {
     this.setState({ locationAccepted: !this.state.locationAccepted });
-  }
+  };
 
   showPicker(type) {
-
     if (type == 'gallery') {
-
       ImagePicker.openPicker({
         multiple: true,
         waitAnimationEnd: false,
         includeExif: false,
         forceJpg: true,
-        compressImageQuality: 0.7
-      }).then(response => {
-        let tempArray = []
-        console.log("responseimage-------", response)
-        response.forEach((item) => {
-          let image = {
-            imagePath: item.path,
-            fileName: item.path.split('/').slice(-1)[0] || `${+new Date}.jpg`,
-            fileType: item.mime,
-          }
-          tempArray.push(image)
-        });
-        this.setState({ pinImages: [...this.state.pinImages, ...tempArray] })
-      }).catch(e => alert(e));
-
+        compressImageQuality: 0.7,
+      })
+        .then(response => {
+          let tempArray = [];
+          console.log('responseimage-------', response);
+          response.forEach(item => {
+            let image = {
+              imagePath: item.path,
+              fileName:
+                item.path.split('/').slice(-1)[0] || `${+new Date()}.jpg`,
+              fileType: item.mime,
+            };
+            tempArray.push(image);
+          });
+          this.setState({ pinImages: [...this.state.pinImages, ...tempArray] });
+        })
+        .catch(e => alert(e));
     } else {
-
     }
-
   }
 
   removeSelectedImage(imageData) {
     let images = [...this.state.pinImages];
-    let removeIndex = images.findIndex(image => image.imagePath == imageData.imagePath);
+    let removeIndex = images.findIndex(
+      image => image.imagePath == imageData.imagePath,
+    );
     images.splice(removeIndex, 1);
     this.setState({ pinImages: images });
   }
 
   addPin() {
-    const { pinImages, selectedLocation, selectedCategory, pinTitle, pinDescription } = this.state;
+    const {
+      pinImages,
+      selectedLocation,
+      selectedCategory,
+      pinTitle,
+      pinDescription,
+    } = this.state;
     const { params } = this.props.navigation.state;
 
     if (!pinDescription) return alert("Pin description is required")
@@ -118,7 +124,7 @@ class AddMapDetail extends React.Component {
       map_id: params.mapID,
       user_id: this.props.userData.id,
       pin_title: pinTitle,
-      category: selectedCategory
+      category: selectedCategory,
     };
 
     if (pinDescription) {
@@ -219,9 +225,9 @@ class AddMapDetail extends React.Component {
                       // available options: https://developers.google.com/places/web-service/autocomplete
                       key: 'AIzaSyBEd0rJ6DYhNEPKAkKHQG-jEBIrFKDQsRs',
                       language: 'en', // language of the results
-                      types: 'geocode' // default: 'geocode'
+                      types: 'geocode', // default: 'geocode'
                     }}
-                    placeholder='Enter Location'
+                    placeholder="Enter Location"
                     minLength={2}
                     autoFocus={false}
                     returnKeyType={'default'}
@@ -229,7 +235,6 @@ class AddMapDetail extends React.Component {
                     enablePoweredByContainer={false}
                     listViewDisplayed={this.state.listViewDisplayed}
                     styles={{
-
                       textInputContainer: {
                         borderWidth: 1,
                         borderColor: '#BDBDBD',
@@ -246,37 +251,51 @@ class AddMapDetail extends React.Component {
                         color: '#4F4F4F',
                       },
                       description: {
-                        fontWeight: 'bold'
+                        fontWeight: 'bold',
                       },
                       predefinedPlacesDescription: {
-                        color: '#1faadb'
-                      }
+                        color: '#1faadb',
+                      },
                     }}
                     debounce={200}
                     renderDescription={(row) => row.description || row.vicinity} // custom description render
                     onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
                       console.log(data, details);
-                      this.setState({ listViewDisplayed: false, selectedLocation: details.geometry.location, selectedAddress: details.formatted_address })
+                      this.setState({
+                        listViewDisplayed: false,
+                        selectedLocation: details.geometry.location,
+                        selectedAddress: details.formatted_address,
+                      });
                     }}
                   />
                 </View>
 
                 <View style={styles.mapPins}>
-                  {
-                    this.props.categories && this.props.categories.map((category) => {
-                      let isCategorySelected = this.state.selectedCategory == category.id;
+                  {this.props.categories &&
+                    this.props.categories.map(category => {
+                      let isCategorySelected =
+                        this.state.selectedCategory == category.id;
                       return (
                         <TouchableOpacity
-                          onPress={() => { this.setState({ selectedCategory: category.id }) }}
+                          onPress={() => {
+                            this.setState({ selectedCategory: category.id });
+                          }}
                           style={[
                             styles.singlePin,
-                            { backgroundColor: isCategorySelected ? '#2F80ED' : 'rgba(47, 128, 237, 0.1)' },
+                            {
+                              backgroundColor: isCategorySelected
+                                ? '#2F80ED'
+                                : 'rgba(47, 128, 237, 0.1)',
+                            },
                           ]}>
-                          <IconMoon size={14} name={category.name.toLowerCase()} color={isCategorySelected ? 'white' : '#2F80ED'} />
+                          <IconMoon
+                            size={14}
+                            name={category.name.toLowerCase()}
+                            color={isCategorySelected ? 'white' : '#2F80ED'}
+                          />
                         </TouchableOpacity>
-                      )
-                    })
-                  }
+                      );
+                    })}
                 </View>
 
                 <View style={styles.formGroup}>
@@ -284,7 +303,7 @@ class AddMapDetail extends React.Component {
                   <TextInput
                     style={styles.formControl}
                     placeholderTextColor={'#828894'}
-                    onChangeText={(pinTitle) => this.setState({ pinTitle })}
+                    onChangeText={pinTitle => this.setState({ pinTitle })}
                   />
                 </View>
 
@@ -295,10 +314,11 @@ class AddMapDetail extends React.Component {
                     style={[styles.formControlTextarea]}
                     textAlignVertical={'top'}
                     placeholderTextColor={'#828894'}
-                    onChangeText={(pinDescription) => this.setState({ pinDescription })}
+                    onChangeText={pinDescription =>
+                      this.setState({ pinDescription })
+                    }
                   />
                 </View>
-
               </ScrollView>
             </View>
             <View style={styles.footerButton}>
@@ -341,7 +361,9 @@ class AddMapDetail extends React.Component {
             dialogStyle={styles.customPopup}>
             <DialogContent style={styles.customPopupContent}>
               <View style={styles.customPopupHeader}>
-                <Text style={styles.customPopupHeaderTitle}>Share Your Map</Text>
+                <Text style={styles.customPopupHeaderTitle}>
+                  Share Your Map
+                </Text>
                 <TouchableOpacity
                   style={styles.buttonClose}
                   onPress={() => this.setState({ showPickerDialog: false })}>
@@ -353,22 +375,28 @@ class AddMapDetail extends React.Component {
                 <View style={styles.shareSocial}>
                   <TouchableOpacity
                     style={[styles.button, styles.buttonCamera]}
-                    onPress={() => this.setState({ showPickerDialog: false }, () => { this.showPicker('gallery') })}>
+                    onPress={() =>
+                      this.setState({ showPickerDialog: false }, () => {
+                        this.showPicker('gallery');
+                      })
+                    }>
                     <AntDesign name={'picture'} color={'#fff'} size={16} />
                     <Text style={[styles.buttonText]}>Gallery</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={[styles.button, styles.buttonCamera]}
-                    onPress={() => this.setState({ showPickerDialog: false }, () => { this.showPicker('camera') })}>
+                    onPress={() =>
+                      this.setState({ showPickerDialog: false }, () => {
+                        this.showPicker('camera');
+                      })
+                    }>
                     <AntDesign name={'camerao'} color={'#fff'} size={16} />
                     <Text style={[styles.buttonText]}>Camera</Text>
                   </TouchableOpacity>
                 </View>
               </View>
-
             </DialogContent>
           </Dialog>
-
         </ImageBackground>
       </Fragment>
     );
