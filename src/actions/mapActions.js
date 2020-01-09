@@ -191,11 +191,21 @@ export function fetchTripList() {
 
 export function fetchMapList(apiData) {
     return function (dispatch, getState) {
+        console.time("dis")
+        dispatch({
+            type: 'mapListLoaded',
+            mapListLoaded: false
+        });
         return new Promise(async (resolve, reject) => {
             let response = await callAPI(
                 apiUrls.mapList,
                 apiData
             );
+            dispatch({
+                type: 'mapListLoaded',
+                mapListLoaded: true
+            });
+            console.timeEnd("dis")
             if (response.status) {
                 dispatch({
                     type: apiData.page > 1 ? 'mapPagination' : 'mapList',
@@ -214,6 +224,54 @@ export function fetchMapList(apiData) {
                 dispatch({
                     type: 'mapListCount',
                     mapListCount: '0'
+                });
+                reject(response.message)
+            }
+        })
+    };
+}
+
+export function fetchMyReviews(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.yourReviews,
+                apiData
+            );
+            if (response.status) {
+                dispatch({
+                    type: 'myReviews',
+                    myReviews: response.data
+                });
+                resolve(response.data);
+            } else {
+                dispatch({
+                    type: 'myReviews',
+                    myReviews: []
+                });
+                reject(response.message)
+            }
+        })
+    };
+}
+
+export function fetchVisitorReviews(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.visitorReviews,
+                apiData
+            );
+            if (response.status) {
+                dispatch({
+                    type: 'visitorReviews',
+                    visitorReviews: response.data
+                });
+                resolve(response.data);
+            } else {
+                dispatch({
+                    type: 'visitorReviews',
+                    visitorReviews: []
                 });
                 reject(response.message)
             }

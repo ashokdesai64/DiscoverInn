@@ -3,7 +3,7 @@ import {
   View,
   Text,
   Dimensions,
-  KeyboardAvoidingView,
+  ActivityIndicator,
   TextInput,
   ScrollView,
   ImageBackground,
@@ -58,9 +58,9 @@ class AddMapDetail extends React.Component {
       imageSelected: false,
       locationAccepted: false,
       listViewDisplayed: false,
-      addPinInProgress: false
+      addPinInProgress: false,
+      addingPin: false
     };
-    console.log(props);
   }
 
   handleCheckBox = () => {
@@ -108,6 +108,12 @@ class AddMapDetail extends React.Component {
     const { pinImages, selectedLocation, selectedCategory, pinTitle, pinDescription } = this.state;
     const { params } = this.props.navigation.state;
 
+    if (!pinDescription) return alert("Pin description is required")
+    if (!pinTitle) return alert("Pin title is required")
+    if (!selectedCategory) return alert("Category is required")
+
+    this.setState({ addingPin: true })
+
     let apiData = {
       map_id: params.mapID,
       user_id: this.props.userData.id,
@@ -126,15 +132,13 @@ class AddMapDetail extends React.Component {
       apiData['longitude'] = selectedLocation.lng;
     }
     this.props.mapAction.addMapPin(apiData).then((data) => {
-      console.log("pin added");
-      this.setState({ addPinInProgress: false },()=>{
-        this.props.navigation.navigate('MapView',{mapID:params.mapID});
+      this.setState({ addingPin: false }, () => {
+        this.props.navigation.navigate('MapView', { mapID: params.mapID });
       })
     }).catch((err) => {
-      this.setState({ addPinInProgress: false })
+      this.setState({ addingPin: false })
       alert(err);
     });
-    // anita ravi sojitra
   }
 
   render() {
@@ -153,7 +157,7 @@ class AddMapDetail extends React.Component {
             style={styles.bgTransfrent}
           />
           <Spinner
-            visible={this.state.addPinInProgress}
+            visible={this.state.addingPin}
             textContent={'Adding Pin...'}
             textStyle={{ color: '#fff' }}
           />
@@ -188,7 +192,7 @@ class AddMapDetail extends React.Component {
                       <AntDesign name={'pluscircleo'} size={36} color={'#2F80ED'} />
                       <Text style={[styles.uploadCoverCardText]}>
                         Add Cover Image
-                  </Text>
+                      </Text>
                     </TouchableOpacity>
                 }
 
@@ -251,7 +255,6 @@ class AddMapDetail extends React.Component {
                     debounce={200}
                     renderDescription={(row) => row.description || row.vicinity} // custom description render
                     onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
-                      console.log("test")
                       console.log(data, details);
                       this.setState({ listViewDisplayed: false, selectedLocation: details.geometry.location, selectedAddress: details.formatted_address })
                     }}
@@ -303,9 +306,14 @@ class AddMapDetail extends React.Component {
                 style={[styles.button, styles.buttonPrimary, { flex: 1 }]}
                 onPress={() => {
                   this.addPin();
-                  // this.props.navigation.navigate('SinglePinView');
                 }}>
                 <Text style={styles.buttonText}>Add Pin</Text>
+                {/* {
+                  this.state.addingPin ?
+                    <ActivityIndicator color={'#fff'} size={'small'} />
+                    :
+                    <Text style={styles.buttonText}>Add Pin</Text>
+                } */}
               </TouchableOpacity>
             </View>
           </View>

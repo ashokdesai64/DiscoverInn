@@ -111,17 +111,17 @@ class MapList extends React.Component {
       selectedTravelType: '',
       addReviewValue: 0,
       selectedMap: null,
-      addingReview: false
+      addingReview: false,
+      fetchingMaps:false
     };
   }
 
-  navigateToMap() {
-    this.props.navigation.navigate('MapView');
+  navigateToMap(mapID) {
+    this.props.navigation.navigate('MapView', { mapID });
   }
 
   _renderItem(item, index) {
     let avgReview = parseInt(item.avrage_review);
-
     return (
       <View style={[styles.mapSlideCard]}>
         <View style={styles.mapSlideCardHeader}>
@@ -133,7 +133,7 @@ class MapList extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.8}
-            onPress={() => this.navigateToMap()}>
+            onPress={() => this.navigateToMap(item.id)}>
             <ImageBlurLoading
               withIndicator
               style={styles.mapSlideCardImg}
@@ -290,6 +290,8 @@ class MapList extends React.Component {
       selectedTravelType,
     } = this.state;
 
+    this.setState({ fetchingMaps:true })
+
     let apiData = {
       user_id: this.props.userData.id,
       sort_by: this.state.sortBy || 'rating',
@@ -314,7 +316,12 @@ class MapList extends React.Component {
     if (selectedTravelType && !!selectedTravelType.length) {
       apiData['travel_type'] = selectedTravelType;
     }
-    this.props.mapAction.fetchMapList(apiData);
+    this.props.mapAction.fetchMapList(apiData).then((data)=>{
+      this.setState({fetchingMaps:false})
+    }).catch((err)=>{
+      this.setState({fetchingMaps:false});
+      alert(err);
+    });
   }
 
   setParams = filterParams => {
@@ -329,12 +336,10 @@ class MapList extends React.Component {
       this.pageNo += 1;
       this.fetchMapList();
     }
-
   }
 
   addReview() {
     const { reviewText, addReviewValue, selectedMap } = this.state;
-    console.log("reviewText =<> ", reviewText)
     if (!reviewText || !reviewText.trim()) {
       alert("Review can't be empty");
       return
@@ -344,9 +349,8 @@ class MapList extends React.Component {
       return
     }
     this.setState({ addingReview: true })
-    console.log("selectedmap => ", selectedMap)
     this.props.mapAction.addReview({ map_id: selectedMap.id, user_id: this.props.userData.id, ratings: addReviewValue, review: reviewText.trim() }).then((data) => {
-      this.setState({ addingReview: false,showAddReviewModal:false })
+      this.setState({ addingReview: false, showAddReviewModal: false })
     }).catch((err) => {
       console.log("err => ", err);
       alert(err);
@@ -355,6 +359,7 @@ class MapList extends React.Component {
   }
 
   render() {
+    console.log("this.state.fetchingMaps => ",this.state.fetchingMaps)
     const { width } = Dimensions.get('window');
     const {
       selectedAge,
@@ -367,11 +372,11 @@ class MapList extends React.Component {
     } = this.state;
     return (
       <Fragment>
-        {/* <Spinner
-          visible={true}
-          textContent={'Loading...'}
-          textStyle={{color:'#fff'}}
-        /> */}
+        <Spinner
+          visible={this.state.fetchingMaps}
+          textContent={'Loading maps...'}
+          textStyle={{ color: '#fff' }}
+        />
         <Header
           showBack={true}
           title={'Discover Inn'}
@@ -1037,6 +1042,7 @@ function mapStateToProps(state) {
     mapList: state.maps.mapList,
     mapListCount: state.maps.mapListCount,
     tripList: state.maps.tripList,
+    mapListLoaded: state.maps.mapListLoaded
   };
 }
 function mapDispatchToProps(dispatch) {

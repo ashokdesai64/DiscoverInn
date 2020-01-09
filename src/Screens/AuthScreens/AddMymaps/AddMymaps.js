@@ -58,7 +58,7 @@ class AddMymaps extends React.Component {
       },
       quality: 0.3
     };
-    
+
     ImagePicker.launchImageLibrary(options, response => {
       console.log('response => ', response);
       this.setState({
@@ -71,36 +71,46 @@ class AddMymaps extends React.Component {
   }
 
   addMap() {
-    this.props.navigation.navigate('MapView', { mapID: 479 })
-    // const { selectedAge, selectedBudget, travelType, month, year, mapTitle, mapDescription } = this.state;
-    // this.setState({ addMapInProgress: true });
-    // let addMapObject = {
-    //   user_id: this.props.userData.id,
-    //   title: mapTitle,
-    //   description: mapDescription
-    // }
-    // if (travelType) {
-    //   addMapObject['travel_type'] = travelType;
-    // }
-    // if (selectedBudget) {
-    //   addMapObject['budget_limit'] = selectedBudget;
-    // }
-    // if (selectedAge) {
-    //   addMapObject['age_at_travel'] = selectedAge;
-    // }
-    // if (year) {
-    //   addMapObject['date_of_year'] = year;
-    // }
-    // if (month) {
-    //   addMapObject['date_of_month'] = month;
-    // }
-    // this.props.mapAction.addMyMap(addMapObject).then((data) => {
-    //   this.setState({ addMapInProgress: false }, () => {
-    //     this.props.navigation.navigate('MapView', { mapID: data.mapID })
-    //   });
-    // }).catch((err) => {
-    //   this.setState({ addMapInProgress: false }, () => { alert(err) });
-    // })
+    // this.props.navigation.navigate('MapView', { mapID: 479 })
+    const { selectedAge, selectedBudget, travelType, month, year, mapTitle, mapDescription, isImageSelected, converImagePath, fileName, fileType } = this.state;
+
+    this.setState({ addMapInProgress: true });
+
+    let addMapObject = {
+      user_id: this.props.userData.id,
+      title: mapTitle,
+      description: mapDescription
+    }
+    if (travelType) {
+      addMapObject['travel_type'] = travelType;
+    }
+    if (selectedBudget) {
+      addMapObject['budget_limit'] = selectedBudget;
+    }
+    if (selectedAge) {
+      addMapObject['age_at_travel'] = selectedAge;
+    }
+    if (year) {
+      addMapObject['date_of_year'] = year;
+    }
+    if (month) {
+      addMapObject['date_of_month'] = month;
+    }
+    if (isImageSelected) {
+      addMapObject['cover_image'] = {
+        uri: converImagePath,
+        name: fileName,
+        type: fileType,
+      }
+    }
+
+    this.props.mapAction.addMyMap(addMapObject).then((data) => {
+      this.setState({ addMapInProgress: false }, () => {
+        this.props.navigation.navigate('MapView', { mapID: data.mapID })
+      });
+    }).catch((err) => {
+      this.setState({ addMapInProgress: false }, () => { alert(err) });
+    })
   }
 
   render() {

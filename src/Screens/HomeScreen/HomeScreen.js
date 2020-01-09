@@ -101,7 +101,7 @@ class HomeScreen extends React.Component {
     return (
       <TouchableOpacity
         style={styles.mapSlidCard}
-        onPress={() => this.props.navigation.navigate('MapView')}
+        onPress={() => this.props.navigation.navigate('MapView',{mapID:item.id})}
         activeOpacity={1}>
         <View style={styles.mapSlidCardInner}>
           <Image
@@ -156,7 +156,7 @@ class HomeScreen extends React.Component {
       <TouchableOpacity
         style={styles.mapSlidCard}
         activeOpacity={1}
-        onPress={() => this.props.navigation.navigate('MapView')}>
+        onPress={() => this.props.navigation.navigate('MapView',{mapID:item.id})}>
         <View style={styles.mapSlidCardInner}>
           <Image
             style={styles.mapSlideCardImg}

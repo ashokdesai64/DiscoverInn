@@ -11,11 +11,18 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import styles from './MapView.style';
-import exampleIcon from './../../Images/transportations1.png';
-import exampleIcon1 from './../../Images/sights1.png';
+
+import sights1 from './../../Images/sights1.png';
+import activities1 from './../../Images/activities1.png';
+import restaurants1 from './../../Images/restaurants1.png';
+import nightlife1 from './../../Images/nightlife1.png';
+import transportations1 from './../../Images/transportations1.png';
+import shopping1 from './../../Images/shopping1.png';
+import other1 from './../../Images/other1.png';
+
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import Spinner from './../../components/Loader';
-
+import _ from 'underscore'
 import { NavigationEvents } from 'react-navigation'
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
@@ -56,8 +63,18 @@ class MapView extends React.Component {
           title: 'Lonely Planet - India',
         },
       ],
+      pinList: [],
       mapPinsInProgress: false
     };
+    this.categoryImages = {
+      '1': sights1,
+      '2': activities1,
+      '3': restaurants1,
+      '4': nightlife1,
+      '5': transportations1,
+      '6': shopping1,
+      '7': other1
+    }
   }
   componentDidMount() {
     console.log('map loaded', this.props);
@@ -83,17 +100,16 @@ class MapView extends React.Component {
     );
   };
 
-  loadMapPins(payload) {
-    console.log("payload", payload);
-    console.log("this.props", this.props);
-    let mapID = payload.state.params && payload.state.params.mapID;
-    // this.setState({ mapPinsInProgress: true })
+  loadMapPins(mapID) {
     if (mapID) {
+      this.setState({ mapPinsInProgress: true })
       this.props.mapAction.getMapPins({ map_id: mapID, user_id: this.props.userData.id }).then((data) => {
-        this.setState({ mapPinsInProgress: false })
+        let pinList = data.mapID;
+        console.log("data => ",data)
+        this.setState({ mapPinsInProgress: false, pinList })
       }).catch((err) => {
-        console.log("error => ",err)
-        this.setState({ mapPinsInProgress: false })
+        console.log("error => ", err)
+        this.setState({ mapPinsInProgress: false, pinList: [] })
       })
     }
   }
@@ -101,56 +117,45 @@ class MapView extends React.Component {
   render() {
     let { params } = this.props.navigation.state;
     params = params || {};
+    let { pinList } = this.state;
 
-    const featureCollection = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          id: `asdf`,
-          properties: {
-            id: `asdf`,
-          },
-          geometry: {
-            type: 'Point',
-            coordinates: [this.state.currentLong, this.state.currentLat],
-          },
-        },
-        {
-          type: 'Feature',
-          id: `asdf`,
-          properties: {
-            id: `asdf`,
-          },
-          geometry: {
-            type: 'Point',
-            coordinates: [this.state.currentLat, this.state.currentLong],
-          },
-        },
-      ],
-    };
-    const featureCollection1 = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          id: `asdf`,
-          properties: {
-            id: `asdf`,
-            description:
-              '<strong>Big Backyard Beach Bash and Wine Fest</strong><p>EatBar (2761 Washington Boulevard Arlington VA) is throwing a <a href="http://tallulaeatbar.ticketleap.com/2012beachblanket/" target="_blank" title="Opens in a new window">Big Backyard Beach Bash and Wine Fest</a> on Saturday, serving up conch fritters, fish tacos and crab sliders, and Red Apron hot dogs. 12:00-3:00 p.m. $25.grill hot dogs.</p>',
-          },
-          geometry: {
-            type: 'Point',
-            coordinates: [72.9583783, 21.1998507],
-          },
-        },
-      ],
-    };
+    let featureCollections = [];
+
+    if (pinList && pinList.length > 0) {
+      let groupedPins = _.groupBy(pinList, (pin) => pin.categories);
+      Object.keys(groupedPins).map((categoryID) => {
+        let pins = groupedPins[categoryID];
+        let temp = [];
+        pins.map((pin) => {
+          if (pin.longitude && pin.latitude) {
+            temp.push({
+              type: 'Feature',
+              id: pin.id,
+              properties: {
+                id: pin.id,
+              },
+              geometry: {
+                type: 'Point',
+                coordinates: [parseFloat(pin.longitude), parseFloat(pin.latitude)],
+              },
+            })
+          }
+        })
+
+        featureCollections.push({
+          type: `FeatureCollection`,
+          features: temp,
+          category: categoryID
+        })
+
+      })
+    }
+
+    let filteredCollections = featureCollections.filter(collection => collection && collection.features && collection.features.length > 0)
     return (
       <View style={styles.page}>
         <NavigationEvents
-          onWillFocus={payload => this.loadMapPins(payload)}
+          onWillFocus={payload => this.loadMapPins(payload.state.params && payload.state.params.mapID)}
         />
         <View style={styles.container}>
           <Spinner
@@ -163,97 +168,55 @@ class MapView extends React.Component {
               <Icon name={'arrow-left'} size={24} color={'#333333'} />
             </TouchableOpacity>
           </View>
+
           <MapboxGL.MapView
             style={styles.map}
             styleURL={MapboxGL.StyleURL.Street}
             logoEnabled={false}
             attributionEnabled={false}>
             <MapboxGL.Camera
-              centerCoordinate={[this.state.currentLong, this.state.currentLat]}
+              centerCoordinate={
+                filteredCollections[0] ?
+                  [filteredCollections[0].features[0].geometry.coordinates[0], filteredCollections[0].features[0].geometry.coordinates[1]]
+                  :
+                  [this.state.currentLong, this.state.currentLat]
+              }
               zoomLevel={10}
               animationMode={'flyTo'}
             />
-
-            <MapboxGL.ShapeSource
-              id="symbolLocationSource"
-              hitbox={{ width: 20, height: 20 }}
-              shape={featureCollection}
-              cluster={true}
-              onPress={e => {
-                this.props.navigation.navigate('PinView');
-              }}>
-              <MapboxGL.SymbolLayer
-                id="symbolLocationSymbols"
-                minZoomLevel={1}
-                style={{
-                  iconImage: exampleIcon,
-                  iconAllowOverlap: true,
-                  iconSize: 0.4,
-                }}
-              />
-              <MapboxGL.Callout title="Rivadavia 1841, 7º Piso, Of. 749." />
-            </MapboxGL.ShapeSource>
-
-            <MapboxGL.ShapeSource
-              id="symbolLocationSource1"
-              hitbox={{ width: 20, height: 20 }}
-              shape={featureCollection1}
-              cluster={true}
-              onPress={e => {
-                this.props.navigation.navigate('PinView');
-              }}>
-              <MapboxGL.SymbolLayer
-                id="symbolLocationSymbols1"
-                minZoomLevel={1}
-                style={{
-                  iconImage: exampleIcon1,
-                  iconAllowOverlap: true,
-                  iconSize: 0.4,
-                }}>
-                <View style={{ width: 20, height: 20, backgroundColor: 'red' }}>
-                  <Text>5</Text>
-                </View>
-              </MapboxGL.SymbolLayer>
-              <MapboxGL.Callout title="Rivadavia 1841, 7º Piso, Of. 749." />
-            </MapboxGL.ShapeSource>
-          </MapboxGL.MapView>
-          {/* <ScrollView
-            horizontal={true}
-            style={{height: 95, position: 'absolute', bottom: 30}}>
-            {[1, 2, 3, 4, 5].map(i => {
-              return (
-                <TouchableOpacity
-                  activeOpacity={0.9}
-                  style={styles.mapViewCard}
-                  onPress={() => this.props.navigation.navigate('PinView')}>
-                  <Image
-                    style={styles.mapViewCardImg}
-                    source={require('./../../Images/login-bg.jpg')}
-                  />
-                  <View style={styles.mapViewCardContent}>
-                    <View style={styles.mapViewTitle}>
-                      <Text style={styles.mapViewTitleText}>
-                        Planet - Bangkok
-                      </Text>
-                      <SimpleLineIcons
-                        name={'heart'}
-                        size={15}
-                        color={'#EB5757'}
+            {
+              filteredCollections && filteredCollections.length > 0 ?
+                filteredCollections.map((collection) => {
+                  let random = Math.floor(Math.random() * 90000) + 10000;
+                  return (
+                    <MapboxGL.ShapeSource
+                      id={"symbolLocationSource" + random}
+                      hitbox={{ width: 20, height: 20 }}
+                      shape={collection}
+                      cluster
+                      clusterMaxZoomLevel={14}
+                      clusterRadius={50}
+                      onPress={e => {
+                        this.props.navigation.navigate('PinView');
+                      }}>
+                      <MapboxGL.SymbolLayer
+                        id={"symbolLocationSymbols" + (random + 1)}
+                        minZoomLevel={1}
+                        style={{
+                          iconImage: this.categoryImages[collection.category],
+                          iconAllowOverlap: true,
+                          iconSize: 0.4,
+                        }}
                       />
-                    </View>
-                    <View style={styles.mapViewCate}>
-                      <IconMoon name="sights" style={styles.mapViewCateIcon} />
-                      <Text style={styles.mapViewCateText}> Sights</Text>
-                    </View>
-                    <Text style={styles.mapViewContentText}>
-                      Australian chef-author David Thompson is the man behind
-                      one of Bangkok's
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              );
-            })}
-          </ScrollView> */}
+                      <MapboxGL.Callout title="Rivadavia 1841, 7º Piso, Of. 749." />
+                    </MapboxGL.ShapeSource>
+                  )
+                })
+                :
+                null
+            }
+          </MapboxGL.MapView>
+
           <View style={styles.mapActionButton}>
             <TouchableOpacity
               style={[
@@ -282,7 +245,7 @@ class MapView extends React.Component {
                 styles.buttonOutlineGray,
                 styles.buttonDecline,
               ]}
-              onPress={() => { }}>
+              onPress={() => { this.loadMapPins(params.mapID) }}>
               <Text style={[styles.buttonText, styles.buttonTextGray]}>
                 Reload Map
               </Text>
@@ -293,18 +256,7 @@ class MapView extends React.Component {
               <Text style={styles.buttonText}>Close</Text>
             </TouchableOpacity>
           </View>
-          {/* <Carousel
-                        data={this.state.carouselItems}
-                        sliderWidth={DEVICE_WIDTH}
-                        sliderHeight={95}
-                        itemWidth={300}
-                        firstItem={0}
-                        inactiveSlideOpacity={1}
-                        inactiveSlideScale={1}
-                        renderItem={this._renderItem}
-                        contentContainerStyle={{ position: 'absolute', height: 95, flex: 0.05 }}
-                        contentContainerCustomStyle={{ position: 'absolute', bottom: 30, height: 95, }}
-                    /> */}
+
         </View>
       </View>
     );

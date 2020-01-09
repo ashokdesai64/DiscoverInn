@@ -52,6 +52,11 @@ class DefaultScreen extends Component {
         if (this.props && !this.props.createdWithins) {
             this.props.mapAction.loadCreatedWithin();
         }
+
+        if(this.props.userData.id){
+            this.props.mapAction.fetchMyReviews({user_id:this.props.userData.id,page:1});
+            this.props.mapAction.fetchVisitorReviews({user_id:1,page:1});
+        }
     }
 
     componentWillReceiveProps(nextProps) {

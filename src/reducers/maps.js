@@ -1,4 +1,4 @@
-const initialState = {};
+const initialState = {mapListLoaded:false};
 
 export default function maps(state = initialState, action = {}) {
     switch (action.type) {
@@ -63,7 +63,6 @@ export default function maps(state = initialState, action = {}) {
             };
         }
         case 'mapPagination': {
-            console.log("map pagination called with => ",state.mapList,action.mapList)
             return {
                 ...state,
                 mapList: [...(state.mapList || []), ...(action.mapList || [])]
@@ -73,6 +72,24 @@ export default function maps(state = initialState, action = {}) {
             return {
                 ...state,
                 mapListCount: action.mapListCount || (state.mapListCount || 0),
+            };
+        }
+        case 'mapListLoaded': {
+            return {
+                ...state,
+                mapListLoaded: action.mapListLoaded || (state.mapListLoaded || false),
+            };
+        }
+        case 'myReviews': {
+            return {
+                ...state,
+                myReviews: action.myReviews || (state.myReviews || false),
+            };
+        }
+        case 'visitorReviews': {
+            return {
+                ...state,
+                visitorReviews: action.visitorReviews || (state.visitorReviews || false),
             };
         }
         default:

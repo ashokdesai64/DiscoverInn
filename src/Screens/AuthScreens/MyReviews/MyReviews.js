@@ -4,9 +4,15 @@ import styles from './MyReviews.style';
 import Header from './../../../components/header/header';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog';
 import { Textarea, CheckBox } from 'native-base';
+import moment from 'moment';
+import ImageBlurLoading from './../../../components/ImageLoader'
 
+//REDUX
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 const DEVICE_WIDTH = Dimensions.get('window').width;
 class MyReviews extends React.Component {
 
@@ -30,7 +36,7 @@ class MyReviews extends React.Component {
         />
         <ScrollView style={styles.container} contentContainerStyle={{ alignItems: 'center' }} showsVerticalScrollIndicator={false}>
 
-          <View style={{ backgroundColor: 'white', flexDirection: 'row', width: DEVICE_WIDTH - 30, alignItems: 'center', borderRadius: 5 }}>
+          <View style={{ marginBottom: 15, backgroundColor: 'white', flexDirection: 'row', width: DEVICE_WIDTH - 30, alignItems: 'center', borderRadius: 5 }}>
             <TouchableOpacity
               onPress={() => this.setState({ selectedTab: 'visitor' })}
               style={{
@@ -45,72 +51,53 @@ class MyReviews extends React.Component {
             </TouchableOpacity>
           </View>
 
-          <View style={{ marginVertical: 15, justifyContent: 'center', alignItems: 'flex-end', width: DEVICE_WIDTH - 30, }}>
-            <TouchableOpacity
-              style={styles.searchresultSelect}
-              onPress={() => this.setState({ recentSorting: true })}>
-              <Text style={styles.searchresultSelectText}>
-                Select Trip List
-              </Text>
-              <Feather
-                style={styles.searchresultSelectIcon}
-                name="chevron-down"
-              />
-            </TouchableOpacity>
-          </View>
-
-
           {
             this.state.selectedTab == 'visitor' ?
-              [1, 2, 3, 4, 5].map(() => {
+              this.props.visitorReviews && this.props.visitorReviews.map((review) => {
                 return (
                   <View style={styles.reviewCard}>
                     <View style={styles.reviewCardHeader}>
                       <View style={styles.reviewCardHeaderLeft}>
-                        <Image
+                        <ImageBlurLoading
+                          withIndicator
                           style={styles.reviewCardAvatar}
-                          source={require('./../../../Images/place.jpg')}
+                          source={{ uri: review.image }}
+                          thumbnailSource={{ uri: 'https://picsum.photos/id/1/50/50' }}
                         />
                         <View style={styles.reviewCardHeading}>
                           <Text style={styles.reviewCardTitle}>
-                            Meadow Rain Walker
-                    </Text>
+                            {review.firstname} {review.lastname}
+                          </Text>
                           <View style={styles.reviewCardRateList}>
-                            <AntDesign
-                              style={styles.starIcon}
-                              name="star"
-                              size={15}
-                              color="#FFAF2C"
-                            />
-                            <AntDesign
-                              style={styles.starIcon}
-                              name="star"
-                              size={15}
-                              color="#FFAF2C"
-                            />
-                            <AntDesign
-                              style={styles.starIcon}
-                              name="star"
-                              size={15}
-                              color="#FFAF2C"
-                            />
-                            <AntDesign
-                              style={styles.starIcon}
-                              name="star"
-                              size={15}
-                              color="#FFAF2C"
-                            />
-                            <AntDesign
-                              style={styles.starIcon}
-                              name="star"
-                              size={15}
-                              color="#FFAF2C"
-                            />
+                            {Array(parseInt(review.ratings))
+                              .fill(1)
+                              .map(d => {
+                                return (
+                                  <MaterialCommunityIcons
+                                    style={styles.starIcon}
+                                    name="star"
+                                    size={15}
+                                    color="#FFAF2C"
+                                  />
+                                );
+                              })}
+                            {Array(5 - parseInt(review.ratings))
+                              .fill(1)
+                              .map(d => {
+                                return (
+                                  <MaterialCommunityIcons
+                                    style={styles.starIcon}
+                                    name="star-outline"
+                                    size={15}
+                                    color="#FFAF2C"
+                                  />
+                                );
+                              })}
                           </View>
                         </View>
                       </View>
 
-                      <Text style={styles.reviewTime}>4 Weeks</Text>
+                      <Text style={styles.reviewTime}>{moment(review.date_created).fromNow()}</Text>
                     </View>
                     <View style={styles.reviewCardBody}>
                       <Image
@@ -119,88 +106,80 @@ class MyReviews extends React.Component {
                       />
                       <Text style={styles.reviewCardText}>
                         {' '}
-                        The sun soaked in the sea and sands of Goa beckon a thirsty
-                        traveler(pun intended) from around the world, including yours
-                        truly! I have been to Goa at least four times but this was my
-                        first visit after eight long years. Yes friends, the waitwas
-                  excruciating for the sun, sand and the beer lover{' '}
+                        {review.review}{' '}
                       </Text>
                     </View>
                   </View>
                 )
               })
               :
-              <View style={styles.reviewCard}>
-                <View style={styles.reviewCardHeader}>
-                  <View style={styles.reviewCardHeaderLeft}>
-                    <Image
-                      style={styles.reviewCardAvatar}
-                      source={require('./../../../Images/place.jpg')}
-                    />
-                    <View style={styles.reviewCardHeading}>
-                      <Text style={styles.reviewCardTitle}>
-                        Meadow Rain Walker
-                    </Text>
-                      <View style={styles.reviewCardRateList}>
-                        <AntDesign
-                          style={styles.starIcon}
-                          name="star"
-                          size={15}
-                          color="#FFAF2C"
+              this.props.myReviews && this.props.myReviews.map((review) => {
+                return (
+                  <View style={styles.reviewCard}>
+                    <View style={styles.reviewCardHeader}>
+                      <View style={styles.reviewCardHeaderLeft}>
+                        <ImageBlurLoading
+                          withIndicator
+                          style={styles.reviewCardAvatar}
+                          source={{ uri: review.image }}
+                          thumbnailSource={{ uri: 'https://picsum.photos/id/1/50/50' }}
                         />
-                        <AntDesign
-                          style={styles.starIcon}
-                          name="star"
-                          size={15}
-                          color="#FFAF2C"
-                        />
-                        <AntDesign
-                          style={styles.starIcon}
-                          name="star"
-                          size={15}
-                          color="#FFAF2C"
-                        />
-                        <AntDesign
-                          style={styles.starIcon}
-                          name="star"
-                          size={15}
-                          color="#FFAF2C"
-                        />
-                        <AntDesign
-                          style={styles.starIcon}
-                          name="star"
-                          size={15}
-                          color="#FFAF2C"
-                        />
+                        <View style={styles.reviewCardHeading}>
+                          <Text style={styles.reviewCardTitle}>
+                            {review.firstname} {review.lastname}
+                          </Text>
+                          <View style={styles.reviewCardRateList}>
+                            {Array(parseInt(review.ratings))
+                              .fill(1)
+                              .map(d => {
+                                return (
+                                  <MaterialCommunityIcons
+                                    style={styles.starIcon}
+                                    name="star"
+                                    size={15}
+                                    color="#FFAF2C"
+                                  />
+                                );
+                              })}
+                            {Array(5 - parseInt(review.ratings))
+                              .fill(1)
+                              .map(d => {
+                                return (
+                                  <MaterialCommunityIcons
+                                    style={styles.starIcon}
+                                    name="star-outline"
+                                    size={15}
+                                    color="#FFAF2C"
+                                  />
+                                );
+                              })}
+                          </View>
+                        </View>
                       </View>
+
+                      <Text style={styles.reviewTime}>{moment(review.date_created).fromNow()}</Text>
+                    </View>
+                    <View style={styles.reviewCardBody}>
+                      <Image
+                        style={styles.reviewExclamationmark}
+                        source={require('./../../../Images/exclamation.png')}
+                      />
+                      <Text style={styles.reviewCardText}>
+                        {' '}
+                        {review.review}{' '}
+                      </Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
+                      <TouchableOpacity onPress={() => this.setState({ showEditReviewModal: true })} style={{ height: 30, width: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(39, 174, 96, 0.1)', borderRadius: 5, marginRight: 10 }}>
+                        <Feather name={'edit-2'} color={'#27AE60'} size={14} />
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => this.setState({ showDeleteReviewModal: true })} style={{ height: 30, width: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(235, 87, 87, 0.1)', borderRadius: 5 }}>
+                        <Feather name={'trash-2'} color={'#EB5757'} size={14} />
+                      </TouchableOpacity>
                     </View>
                   </View>
-
-                  <Text style={styles.reviewTime}>4 Weeks</Text>
-                </View>
-                <View style={styles.reviewCardBody}>
-                  <Image
-                    style={styles.reviewExclamationmark}
-                    source={require('./../../../Images/exclamation.png')}
-                  />
-                  <Text style={styles.reviewCardText}>
-                    {' '}
-                    The sun soaked in the sea and sands of Goa beckon a thirsty
-                    traveler(pun intended) from around the world, including yours
-                    truly! I have been to Goa at least four times but this was my
-                    first visit after eight long years. Yes friends, the waitwas
-                  excruciating for the sun, sand and the beer lover{' '}
-                  </Text>
-                </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
-                  <TouchableOpacity onPress={() => this.setState({ showEditReviewModal: true })} style={{ height: 30, width: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(39, 174, 96, 0.1)', borderRadius: 5, marginRight: 10 }}>
-                    <Feather name={'edit-2'} color={'#27AE60'} size={14} />
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => this.setState({ showDeleteReviewModal: true })} style={{ height: 30, width: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(235, 87, 87, 0.1)', borderRadius: 5 }}>
-                    <Feather name={'trash-2'} color={'#EB5757'} size={14} />
-                  </TouchableOpacity>
-                </View>
-              </View>
+                )
+              })
           }
 
         </ScrollView>
@@ -310,7 +289,7 @@ class MyReviews extends React.Component {
           }}
           dialogStyle={styles.customPopup}>
           <DialogContent style={styles.customPopupContent}>
-            <View style={[styles.customPopupHeader,{justifyContent:'flex-end'}]}>
+            <View style={[styles.customPopupHeader, { justifyContent: 'flex-end' }]}>
               <TouchableOpacity
                 style={styles.buttonClose}
                 onPress={() => this.setState({ recentSorting: false })}>
@@ -430,4 +409,20 @@ class MyReviews extends React.Component {
     );
   }
 }
-export default MyReviews;
+
+function mapStateToProps(state) {
+  console.log("state.maps.myReviews => ", state.maps.myReviews)
+  return {
+    userData: state.user.userData,
+    myReviews: state.maps.myReviews,
+    visitorReviews: state.maps.visitorReviews,
+  };
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    // authAction: bindActionCreators(authActions, dispatch),
+    // mapAction: bindActionCreators(mapActions, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, null)(MyReviews);

@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   reviewCard: {
+    width:DEVICE_WIDTH-30,
     borderRadius: 5,
     backgroundColor: '#fff',
     shadowColor: '#000000',
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 0 },
     shadowRadius: 10,
     padding: 10,
-    marginBottom: 10
+    marginBottom: 10,
   },
 
   buttonClose: {
