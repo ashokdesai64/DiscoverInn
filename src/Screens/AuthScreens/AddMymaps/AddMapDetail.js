@@ -131,7 +131,7 @@ class AddMapDetail extends React.Component {
       apiData['pin_description'] = pinDescription;
     }
     if (pinImages) {
-      apiData['pin_image'] = pinImages;
+      apiData['pin_images'] = pinImages;
     }
     if (selectedLocation && selectedLocation.lat && selectedLocation.lng) {
       apiData['latitude'] = selectedLocation.lat;

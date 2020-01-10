@@ -132,6 +132,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     height: 90,
+    fontFamily: 'Montserrat-Medium',
   },
   customPopupFooter: {
     marginTop: 20,
@@ -153,9 +154,9 @@ const styles = StyleSheet.create({
   reviewCardAvatar: {
     width: 44,
     height: 44,
-    borderWidth: 4,
+    borderWidth: 2,
     borderColor: '#F3F4F6',
-    borderRadius: 44,
+    borderRadius: 22,
   },
   reviewCardTitle: {
     fontSize: 12,

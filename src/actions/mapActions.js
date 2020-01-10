@@ -351,3 +351,56 @@ export function addReview(apiData) {
         })
     };
 }
+
+export function deleteReview(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            console.log("api data => ",apiData)
+            let response = await callAPI(
+                apiUrls.deleteReview,
+                apiData
+            );
+
+            if (response.status) {
+                let reviews = getState().maps.myReviews;
+                let filteredReviews = reviews.filter((review) => review.id != apiData.review_id);
+                dispatch({
+                    type: 'myReviews',
+                    'myReviews': filteredReviews
+                });
+                resolve({ data: response.data });
+            } else {
+                reject(response.message)
+            }
+
+        })
+    };
+}
+
+export function editReview(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            console.log("api data => ",apiData)
+            let response = await callAPI(
+                apiUrls.editReview,
+                apiData
+            );
+
+            if (response.status) {
+                let allReviews = getState().maps.myReviews;
+                allReviews.map((review)=>{
+                    if(review.id == apiData.review_id){
+                        review['review'] = apiData.review;
+                        review['ratings'] = apiData.ratings;
+                    }
+                    return review
+                })
+
+                resolve({ data: response.data });
+            } else {
+                reject(response.message)
+            }
+
+        })
+    };
+}

@@ -1,20 +1,20 @@
-import React, {Fragment} from 'react';
-import {View, Text, ScrollView, Switch, Dimensions, Image} from 'react-native';
-import {Item, Input, Button, Content, Accordion, CheckBox} from 'native-base';
+import React, { Fragment } from 'react';
+import { View, Text, ScrollView, Switch, Dimensions, Image } from 'react-native';
+import { Item, Input, Button, Content, Accordion, CheckBox } from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import styles from './MyTravel.style';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import Header from '../../../components/header/header';
-import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
+import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog';
 
 //REDUX
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import * as mapActions from '../../../actions/mapActions';
 
-const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
   const paddingToBottom = 20;
   return (
     layoutMeasurement.height + contentOffset.y >=
@@ -49,7 +49,7 @@ class MyTravel extends React.Component {
 
   _updateSections = activeSections => {
     console.log('activeSections => ', activeSections);
-    this.setState({activeSections});
+    this.setState({ activeSections });
   };
 
   componentDidMount() {
@@ -70,16 +70,17 @@ class MyTravel extends React.Component {
         {expanded ? (
           <Feather style={styles.accordionCardHeaderIcon} name="chevron-up" />
         ) : (
-          <Feather style={styles.accordionCardHeaderIcon} name="chevron-down" />
-        )}
+            <Feather style={styles.accordionCardHeaderIcon} name="chevron-down" />
+          )}
       </View>
     );
   }
 
   _renderContent = item => {
-    var commentIndex = this.state.dataArray.findIndex(function(c) {
+    var commentIndex = this.state.dataArray.findIndex(function (c) {
       return c.title == item.title;
     });
+    console.log("item => ",item)
     return (
       <View style={styles.accordionCardBody}>
         <View style={styles.myTravelCard}>
@@ -88,7 +89,7 @@ class MyTravel extends React.Component {
             <Switch
               style={[
                 styles.myTravelItemSwitch,
-                {transform: [{scaleX: 0.7}, {scaleY: 0.7}]},
+                { transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }] },
               ]}
               value={item.map_type == 'public'}
               // trackColor={{true: '#fff', false: '#fff'}}
@@ -112,7 +113,7 @@ class MyTravel extends React.Component {
             <TouchableOpacity
               style={[styles.button, styles.buttonSm, styles.buttonPrimary]}
               onPress={() => {
-                this.props.navigation.navigate('MapView');
+                this.props.navigation.navigate('MapView',{mapID:item.id});
               }}>
               <Text style={styles.buttonText}>View</Text>
             </TouchableOpacity>
@@ -121,10 +122,10 @@ class MyTravel extends React.Component {
                 styles.button,
                 styles.buttonSm,
                 styles.buttonSuccess,
-                {marginLeft: 5},
+                { marginLeft: 5 },
               ]}
               onPress={() => {
-                this.props.navigation.navigate('AddMapDetail', {type: 'edit'});
+                this.props.navigation.navigate('AddMapDetail', { type: 'edit' });
               }}>
               <Text style={styles.buttonText}>Edit</Text>
             </TouchableOpacity>
@@ -133,10 +134,10 @@ class MyTravel extends React.Component {
                 styles.button,
                 styles.buttonSm,
                 styles.buttonDanger,
-                {marginLeft: 5},
+                { marginLeft: 5 },
               ]}
               onPress={() => {
-                this.setState({showDeleteModal: true});
+                this.setState({ showDeleteModal: true });
               }}>
               <Text style={styles.buttonText}>Delete</Text>
             </TouchableOpacity>
@@ -169,6 +170,7 @@ class MyTravel extends React.Component {
               style={styles.scrollView}
               showsHorizontalScrollIndicator={false}
               keyboardShouldPersistTaps={'always'}
+              showsVerticalScrollIndicator={false}
               // onScroll={({ nativeEvent }) => {
               //   if (isCloseToBottom(nativeEvent)) {
               //     this.pageNo += 1;
@@ -183,7 +185,7 @@ class MyTravel extends React.Component {
                     style={styles.searchbarInput}
                     placeholder="Search your maps"
                     value={this.state.search}
-                    onChangeText={search => this.setState({search})}
+                    onChangeText={search => this.setState({ search })}
                   />
                 </Item>
                 <Button
@@ -204,31 +206,30 @@ class MyTravel extends React.Component {
                     renderHeader={this._renderHeader}
                     renderContent={this._renderContent}
                     onChange={this._updateSections}
-                    contentStyle={{marginBottom: 10}}
+                    contentStyle={{ marginBottom: 10 }}
                   />
                 </Content>
               ) : (
-                <Text
-                  style={[
-                    styles.buttonText,
-                    {
-                      marginTop: 20,
-                      fontSize: 16,
-                      color: 'grey',
-                      alignSelf: 'center',
-                    },
-                  ]}>
-                  No Maps Found.
+                  <Text
+                    style={[
+                      styles.buttonText,
+                      {
+                        marginTop: 20,
+                        fontSize: 16,
+                        color: 'grey',
+                        alignSelf: 'center',
+                      },
+                    ]}>
+                    No Maps Found.
                 </Text>
-              )}
+                )}
             </ScrollView>
           </View>
           <View style={styles.footerButton}>
             <TouchableOpacity
               style={[styles.button, styles.buttonPrimary, styles.buttonNewMap]}
               onPress={() => {
-                this.addPin();
-                // this.props.navigation.navigate('SinglePinView');
+                this.props.navigation.navigate('AddMymaps');
               }}>
               <Text style={styles.buttonText}>Add New Map</Text>
             </TouchableOpacity>
@@ -241,7 +242,7 @@ class MyTravel extends React.Component {
           hasOverlay={true}
           animationDuration={1}
           onTouchOutside={() => {
-            this.setState({uploadCoverModal: false});
+            this.setState({ uploadCoverModal: false });
           }}
           dialogAnimation={
             new FadeAnimation({
@@ -251,7 +252,7 @@ class MyTravel extends React.Component {
             })
           }
           onHardwareBackPress={() => {
-            this.setState({uploadCoverModal: false});
+            this.setState({ uploadCoverModal: false });
             return true;
           }}
           dialogStyle={styles.customPopup}>
@@ -262,7 +263,7 @@ class MyTravel extends React.Component {
               </Text>
               <TouchableOpacity
                 style={styles.buttonClose}
-                onPress={() => this.setState({uploadCoverModal: false})}>
+                onPress={() => this.setState({ uploadCoverModal: false })}>
                 <Feather name={'x'} style={styles.buttonCloseIcon} />
               </TouchableOpacity>
             </View>
@@ -270,7 +271,7 @@ class MyTravel extends React.Component {
             <View style={[styles.coverImageCard]}>
               <Image
                 style={[styles.coverImageCardBox]}
-                source={{uri: this.state.currentMap.cover_image}}
+                source={{ uri: this.state.currentMap.cover_image }}
               />
               <View style={[styles.addPlusIcon]}>
                 <AntDesign name={'pluscircleo'} size={36} color={'#fff'} />
@@ -282,9 +283,9 @@ class MyTravel extends React.Component {
                 styles.button,
                 styles.buttonPrimary,
                 styles.buttonLg,
-                {marginTop: 25},
+                { marginTop: 25 },
               ]}
-              onPress={() => this.setState({saveToListModal: false})}>
+              onPress={() => this.setState({ saveToListModal: false })}>
               <Text style={styles.buttonText}>Upload Image</Text>
             </TouchableOpacity>
           </DialogContent>
@@ -296,7 +297,7 @@ class MyTravel extends React.Component {
           hasOverlay={true}
           animationDuration={1}
           onTouchOutside={() => {
-            this.setState({showDeleteModal: false});
+            this.setState({ showDeleteModal: false });
           }}
           dialogAnimation={
             new FadeAnimation({
@@ -306,7 +307,7 @@ class MyTravel extends React.Component {
             })
           }
           onHardwareBackPress={() => {
-            this.setState({showDeleteModal: false});
+            this.setState({ showDeleteModal: false });
             return true;
           }}
           dialogStyle={styles.customPopup}>
@@ -315,7 +316,7 @@ class MyTravel extends React.Component {
               <Text style={styles.customPopupHeaderTitle}>Delete Map</Text>
               <TouchableOpacity
                 style={styles.buttonClose}
-                onPress={() => this.setState({showDeleteModal: false})}>
+                onPress={() => this.setState({ showDeleteModal: false })}>
                 <Feather name={'x'} style={styles.buttonCloseIcon} />
               </TouchableOpacity>
             </View>
@@ -334,14 +335,14 @@ class MyTravel extends React.Component {
                   styles.buttonOutlineGray,
                   styles.buttonDecline,
                 ]}
-                onPress={() => {}}>
+                onPress={() => { }}>
                 <Text style={[styles.buttonText, styles.buttonTextGray]}>
                   Decline
                 </Text>
               </Button>
               <Button
                 style={[styles.button, styles.buttonDanger, styles.buttonSave]}
-                onPress={() => {}}>
+                onPress={() => { }}>
                 <Text style={styles.buttonText}>Yes Sure</Text>
               </Button>
             </View>

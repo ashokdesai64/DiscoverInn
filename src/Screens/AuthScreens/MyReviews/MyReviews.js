@@ -9,17 +9,82 @@ import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog'
 import { Textarea, CheckBox } from 'native-base';
 import moment from 'moment';
 import ImageBlurLoading from './../../../components/ImageLoader'
+import Spinner from './../../../components/Loader';
 
+const DEVICE_WIDTH = Dimensions.get('window').width;
 //REDUX
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-const DEVICE_WIDTH = Dimensions.get('window').width;
+import * as mapActions from './../../../actions/mapActions';
+
 class MyReviews extends React.Component {
 
   constructor(props) {
     super(props);
+    console.log("props => ", props)
     this.state = {
-      selectedTab: 'your' //visitor
+      selectedTab: 'your', //visitor
+      myReviews: props.myReviews,
+      visitorReviews: props.visitorReviews,
+      selectedReview: null,
+      editReviewValue: null,
+      editReviewText: ''
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log("nextProps => ", nextProps)
+    if (nextProps.myReviews) {
+      this.setState({ myReviews: nextProps.myReviews })
+    }
+    if (nextProps.visitorReviews) {
+      this.setState({ visitorReviews: nextProps.visitorReviews })
+    }
+  }
+
+  editReview() {
+
+    let { selectedReview, editReviewText, editReviewValue } = this.state;
+    if (selectedReview) {
+
+      if(!editReviewText) return alert("Review description is required.");
+      if(!editReviewValue) return alert("Review value is required.");
+
+      this.setState({showLoader:true,loaderText:'Editing Review...'})
+      this.props.mapAction.editReview({
+        review_id: selectedReview.id,
+        user_id: this.props.userData.id,
+        ratings: editReviewValue,
+        review: editReviewText
+      }).then((data) => {
+        this.setState({ showEditReviewModal: false, showLoader: false, loaderText: '' });
+
+      }).catch((err) => {
+        this.setState({ showLoader: false, loaderText: '' }, () => {
+          alert(err);
+        })
+      })
+    } else {
+      this.setState({ showEditReviewModal: false })
+    }
+
+  }
+
+  deleteReview() {
+    let { selectedReview } = this.state;
+    if (selectedReview) {
+
+      this.setState({showLoader:true,loaderText:'Deleting Review...'})
+
+      this.props.mapAction.deleteReview({ review_id: selectedReview.id, user_id: this.props.userData.id }).then((data) => {
+        this.setState({ showDeleteReviewModal: false, showLoader: false, loaderText: '' });
+      }).catch((err) => {
+        this.setState({ showLoader: false, loaderText: '' }, () => {
+          alert(err);
+        })
+      })
+    } else {
+      this.setState({ showDeleteReviewModal: false })
     }
   }
 
@@ -33,6 +98,11 @@ class MyReviews extends React.Component {
           title={'Review'}
           {...this.props}
           style={{ backgroundColor: '#F3F4F6' }}
+        />
+        <Spinner
+          visible={this.state.showLoader}
+          textContent={this.state.loaderText}
+          textStyle={{ color: '#fff' }}
         />
         <ScrollView style={styles.container} contentContainerStyle={{ alignItems: 'center' }} showsVerticalScrollIndicator={false}>
 
@@ -53,9 +123,10 @@ class MyReviews extends React.Component {
 
           {
             this.state.selectedTab == 'visitor' ?
-              this.props.visitorReviews && this.props.visitorReviews.map((review) => {
+              this.state.visitorReviews && this.state.visitorReviews.map((review) => {
+                console.log("visitorReviews => ", review)
                 return (
-                  <View style={styles.reviewCard}>
+                  <View style={styles.reviewCard} key={review.id}>
                     <View style={styles.reviewCardHeader}>
                       <View style={styles.reviewCardHeaderLeft}>
                         <ImageBlurLoading
@@ -113,9 +184,10 @@ class MyReviews extends React.Component {
                 )
               })
               :
-              this.props.myReviews && this.props.myReviews.map((review) => {
+              this.state.myReviews && this.state.myReviews.map((review) => {
+                console.log("my review => ", review)
                 return (
-                  <View style={styles.reviewCard}>
+                  <View style={styles.reviewCard} key={review.id}>
                     <View style={styles.reviewCardHeader}>
                       <View style={styles.reviewCardHeaderLeft}>
                         <ImageBlurLoading
@@ -170,10 +242,10 @@ class MyReviews extends React.Component {
                       </Text>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
-                      <TouchableOpacity onPress={() => this.setState({ showEditReviewModal: true })} style={{ height: 30, width: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(39, 174, 96, 0.1)', borderRadius: 5, marginRight: 10 }}>
+                      <TouchableOpacity onPress={() => this.setState({ showEditReviewModal: true, selectedReview: review, editReviewValue: review.ratings, editReviewText: review.review })} style={{ height: 30, width: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(39, 174, 96, 0.1)', borderRadius: 5, marginRight: 10 }}>
                         <Feather name={'edit-2'} color={'#27AE60'} size={14} />
                       </TouchableOpacity>
-                      <TouchableOpacity onPress={() => this.setState({ showDeleteReviewModal: true })} style={{ height: 30, width: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(235, 87, 87, 0.1)', borderRadius: 5 }}>
+                      <TouchableOpacity onPress={() => this.setState({ showDeleteReviewModal: true, selectedReview: review })} style={{ height: 30, width: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(235, 87, 87, 0.1)', borderRadius: 5 }}>
                         <Feather name={'trash-2'} color={'#EB5757'} size={14} />
                       </TouchableOpacity>
                     </View>
@@ -216,36 +288,38 @@ class MyReviews extends React.Component {
             <View style={styles.formGroup}>
               <Text style={styles.formLabel}>Rating</Text>
               <View style={{ flexDirection: 'row' }}>
-                <AntDesign
-                  style={styles.starIcon}
-                  name="star"
-                  size={16}
-                  color="#FFAF2C"
-                />
-                <AntDesign
-                  style={styles.starIcon}
-                  name="star"
-                  size={16}
-                  color="#FFAF2C"
-                />
-                <AntDesign
-                  style={styles.starIcon}
-                  name="star"
-                  size={16}
-                  color="#FFAF2C"
-                />
-                <AntDesign
-                  style={styles.starIcon}
-                  name="star"
-                  size={16}
-                  color="#FFAF2C"
-                />
-                <AntDesign
-                  style={styles.starIcon}
-                  name="star"
-                  size={16}
-                  color="#FFAF2C"
-                />
+                {
+                  this.state.editReviewValue &&
+                  Array(parseInt(this.state.editReviewValue))
+                    .fill(1)
+                    .map((d, i) => {
+                      return (
+                        <MaterialCommunityIcons
+                          onPress={() => { console.log(i + 1); this.setState({ editReviewValue: i + 1 }) }}
+                          style={styles.starIcon}
+                          name="star"
+                          size={20}
+                          color="#FFAF2C"
+                        />
+                      );
+                    })
+                }
+                {
+                  this.state.editReviewValue &&
+                  Array(5 - parseInt(this.state.editReviewValue))
+                    .fill(1)
+                    .map((d, i) => {
+                      return (
+                        <MaterialCommunityIcons
+                          onPress={() => { console.log(parseInt(this.state.editReviewValue) + i); this.setState({ editReviewValue: parseInt(this.state.editReviewValue) + i + 1 }) }}
+                          style={styles.starIcon}
+                          name="star-outline"
+                          size={20}
+                          color="#FFAF2C"
+                        />
+                      );
+                    })
+                }
               </View>
             </View>
             <View>
@@ -255,13 +329,14 @@ class MyReviews extends React.Component {
                 placeholderTextColor={'#828894'}
                 rowSpan={5}
                 style={styles.formControlTextarea}
-                defaultValue={`Ohh That's great map`}
+                defaultValue={(this.state.editReviewText) || ''}
+                onChangeText={(text) => this.setState({ editReviewText: text })}
               />
             </View>
             <View style={styles.customPopupFooter}>
               <TouchableOpacity
                 style={[styles.button, styles.buttonPrimary]}
-                onPress={() => this.setState({ showEditReviewModal: false })}>
+                onPress={() => this.editReview()}>
                 <Text style={styles.buttonText}>Submit</Text>
               </TouchableOpacity>
             </View>
@@ -391,7 +466,7 @@ class MyReviews extends React.Component {
                   borderColor: '#EB5757',
                   backgroundColor: '#EB5757'
                 }}
-                onPress={() => this.setState({ saveToListModal: false })}>
+                onPress={() => this.deleteReview()}>
                 <Text
                   style={{
                     fontFamily: 'Montserrat-Regular',
@@ -411,7 +486,6 @@ class MyReviews extends React.Component {
 }
 
 function mapStateToProps(state) {
-  console.log("state.maps.myReviews => ", state.maps.myReviews)
   return {
     userData: state.user.userData,
     myReviews: state.maps.myReviews,
@@ -420,9 +494,8 @@ function mapStateToProps(state) {
 }
 function mapDispatchToProps(dispatch) {
   return {
-    // authAction: bindActionCreators(authActions, dispatch),
-    // mapAction: bindActionCreators(mapActions, dispatch),
+    mapAction: bindActionCreators(mapActions, dispatch),
   };
 }
 
-export default connect(mapStateToProps, null)(MyReviews);
+export default connect(mapStateToProps, mapDispatchToProps)(MyReviews);
