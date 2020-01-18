@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
@@ -24,9 +24,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   unauthContent: {
-    padding: 30,
+    paddingHorizontal: 30,
     paddingBottom: 0,
-    flex:1
+    flex: 1,
   },
   logoText: {
     fontSize: 36,
@@ -105,6 +105,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Medium',
     textAlignVertical: 'bottom',
     marginBottom: 20,
+    position: 'absolute',
+    bottom: '0%',
   },
   fixedFooter: {
     position: 'absolute',

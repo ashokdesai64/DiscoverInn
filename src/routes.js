@@ -8,6 +8,7 @@ import AddMymaps from './Screens/AuthScreens/AddMymaps/AddMymaps';
 import AddMapDetail from './Screens/AuthScreens/AddMymaps/AddMapDetail';
 import EditMymaps from './Screens/AuthScreens/EditMymaps/EditMymaps';
 import MyTravel from './Screens/AuthScreens/MyTravel/MyTravel';
+import EditMyTravel from './Screens/AuthScreens/EditMyTravel/EditMyTravel';
 import MyReviews from './Screens/AuthScreens/MyReviews/MyReviews';
 import MyTripList from './Screens/AuthScreens/MyTripList/MyTripList';
 import TripPinList from './Screens/AuthScreens/TripPinList/TripPinList';
@@ -55,6 +56,9 @@ const userStack = createStackNavigator(
     },
     MyTravel: {
       screen: MyTravel,
+    },
+    EditMyTravel: {
+      screen: EditMyTravel,
     },
     AddMymaps: {
       screen: AddMymaps,
