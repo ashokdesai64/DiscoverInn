@@ -77,7 +77,10 @@ class EditMyTravel extends React.Component {
                 styles.button,
                 styles.buttonOutline,
                 styles.buttonEditMapDetail,
-              ]}>
+              ]}
+              onPress={() => {
+                this.props.navigation.navigate('EditMyTravelDetails');
+              }}>
               <Text style={styles.buttonTextGray}>Edit Map Details</Text>
             </Button>
             <Button

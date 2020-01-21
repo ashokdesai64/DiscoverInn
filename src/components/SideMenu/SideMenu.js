@@ -69,6 +69,18 @@ class SideMenu extends Component {
                 size={12}
                 paddingRight={0}
                 backgroundColor="#ffffff"
+                onPress={() => this.props.navigation.navigate('AddMy')}>
+                <Text style={styles.menuList_LinkText}>Edit My Maps</Text>
+              </Icon.Button>
+            </View>
+            <View style={styles.menuList_Item}>
+              <Icon.Button
+                style={styles.menuList_Link}
+                color="#828282"
+                name="plus-circle"
+                size={12}
+                paddingRight={0}
+                backgroundColor="#ffffff"
                 onPress={() => this.props.navigation.navigate('MyTravel')}>
                 <Text style={styles.menuList_LinkText}>My Travel</Text>
               </Icon.Button>
