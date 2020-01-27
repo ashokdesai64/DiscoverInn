@@ -191,7 +191,6 @@ export function fetchTripList() {
 
 export function fetchMapList(apiData) {
     return function (dispatch, getState) {
-        console.time("dis")
         dispatch({
             type: 'mapListLoaded',
             mapListLoaded: false
@@ -205,7 +204,6 @@ export function fetchMapList(apiData) {
                 type: 'mapListLoaded',
                 mapListLoaded: true
             });
-            console.timeEnd("dis")
             if (response.status) {
                 dispatch({
                     type: apiData.page > 1 ? 'mapPagination' : 'mapList',
@@ -355,7 +353,7 @@ export function addReview(apiData) {
 export function deleteReview(apiData) {
     return function (dispatch, getState) {
         return new Promise(async (resolve, reject) => {
-            console.log("api data => ",apiData)
+            console.log("api data => ", apiData)
             let response = await callAPI(
                 apiUrls.deleteReview,
                 apiData
@@ -380,7 +378,7 @@ export function deleteReview(apiData) {
 export function editReview(apiData) {
     return function (dispatch, getState) {
         return new Promise(async (resolve, reject) => {
-            console.log("api data => ",apiData)
+            console.log("api data => ", apiData)
             let response = await callAPI(
                 apiUrls.editReview,
                 apiData
@@ -388,8 +386,8 @@ export function editReview(apiData) {
 
             if (response.status) {
                 let allReviews = getState().maps.myReviews;
-                allReviews.map((review)=>{
-                    if(review.id == apiData.review_id){
+                allReviews.map((review) => {
+                    if (review.id == apiData.review_id) {
                         review['review'] = apiData.review;
                         review['ratings'] = apiData.ratings;
                     }
@@ -403,4 +401,22 @@ export function editReview(apiData) {
 
         })
     };
+}
+
+export function updateMapName(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.updateMapTitle,
+                apiData
+            );
+
+            if (response.status) {
+                resolve({ data: response.data });
+            } else {
+                reject(response.message)
+            }
+
+        })
+    }
 }

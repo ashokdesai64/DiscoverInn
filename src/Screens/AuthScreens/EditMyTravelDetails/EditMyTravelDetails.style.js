@@ -194,13 +194,10 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     marginBottom: 20,
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
     position: 'absolute',
     bottom: 0,
     right: 0,
     left: 0,
-    flex: 1,
-    width: WIDTH,
   },
   button: {
     paddingVertical: 5,

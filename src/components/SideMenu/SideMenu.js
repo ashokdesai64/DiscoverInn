@@ -61,7 +61,7 @@ class SideMenu extends Component {
           </View>
 
           <View style={styles.menuList}>
-            <View style={styles.menuList_Item}>
+            {/* <View style={styles.menuList_Item}>
               <Icon.Button
                 style={styles.menuList_Link}
                 color="#828282"
@@ -72,7 +72,7 @@ class SideMenu extends Component {
                 onPress={() => this.props.navigation.navigate('AddMy')}>
                 <Text style={styles.menuList_LinkText}>Edit My Maps</Text>
               </Icon.Button>
-            </View>
+            </View> */}
             <View style={styles.menuList_Item}>
               <Icon.Button
                 style={styles.menuList_Link}

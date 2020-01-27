@@ -125,7 +125,7 @@ class MyTravel extends React.Component {
                 {marginLeft: 5},
               ]}
               onPress={() => {
-                this.props.navigation.navigate('AddMapDetail', {type: 'edit'});
+                this.props.navigation.navigate('EditMyTravel', {type:'edit',mapData:item});
               }}>
               <Text style={styles.buttonText}>Edit</Text>
             </TouchableOpacity>

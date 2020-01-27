@@ -149,6 +149,7 @@ class AddMapDetail extends React.Component {
 
   render() {
     const { pinImages } = this.state;
+    const {params} = this.props.navigation.state;
     return (
       <Fragment>
         <ImageBackground
@@ -156,7 +157,7 @@ class AddMapDetail extends React.Component {
           style={{ width: '100%', height: '100%' }}>
           <Header
             showBack={true}
-            title={'Add Map Detail'}
+            title={params.type == 'edit' ? 'My Travel' : 'Add Map Detail'}
             {...this.props}
             rightEmpty={true}
             showRightButton={false}

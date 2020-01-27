@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   Text,
@@ -11,7 +11,7 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from 'react-native';
-import {ListItem, CheckBox, Picker, Textarea} from 'native-base';
+import { ListItem, CheckBox, Picker, Textarea } from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Header from '../../../components/header/header';
@@ -20,8 +20,8 @@ import ImagePicker from 'react-native-image-picker';
 import Spinner from '../../../components/Loader';
 
 //REDUX
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import * as mapActions from '../../../actions/mapActions';
 class EditMyTravelDetails extends React.Component {
@@ -40,16 +40,16 @@ class EditMyTravelDetails extends React.Component {
   }
 
   change_month = month => {
-    this.setState({month: month});
+    this.setState({ month: month });
   };
   change_year = year => {
-    this.setState({year: year});
+    this.setState({ year: year });
   };
 
   openImagePicker() {
     const options = {
       title: 'Select Avatar',
-      customButtons: [{name: 'fb', title: 'Choose Photo from Gallery'}],
+      customButtons: [{ name: 'fb', title: 'Choose Photo from Gallery' }],
       permissionDenied: {
         title: 'Give permission',
         text: 'Text',
@@ -86,7 +86,7 @@ class EditMyTravelDetails extends React.Component {
       fileType,
     } = this.state;
 
-    this.setState({addMapInProgress: true});
+    this.setState({ addMapInProgress: true });
 
     let addMapObject = {
       user_id: this.props.userData.id,
@@ -119,12 +119,12 @@ class EditMyTravelDetails extends React.Component {
     this.props.mapAction
       .addMyMap(addMapObject)
       .then(data => {
-        this.setState({addMapInProgress: false}, () => {
-          this.props.navigation.navigate('MapView', {mapID: data.mapID});
+        this.setState({ addMapInProgress: false }, () => {
+          this.props.navigation.navigate('MapView', { mapID: data.mapID });
         });
       })
       .catch(err => {
-        this.setState({addMapInProgress: false}, () => {
+        this.setState({ addMapInProgress: false }, () => {
           alert(err);
         });
       });
@@ -135,7 +135,7 @@ class EditMyTravelDetails extends React.Component {
       <Fragment>
         <ImageBackground
           source={require('../../../Images/map-bg.png')}
-          style={{width: '100%', height: '100%'}}>
+          style={{ width: '100%', height: '100%' }}>
           <Header
             showBack={true}
             title={'LonelyPlanet - Bordeaux'}
@@ -147,7 +147,7 @@ class EditMyTravelDetails extends React.Component {
           <Spinner
             visible={this.state.addMapInProgress}
             textContent={'Adding Map...'}
-            textStyle={{color: '#fff'}}
+            textStyle={{ color: '#fff' }}
           />
           <View style={styles.container}>
             <View style={styles.pageContent}>
@@ -155,7 +155,9 @@ class EditMyTravelDetails extends React.Component {
                 style={styles.scrollView}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
-                keyboardShouldPersistTaps={'always'}>
+                keyboardShouldPersistTaps={'always'}
+                contentContainerStyle={{height:'100%'}}
+              >
                 <View style={styles.formGroup}>
                   <Text style={styles.formLabel}>Description</Text>
                   <KeyboardAvoidingView behavior="padding" enabled>
@@ -164,7 +166,7 @@ class EditMyTravelDetails extends React.Component {
                       style={styles.formControlTextarea}
                       value={this.state.mapDescription}
                       onChangeText={mapDescription => {
-                        this.setState({mapDescription});
+                        this.setState({ mapDescription });
                       }}
                     />
                   </KeyboardAvoidingView>
@@ -183,7 +185,7 @@ class EditMyTravelDetails extends React.Component {
                                 : styles.UnCheckboxBlue,
                             ]}
                             onPress={() =>
-                              this.setState({travelType: travelType.id})
+                              this.setState({ travelType: travelType.id })
                             }>
                             <Text
                               style={[
@@ -218,7 +220,7 @@ class EditMyTravelDetails extends React.Component {
                                   : styles.UnCheckboxGreen,
                               ]}
                               onPress={() =>
-                                this.setState({selectedBudget: budget.value})
+                                this.setState({ selectedBudget: budget.value })
                               }>
                               <Text
                                 style={[
@@ -250,7 +252,7 @@ class EditMyTravelDetails extends React.Component {
                                   : styles.UnCheckboxYellow,
                               ]}
                               onPress={() =>
-                                this.setState({selectedAge: age.value})
+                                this.setState({ selectedAge: age.value })
                               }>
                               <Text
                                 style={[
@@ -272,7 +274,7 @@ class EditMyTravelDetails extends React.Component {
                   <View style={[styles.formGroup, styles.picker]}>
                     <Picker
                       style={styles.formDropdown}
-                      placeholderStyle={{color: '#2874F0'}}
+                      placeholderStyle={{ color: '#2874F0' }}
                       selectedValue={this.state.month}
                       textStyle={styles.dropdownText}
                       onValueChange={this.change_month}
@@ -321,50 +323,28 @@ class EditMyTravelDetails extends React.Component {
                   </View>
                 </View>
 
-                {this.state.isImageSelected ? (
+               
+                <View style={styles.footerButton}>
                   <TouchableOpacity
-                    onPress={() => this.openImagePicker()}
-                    style={[styles.uploadCoverCard]}>
-                    <Image
-                      source={{uri: this.state.converImagePath}}
-                      style={styles.coverImage}
-                    />
+                    style={[
+                      styles.button,
+                      styles.buttonOutline,
+                      styles.buttonEditMapDetail,
+                    ]}>
+                    <Text style={styles.buttonTextGray}>Cancel</Text>
                   </TouchableOpacity>
-                ) : (
                   <TouchableOpacity
-                    onPress={() => this.openImagePicker()}
-                    style={[styles.uploadCoverCard]}>
-                    <AntDesign
-                      name={'pluscircleo'}
-                      size={36}
-                      color={'#2F80ED'}
-                    />
-                    <Text style={[styles.uploadCoverCardText]}>
-                      {' '}
-                      Add Cover Image{' '}
-                    </Text>
+                    style={[
+                      styles.button,
+                      styles.buttonPrimary,
+                      styles.buttonEditPin,
+                    ]}>
+                    <Text style={styles.buttonText}>Save</Text>
                   </TouchableOpacity>
-                )}
+                </View>
               </ScrollView>
             </View>
-            <View style={styles.footerButton}>
-              <TouchableOpacity
-                style={[
-                  styles.button,
-                  styles.buttonOutline,
-                  styles.buttonEditMapDetail,
-                ]}>
-                <Text style={styles.buttonTextGray}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.button,
-                  styles.buttonPrimary,
-                  styles.buttonEditPin,
-                ]}>
-                <Text style={styles.buttonText}>Save</Text>
-              </TouchableOpacity>
-            </View>
+
           </View>
         </ImageBackground>
       </Fragment>

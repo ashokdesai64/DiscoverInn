@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import styles from './MapView.style';
+import geoViewport from '@mapbox/geo-viewport';
 
 import sights1 from './../../Images/sights1.png';
 import activities1 from './../../Images/activities1.png';
@@ -37,7 +38,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as mapActions from './../../actions/mapActions';
-
+const CENTER_COORD = [-73.970895, 40.723279];
+const MAPBOX_VECTOR_TILE_SIZE = 512;
 
 class MapView extends React.Component {
   constructor(props) {
@@ -64,7 +66,8 @@ class MapView extends React.Component {
         },
       ],
       pinList: [],
-      mapPinsInProgress: false
+      mapPinsInProgress: false,
+      followUserLocation: false
     };
     this.categoryImages = {
       '1': sights1,
@@ -105,13 +108,47 @@ class MapView extends React.Component {
       this.setState({ mapPinsInProgress: true })
       this.props.mapAction.getMapPins({ map_id: mapID, user_id: this.props.userData.id }).then((data) => {
         let pinList = data.mapID;
-        console.log("data => ",data)
+        console.log("data => ", data)
         this.setState({ mapPinsInProgress: false, pinList })
       }).catch((err) => {
         console.log("error => ", err)
         this.setState({ mapPinsInProgress: false, pinList: [] })
       })
     }
+  }
+
+  async onDidFinishLoadingStyle() {
+
+
+
+    const { width, height } = Dimensions.get('window');
+    const bounds = geoViewport.bounds(
+      CENTER_COORD,
+      12,
+      [width, height],
+      MAPBOX_VECTOR_TILE_SIZE,
+    );
+
+    const options = {
+      name: Math.random().toString(),
+      styleURL: MapboxGL.StyleURL.Street,
+      bounds: [[bounds[0], bounds[1]], [bounds[2], bounds[3]]],
+      minZoom: 10,
+      maxZoom: 20,
+    };
+
+    // start download
+    MapboxGL.offlineManager.createPack(options, this.onDownloadProgress);
+  }
+
+  onDownloadProgress = (offlineRegion, offlineRegionStatus) => {
+    console.log("offline region => ", offlineRegion)
+    console.log("offlineRegionStatus => ", offlineRegionStatus)
+    this.setState({
+      name: offlineRegion.name,
+      offlineRegion,
+      offlineRegionStatus,
+    });
   }
 
   render() {
@@ -173,8 +210,14 @@ class MapView extends React.Component {
             style={styles.map}
             styleURL={MapboxGL.StyleURL.Street}
             logoEnabled={false}
-            attributionEnabled={false}>
+            attributionEnabled={false}
+            onDidFinishRenderingMapFully={(r) => {
+              this.setState({ followUserLocation: true })
+            }}
+          >
             <MapboxGL.Camera
+              // followUserLocation={this.state.followUserLocation}
+              // followUserMode={MapboxGL.UserTrackingModes.FollowWithCourse}
               centerCoordinate={
                 filteredCollections[0] ?
                   [filteredCollections[0].features[0].geometry.coordinates[0], filteredCollections[0].features[0].geometry.coordinates[1]]
@@ -215,8 +258,8 @@ class MapView extends React.Component {
                 :
                 null
             }
+            <MapboxGL.UserLocation visible animated />
           </MapboxGL.MapView>
-
           <View style={styles.mapActionButton}>
             <TouchableOpacity
               style={[
