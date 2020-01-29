@@ -1,42 +1,50 @@
 import React, { Fragment } from 'react';
-import {
-  View,
-  Text,
-  Button,
-  KeyboardAvoidingView,
-  TextInput,
-  Dimensions,
-  ScrollView,
-  Image,
-  ImageBackground,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, KeyboardAvoidingView, ScrollView, ImageBackground, TouchableOpacity, } from 'react-native';
 import { ListItem, CheckBox, Picker, Textarea } from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import Header from '../../../components/header/header';
 import styles from './EditMyTravelDetails.style';
 import ImagePicker from 'react-native-image-picker';
 import Spinner from '../../../components/Loader';
-
+import moment from 'moment';
+import { NavigationActions, StackActions } from 'react-navigation';
 //REDUX
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as mapActions from '../../../actions/mapActions';
 class EditMyTravelDetails extends React.Component {
+
   constructor(props) {
     super(props);
+
+    const { params } = props.navigation.state;
+
+    let travelMonth = 'select month', travelYear = 'select year';
+    if (params.type == 'edit') {
+
+      let momentMonth = moment(params.mapData.date_of_travel).month();
+      let momentYear = moment(params.mapData.date_of_travel).year();
+
+      if (!isNaN(momentMonth) && momentMonth >= 0) {
+        travelMonth = ('0' + (momentMonth + 1).toString()).slice(-2);
+      }
+      if (!isNaN(momentYear) && momentYear) {
+        travelYear = momentYear.toString();
+      }
+    }
+
     this.state = {
       mapTitle: '',
-      mapDescription: '',
-      travelType: '',
-      selectedBudget: '',
-      selectedAge: '',
-      month: 'select month',
-      year: 'select year',
+      mapDescription: params.type == 'edit' ? params.mapData.description : '',
+      travelType: params.type == 'edit' ? params.mapData.travel_type : '',
+      selectedBudget: params.type == 'edit' ? params.mapData.budget_limit : '',
+      selectedAge: params.type == 'edit' ? params.mapData.age_at_travel : '',
+      month: travelMonth,
+      year: travelYear,
       addMapInProgress: false,
     };
+
   }
 
   change_month = month => {
@@ -70,7 +78,8 @@ class EditMyTravelDetails extends React.Component {
     });
   }
 
-  addMap() {
+  updateMap() {
+    const { params } = this.props.navigation.state;
     // this.props.navigation.navigate('MapView', { mapID: 479 })
     const {
       selectedAge,
@@ -78,21 +87,17 @@ class EditMyTravelDetails extends React.Component {
       travelType,
       month,
       year,
-      mapTitle,
-      mapDescription,
-      isImageSelected,
-      converImagePath,
-      fileName,
-      fileType,
+      mapDescription
     } = this.state;
 
     this.setState({ addMapInProgress: true });
 
     let addMapObject = {
       user_id: this.props.userData.id,
-      title: mapTitle,
       description: mapDescription,
+      map_id: params.mapData.id
     };
+
     if (travelType) {
       addMapObject['travel_type'] = travelType;
     }
@@ -108,19 +113,16 @@ class EditMyTravelDetails extends React.Component {
     if (month) {
       addMapObject['date_of_month'] = month;
     }
-    if (isImageSelected) {
-      addMapObject['cover_image'] = {
-        uri: converImagePath,
-        name: fileName,
-        type: fileType,
-      };
-    }
 
     this.props.mapAction
-      .addMyMap(addMapObject)
+      .updateMyMap(addMapObject)
       .then(data => {
         this.setState({ addMapInProgress: false }, () => {
-          this.props.navigation.navigate('MapView', { mapID: data.mapID });
+          const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: 'MyTravel' })],
+          });
+          this.props.navigation.dispatch(resetAction);
         });
       })
       .catch(err => {
@@ -131,6 +133,7 @@ class EditMyTravelDetails extends React.Component {
   }
 
   render() {
+    const { params } = this.props.navigation.state;
     return (
       <Fragment>
         <ImageBackground
@@ -138,7 +141,7 @@ class EditMyTravelDetails extends React.Component {
           style={{ width: '100%', height: '100%' }}>
           <Header
             showBack={true}
-            title={'LonelyPlanet - Bordeaux'}
+            title={params.mapData.name}
             {...this.props}
             style={styles.bgTransfrent}
             rightEmpty={true}
@@ -146,7 +149,7 @@ class EditMyTravelDetails extends React.Component {
           />
           <Spinner
             visible={this.state.addMapInProgress}
-            textContent={'Adding Map...'}
+            textContent={'Updating Map...'}
             textStyle={{ color: '#fff' }}
           />
           <View style={styles.container}>
@@ -156,7 +159,7 @@ class EditMyTravelDetails extends React.Component {
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps={'always'}
-                contentContainerStyle={{height:'100%'}}
+                contentContainerStyle={{ height: '100%' }}
               >
                 <View style={styles.formGroup}>
                   <Text style={styles.formLabel}>Description</Text>
@@ -323,14 +326,16 @@ class EditMyTravelDetails extends React.Component {
                   </View>
                 </View>
 
-               
+
                 <View style={styles.footerButton}>
                   <TouchableOpacity
                     style={[
                       styles.button,
                       styles.buttonOutline,
                       styles.buttonEditMapDetail,
-                    ]}>
+                    ]}
+                    onPress={() => this.props.navigation.goBack()}
+                  >
                     <Text style={styles.buttonTextGray}>Cancel</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
@@ -338,7 +343,9 @@ class EditMyTravelDetails extends React.Component {
                       styles.button,
                       styles.buttonPrimary,
                       styles.buttonEditPin,
-                    ]}>
+                    ]}
+                    onPress={() => this.updateMap()}
+                  >
                     <Text style={styles.buttonText}>Save</Text>
                   </TouchableOpacity>
                 </View>

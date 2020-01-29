@@ -100,7 +100,7 @@ class Header extends Component {
                 <View></View>
               )}
 
-          <Text style={styles.headerTitle}>{this.props.title}</Text>
+          <Text style={styles.headerTitle} numberOfLines={1} ellipsizeMode='tail'>{this.props.title}</Text>
 
           {this.props.rightEmpty ? (
             this.props.showRightButton ? (

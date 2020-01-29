@@ -19,6 +19,8 @@ export const apiUrls = {
     deleteReview:'https://discover-inn.com/api/v1/delete_review',
     editReview:'https://discover-inn.com/api/v1/update_review',
     updateMapTitle:'https://discover-inn.com/api/v1/update_map_title',
+    updateMapDetails:'https://discover-inn.com/api/v1/update_map_details',
+    updateCoverImage:'https://discover-inn.com/api/v1/update_map_cover',
     //remaining
     sharedMaps:'https://discover-inn.com/api/v1/shared_maps',
     addReview:'https://discover-inn.com/api/v1/add_review',

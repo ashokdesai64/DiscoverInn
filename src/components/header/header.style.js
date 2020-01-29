@@ -41,6 +41,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontFamily: 'Montserrat-Medium',
     textAlign: 'center',
+    width:'80%',
+    paddingHorizontal:5
   },
   headerRightIcon: {
     justifyContent: 'center',

@@ -231,7 +231,7 @@ class MyTravel extends React.Component {
             <TouchableOpacity
               style={[styles.button, styles.buttonPrimary, styles.buttonNewMap]}
               onPress={() => {
-                this.props.navigation.navigate('EditMyTravel');
+                this.props.navigation.navigate('EditMyTravel',{type:'add'});
               }}>
               <Text style={styles.buttonText}>Add New Map</Text>
             </TouchableOpacity>

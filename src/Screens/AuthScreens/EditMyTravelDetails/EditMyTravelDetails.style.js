@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
   },
   formControlTextarea: {
     borderWidth: 1,
+    fontFamily: 'Montserrat-Regular',
     borderColor: '#BDBDBD',
     borderRadius: 5,
     paddingTop: 10,

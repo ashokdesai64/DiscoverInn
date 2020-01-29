@@ -420,3 +420,36 @@ export function updateMapName(apiData) {
         })
     }
 }
+
+export function updateMyMap(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.updateMapDetails,
+                apiData
+            );
+            console.log("response => ", response)
+            if (response.status) {
+                resolve({ response });
+            } else {
+                reject(response.message)
+            }
+        })
+    };
+}
+
+export function updateCoverImage(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.updateCoverImage,
+                apiData
+            );
+            if (response.status) {
+                resolve(response);
+            } else {
+                reject(response.message)
+            }
+        })
+    };
+}

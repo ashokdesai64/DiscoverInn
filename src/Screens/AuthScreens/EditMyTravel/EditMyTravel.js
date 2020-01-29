@@ -8,6 +8,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import Header from '../../../components/header/header';
 import moment from 'moment';
 
+import ImagePicker from 'react-native-image-picker';
+import Spinner from './../../../components/Loader';
 //REDUX
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -23,29 +25,76 @@ class EditMyTravel extends React.Component {
     const { params } = props.navigation.state;
     this.state = {
       showNameInput: false,
-      mapName: params.mapData.name || '',
-      coverImage: params.mapData.cover_image || false,
-
+      mapName: params.type == 'edit' ? (params.mapData.name || '') : '',
+      coverImage: params.type == 'edit' ? (params.mapData.cover_image || false) : false,
+      addCoverInProgress: false,
+      mapData : params.mapData || {}
     }
   }
-  pageNo = 1;
 
   updateMapName() {
     const { params } = this.props.navigation.state;
+
     let mapName = this.state.mapName;
-    if (mapName != params.mapData.name) {
+    if (!mapName || !mapName.trim()) return alert("Please enter map name");
+
+    if (params.type == 'edit') {
       //call api to change map
       this.props.mapAction.updateMapName({ user_id: this.props.userData.id, map_id: params.mapData.id, title: mapName }).then((data) => {
-        this.setState({ showNameInput: false, })
+        this.setState({ showNameInput: false })
+      }).catch(err => {
+        console.log("err => ", err)
+      })
+    } else {
+      this.props.mapAction.addMyMap({ user_id: this.props.userData.id, title: mapName }).then((data) => {
+        this.setState({ showNameInput: false,mapData: { id: data.mapID, name: mapName } })
       }).catch(err => {
         console.log("err => ", err)
       })
     }
+
+  }
+
+  openImagePicker() {
+    const options = {
+      title: 'Select Avatar',
+      customButtons: [{ name: 'fb', title: 'Choose Photo from Gallery' }],
+      permissionDenied: {
+        title: 'Give permission',
+        text: 'Text',
+        reTryTitle: 'reTryTitle',
+        okTitle: 'okTitle',
+      },
+      quality: 0.3
+    };
+    if(!this.state.mapData.id) return alert("Please enter map name first...");
+
+    ImagePicker.launchImageLibrary(options, response => {
+
+      this.setState({ addCoverInProgress: true });
+      let fileObj = {
+        uri: response.uri,
+        name: response.fileName,
+        type: response.type
+      }
+      this.props.mapAction.updateCoverImage({user_id:this.props.userData.id,map_id:this.state.mapData.id,cover_image:fileObj}).then((data)=>{
+        this.setState({ addCoverInProgress: false,mapData:{...this.state.mapData,cover_image:response.uri},coverImage:response.uri });
+      }).catch((err)=>{
+        this.setState({ addCoverInProgress: false });
+        alert("Couldn't update image, Please try again.")
+        console.log("err => ",err)
+      })
+    });
   }
 
   render() {
-    console.log("this.state => ",this.state.coverImage)
     const { params } = this.props.navigation.state;
+
+    let travel_type = params.type == 'edit' ? params.mapData.travel_type : '-'
+    let budget_limit = params.type == 'edit' ? params.mapData.budget_limit : '-'
+    let date_created = params.type == 'edit' ? moment(params.mapData.date_created).fromNow() : '-'
+    let age_at_travel = params.type == 'edit' ? params.mapData.age_at_travel : '-'
+
     return (
       <Fragment>
         <Header
@@ -55,6 +104,11 @@ class EditMyTravel extends React.Component {
           style={styles.bgTransfrent}
           rightEmpty={true}
           showRightButton={false}
+        />
+        <Spinner
+          visible={this.state.addCoverInProgress}
+          textContent={'Updating Cover Image...'}
+          textStyle={{ color: '#fff' }}
         />
         <View style={styles.container}>
           <View style={styles.pageContent}>
@@ -68,7 +122,9 @@ class EditMyTravel extends React.Component {
                 {
                   !this.state.showNameInput ?
                     <>
-                      <Text style={[styles.myTravelNameText, { marginRight: 10, minWidth: 200, maxWidth: DEVICE_WIDTH - 100 }]}> {this.state.mapName} </Text>
+                      <Text style={[styles.myTravelNameText, { color: params.type == 'add' ? '#828894' : '#000', marginRight: 10, minWidth: 200, maxWidth: DEVICE_WIDTH - 100 }]}>
+                        {this.state.mapName || (params.type == 'edit' ? this.state.mapName : 'Add Map Title')}
+                      </Text>
                       <TouchableOpacity onPress={() => this.setState({ showNameInput: true })}>
                         <Feather name="edit" style={styles.myTravelNameIcon} />
                       </TouchableOpacity>
@@ -80,6 +136,7 @@ class EditMyTravel extends React.Component {
                         placeholderTextColor={'#828894'}
                         onChangeText={mapName => this.setState({ mapName })}
                         value={this.state.mapName}
+                        placeholder={'Add Map Name'}
                       />
                       <TouchableOpacity onPress={() => this.updateMapName()}>
                         <Feather name="check" style={styles.myTravelNameIcon} />
@@ -93,10 +150,10 @@ class EditMyTravel extends React.Component {
                 {
                   this.state.coverImage ?
                     <TouchableOpacity onPress={() => this.openImagePicker()} style={[styles.uploadCoverCard]}>
-                      <Image source={{uri:this.state.coverImage}} style={styles.coverImage} />
+                      <Image source={{ uri: this.state.coverImage }} style={styles.coverImage} />
                     </TouchableOpacity>
                     :
-                    <TouchableOpacity style={[styles.uploadCoverCard]}>
+                    <TouchableOpacity onPress={() => this.openImagePicker()} style={[styles.uploadCoverCard]}>
                       <AntDesign name={'pluscircleo'} size={36} color={'#2F80ED'} />
                       <Text style={[styles.uploadCoverCardText]}> Add Cover Image </Text>
                     </TouchableOpacity>
@@ -106,19 +163,19 @@ class EditMyTravel extends React.Component {
               <View style={styles.myTravelCard}>
                 <View style={styles.myTravelItem}>
                   <Text style={styles.myTravelItemTitle}>Travel Type</Text>
-                  <Text style={styles.myTravelItemValue}>{params.mapData.travel_type || '-'}</Text>
+                  <Text style={styles.myTravelItemValue}>{travel_type || '-'}</Text>
                 </View>
                 <View style={styles.myTravelItem}>
                   <Text style={styles.myTravelItemTitle}>Budget</Text>
-                  <Text style={styles.myTravelItemValue}>{params.mapData.budget || '-'}</Text>
+                  <Text style={styles.myTravelItemValue}>{budget_limit || '-'}</Text>
                 </View>
                 <View style={styles.myTravelItem}>
                   <Text style={styles.myTravelItemTitle}>Created</Text>
-                  <Text style={styles.myTravelItemValue}>{moment(params.mapData.date_created).fromNow() || '-' }</Text>
+                  <Text style={styles.myTravelItemValue}>{date_created || '-'}</Text>
                 </View>
                 <View style={[styles.myTravelItem, { borderBottomWidth: 0 }]}>
                   <Text style={styles.myTravelItemTitle}>Age</Text>
-                  <Text style={styles.myTravelItemValue}>{params.mapData.age_at_travel || '-'}</Text>
+                  <Text style={styles.myTravelItemValue}>{age_at_travel || '-'}</Text>
                 </View>
               </View>
             </ScrollView>
@@ -131,7 +188,10 @@ class EditMyTravel extends React.Component {
                 styles.buttonEditMapDetail,
               ]}
               onPress={() => {
-                this.props.navigation.navigate('EditMyTravelDetails');
+                this.props.navigation.navigate('EditMyTravelDetails', {
+                  mapData: { ...this.state.mapData, name: this.state.mapName },
+                  type: params.type
+                });
               }}>
               <Text style={styles.buttonTextGray}>Edit Map Details</Text>
             </Button>
