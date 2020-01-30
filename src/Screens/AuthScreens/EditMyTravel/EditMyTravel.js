@@ -28,7 +28,7 @@ class EditMyTravel extends React.Component {
       mapName: params.type == 'edit' ? (params.mapData.name || '') : '',
       coverImage: params.type == 'edit' ? (params.mapData.cover_image || false) : false,
       addCoverInProgress: false,
-      mapData : params.mapData || {}
+      mapData: params.mapData || {}
     }
   }
 
@@ -47,7 +47,7 @@ class EditMyTravel extends React.Component {
       })
     } else {
       this.props.mapAction.addMyMap({ user_id: this.props.userData.id, title: mapName }).then((data) => {
-        this.setState({ showNameInput: false,mapData: { id: data.mapID, name: mapName } })
+        this.setState({ showNameInput: false, mapData: { id: data.mapID, name: mapName } })
       }).catch(err => {
         console.log("err => ", err)
       })
@@ -67,7 +67,7 @@ class EditMyTravel extends React.Component {
       },
       quality: 0.3
     };
-    if(!this.state.mapData.id) return alert("Please enter map name first...");
+    if (!this.state.mapData.id) return alert("Please enter map name first...");
 
     ImagePicker.launchImageLibrary(options, response => {
 
@@ -77,12 +77,12 @@ class EditMyTravel extends React.Component {
         name: response.fileName,
         type: response.type
       }
-      this.props.mapAction.updateCoverImage({user_id:this.props.userData.id,map_id:this.state.mapData.id,cover_image:fileObj}).then((data)=>{
-        this.setState({ addCoverInProgress: false,mapData:{...this.state.mapData,cover_image:response.uri},coverImage:response.uri });
-      }).catch((err)=>{
+      this.props.mapAction.updateCoverImage({ user_id: this.props.userData.id, map_id: this.state.mapData.id, cover_image: fileObj }).then((data) => {
+        this.setState({ addCoverInProgress: false, mapData: { ...this.state.mapData, cover_image: response.uri }, coverImage: response.uri });
+      }).catch((err) => {
         this.setState({ addCoverInProgress: false });
         alert("Couldn't update image, Please try again.")
-        console.log("err => ",err)
+        console.log("err => ", err)
       })
     });
   }
@@ -94,6 +94,7 @@ class EditMyTravel extends React.Component {
     let budget_limit = params.type == 'edit' ? params.mapData.budget_limit : '-'
     let date_created = params.type == 'edit' ? moment(params.mapData.date_created).fromNow() : '-'
     let age_at_travel = params.type == 'edit' ? params.mapData.age_at_travel : '-'
+    let mapID = params.type == 'edit' ? params.mapData.id : this.state.mapData.id;
 
     return (
       <Fragment>
@@ -200,7 +201,9 @@ class EditMyTravel extends React.Component {
                 styles.button,
                 styles.buttonPrimary,
                 styles.buttonEditPin,
-              ]}>
+              ]}
+              onPress={()=> this.props.navigation.navigate('MapPins',{mapID,mapName:this.state.mapName})}
+            >
               <Text style={styles.buttonText}>Edit Pins</Text>
             </Button>
           </View>

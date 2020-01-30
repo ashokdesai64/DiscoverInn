@@ -29,6 +29,7 @@ import FilterScreen from './Screens/FilterScreen/FilterScreen';
 import AboutUsScreen from './Screens/AboutUsScreen/AboutUsScreen';
 import PrivacyPolicyScreen from './Screens/PrivacyPolicyScreen/PrivacyPolicyScreen';
 import TermsConditionScreen from './Screens/TermsConditionScreen/TermsConditionScreen';
+import MapPins from './Screens/MapPins/MapPins';
 import SideMenu from './components/SideMenu/SideMenu';
 
 import DefaultScreen from './Screens/DefaultScreen';
@@ -39,6 +40,9 @@ const userStack = createStackNavigator(
   {
     Home: {
       screen: HomeScreen,
+    },
+    MapPins:{
+      screen:MapPins
     },
     ChangePassword: {
       screen: ChangePassword,

@@ -157,7 +157,7 @@ class AddMapDetail extends React.Component {
           style={{ width: '100%', height: '100%' }}>
           <Header
             showBack={true}
-            title={params.type == 'edit' ? 'My Travel' : 'Add Map Detail'}
+            title={params.mapData.name}
             {...this.props}
             rightEmpty={true}
             showRightButton={false}

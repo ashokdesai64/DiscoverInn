@@ -70,15 +70,6 @@ class SinglePinView extends React.Component {
                     <Feather name="map-pin" style={styles.pinIcon}></Feather>
                     <Text style={styles.categorypinTitle}>{item}</Text>
                     <View style={styles.categorypinAction}>
-                      {/* <Switch
-                        style={[
-                          styles.mymapsItemSwitch,
-                          {transform: [{scaleX: 0.7}, {scaleY: 0.7}]},
-                        ]}
-                        thumbColor={'#2F80ED'}
-                        onValueChange={handlerHere}
-                        value={}
-                      /> */}
                       <Button
                         style={[
                           styles.iconButton,

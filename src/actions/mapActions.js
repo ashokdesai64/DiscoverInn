@@ -453,3 +453,61 @@ export function updateCoverImage(apiData) {
         })
     };
 }
+
+export function removeMap(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.removeMap,
+                apiData
+            );
+            if (response.status) {
+                let oldMaps = getState().maps.ownMaps || [];
+                let maps = [...oldMaps]
+                let removeIndex = oldMaps.findIndex((d) => d.id == apiData.map_id);
+                maps.splice(removeIndex, 1);
+                dispatch({
+                    type: 'ownMaps',
+                    ownMaps: maps
+                });
+                resolve(response);
+            } else {
+                reject(response.message)
+            }
+        })
+    };
+}
+
+export function getMapPinsList(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.getMapPins,
+                apiData
+            );
+            console.log("response => ",response)
+            if (response.status) {
+                resolve(response.data);
+            } else {
+                reject(response.message)
+            }
+        })
+    };
+}
+
+export function deleteMapPin(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.deleteMapPin,
+                apiData
+            );
+            console.log("response => ",response)
+            if (response.status) {
+                resolve(response.data);
+            } else {
+                reject(response.message)
+            }
+        })
+    };
+}
