@@ -22,6 +22,7 @@ export const apiUrls = {
     updateMapDetails:'https://discover-inn.com/api/v1/update_map_details',
     updateCoverImage:'https://discover-inn.com/api/v1/update_map_cover',
     removeMap:'https://discover-inn.com/api/v1/map_remove',
+    addPinFromTripList:'https://discover-inn.com/api/v1/add_pin_from_trip_list',
     // deleteMapPin:'',
     //remaining
     sharedMaps:'https://discover-inn.com/api/v1/shared_maps',
@@ -33,7 +34,6 @@ export const apiUrls = {
     favouritePins:'https://discover-inn.com/api/v1/favorites_pin',
     singleFavouritePinList:'https://discover-inn.com/api/v1/single_favorite_pin_list',
     addRemovePinToFavourite:'https://discover-inn.com/api/v1/add_remove_pin_to_favourite',
-    addPinFromTripList:'https://discover-inn.com/api/v1/add_pin_from_trip_list',
     updateMap:'https://discover-inn.com/api/v1/update_map',
     updateMapPin:'https://discover-inn.com/api/v1/update_map_pin',
     pinsFromCategory:'https://discover-inn.com/api/v1/pins_from_category',

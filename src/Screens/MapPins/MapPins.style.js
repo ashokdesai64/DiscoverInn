@@ -1,5 +1,6 @@
-import {StyleSheet} from 'react-native';
-import {Row} from 'native-base';
+import { StyleSheet,Dimensions } from 'react-native';
+let DEVICE_HEIGHT = Dimensions.get('window').height;
+import { Row } from 'native-base';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -7,11 +8,17 @@ const styles = StyleSheet.create({
   pageContent: {
     paddingHorizontal: 15,
     paddingVertical: 10,
-    flex: 1,
+    flex:1,
+    height:DEVICE_HEIGHT-80,
   },
   scrollView: {
     flex: 1,
     backgroundColor: '#F3F4F6',
+  },
+  headingText:{
+    fontSize: 16,
+    fontFamily: 'Montserrat-Medium',
+    marginBottom:5,
   },
   searchbarCard: {
     flexWrap: 'nowrap',
@@ -53,7 +60,7 @@ const styles = StyleSheet.create({
     color: 'rgba(47, 128, 237, 1)',
   },
   categorypinList: {
-    paddingVertical: 10,
+    // paddingVertical: 10,
   },
   categorypinItem: {
     backgroundColor: '#fff',
@@ -73,14 +80,14 @@ const styles = StyleSheet.create({
     fontSize: 60,
     top: -8,
     left: -32,
-    width:'20%'
+    width: '20%'
   },
   categorypinTitle: {
     color: '#333333',
     fontSize: 14,
-    marginLeft:5,
+    marginLeft: 5,
     fontFamily: 'Montserrat-Medium',
-    width:'60%'
+    width: '60%'
   },
   categorypinAction: {
     flexDirection: 'row',
@@ -88,7 +95,7 @@ const styles = StyleSheet.create({
   iconButton: {
     width: 30,
     height: 30,
-    backgroundColor:'white',
+    backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -112,6 +119,57 @@ const styles = StyleSheet.create({
   },
   iconButtonIconDanger: {
     color: '#EB5757',
+  },
+  button: {
+    paddingVertical: 5,
+    paddingHorizontal: 20,
+    height: 40,
+    alignSelf: 'center',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  buttonPrimary: {
+    backgroundColor: '#2F80ED',
+    color: '#fff',
+  },
+  buttonEditPin: {
+    width:'100%',
+    // position:'absolute',
+    // bottom:10,
+    // backgroundColor:'red'
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 12,
+    fontFamily: 'Montserrat-Medium',
+  },
+  formGroup: {
+    marginBottom: 15,
+  },
+  picker: {
+    borderWidth: 1,
+    borderColor: '#BDBDBD',
+    marginRight: 5,
+    borderRadius: 5,
+  },
+  formDropdown: {
+    height: 40,
+    fontSize: 12,
+    // width: 120,
+    borderRadius: 5,
+    fontFamily: 'Montserrat-Medium',
+    padding: 5,
+  },
+  formDropdownIcon: {
+    color: '#828282',
+  },
+  dropdownText: {
+    color: '#333333',
+    fontSize: 14,
+    fontFamily: 'Montserrat-Medium',
+    marginRight: 0,
   },
 });
 

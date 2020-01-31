@@ -247,7 +247,7 @@ class MyTravel extends React.Component {
           </View>
         </View>
 
-        <Dialog
+        {/* <Dialog
           rounded={false}
           visible={this.state.uploadCoverModal}
           hasOverlay={true}
@@ -300,7 +300,7 @@ class MyTravel extends React.Component {
               <Text style={styles.buttonText}>Upload Image</Text>
             </TouchableOpacity>
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
 
         <Dialog
           rounded={false}

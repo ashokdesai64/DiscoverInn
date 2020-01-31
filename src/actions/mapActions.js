@@ -511,3 +511,20 @@ export function deleteMapPin(apiData) {
         })
     };
 }
+
+export function addPinFromTripList(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.addPinFromTripList,
+                apiData
+            );
+            console.log("response => ",response)
+            if (response.status) {
+                resolve(response.data);
+            } else {
+                reject(response.message)
+            }
+        })
+    };
+}

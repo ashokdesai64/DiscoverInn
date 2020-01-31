@@ -40,7 +40,7 @@ const LocationCheckbox = ({
   text = '',
   ...props
 }) => (
-    <TouchableOpacity style={styles.useLoaction} onPress={onPress} {...props}>
+    <TouchableOpacity style={styles.useLoaction} disabled={true} onPress={onPress} {...props}>
       <Feather
         size={size}
         color={selected ? '#BDBDBD' : '#2F80ED'}
@@ -56,7 +56,7 @@ class AddMapDetail extends React.Component {
     this.state = {
       pinImages: [],
       imageSelected: false,
-      locationAccepted: false,
+      locationAccepted: true,
       listViewDisplayed: false,
       addPinInProgress: false,
       addingPin: false
@@ -130,9 +130,9 @@ class AddMapDetail extends React.Component {
     if (pinDescription) {
       apiData['pin_description'] = pinDescription;
     }
-    if (pinImages) {
-      apiData['pin_images'] = pinImages;
-    }
+    // if (pinImages) {
+    //   apiData['pin_images'] = pinImages;
+    // }
     if (selectedLocation && selectedLocation.lat && selectedLocation.lng) {
       apiData['latitude'] = selectedLocation.lat;
       apiData['longitude'] = selectedLocation.lng;
@@ -150,6 +150,7 @@ class AddMapDetail extends React.Component {
   render() {
     const { pinImages } = this.state;
     const {params} = this.props.navigation.state;
+    console.log("params => ",params)
     return (
       <Fragment>
         <ImageBackground
@@ -157,7 +158,7 @@ class AddMapDetail extends React.Component {
           style={{ width: '100%', height: '100%' }}>
           <Header
             showBack={true}
-            title={params.mapData.name}
+            title={params.mapName}
             {...this.props}
             rightEmpty={true}
             showRightButton={false}
@@ -170,7 +171,7 @@ class AddMapDetail extends React.Component {
           />
           <View style={styles.container}>
             <View style={styles.pageContent}>
-              <ScrollView keyboardShouldPersistTaps={'always'}>
+              <ScrollView keyboardShouldPersistTaps={'always'} showsVerticalScrollIndicator={false}>
                 {
                   pinImages && pinImages.length ?
                     <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start', alignItems: 'center', marginBottom: 10 }}>
@@ -215,7 +216,7 @@ class AddMapDetail extends React.Component {
                   <Text style={styles.formLabel}>
                     Location Name{' '}
                     <Feather
-                      size={12}
+                      size={14}
                       name="alert-triangle"
                       color={'#F2994A'}
                     />
