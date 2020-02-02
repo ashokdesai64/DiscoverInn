@@ -1,5 +1,6 @@
-import { StyleSheet,Dimensions } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 let DEVICE_HEIGHT = Dimensions.get('window').height;
+let DEVICE_WIDTH = Dimensions.get('window').width;
 import { Row } from 'native-base';
 const styles = StyleSheet.create({
   container: {
@@ -8,17 +9,17 @@ const styles = StyleSheet.create({
   pageContent: {
     paddingHorizontal: 15,
     paddingVertical: 10,
-    flex:1,
-    height:DEVICE_HEIGHT-80,
+    flex: 1,
+    height: DEVICE_HEIGHT - 80,
   },
   scrollView: {
     flex: 1,
     backgroundColor: '#F3F4F6',
   },
-  headingText:{
+  headingText: {
     fontSize: 16,
     fontFamily: 'Montserrat-Medium',
-    marginBottom:5,
+    marginBottom: 5,
   },
   searchbarCard: {
     flexWrap: 'nowrap',
@@ -134,8 +135,54 @@ const styles = StyleSheet.create({
     backgroundColor: '#2F80ED',
     color: '#fff',
   },
+  buttonClose: {
+    width: 24,
+    height: 24,
+  },
+  buttonCloseIcon: {
+    color: '#BDBDBD',
+    fontSize: 24,
+  },
+  deleteModalBody: {
+    paddingTop: 20,
+    paddingHorizontal: 35,
+    paddingBottom: 50,
+  },
+  deleteModalBodyText: {
+    fontSize: 18,
+    fontFamily: 'Montserrat-SemiBold',
+    textAlign: 'center',
+  },
+  buttonOutline: {
+    borderColor: '#BDBDBD',
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    color: '#fff',
+  },
+  buttonDecline: {
+    flex: 1,
+    marginRight: 15,
+  },
+  buttonSave: {
+    flex: 1,
+    marginLeft: 15,
+  },
+  buttonTextGray: {
+    color: '#333333',
+  },
+  footerButton: {
+    flexDirection: 'row',
+    marginTop: 0,
+    marginHorizontal: 15,
+    alignItems: 'flex-end',
+    marginBottom: 20,
+  },
+  buttonDanger: {
+    backgroundColor: '#EB5757',
+    color: '#fff',
+  },
   buttonEditPin: {
-    width:'100%',
+    width: '100%',
     // position:'absolute',
     // bottom:10,
     // backgroundColor:'red'
@@ -144,6 +191,37 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 12,
     fontFamily: 'Montserrat-Medium',
+  },
+  customPopup: {
+    width: DEVICE_WIDTH,
+    padding: 0,
+    position: 'absolute',
+    bottom: 0,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: -2 },
+    shadowRadius: 10,
+    maxHeight: DEVICE_HEIGHT - 190,
+  },
+  customPopupContent: {
+    paddingVertical: 20,
+    paddingHorizontal: 5,
+  },
+  customPopupHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  customPopupHeaderTitle: {
+    fontSize: 16,
+    fontFamily: 'Montserrat-SemiBold',
+    color: '#333333',
   },
   formGroup: {
     marginBottom: 15,

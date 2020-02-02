@@ -5,6 +5,9 @@ import Feather from 'react-native-vector-icons/Feather';
 import styles from './MapPins.style';
 import Header from '../../components/header/header';
 import _ from 'underscore'
+import { NavigationEvents } from 'react-navigation'
+import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog';
+
 //REDUX
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -19,12 +22,10 @@ class MapPins extends React.Component {
             pinList: [],
             filteredPinList: [],
             fetchingPins: true,
-            searchTerm: ''
+            searchTerm: '',
+            showDeleteModal: false,
+            selectedPinID: false
         };
-    }
-
-    componentWillMount() {
-        this.fetchMapPins();
     }
 
     fetchMapPins() {
@@ -32,13 +33,10 @@ class MapPins extends React.Component {
         this.props.mapAction.getMapPinsList({ user_id: this.props.userData.id, map_id: params.mapID }).then((data) => {
             let mapData = { ...data };
             delete mapData.pin_list;
-            console.log("data => ", data)
             let allPins = data.pin_list || [], searchTerm = this.state.searchTerm, filteredPinList = data.pin_list || [];
-            console.log("filteredPinList => ", data.pin_list)
             if (allPins && allPins.length > 0 && searchTerm.trim() != '') {
                 filteredPinList = allPins.filter((pin) => pin.name.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0);
             }
-
             this.setState({ pinList: data.pin_list, filteredPinList, mapData, fetchingPins: false });
         }).catch((err) => {
             this.setState({ pinList: [], fetchingPins: false });
@@ -46,12 +44,16 @@ class MapPins extends React.Component {
     }
 
     deleteMapPin(pinID) {
-        // this.props.mapAction.deleteMapPin({ user_id: this.props.userData.id, map_id: params.mapID }).then((data) => {
-        //     console.log("data.data.pin_list => ", data.pin_list)
-        //     this.setState({ pinList: data.pin_list });
-        // }).catch((err) => {
-        //     this.setState({ pinList: [] });
-        // })
+        if (pinID) {
+            const { params } = this.props.navigation.state;
+            this.props.mapAction.deleteMapPin({ user_id: this.props.userData.id, map_id: params.mapID, pin_id: pinID }).then((data) => {
+                this.fetchMapPins();
+            }).catch((err) => {
+                alert("can't remove this pin, please try again later.")
+                // this.setState({ pinList: [] });
+            })
+        }
+
     }
 
     tripListSelected = tripID => {
@@ -86,6 +88,9 @@ class MapPins extends React.Component {
             <ScrollView
                 style={styles.scrollView}
                 showsHorizontalScrollIndicator={false}>
+                <NavigationEvents
+                    onWillFocus={payload => this.fetchMapPins()}
+                />
                 <Header showBack={true} title={params.mapName || ''} {...this.props} />
                 <View style={styles.container}>
                     <View style={styles.pageContent}>
@@ -174,7 +179,7 @@ class MapPins extends React.Component {
                                                                             { marginRight: 5 },
                                                                         ]}
                                                                         onPress={() =>
-                                                                            this.props.navigation.navigate('MapView')
+                                                                            this.props.navigation.navigate('PinView',{mapID: params.mapID, mapName: params.mapName, pinID: pin.id})
                                                                         }>
                                                                         <Feather
                                                                             style={[
@@ -191,7 +196,7 @@ class MapPins extends React.Component {
                                                                             { marginRight: 5 },
                                                                         ]}
                                                                         onPress={() =>
-                                                                            this.props.navigation.navigate('AddMapDetail', { type: 'add', mapData: this.state.mapData })
+                                                                            this.props.navigation.navigate('EditMapDetails', { type: 'add', mapData: this.state.mapData, mapID: params.mapID, mapName: params.mapName, pinID: pin.id })
                                                                         }>
                                                                         <Feather
                                                                             style={[
@@ -204,7 +209,7 @@ class MapPins extends React.Component {
                                                                     <TouchableOpacity
                                                                         style={[styles.iconButton, styles.iconButtonDanger]}
                                                                         onPress={() =>
-                                                                            this.deleteMapPin(pin.id)
+                                                                            this.setState({ showDeleteModal: true, selectedPinID: pin.id })//this.deleteMapPin(pin.id)
                                                                         }>
                                                                         <Feather
                                                                             style={[
@@ -235,6 +240,64 @@ class MapPins extends React.Component {
                         </Button>
                     </View>
                 </View>
+                <Dialog
+                    rounded={false}
+                    visible={this.state.showDeleteModal}
+                    hasOverlay={true}
+                    animationDuration={1}
+                    onTouchOutside={() => {
+                        this.setState({ showDeleteModal: false });
+                    }}
+                    dialogAnimation={
+                        new FadeAnimation({
+                            initialValue: 0, // optional
+                            animationDuration: 150, // optional
+                            useNativeDriver: true, // optional
+                        })
+                    }
+                    onHardwareBackPress={() => {
+                        this.setState({ showDeleteModal: false });
+                        return true;
+                    }}
+                    dialogStyle={styles.customPopup}>
+                    <DialogContent style={styles.customPopupContent}>
+                        <View style={styles.customPopupHeader}>
+                            <Text style={styles.customPopupHeaderTitle}>Delete Map</Text>
+                            <TouchableOpacity
+                                style={styles.buttonClose}
+                                onPress={() => this.setState({ showDeleteModal: false })}>
+                                <Feather name={'x'} style={styles.buttonCloseIcon} />
+                            </TouchableOpacity>
+                        </View>
+
+                        <View style={styles.deleteModalBody}>
+                            <Text style={styles.deleteModalBodyText}> Are you sure you want to delete this pin? </Text>
+                        </View>
+
+                        <View style={[styles.footerButton]}>
+                            <Button
+                                style={[
+                                    styles.button,
+                                    styles.buttonOutline,
+                                    styles.buttonOutlineGray,
+                                    styles.buttonDecline,
+                                ]}
+                                onPress={() => { this.setState({ showDeleteModal: false }) }}>
+                                <Text style={[styles.buttonText, styles.buttonTextGray]}> Not Now </Text>
+                            </Button>
+                            <Button
+                                style={[styles.button, styles.buttonDanger, styles.buttonSave]}
+                                onPress={() => { this.setState({ showDeleteModal: false }, () => { this.deleteMapPin(this.state.selectedPinID) }) }}>
+                                {
+                                    this.state.deleteInProgrss ?
+                                        <ActivityIndicator size={'small'} color={'white'} />
+                                        :
+                                        <Text style={styles.buttonText}>Yes Sure</Text>
+                                }
+                            </Button>
+                        </View>
+                    </DialogContent>
+                </Dialog>
             </ScrollView >
         );
     }

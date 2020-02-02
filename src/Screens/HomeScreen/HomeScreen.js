@@ -383,6 +383,7 @@ class HomeScreen extends React.Component {
 }
 
 function mapStateToProps(state) {
+  console.log("state.maps.categories => ",state.maps.categories)
   return {
     userData: state.user.userData,
     popularMaps: state.maps.popularMaps,

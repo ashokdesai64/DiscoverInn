@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import { ListItem, CheckBox, Picker, Textarea } from 'native-base';
+import { ListItem, CheckBox, Picker, Textarea, Form } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import Header from './../../../components/header/header';
@@ -81,10 +81,9 @@ class AddMapDetail extends React.Component {
           console.log('responseimage-------', response);
           response.forEach(item => {
             let image = {
-              imagePath: item.path,
-              fileName:
-                item.path.split('/').slice(-1)[0] || `${+new Date()}.jpg`,
-              fileType: item.mime,
+              uri: item.path,
+              name: item.path.split('/').slice(-1)[0] || `${+new Date()}.jpg`,
+              type: item.mime,
             };
             tempArray.push(image);
           });
@@ -98,7 +97,7 @@ class AddMapDetail extends React.Component {
   removeSelectedImage(imageData) {
     let images = [...this.state.pinImages];
     let removeIndex = images.findIndex(
-      image => image.imagePath == imageData.imagePath,
+      image => image.uri == imageData.uri,
     );
     images.splice(removeIndex, 1);
     this.setState({ pinImages: images });
@@ -118,6 +117,8 @@ class AddMapDetail extends React.Component {
     if (!pinTitle) return alert("Pin title is required")
     if (!selectedCategory) return alert("Category is required")
 
+    console.log("pinImages => ",pinImages);
+    
     this.setState({ addingPin: true })
 
     let apiData = {
@@ -130,13 +131,14 @@ class AddMapDetail extends React.Component {
     if (pinDescription) {
       apiData['pin_description'] = pinDescription;
     }
-    // if (pinImages) {
-    //   apiData['pin_images'] = pinImages;
-    // }
+    if (pinImages) {
+      apiData['pin_images'] = pinImages;
+    }
     if (selectedLocation && selectedLocation.lat && selectedLocation.lng) {
       apiData['latitude'] = selectedLocation.lat;
       apiData['longitude'] = selectedLocation.lng;
     }
+
     this.props.mapAction.addMapPin(apiData).then((data) => {
       this.setState({ addingPin: false }, () => {
         this.props.navigation.navigate('MapView', { mapID: params.mapID });
@@ -149,8 +151,8 @@ class AddMapDetail extends React.Component {
 
   render() {
     const { pinImages } = this.state;
-    const {params} = this.props.navigation.state;
-    console.log("params => ",params)
+    const { params } = this.props.navigation.state;
+    console.log("params => ", params)
     return (
       <Fragment>
         <ImageBackground
@@ -181,7 +183,7 @@ class AddMapDetail extends React.Component {
                             <View style={{ marginRight: 13, marginBottom: 15 }}>
                               <Image
                                 style={{ height: 80, width: 80, borderRadius: 5 }}
-                                source={{ uri: image.imagePath }}
+                                source={{ uri: image.uri }}
                               />
                               <TouchableOpacity onPress={() => this.removeSelectedImage(image)} style={{ backgroundColor: 'white', height: 20, width: 20, position: 'absolute', top: -5, right: -5, borderRadius: 10, justifyContent: 'center', alignItems: 'center', elevation: 5, shadowColor: '#000000', shadowOpacity: 0.05, shadowOffset: { width: 0, height: 4 }, shadowRadius: 10 }}>
                                 <Feather name={'x'} color={'red'} />

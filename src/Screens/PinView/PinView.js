@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   Dimensions,
@@ -13,14 +13,20 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import Carousel, {Pagination} from 'react-native-snap-carousel';
-import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
+import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog';
 import fontelloConfig from './../../selection.json';
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
-import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const DEVICE_WIDTH = Dimensions.get('window').width;
+
+//REDUX
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import * as mapActions from './../../actions/mapActions';
 
 class PinView extends React.Component {
   constructor(props) {
@@ -28,45 +34,65 @@ class PinView extends React.Component {
     this.state = {
       saveToListModal: false,
       activeSlide: 0,
+      selectedCategory: false,
       carouselItems: [
         {
-          title: 'Lonely Planet - Bangkok',
-        },
-        {
-          title: 'Lonely Planet - Franch',
-        },
-        {
-          title: 'Lonely Planet - Maxico',
-        },
-        {
-          title: 'Lonely Planet - India',
-        },
+          image: 'https://discover-inn.com/assets/images/map-image.jpeg ',
+        }
       ],
     };
   }
-  _renderItemCate = ({item, index}) => {
+
+  componentWillMount() {
+    const { params } = this.props.navigation.state;
+    let pinID = params.pinID;
+    let mapID = params.mapID;
+    if (pinID && mapID) {
+      this.setState({ pinDetailInProgress: true })
+      this.props.mapAction.getSinglePinData({ pin_id: pinID, user_id: this.props.userData.id, map_id: mapID }).then((data) => {
+        let pinData = data.pin_data;
+        let isLocationSelected = pinData.latitude && pinData.longitude;
+        let pinImages = (pinData.images && pinData.images.length >= 0) ? pinData.images : [];
+        this.setState({ pinTitle: pinData.name, pinDescription: pinData.description, selectedCategory: pinData.categories, isLocationSelected, webImages: pinImages, pinDetailInProgress: false });
+        console.log("pin data => ", data);
+      }).catch((err) => {
+        this.setState({ pinDetailInProgress: false })
+        console.log("err => ", err)
+      })
+    }
+  }
+
+  _renderItemCate = ({ item, index }) => {
     return (
       <Image
-        source={require('./../../Images/signup-bg-dark.jpg')}
+        source={{uri:item.image}}
         style={styles.cateSlideCardIcon}
       />
     );
   };
 
   render() {
+    let { categories } = this.props;
+    const { params } = this.props.navigation.state;
+    let selectedCategory = categories && categories.find((c) => c.id == this.state.selectedCategory);
+    let categoryName = (selectedCategory && selectedCategory.name) || '';
+
+    let isWebImages = this.state.webImages && this.state.webImages.length > 0;
     return (
       <SafeAreaView>
+
         <View style={[styles.pinHeader]}>
           <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
             <Feather name={'arrow-left'} size={24} color={'white'} />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => this.setState({saveToListModal: true})}>
+            onPress={() => this.setState({ saveToListModal: true })}>
             <Feather name={'heart'} size={24} color={'white'} />
           </TouchableOpacity>
         </View>
+
         <Carousel
-          data={this.state.carouselItems}
+          data={isWebImages ? this.state.webImages : this.state.carouselItems}
           sliderWidth={DEVICE_WIDTH}
           itemWidth={DEVICE_WIDTH}
           inactiveSlideOpacity={1}
@@ -79,11 +105,11 @@ class PinView extends React.Component {
           }}
           firstItem={0}
           renderItem={this._renderItemCate}
-          onSnapToItem={index => this.setState({activeSlide: index})}
+          onSnapToItem={index => this.setState({ activeSlide: index })}
         />
 
         <Pagination
-          dotsLength={this.state.carouselItems.length}
+          dotsLength={this.state.webImages && this.state.webImages.length}
           activeDotIndex={this.state.activeSlide}
           containerStyle={{
             position: 'absolute',
@@ -108,26 +134,16 @@ class PinView extends React.Component {
         />
 
         <ScrollView style={styles.pinScrollView}>
-          <Text style={styles.pinViewTitle}>Planet - Bangkok</Text>
+          <Text style={styles.pinViewTitle}>{this.state.pinTitle}</Text>
           <View style={styles.pinViewCate}>
-            <IconMoon name="sights" style={styles.pinViewCateIcon} />
-
-            <Text style={styles.pinViewCateText}> Sights</Text>
+            <IconMoon name={categoryName.toLowerCase()} style={styles.pinViewCateIcon} />
+            <Text style={styles.pinViewCateText}> {categoryName}</Text>
           </View>
-          <Text style={styles.pinViewContent}>
-            This imposing early-20th-century Italianate stone mansion, set
-            discreetly back from the street, belonged to Don José Lázaro
-            Galdiano (1862–1947), a successful businessman and passionate patron
-            of the arts. His astonishing private collection, which he bequeathed
-            to the city upon his death, includes 13,000 works of art and objets
-            d’art, a quarter of which are on show at any time. This imposing
-            early-20th-century Italianate stone mansion, set discreetly back
-            from the street, belonged to Don José Lázaro Galdiano (1862–1947), a
-            successful businessman and passionate patron of the arts. His
-            astonishing private collection, which he bequeathed to the city upon
-            his death, includes 13,000 works of art and objets d’art, a quarter
-            of which are on show at any time.
-          </Text>
+          {
+            this.state.pinTitle &&
+            <Text style={[styles.pinViewCateText, { marginBottom: 15 }]}> Added From: {params.mapName}</Text>
+          }
+          <Text style={styles.pinViewContent}>{this.state.pinDescription}</Text>
         </ScrollView>
 
         <Dialog
@@ -136,7 +152,7 @@ class PinView extends React.Component {
           hasOverlay={true}
           animationDuration={1}
           onTouchOutside={() => {
-            this.setState({saveToListModal: false});
+            this.setState({ saveToListModal: false });
           }}
           dialogAnimation={
             new FadeAnimation({
@@ -146,7 +162,7 @@ class PinView extends React.Component {
             })
           }
           onHardwareBackPress={() => {
-            this.setState({saveToListModal: false});
+            this.setState({ saveToListModal: false });
             return true;
           }}
           dialogStyle={styles.customPopup}>
@@ -155,7 +171,7 @@ class PinView extends React.Component {
               <Text style={styles.customPopupHeaderTitle}>Save to list</Text>
               <TouchableOpacity
                 style={styles.buttonClose}
-                onPress={() => this.setState({saveToListModal: false})}>
+                onPress={() => this.setState({ saveToListModal: false })}>
                 <Feather style={styles.buttonCloseIcon} name={'x'} />
               </TouchableOpacity>
             </View>
@@ -175,7 +191,7 @@ class PinView extends React.Component {
                   styles.buttonCTCancel,
                   styles.buttonOutline,
                 ]}
-                onPress={() => this.setState({saveToListModal: false})}>
+                onPress={() => this.setState({ saveToListModal: false })}>
                 <Text style={[styles.buttonText, styles.buttonTextDark]}>
                   Cancel
                 </Text>
@@ -187,7 +203,7 @@ class PinView extends React.Component {
                   styles.buttonCTSubmit,
                   styles.buttonPrimary,
                 ]}
-                onPress={() => this.setState({saveToListModal: false})}>
+                onPress={() => this.setState({ saveToListModal: false })}>
                 <Text style={styles.buttonText}>Submit</Text>
               </TouchableOpacity>
             </View>
@@ -200,7 +216,7 @@ class PinView extends React.Component {
                 <Text style={styles.MVTripListItemTitle}>London</Text>
                 <SimpleLineIcons name={'heart'} color={'#2F80ED'} size={15} />
               </View>
-              <View style={[styles.MVTripListItem, {borderBottomWidth: 0}]}>
+              <View style={[styles.MVTripListItem, { borderBottomWidth: 0 }]}>
                 <Text style={styles.MVTripListItemTitle}>London</Text>
                 <SimpleLineIcons name={'heart'} color={'#2F80ED'} size={15} />
               </View>
@@ -239,7 +255,7 @@ class PinView extends React.Component {
                 alignSelf: 'center',
                 borderRadius: 5,
               }}
-              onPress={() => this.setState({saveToListModal: false})}>
+              onPress={() => this.setState({ saveToListModal: false })}>
               <Text
                 style={{
                   fontFamily: 'Montserrat-Regular',
@@ -255,6 +271,7 @@ class PinView extends React.Component {
     );
   }
 }
+
 const styles = StyleSheet.create({
   page: {
     justifyContent: 'center',
@@ -267,6 +284,7 @@ const styles = StyleSheet.create({
   pinScrollView: {
     padding: 20,
     height: 'auto',
+    width: '100%',
     borderRadius: 20,
     backgroundColor: 'white',
     position: 'absolute',
@@ -282,7 +300,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: 5,
   },
   pinViewCateIcon: {
     color: '#2F80ED',
@@ -311,7 +329,7 @@ const styles = StyleSheet.create({
   cateSlideCard: {
     height: 375,
     marginBottom: 10,
-    shadowOffset: {width: 0, height: 5},
+    shadowOffset: { width: 0, height: 5 },
     shadowColor: 'rgba(6, 18, 42, 0.08);',
     shadowOpacity: 1.0,
     backgroundColor: '#fff',
@@ -389,7 +407,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     shadowColor: '#000',
     shadowOpacity: 0.05,
-    shadowOffset: {width: 0, height: -2},
+    shadowOffset: { width: 0, height: -2 },
     shadowRadius: 10,
     maxHeight: DEVICE_HEIGHT - 100,
     overflow: 'scroll',
@@ -529,4 +547,16 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Medium',
   },
 });
-export default PinView;
+
+function mapStateToProps(state) {
+  return {
+    userData: state.user.userData,
+    categories: state.maps.categories
+  };
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    mapAction: bindActionCreators(mapActions, dispatch),
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(PinView);

@@ -297,15 +297,18 @@ export function addMapPin(apiData) {
     return function (dispatch, getState) {
         return new Promise(async (resolve, reject) => {
 
-            let response = await callAPI(
-                apiUrls.addMapPin,
-                apiData
-            );
-
-            if (response.status) {
-                resolve({ mapID: response.data });
-            } else {
-                reject(response.message)
+            try {
+                let response = await callAPI(
+                    apiUrls.addMapPin,
+                    apiData
+                );
+                if (response.status) {
+                    resolve({ mapID: response.data });
+                } else {
+                    reject(response.message)
+                }
+            } catch (err) {
+                reject(err)
             }
 
         })
@@ -485,7 +488,7 @@ export function getMapPinsList(apiData) {
                 apiUrls.getMapPins,
                 apiData
             );
-            console.log("response => ",response)
+            console.log("response => ", response)
             if (response.status) {
                 resolve(response.data);
             } else {
@@ -502,7 +505,7 @@ export function deleteMapPin(apiData) {
                 apiUrls.deleteMapPin,
                 apiData
             );
-            console.log("response => ",response)
+            console.log("response => ", response)
             if (response.status) {
                 resolve(response.data);
             } else {
@@ -519,7 +522,58 @@ export function addPinFromTripList(apiData) {
                 apiUrls.addPinFromTripList,
                 apiData
             );
-            console.log("response => ",response)
+            console.log("response => ", response)
+            if (response.status) {
+                resolve(response.data);
+            } else {
+                reject(response.message)
+            }
+        })
+    };
+}
+
+export function getSinglePinData(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.getSinglePin,
+                apiData
+            );
+            console.log("response => ", response)
+            if (response.status) {
+                resolve(response.data);
+            } else {
+                reject(response.message)
+            }
+        })
+    };
+}
+
+export function removeSinglePinImage(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.removeSinglePinImage,
+                apiData
+            );
+            console.log("response => ", response)
+            if (response.status) {
+                resolve(response.data);
+            } else {
+                reject(response.message)
+            }
+        })
+    };
+}
+
+export function updateMapPin(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.updateMapPin,
+                apiData
+            );
+            console.log("update map pin response => ", response)
             if (response.status) {
                 resolve(response.data);
             } else {
