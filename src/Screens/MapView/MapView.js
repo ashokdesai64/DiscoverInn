@@ -20,7 +20,7 @@ import nightlife1 from './../../Images/nightlife1.png';
 import transportations1 from './../../Images/transportations1.png';
 import shopping1 from './../../Images/shopping1.png';
 import other1 from './../../Images/other1.png';
-
+import Header from './../../components/header/header'
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import Spinner from './../../components/Loader';
 import _ from 'underscore'
@@ -107,7 +107,7 @@ class MapView extends React.Component {
     if (mapID) {
       this.setState({ mapPinsInProgress: true })
       this.props.mapAction.getMapPins({ map_id: mapID, user_id: this.props.userData.id }).then((data) => {
-        let pinList = data.mapID;
+        let pinList = data.mapID.pin_list || [];
         console.log("data => ", data)
         this.setState({ mapPinsInProgress: false, pinList })
       }).catch((err) => {
@@ -118,8 +118,6 @@ class MapView extends React.Component {
   }
 
   async onDidFinishLoadingStyle() {
-
-
 
     const { width, height } = Dimensions.get('window');
     const bounds = geoViewport.bounds(
@@ -157,7 +155,6 @@ class MapView extends React.Component {
     let { pinList } = this.state;
 
     let featureCollections = [];
-
     if (pinList && pinList.length > 0) {
       let groupedPins = _.groupBy(pinList, (pin) => pin.categories);
       Object.keys(groupedPins).map((categoryID) => {
@@ -200,11 +197,19 @@ class MapView extends React.Component {
             textContent={'Fetching Pins...'}
             textStyle={{ color: '#fff' }}
           />
-          <View style={styles.viewMapHeader}>
+          {/* <View style={styles.viewMapHeader}>
             <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
               <Icon name={'arrow-left'} size={24} color={'#333333'} />
             </TouchableOpacity>
-          </View>
+          </View> */}
+          <Header
+            showBack={true}
+            rightEmpty={true}
+            showRightButton={false}
+            title={'TESTING'}
+            {...this.props}
+            style={{position:'absolute',top:0,left:0,zIndex:9999}}
+          />
 
           <MapboxGL.MapView
             style={styles.map}
@@ -260,26 +265,7 @@ class MapView extends React.Component {
             }
             <MapboxGL.UserLocation visible animated />
           </MapboxGL.MapView>
-          <View style={styles.mapActionButton}>
-            <TouchableOpacity
-              style={[
-                styles.iconButton,
-                styles.iconButtonPrimary,
-                styles.iconButtonView,
-              ]}>
-              <Icon name={'map-pin'} size={24} color={'#FFF'} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.iconButton,
-                styles.iconButtonPrimary,
-                styles.iconButtonAdd,
-              ]}
-              onPress={() => this.props.navigation.navigate('AddMapDetail', { ...params })}
-            >
-              <Icon name={'plus-circle'} size={24} color={'#FFF'} />
-            </TouchableOpacity>
-          </View>
+
           <View style={[styles.mapControlButton]}>
             <TouchableOpacity
               style={[

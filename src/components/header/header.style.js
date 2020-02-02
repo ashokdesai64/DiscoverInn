@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignItems: 'center',
     backgroundColor: 'transparent',
+    // position:'absolute',top:0,left:0,zIndex:9999
   },
   headerContainerInner: {
     flexDirection: 'row',
