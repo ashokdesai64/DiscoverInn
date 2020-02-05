@@ -1,7 +1,7 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import colors from './../../config/colors';
-import {Dimensions} from 'react-native';
-const {width, height} = Dimensions.get('window');
+import { Dimensions } from 'react-native';
+const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
@@ -27,10 +27,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   menuIcon: {
-    transform: [{rotate: '90deg'}],
+    transform: [{ rotate: '90deg' }],
   },
   headerLeftIcons: {
     color: '#333333',
+  },
+  formControl: {
+    borderColor: '#BDBDBD',
+    height: 40,
+    fontFamily: 'Montserrat-Regular',
+    color: '#4F4F4F',
+    fontSize: 14,
   },
   headerLeftIconImage: {
     height: 30,
@@ -42,8 +49,18 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontFamily: 'Montserrat-Medium',
     textAlign: 'center',
-    width:'80%',
-    paddingHorizontal:5
+    width: '80%',
+    paddingHorizontal: 5
+  },
+  editHeaderTitle: {
+    color: '#4F4F4F',
+    fontSize: 16,
+    fontWeight: '600',
+    fontFamily: 'Montserrat-Medium',
+    textAlign: 'center',
+    width: '60%',
+    padding: 5,
+    backgroundColor: 'white'
   },
   headerRightIcon: {
     justifyContent: 'center',

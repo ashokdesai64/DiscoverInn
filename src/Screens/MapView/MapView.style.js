@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
   },
   button: {
     paddingVertical: 5,
-    paddingHorizontal: 30,
+    paddingHorizontal: 5,
     height: 40,
     alignSelf: 'center',
     borderRadius: 5,

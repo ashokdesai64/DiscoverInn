@@ -149,6 +149,16 @@ class MapView extends React.Component {
     });
   }
 
+  addNewPin(){
+    let { params } = this.props.navigation.state;
+    this.props.navigation.navigate('AddMapDetail',{mapID:params.mapID,mapName:params.mapName})
+  }
+
+  editPins(){
+    let { params } = this.props.navigation.state;
+    this.props.navigation.navigate('MapPins',{mapID:params.mapID,mapName:params.mapName})
+  }
+
   render() {
     let { params } = this.props.navigation.state;
     params = params || {};
@@ -197,18 +207,14 @@ class MapView extends React.Component {
             textContent={'Fetching Pins...'}
             textStyle={{ color: '#fff' }}
           />
-          {/* <View style={styles.viewMapHeader}>
-            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-              <Icon name={'arrow-left'} size={24} color={'#333333'} />
-            </TouchableOpacity>
-          </View> */}
+
           <Header
             showBack={true}
             rightEmpty={true}
             showRightButton={false}
-            title={'TESTING'}
+            title={params.mapName}
             {...this.props}
-            style={{position:'absolute',top:0,left:0,zIndex:9999}}
+            absoluteHeader={true}
           />
 
           <MapboxGL.MapView
@@ -267,6 +273,7 @@ class MapView extends React.Component {
           </MapboxGL.MapView>
 
           <View style={[styles.mapControlButton]}>
+
             <TouchableOpacity
               style={[
                 styles.button,
@@ -274,15 +281,37 @@ class MapView extends React.Component {
                 styles.buttonOutlineGray,
                 styles.buttonDecline,
               ]}
+              activeOpacity={0.8}
+              onPress={() => { this.editPins() }}>
+              <Text style={[styles.buttonText, styles.buttonTextGray]}>
+                Edit Pins
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.button,
+                styles.buttonOutline,
+                styles.buttonOutlineGray,
+                styles.buttonDecline,
+              ]}
+              activeOpacity={0.8}
+              onPress={() => { this.addNewPin() }}>
+              <Text style={[styles.buttonText, styles.buttonTextGray]}>
+                Add Pin
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.button,
+                styles.buttonOutline,
+                styles.buttonOutlineGray,
+                styles.buttonDecline,
+              ]}
+              activeOpacity={0.8}
               onPress={() => { this.loadMapPins(params.mapID) }}>
               <Text style={[styles.buttonText, styles.buttonTextGray]}>
                 Reload Map
               </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.button, styles.buttonDanger, styles.buttonSave]}
-              onPress={() => { }}>
-              <Text style={styles.buttonText}>Close</Text>
             </TouchableOpacity>
           </View>
 

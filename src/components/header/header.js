@@ -6,9 +6,11 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Dimensions,
+  TextInput
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MenuIcon from './../../Images/hamburger.png';
@@ -27,6 +29,8 @@ class Header extends Component {
     super(props);
     this.state = {
       authModal: false,
+      headerTitle: props.title || '',
+      editHeader: false
     };
     this.popupDialog = null;
   }
@@ -72,6 +76,9 @@ class Header extends Component {
     if (this.props.rightTextStyle) {
       rightTextStyles = { ...rightTextStyles, ...this.props.rightTextStyle };
     }
+    if (this.props.absoluteHeader) {
+      headerStyles = { ...headerStyles, position: 'absolute', top: 0, left: 0, zIndex: 9999 }
+    }
     return (
       <SafeAreaView style={headerStyles}>
         <View style={headerStylesInner}>
@@ -100,7 +107,31 @@ class Header extends Component {
                 <View></View>
               )}
 
-          <Text style={styles.headerTitle} numberOfLines={1} ellipsizeMode='tail'>{this.props.title}</Text>
+          {
+            this.props.headerEditable ?
+              this.state.editHeader ?
+                <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                  <TextInput
+                    style={[styles.formControl, { borderWidth: 0, borderBottomWidth: 1, minWidth: 200 }]}
+                    placeholderTextColor={'#828894'}
+                    onChangeText={headerTitle => this.setState({ headerTitle })}
+                    value={this.state.headerTitle}
+                    placeholder={'Trip List Name'}
+                  />
+                  <TouchableOpacity onPress={() => this.setState({ editHeader: false }, () => { this.props.onHeaderEditSubmit(this.state.headerTitle) })} >
+                    <Feather name="check" style={{ color: '#2F80ED', fontSize: 18, marginLeft: 15, }} />
+                  </TouchableOpacity>
+                </View>
+                :
+                <TouchableOpacity onPress={() => this.setState({ editHeader: true })} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
+                  <Text style={styles.editHeaderTitle} numberOfLines={1} ellipsizeMode='tail'>
+                    {this.state.headerTitle}
+                  </Text>
+                  <Feather name={'edit'} color={'#2F80ED'} size={14} style={{ paddingLeft: 5 }} />
+                </TouchableOpacity>
+              :
+              <Text style={styles.headerTitle} numberOfLines={1} ellipsizeMode='tail'>{this.props.title}</Text>
+          }
 
           {this.props.rightEmpty ? (
             this.props.showRightButton ? (
@@ -214,7 +245,7 @@ class Header extends Component {
             </DialogContent>
           </Dialog>
         </View>
-      </SafeAreaView>
+      </SafeAreaView >
     );
   }
 }

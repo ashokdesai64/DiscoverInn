@@ -582,3 +582,60 @@ export function updateMapPin(apiData) {
         })
     };
 }
+
+export function createFavouriteList(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.createFavouriteList,
+                apiData
+            );
+            if (response.status) {
+                resolve(response.data);
+            } else {
+                reject(response.message)
+            }
+        })
+    };
+}
+
+export function deleteFavouriteList(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.deleteFavouriteList,
+                apiData
+            );
+            console.log("deleteFavouriteList resp => ", response)
+            if (response.status) {
+                let tripLists = getState().maps.tripList || [];
+                let lists = [...tripLists];
+                let removeIndex = tripLists.findIndex((d) => d.id == apiData.favorite_id);
+                lists.splice(removeIndex, 1);
+                dispatch({
+                    type: 'tripList',
+                    tripList: lists
+                });
+                resolve(response);
+            } else {
+                reject(response.message)
+            }
+        })
+    };
+}
+
+export function updateFavouriteList(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.updateFavouriteList,
+                apiData
+            );
+            if (response.status) {
+                resolve(response.data);
+            } else {
+                reject(response.message)
+            }
+        })
+    };
+}

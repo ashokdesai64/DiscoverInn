@@ -8,25 +8,46 @@ import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog'
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const DEVICE_WIDTH = Dimensions.get('window').width;
 
+//REDUX
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import * as mapActions from './../../../actions/mapActions';
+
 class TripPinList extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      showDeletePinModal: false
+      showDeletePinModal: false,
+      tripName:''
     }
   }
 
+  changeTripName(tripName){
+    console.log("trip name => ",tripName);
+    const {params} = this.props.navigation.state;
+    this.props.mapAction.updateFavouriteList({user_id:this.props.userData.id,name:tripName,favorite_id:params.trip.id}).then((data)=>{
+      console.log("trip updated")
+    }).catch((err) => {
+      console.log("err => ",err)
+    })
+  }
+
   render() {
+    const {params} = this.props.navigation.state;
+    console.log("params => ",params)
     return (
       <Fragment style={styles.homePage}>
         <Header
           showBack={true}
-          title={'Trip Pin List'}
+          title={params.trip.name}
           {...this.props}
           style={{ backgroundColor: '#F3F4F6' }}
           rightEmpty={true}
           showRightButton={false}
+          headerEditable={true}
+          onHeaderEditSubmit={(tripName)=> this.changeTripName(tripName)}
         />
         <ScrollView
           style={styles.scrollView}
@@ -157,4 +178,17 @@ class TripPinList extends React.Component {
     );
   }
 }
-export default TripPinList;
+
+function mapStateToProps(state) {
+  console.log(state.maps);
+  return {
+    userData: state.user.userData,
+    tripList: state.maps.tripList,
+  };
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    mapAction: bindActionCreators(mapActions, dispatch),
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(TripPinList);

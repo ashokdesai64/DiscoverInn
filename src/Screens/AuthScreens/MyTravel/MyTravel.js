@@ -80,6 +80,7 @@ class MyTravel extends React.Component {
     var commentIndex = this.props.myMaps.findIndex(function (c) {
       return c.title == item.title;
     });
+    console.log("item => ",item)
     return (
       <View style={styles.accordionCardBody}>
         <View style={styles.myTravelCard}>
@@ -111,7 +112,7 @@ class MyTravel extends React.Component {
             <TouchableOpacity
               style={[styles.button, styles.buttonSm, styles.buttonPrimary]}
               onPress={() => {
-                this.props.navigation.navigate('MapView', { mapID: item.id });
+                this.props.navigation.navigate('MapView', { mapID: item.id,mapName:item.name });
               }}>
               <Text style={styles.buttonText}>View</Text>
             </TouchableOpacity>

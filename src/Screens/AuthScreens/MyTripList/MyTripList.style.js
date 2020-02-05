@@ -1,5 +1,5 @@
-import {StyleSheet, Dimensions} from 'react-native';
-const {width} = Dimensions.get('window');
+import { StyleSheet, Dimensions } from 'react-native';
+const { width } = Dimensions.get('window');
 const height = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   container: {
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     shadowColor: '#000',
     shadowOpacity: 0.05,
-    shadowOffset: {width: 0, height: -2},
+    shadowOffset: { width: 0, height: -2 },
     shadowRadius: 10,
     maxHeight: height - 190,
   },
@@ -120,6 +120,118 @@ const styles = StyleSheet.create({
   customPopupFooter: {
     marginTop: 20,
     marginBottom: 10,
+  },
+  myTravelAction: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flex:1,
+    backgroundColor:'white',
+    width:width-30,
+    paddingHorizontal:10,
+    paddingVertical:10,
+    borderTopWidth:1,
+    borderColor:'#ddd'
+  },
+  myTravelActionLeft: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  myTravelActionRight: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  button: {
+    paddingVertical: 5,
+    paddingHorizontal: 20,
+    height: 40,
+    alignSelf: 'center',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  buttonSm: {
+    height: 30,
+  },
+  buttonPrimary: {
+    backgroundColor: '#2F80ED',
+    color: '#fff',
+  },
+  buttonSuccess: {
+    backgroundColor: '#6FCF97',
+    color: '#fff',
+  },
+  buttonDanger: {
+    backgroundColor: '#EB5757',
+    color: '#fff',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 12,
+    fontFamily: 'Montserrat-Medium',
+  },
+  myTravelItemCover: {
+    flexWrap: 'nowrap',
+    flexDirection: 'row',
+    flex: 1,
+    position: 'relative',
+  },
+  dropdownText: {
+    color: '#4F4F4F',
+    fontSize: 10,
+    fontFamily: 'Montserrat-Medium',
+    margin: 0,
+    padding: 0,
+  },
+  dropdownArrow: {
+    fontSize: 14,
+    color: '#828282',
+    width: 14,
+    height: 20,
+    margin: 0,
+    padding: 0,
+    position: 'absolute',
+    right: 25,
+    top: 0,
+  },
+  myTravelItemDropdown: {
+    fontSize: 12,
+    height: 25,
+    position: 'relative',
+  },
+  buttonIcon: {
+    margin: 5,
+    padding: 5,
+    borderRadius: 5,
+    width: 30,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonIconPrimary: {
+    backgroundColor: 'rgba(47, 128, 237, 0.2)',
+  },
+  buttonIconText: {
+    fontSize: 14,
+    color: 'rgba(47, 128, 237, 1)',
+  },
+  buttonOutline: {
+    borderColor: '#BDBDBD',
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    color: '#fff',
+  },
+  buttonDecline: {
+    flex: 1,
+    marginRight: 15,
+  },
+  buttonSave: {
+    flex: 1,
+    marginLeft: 15,
+  },
+  buttonTextGray: {
+    color: '#333333',
   },
 });
 
