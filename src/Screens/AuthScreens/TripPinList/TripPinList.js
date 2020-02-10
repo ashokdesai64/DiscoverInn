@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { View, ScrollView, Text, Dimensions, TouchableOpacity, Image, TextInput } from 'react-native';
+import { View, ScrollView, Text, Dimensions, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import styles from './TripPinList.style';
 import Header from './../../../components/header/header';
 import Feather from 'react-native-vector-icons/Feather';
@@ -20,23 +20,85 @@ class TripPinList extends React.Component {
     super(props);
     this.state = {
       showDeletePinModal: false,
-      tripName:''
+      tripName: '',
+      pinList: [],
+      isPinListFetching: true
     }
   }
 
-  changeTripName(tripName){
-    console.log("trip name => ",tripName);
-    const {params} = this.props.navigation.state;
-    this.props.mapAction.updateFavouriteList({user_id:this.props.userData.id,name:tripName,favorite_id:params.trip.id}).then((data)=>{
-      console.log("trip updated")
+  changeTripName(tripName) {
+    console.log("trip name => ", tripName);
+    const { params } = this.props.navigation.state;
+    this.props.mapAction.updateFavouriteList({ user_id: this.props.userData.id, name: tripName, favorite_id: params.trip.id }).then((data) => {
+      console.log("trip updated");
     }).catch((err) => {
-      console.log("err => ",err)
+      console.log("err => ", err)
     })
   }
 
+  componentWillMount() {
+    const { params } = this.props.navigation.state;
+    this.props.mapAction.singleFavouritePinList({ user_id: this.props.userData.id, favorite_id: params.trip.id, page: 1 }).then((data) => {
+      this.setState({ pinList: data.favorite_pin || [], isPinListFetching: false })
+      console.log("trip data ", data);
+    }).catch((err) => {
+      this.setState({ pinList: [], isPinListFetching: false })
+      console.log("err => ", err)
+    })
+  }
+
+  deletePin() {
+    let { deletePin } = this.state;
+
+    console.log(this.props);
+    // let { params } = this.props.navigation.state;
+    // if (params && params.mapID && params.pinID && tripID) {
+    //   this.props.mapAction.addRemoveToTrip({ map_id: params.mapID, pin_id: params.pinID, favorite_id: tripID, user_id: this.props.userData.id }).then((data) => {
+    //     console.log("data => ", data);
+    //     let listToAdded = [...this.state.listToAdded];
+
+    //     let isAdded = listToAdded.indexOf(tripID);
+    //     if (isAdded >= 0) {
+    //       listToAdded.splice(isAdded, 1);
+    //     } else {
+    //       listToAdded.push(tripID);
+    //     }
+    //     this.setState({ listToAdded })
+    //   }).catch((err) => {
+    //     console.log("err => ", err);
+    //   })
+    // }
+
+    this.setState({ saveToListModal: false });
+  }
+
   render() {
-    const {params} = this.props.navigation.state;
-    console.log("params => ",params)
+    const { params } = this.props.navigation.state;
+    console.log("params => ", params)
+
+    if (this.state.isPinListFetching) {
+      return (
+        <Fragment style={styles.homePage}>
+          <Header
+            showBack={true}
+            title={params.trip.name}
+            {...this.props}
+            style={{ backgroundColor: '#F3F4F6' }}
+            rightEmpty={true}
+            showRightButton={false}
+            headerEditable={true}
+            onHeaderEditSubmit={(tripName) => this.changeTripName(tripName)}
+          />
+          <View style={styles.container}>
+            <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', flex: 1, marginBottom: 50 }}>
+              <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: 18, color: '#aaa', marginRight: 10 }}>Fetching Pins</Text>
+              <ActivityIndicator size={'small'} color={'#aaa'} />
+            </View>
+          </View>
+        </Fragment>
+      )
+    }
+
     return (
       <Fragment style={styles.homePage}>
         <Header
@@ -47,7 +109,7 @@ class TripPinList extends React.Component {
           rightEmpty={true}
           showRightButton={false}
           headerEditable={true}
-          onHeaderEditSubmit={(tripName)=> this.changeTripName(tripName)}
+          onHeaderEditSubmit={(tripName) => this.changeTripName(tripName)}
         />
         <ScrollView
           style={styles.scrollView}
@@ -56,29 +118,38 @@ class TripPinList extends React.Component {
           <View style={{ justifyContent: 'center', alignItems: 'center', padding: 15, }}>
 
             {
-              [1, 2, 3, 4, 5].map((e) => {
-                return (
-                  <View style={{ elevation: 5, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff', marginBottom: 20, borderRadius: 10, paddingHorizontal: 15, paddingVertical: 10, width: DEVICE_WIDTH - 30, }}>
-
-                    <View style={[styles.mymapsAction, { paddingHorizontal: 10, width: DEVICE_WIDTH - 30, }]}>
-
-                      <Text style={{ fontFamily: 'Montserrat-Regular' }}>Guindy Snake Park</Text>
-                      <TouchableOpacity onPress={() => this.setState({ showDeletePinModal: true })} style={{ height: 25, width: 25, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(235, 87, 87, 0.1)', borderRadius: 5 }}>
-                        <Feather name={'trash-2'} color={'#EB5757'} size={14} />
-                      </TouchableOpacity>
-                    </View>
-
-                    <Image
-                      source={require('./../../../Images/map.png')}
-                      style={{ height: 150, width: DEVICE_WIDTH - 50, borderRadius: 5, marginTop: 10 }}
-                    />
-                    <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: 14, color: '#828282', marginTop: 10 }}>This the place where hundreds of varieties of snakes are prserved</Text>
+              this.state.pinList && this.state.pinList.length <= 0 ?
+                <View style={styles.container}>
+                  <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', flex: 1, marginBottom: 50 }}>
+                    <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: 18, color: '#aaa', marginRight: 10 }}>No Pins in this list</Text>
+                    <ActivityIndicator size={'small'} color={'#aaa'} />
                   </View>
-                )
-              })
+                </View>
+                :
+                this.state.pinList.map((pin) => {
+                  return (
+                    <View style={{ elevation: 5, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff', marginBottom: 20, borderRadius: 10, paddingHorizontal: 15, paddingVertical: 10, width: DEVICE_WIDTH - 30, }}>
+
+                      <View style={[styles.mymapsAction, { paddingHorizontal: 10, width: DEVICE_WIDTH - 30, }]}>
+
+                        <Text style={{ fontFamily: 'Montserrat-Regular' }}>{pin.name}</Text>
+                        <TouchableOpacity onPress={() => this.setState({ deletePin: pin, showDeletePinModal: true })} style={{ height: 25, width: 25, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(235, 87, 87, 0.1)', borderRadius: 5 }}>
+                          <Feather name={'trash-2'} color={'#EB5757'} size={14} />
+                        </TouchableOpacity>
+                      </View>
+
+                      <Image
+                        source={require('./../../../Images/map.png')}
+                        style={{ height: 150, width: DEVICE_WIDTH - 50, borderRadius: 5, marginTop: 10 }}
+                      />
+                      <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: 14, color: '#828282', marginTop: 10 }} numberOfLines={3} ellipsizeMode={'tail'}>{pin.description}</Text>
+                    </View>
+                  )
+                })
             }
 
           </View>
+
           <Dialog
             rounded={false}
             visible={this.state.showDeletePinModal}
@@ -132,11 +203,11 @@ class TripPinList extends React.Component {
                     width: (DEVICE_WIDTH / 2) - 30,
                     alignSelf: 'center',
                     borderRadius: 5,
-                    borderWidth:1,
-                    borderColor:'#BDBDBD',
-                    borderRadius:5
+                    borderWidth: 1,
+                    borderColor: '#BDBDBD',
+                    borderRadius: 5
                   }}
-                  onPress={() => this.setState({ saveToListModal: false })}>
+                  onPress={() => this.setState({ showDeletePinModal: false })}>
                   <Text
                     style={{
                       fontFamily: 'Montserrat-Regular',
@@ -160,7 +231,7 @@ class TripPinList extends React.Component {
                     borderColor: '#EB5757',
                     backgroundColor: '#EB5757'
                   }}
-                  onPress={() => this.setState({ saveToListModal: false })}>
+                  onPress={() => this.deletePin()}>
                   <Text
                     style={{
                       fontFamily: 'Montserrat-Regular',

@@ -10,7 +10,7 @@ import {
   TextInput,
   SafeAreaView,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
@@ -40,6 +40,7 @@ class PinView extends React.Component {
           image: 'https://discover-inn.com/assets/images/map-image.jpeg ',
         }
       ],
+      listToAdded: []
     };
   }
 
@@ -65,18 +66,39 @@ class PinView extends React.Component {
   _renderItemCate = ({ item, index }) => {
     return (
       <Image
-        source={{uri:item.image}}
+        source={{ uri: item.image }}
         style={styles.cateSlideCardIcon}
       />
     );
   };
+
+  addToTrip(tripID) {
+    console.log(this.props);
+    let { params } = this.props.navigation.state;
+    if (params && params.mapID && params.pinID && tripID) {
+      this.props.mapAction.addRemoveToTrip({ map_id: params.mapID, pin_id: params.pinID, favorite_id: tripID, user_id: this.props.userData.id }).then((data) => {
+        console.log("data => ", data);
+        let listToAdded = [...this.state.listToAdded];
+
+        let isAdded = listToAdded.indexOf(tripID);
+        if (isAdded>=0) {
+          listToAdded.splice(isAdded, 1);
+        } else {
+          listToAdded.push(tripID);
+        }
+        this.setState({ listToAdded })
+      }).catch((err) => {
+        console.log("err => ", err);
+      })
+    }
+  }
 
   render() {
     let { categories } = this.props;
     const { params } = this.props.navigation.state;
     let selectedCategory = categories && categories.find((c) => c.id == this.state.selectedCategory);
     let categoryName = (selectedCategory && selectedCategory.name) || '';
-
+    console.log("this.props.tripList => ", this.props.tripList)
     let isWebImages = this.state.webImages && this.state.webImages.length > 0;
     return (
       <SafeAreaView>
@@ -207,41 +229,58 @@ class PinView extends React.Component {
                 <Text style={styles.buttonText}>Submit</Text>
               </TouchableOpacity>
             </View>
-            <View style={styles.orDivider}>
-              <Text style={styles.orDividerBorder}></Text>
-              <Text style={styles.orDividerText}>OR</Text>
-            </View>
-            <View style={styles.MVTripList}>
-              <View style={styles.MVTripListItem}>
-                <Text style={styles.MVTripListItemTitle}>London</Text>
-                <SimpleLineIcons name={'heart'} color={'#2F80ED'} size={15} />
-              </View>
-              <View style={[styles.MVTripListItem, { borderBottomWidth: 0 }]}>
-                <Text style={styles.MVTripListItemTitle}>London</Text>
-                <SimpleLineIcons name={'heart'} color={'#2F80ED'} size={15} />
-              </View>
-            </View>
 
-            <View activeOpacity={0.9} style={styles.mapViewCard}>
-              <Image
-                style={styles.mapViewCardImg}
-                source={require('./../../Images/login-bg.jpg')}
-              />
-              <View style={styles.mapViewCardContent}>
-                <View style={styles.mapViewTitle}>
-                  <Text style={styles.mapViewTitleText}>Planet - Bangkok</Text>
-                  <SimpleLineIcons name={'heart'} size={15} color={'#EB5757'} />
+            {
+              this.props.tripList && this.props.tripList.length > 0 &&
+              <>
+                <View style={styles.orDivider}>
+                  <Text style={styles.orDividerBorder}></Text>
+                  <Text style={styles.orDividerText}>OR</Text>
                 </View>
-                <View style={styles.mapViewCate}>
-                  <IconMoon name="sights" style={styles.mapViewCateIcon} />
-                  <Text style={styles.mapViewCateText}> Sights</Text>
+                <View style={styles.MVTripList}>
+                  {
+                    this.props.tripList.map((trip) => {
+                      console.log("this.state.listToAdded => ",this.state.listToAdded )
+                      return (
+                        <View style={styles.MVTripListItem}>
+                          <Text style={styles.MVTripListItemTitle}>{trip.name}</Text>
+                          <TouchableOpacity onPress={() => this.addToTrip(trip.id)}>
+                            {
+                              this.state.listToAdded.indexOf(trip.id) >= 0 ?
+                                <AntDesign name={'heart'} color={'#2F80ED'} size={15} />
+                                :
+                                <AntDesign name={'hearto'} color={'#2F80ED'} size={15} />
+                            }
+                          </TouchableOpacity>
+                        </View>
+                      )
+                    })
+                  }
+
                 </View>
-                <Text style={styles.mapViewContentText}>
-                  Australian chef-author David Thompson is the man behind one of
-                  Bangkok's
+
+                {/* <View activeOpacity={0.9} style={styles.mapViewCard}>
+                  <Image
+                    style={styles.mapViewCardImg}
+                    source={require('./../../Images/login-bg.jpg')}
+                  />
+                  <View style={styles.mapViewCardContent}>
+                    <View style={styles.mapViewTitle}>
+                      <Text style={styles.mapViewTitleText}>Planet - Bangkok</Text>
+                      <SimpleLineIcons name={'heart'} size={15} color={'#EB5757'} />
+                    </View>
+                    <View style={styles.mapViewCate}>
+                      <IconMoon name="sights" style={styles.mapViewCateIcon} />
+                      <Text style={styles.mapViewCateText}> Sights</Text>
+                    </View>
+                    <Text style={styles.mapViewContentText}>
+                      Australian chef-author David Thompson is the man behind one of
+                      Bangkok's
                 </Text>
-              </View>
-            </View>
+                  </View>
+                </View> */}
+              </>
+            }
 
             <TouchableOpacity
               style={{
@@ -551,7 +590,8 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
   return {
     userData: state.user.userData,
-    categories: state.maps.categories
+    categories: state.maps.categories,
+    tripList: state.maps.tripList,
   };
 }
 function mapDispatchToProps(dispatch) {

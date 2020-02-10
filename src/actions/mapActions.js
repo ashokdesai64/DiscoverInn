@@ -639,3 +639,35 @@ export function updateFavouriteList(apiData) {
         })
     };
 }
+
+export function singleFavouritePinList(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.singleFavouritePinList,
+                apiData
+            );
+            if (response.status) {
+                resolve(response.data);
+            } else {
+                reject(response.message)
+            }
+        })
+    };
+}
+
+export function addRemoveToTrip(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.addRemovePinToFavourite,
+                apiData
+            );
+            if (response.status) {
+                resolve(response.data);
+            } else {
+                reject(response.message)
+            }
+        })
+    };
+}

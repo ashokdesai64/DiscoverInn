@@ -30,14 +30,14 @@ export const apiUrls = {
     deleteFavouriteList: 'https://discover-inn.com/api/v1/delete_favorite_list',
     createFavouriteList: 'https://discover-inn.com/api/v1/create_favorite_list',
     updateFavouriteList: 'https://discover-inn.com/api/v1/update_favorite_list',
+    singleFavouritePinList: 'https://discover-inn.com/api/v1/single_favorite_pin_list',
+    addRemovePinToFavourite: 'https://discover-inn.com/api/v1/add_remove_pin_to_favourite',
     // deleteMapPin:'',
     //remaining
     sharedMaps: 'https://discover-inn.com/api/v1/shared_maps',
     addReview: 'https://discover-inn.com/api/v1/add_review',
     mapRemove: 'https://discover-inn.com/api/v1/map_remove',
     favouritePins: 'https://discover-inn.com/api/v1/favorites_pin',
-    singleFavouritePinList: 'https://discover-inn.com/api/v1/single_favorite_pin_list',
-    addRemovePinToFavourite: 'https://discover-inn.com/api/v1/add_remove_pin_to_favourite',
     updateMap: 'https://discover-inn.com/api/v1/update_map',
 
     pinsFromCategory: 'https://discover-inn.com/api/v1/pins_from_category',
