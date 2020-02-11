@@ -22,6 +22,7 @@ class TripPinList extends React.Component {
       showDeletePinModal: false,
       tripName: '',
       pinList: [],
+      deletingPin: false,
       isPinListFetching: true
     }
   }
@@ -37,6 +38,10 @@ class TripPinList extends React.Component {
   }
 
   componentWillMount() {
+    this.fetchPinList()
+  }
+
+  fetchPinList() {
     const { params } = this.props.navigation.state;
     this.props.mapAction.singleFavouritePinList({ user_id: this.props.userData.id, favorite_id: params.trip.id, page: 1 }).then((data) => {
       this.setState({ pinList: data.favorite_pin || [], isPinListFetching: false })
@@ -50,26 +55,21 @@ class TripPinList extends React.Component {
   deletePin() {
     let { deletePin } = this.state;
 
-    console.log(this.props);
-    // let { params } = this.props.navigation.state;
-    // if (params && params.mapID && params.pinID && tripID) {
-    //   this.props.mapAction.addRemoveToTrip({ map_id: params.mapID, pin_id: params.pinID, favorite_id: tripID, user_id: this.props.userData.id }).then((data) => {
-    //     console.log("data => ", data);
-    //     let listToAdded = [...this.state.listToAdded];
+    let { params } = this.props.navigation.state;
+    if (deletePin.map_id && deletePin.id && params.trip.id) {
+      this.setState({ deletingPin: true })
+      this.props.mapAction.addRemoveToTrip({ map_id: deletePin.map_id, pin_id: deletePin.id, favorite_id: params.trip.id, user_id: this.props.userData.id }).then((data) => {
+        console.log("data => ", data);
+        this.fetchPinList()
+        this.setState({ showDeletePinModal: false, deletingPin: false })
+      }).catch((err) => {
+        console.log("err => ", err);
+      })
+    } else {
+      alert("Can not remove from trip list")
+      this.setState({ showDeletePinModal: false, deletingPin: false });
+    }
 
-    //     let isAdded = listToAdded.indexOf(tripID);
-    //     if (isAdded >= 0) {
-    //       listToAdded.splice(isAdded, 1);
-    //     } else {
-    //       listToAdded.push(tripID);
-    //     }
-    //     this.setState({ listToAdded })
-    //   }).catch((err) => {
-    //     console.log("err => ", err);
-    //   })
-    // }
-
-    this.setState({ saveToListModal: false });
   }
 
   render() {
@@ -122,7 +122,6 @@ class TripPinList extends React.Component {
                 <View style={styles.container}>
                   <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', flex: 1, marginBottom: 50 }}>
                     <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: 18, color: '#aaa', marginRight: 10 }}>No Pins in this list</Text>
-                    <ActivityIndicator size={'small'} color={'#aaa'} />
                   </View>
                 </View>
                 :
@@ -194,9 +193,9 @@ class TripPinList extends React.Component {
 
                 <TouchableOpacity
                   style={{
-                    paddingVertical: 10,
+                    paddingVertical: 15,
                     paddingHorizontal: 30,
-                    marginTop: 5,
+                    marginTop: 10,
                     backgroundColor: 'transparent',
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -219,9 +218,9 @@ class TripPinList extends React.Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{
-                    paddingVertical: 10,
+                    paddingVertical: 15,
                     paddingHorizontal: 30,
-                    marginTop: 5,
+                    marginTop: 10,
                     justifyContent: 'center',
                     alignItems: 'center',
                     width: (DEVICE_WIDTH / 2) - 30,
@@ -232,14 +231,13 @@ class TripPinList extends React.Component {
                     backgroundColor: '#EB5757'
                   }}
                   onPress={() => this.deletePin()}>
-                  <Text
-                    style={{
-                      fontFamily: 'Montserrat-Regular',
-                      fontSize: 12,
-                      color: '#fff',
-                    }}>
-                    Yes Sure
-                                </Text>
+                  {
+                    this.state.deletingPin ?
+                      <ActivityIndicator size={'small'} color={'white'} />
+                      :
+                      <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: 12, color: '#fff', }}> Yes Sure </Text>
+                  }
+
                 </TouchableOpacity>
               </View>
             </DialogContent>

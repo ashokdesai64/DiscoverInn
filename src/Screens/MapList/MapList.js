@@ -116,8 +116,8 @@ class MapList extends React.Component {
     };
   }
 
-  navigateToMap(mapID) {
-    this.props.navigation.navigate('MapView', { mapID });
+  navigateToMap(mapID,mapName) {
+    this.props.navigation.navigate('MapView', { mapID,mapName });
   }
 
   _renderItem(item, index) {
@@ -133,7 +133,7 @@ class MapList extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.8}
-            onPress={() => this.navigateToMap(item.id)}>
+            onPress={() => this.navigateToMap(item.id,item.name)}>
             <ImageBlurLoading
               withIndicator
               style={styles.mapSlideCardImg}

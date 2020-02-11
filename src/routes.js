@@ -1,6 +1,6 @@
-import {createAppContainer, createSwitchNavigator} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
-import {createDrawerNavigator} from 'react-navigation-drawer';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createDrawerNavigator } from 'react-navigation-drawer';
 import HomeScreen from './Screens/HomeScreen/HomeScreen';
 import EditCategories from './Screens/EditCategories/EditCategories';
 import EditProfile from './Screens/AuthScreens/EditProfile/EditProfile';
@@ -22,6 +22,7 @@ import SetPassScreen from './Screens/UnauthScreens/SetPassScreen';
 import MyMapShareList from './Screens/ShareList/MyMapShareList';
 import MapList from './Screens/MapList/MapList';
 import MapView from './Screens/MapView/MapView';
+import FavouritePinMap from './Screens/FavouritePinMap/FavouritePinMap';
 import PinView from './Screens/PinView/PinView';
 import UploadMap from './Screens/HomeScreen/UploadMap/UploadMap';
 import PinCategories from './Screens/AuthScreens/PinCategories/PinCategories';
@@ -34,7 +35,7 @@ import MapPins from './Screens/MapPins/MapPins';
 import SideMenu from './components/SideMenu/SideMenu';
 
 import DefaultScreen from './Screens/DefaultScreen';
-import {Router, Scene, Stack, Drawer} from 'react-native-router-flux';
+import { Router, Scene, Stack, Drawer } from 'react-native-router-flux';
 import MenuIcon from '../src/Images/hamburger.png';
 
 const userStack = createStackNavigator(
@@ -42,8 +43,8 @@ const userStack = createStackNavigator(
     Home: {
       screen: HomeScreen,
     },
-    MapPins:{
-      screen:MapPins
+    MapPins: {
+      screen: MapPins
     },
     ChangePassword: {
       screen: ChangePassword,
@@ -86,6 +87,9 @@ const userStack = createStackNavigator(
     },
     MapView: {
       screen: MapView,
+    },
+    FavouritePinMap: {
+      screen: FavouritePinMap,
     },
     PinCategories: {
       screen: PinCategories,
@@ -150,7 +154,7 @@ const AuthStack = createStackNavigator(
 
 const DrawerStack = createDrawerNavigator(
   {
-    userStack: {screen: userStack},
+    userStack: { screen: userStack },
   },
   {
     gesturesEnabled: false,

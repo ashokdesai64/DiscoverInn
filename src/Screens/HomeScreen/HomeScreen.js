@@ -97,11 +97,11 @@ class HomeScreen extends React.Component {
 
   _renderItem({ item, index }) {
     let avgReview = parseInt(item.avrage_review);
-
+    console.log("map => ",item)
     return (
       <TouchableOpacity
         style={styles.mapSlidCard}
-        onPress={() => this.props.navigation.navigate('MapView',{mapID:item.id})}
+        onPress={() => this.props.navigation.navigate('MapView',{mapID:item.id,mapName:item.name})}
         activeOpacity={1}>
         <View style={styles.mapSlidCardInner}>
           <Image

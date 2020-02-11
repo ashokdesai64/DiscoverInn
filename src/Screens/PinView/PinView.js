@@ -48,6 +48,7 @@ class PinView extends React.Component {
     const { params } = this.props.navigation.state;
     let pinID = params.pinID;
     let mapID = params.mapID;
+    console.log("pin id => ",pinID,mapID)
     if (pinID && mapID) {
       this.setState({ pinDetailInProgress: true })
       this.props.mapAction.getSinglePinData({ pin_id: pinID, user_id: this.props.userData.id, map_id: mapID }).then((data) => {
@@ -98,7 +99,7 @@ class PinView extends React.Component {
     const { params } = this.props.navigation.state;
     let selectedCategory = categories && categories.find((c) => c.id == this.state.selectedCategory);
     let categoryName = (selectedCategory && selectedCategory.name) || '';
-    console.log("this.props.tripList => ", this.props.tripList)
+    
     let isWebImages = this.state.webImages && this.state.webImages.length > 0;
     return (
       <SafeAreaView>

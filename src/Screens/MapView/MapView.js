@@ -149,21 +149,21 @@ class MapView extends React.Component {
     });
   }
 
-  addNewPin(){
+  addNewPin() {
     let { params } = this.props.navigation.state;
-    this.props.navigation.navigate('AddMapDetail',{mapID:params.mapID,mapName:params.mapName})
+    this.props.navigation.navigate('AddMapDetail', { mapID: params.mapID, mapName: params.mapName })
   }
 
-  editPins(){
+  editPins() {
     let { params } = this.props.navigation.state;
-    this.props.navigation.navigate('MapPins',{mapID:params.mapID,mapName:params.mapName})
+    this.props.navigation.navigate('MapPins', { mapID: params.mapID, mapName: params.mapName })
   }
 
   render() {
     let { params } = this.props.navigation.state;
     params = params || {};
     let { pinList } = this.state;
-
+    console.log("params => ",params)
     let featureCollections = [];
     if (pinList && pinList.length > 0) {
       let groupedPins = _.groupBy(pinList, (pin) => pin.categories);
@@ -177,6 +177,8 @@ class MapView extends React.Component {
               id: pin.id,
               properties: {
                 id: pin.id,
+                mapName:params.mapName,
+                mapID:params.mapID
               },
               geometry: {
                 type: 'Point',
@@ -251,7 +253,9 @@ class MapView extends React.Component {
                       clusterMaxZoomLevel={14}
                       clusterRadius={50}
                       onPress={e => {
-                        this.props.navigation.navigate('PinView');
+                        console.log("collection => ", e.nativeEvent.payload);
+                        let payload = e.nativeEvent.payload;
+                        this.props.navigation.navigate('PinView', { pinID: payload.id, mapID: payload.properties.mapID });
                       }}>
                       <MapboxGL.SymbolLayer
                         id={"symbolLocationSymbols" + (random + 1)}
