@@ -78,7 +78,6 @@ class AddMapDetail extends React.Component {
       })
         .then(response => {
           let tempArray = [];
-          console.log('responseimage-------', response);
           response.forEach(item => {
             let image = {
               uri: item.path,
@@ -91,6 +90,19 @@ class AddMapDetail extends React.Component {
         })
         .catch(e => alert(e));
     } else {
+      ImagePicker.openCamera({
+        avoidEmptySpaceAroundImage: true,
+        mediaType: 'photo',
+        cropping: true,
+        compressImageQuality:0.5
+      }).then(item => {
+        let image = {
+          uri: item.path,
+          name: item.path.split('/').slice(-1)[0] || `${+new Date()}.jpg`,
+          type: item.mime,
+        };
+        this.setState({ pinImages: [...this.state.pinImages, image] });
+      });
     }
   }
 
@@ -117,8 +129,6 @@ class AddMapDetail extends React.Component {
     if (!pinTitle) return alert("Pin title is required")
     if (!selectedCategory) return alert("Category is required")
 
-    console.log("pinImages => ",pinImages);
-    
     this.setState({ addingPin: true })
 
     let apiData = {

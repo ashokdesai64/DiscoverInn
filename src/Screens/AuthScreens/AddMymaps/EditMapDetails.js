@@ -96,6 +96,19 @@ class EditMapDetails extends React.Component {
                 })
                 .catch(e => alert(e));
         } else {
+            ImagePicker.openCamera({
+                avoidEmptySpaceAroundImage: true,
+                mediaType: 'photo',
+                cropping: true,
+                compressImageQuality: 0.5
+            }).then(item => {
+                let image = {
+                    uri: item.path,
+                    name: item.path.split('/').slice(-1)[0] || `${+new Date()}.jpg`,
+                    type: item.mime,
+                };
+                this.setState({ pinImages: [...this.state.pinImages, image] });
+            });
         }
     }
 
