@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, {Fragment} from 'react';
 import {
   View,
   Text,
@@ -6,21 +6,22 @@ import {
   ScrollView,
   Dimensions,
   TouchableOpacity,
+  Linking,
 } from 'react-native';
-import { Item, Input, Button } from 'native-base';
+import {Item, Input, Button} from 'native-base';
 import styles from './HomeScreen.style';
 import Carousel from 'react-native-snap-carousel';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from './../../components/header/header';
 
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
 import fontelloConfig from './../../selection.json';
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 
 //REDUX
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
 import * as authActions from './../../actions/authActions';
 import * as mapActions from './../../actions/mapActions';
@@ -30,7 +31,7 @@ class HomeScreen extends React.Component {
     super(props);
     this.state = {
       showSorting: false,
-      userData: { userName: 'test' },
+      userData: {userName: 'test'},
       carouselItems: [
         {
           title: 'Lonely Planet - Bangkok',
@@ -89,19 +90,24 @@ class HomeScreen extends React.Component {
           icon: 'other',
         },
       ],
-      searchTerm: ''
+      searchTerm: '',
     };
     this._renderItemTop = this._renderItemTop.bind(this);
     this._renderItem = this._renderItem.bind(this);
   }
 
-  _renderItem({ item, index }) {
+  _renderItem({item, index}) {
     let avgReview = parseInt(item.avrage_review);
-    console.log("map => ",item)
+    console.log('map => ', item);
     return (
       <TouchableOpacity
         style={styles.mapSlidCard}
-        onPress={() => this.props.navigation.navigate('MapView',{mapID:item.id,mapName:item.name})}
+        onPress={() =>
+          this.props.navigation.navigate('MapView', {
+            mapID: item.id,
+            mapName: item.name,
+          })
+        }
         activeOpacity={1}>
         <View style={styles.mapSlidCardInner}>
           <Image
@@ -151,12 +157,14 @@ class HomeScreen extends React.Component {
     );
   }
 
-  _renderItemTop({ item, index }) {
+  _renderItemTop({item, index}) {
     return (
       <TouchableOpacity
         style={styles.mapSlidCard}
         activeOpacity={1}
-        onPress={() => this.props.navigation.navigate('MapView',{mapID:item.id})}>
+        onPress={() =>
+          this.props.navigation.navigate('MapView', {mapID: item.id})
+        }>
         <View style={styles.mapSlidCardInner}>
           <Image
             style={styles.mapSlideCardImg}
@@ -209,7 +217,26 @@ class HomeScreen extends React.Component {
     );
   }
 
-  _renderItemCate = ({ item, index }) => {
+  componentDidMount() {
+    Linking.getInitialURL()
+      .then(url => {
+        if (url) {
+          console.log('Initial url is: ' + url);
+        }
+      })
+      .catch(err => console.error('An error occurred', err));
+
+    Linking.addEventListener('url', this._handleOpenURL);
+  }
+
+  componentWillUnmount() {
+    Linking.removeEventListener('url', this._handleOpenURL);
+  }
+  _handleOpenURL(event) {
+    console.log(event.url);
+  }
+
+  _renderItemCate = ({item, index}) => {
     let category = this.state.carouselCateItems.find(c => c.title == item.name);
     let iconName = category.icon || 'other';
     return (
@@ -235,31 +262,31 @@ class HomeScreen extends React.Component {
       sort_by: 'rating',
       user_id: userID,
     });
-    this.props.navigation.navigate('MapList', { category: [categoryID] });
+    this.props.navigation.navigate('MapList', {category: [categoryID]});
   }
 
   fetchSearchedMaps() {
     let userID = this.props.userData && this.props.userData.id;
     let {searchTerm} = this.state;
-    console.log("searchTerm => ",searchTerm)
+    console.log('searchTerm => ', searchTerm);
     this.props.mapAction.fetchMapList({
       page: 1,
       sort_by: 'rating',
       user_id: userID,
-      search:searchTerm
+      search: searchTerm,
     });
-    this.props.navigation.navigate('MapList',{searchTerm});
+    this.props.navigation.navigate('MapList', {searchTerm});
   }
 
   render() {
-    const { width } = Dimensions.get('window');
+    const {width} = Dimensions.get('window');
     return (
       <Fragment>
         <Header
           showMenu={true}
           title={'Discover Inn'}
           {...this.props}
-          style={{ backgroundColor: '#F3F4F6' }}
+          style={{backgroundColor: '#F3F4F6'}}
           rightEmpty={true}
           showRightButton={false}
         />
@@ -281,11 +308,11 @@ class HomeScreen extends React.Component {
                   style={styles.searchbarInput}
                   placeholder="Type in your next destination!"
                   value={this.state.searchTerm}
-                  onChangeText={searchTerm => this.setState({ searchTerm })}
+                  onChangeText={searchTerm => this.setState({searchTerm})}
                 />
                 <TouchableOpacity
                   onPress={() =>
-                    this.setState({ showSorting: !this.state.showSorting })
+                    this.setState({showSorting: !this.state.showSorting})
                   }>
                   <Feather style={styles.searchbarFilter} name="sliders" />
                 </TouchableOpacity>
@@ -311,7 +338,7 @@ class HomeScreen extends React.Component {
                     styles.buttonOutlinePrimary,
                     styles.buttonDisabled,
                   ]}
-                  onPress={() => this.setState({ saveToListModal: false })}>
+                  onPress={() => this.setState({saveToListModal: false})}>
                   <Text
                     style={
                       ([styles.buttonText],
@@ -383,7 +410,7 @@ class HomeScreen extends React.Component {
 }
 
 function mapStateToProps(state) {
-  console.log("state.maps.categories => ",state.maps.categories)
+  console.log('state.maps.categories => ', state.maps.categories);
   return {
     userData: state.user.userData,
     popularMaps: state.maps.popularMaps,
