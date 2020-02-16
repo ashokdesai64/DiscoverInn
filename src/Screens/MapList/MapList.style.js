@@ -1,5 +1,5 @@
-import {StyleSheet, Dimensions} from 'react-native';
-const {width} = Dimensions.get('window');
+import { StyleSheet, Dimensions } from 'react-native';
+const { width } = Dimensions.get('window');
 const height = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     shadowColor: '#000000',
     shadowOpacity: 0.05,
-    shadowOffset: {width: 0, height: 4},
+    shadowOffset: { width: 0, height: 4 },
     shadowRadius: 10,
     marginRight: 5,
     flex: 1,
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     shadowColor: '#000000',
     shadowOpacity: 0.05,
-    shadowOffset: {width: 0, height: 4},
+    shadowOffset: { width: 0, height: 4 },
     shadowRadius: 10,
   },
   iconButtonIcon: {
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     shadowColor: 'black',
     shadowOpacity: 0.05,
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowRadius: 10,
   },
   mapSlideBadgeGroup: {
@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     shadowColor: '#000',
     shadowOpacity: 0.05,
-    shadowOffset: {width: 0, height: -2},
+    shadowOffset: { width: 0, height: -2 },
     shadowRadius: 10,
     maxHeight: height - 190,
   },
@@ -436,6 +436,14 @@ const styles = StyleSheet.create({
     zIndex: 6,
     backgroundColor: '#C4C4C4',
   },
+  autocompleteContainer: {
+    flex: 1,
+    // left: 0,
+    // position: 'absolute',
+    // right: 0,
+    // top: 0,
+    zIndex: 1
+  },
   mapDetailesImg: {
     borderRadius: 5,
     height: 180,
@@ -478,7 +486,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     shadowColor: '#000000',
     shadowOpacity: 0.05,
-    shadowOffset: {width: 0, height: 0},
+    shadowOffset: { width: 0, height: 0 },
     shadowRadius: 10,
     padding: 10,
   },

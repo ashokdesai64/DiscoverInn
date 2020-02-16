@@ -671,3 +671,43 @@ export function addRemoveToTrip(apiData) {
         })
     };
 }
+
+export function shareMap(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.shareMap,
+                apiData
+            );
+            if (response.status) {
+                resolve(response.data);
+            } else {
+                reject(response.message)
+            }
+        })
+    };
+}
+
+export function fetchAllUserNames(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.fetchAllUserNames,
+                apiData
+            );
+            if (response.status) {
+                dispatch({
+                    type: 'allUserNames',
+                    allUserNames: response.data
+                });
+                resolve(response.data);
+            } else {
+                dispatch({
+                    type: 'allUserNames',
+                    allUserNames: []
+                });
+                reject(response.message)
+            }
+        })
+    };
+}

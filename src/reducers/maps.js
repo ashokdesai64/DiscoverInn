@@ -92,6 +92,12 @@ export default function maps(state = initialState, action = {}) {
                 visitorReviews: action.visitorReviews || (state.visitorReviews || false),
             };
         }
+        case 'allUserNames': {
+            return {
+                ...state,
+                allUserNames: action.allUserNames || (state.allUserNames || []),
+            };
+        }
         default:
             return state;
     }
