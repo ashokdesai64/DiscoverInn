@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowOffset: {width: 0, height: 4},
     shadowRadius: 10,
-    elevation:5
+    elevation: 5,
   },
   searchbarInputBox: {
     flex: 1,
@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
     width: 295,
     marginBottom: 10,
+    height: 500,
   },
   mapSlideCardImg: {
     width: 300,
@@ -110,6 +111,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowOffset: {width: 0, height: 4},
     shadowRadius: 10,
+    minHeight: 300,
   },
   mapSlideBadgeGroup: {
     flexDirection: 'row',
@@ -168,7 +170,7 @@ const styles = StyleSheet.create({
   shareMapContant: {
     paddingTop: 20,
     alignItems: 'flex-start',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
   },
   mapShareDescText: {
     color: '#BDBDBD',
