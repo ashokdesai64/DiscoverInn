@@ -10,6 +10,17 @@ const styles = StyleSheet.create({
   homePage: {
     marginBottom: 25,
   },
+  view: {
+    width: 60,
+    height: 60,
+    borderColor: 'black',
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    fontSize: 50,
+  },
   scrollView: {
     paddingRight: 0,
     marginRight: 0,

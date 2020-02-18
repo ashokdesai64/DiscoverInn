@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, {Fragment} from 'react';
 import {
   View,
   Dimensions,
@@ -20,13 +20,13 @@ import nightlife1 from './../../Images/nightlife1.png';
 import transportations1 from './../../Images/transportations1.png';
 import shopping1 from './../../Images/shopping1.png';
 import other1 from './../../Images/other1.png';
-import Header from './../../components/header/header'
+import Header from './../../components/header/header';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import Spinner from './../../components/Loader';
-import _ from 'underscore'
-import { NavigationEvents } from 'react-navigation'
+import _ from 'underscore';
+import {NavigationEvents} from 'react-navigation';
 
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
 import fontelloConfig from './../../selection.json';
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 MapboxGL.setAccessToken(
@@ -34,12 +34,14 @@ MapboxGL.setAccessToken(
 );
 
 //REDUX
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
 import * as mapActions from './../../actions/mapActions';
 const CENTER_COORD = [-73.970895, 40.723279];
 const MAPBOX_VECTOR_TILE_SIZE = 512;
+
+const customIcons = ['😀', '🤣', '😋', '😢', '😬'];
 
 class MapView extends React.Component {
   constructor(props) {
@@ -49,25 +51,27 @@ class MapView extends React.Component {
       currentLat: 21.2148224,
       currentLong: 72.8629248,
       isSelected: '1',
-      featureCollection: MapboxGL.geoUtils.makeFeatureCollection(),
+      // featureCollection: MapboxGL.geoUtils.makeFeatureCollection(),
       showDestination: true,
-      carouselItems: [
-        {
-          title: 'Lonely Planet - Bangkok',
-        },
-        {
-          title: 'Lonely Planet - Franch',
-        },
-        {
-          title: 'Lonely Planet - Maxico',
-        },
-        {
-          title: 'Lonely Planet - India',
-        },
-      ],
       pinList: [],
       mapPinsInProgress: false,
-      followUserLocation: false
+      followUserLocation: false,
+      featureCollection: {
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            geometry: {
+              coordinates: [-73.970895, 40.723279],
+              type: 'Point',
+            },
+            id: 1,
+            properties: {
+              customIcon: customIcons[0],
+            },
+          },
+        ],
+      },
     };
     this.categoryImages = {
       '1': sights1,
@@ -76,11 +80,33 @@ class MapView extends React.Component {
       '4': nightlife1,
       '5': transportations1,
       '6': shopping1,
-      '7': other1
-    }
+      '7': other1,
+    };
+
+    this.onSourceLayerPress = this.onSourceLayerPress.bind(this);
+    this.onPress = this.onPress.bind(this);
   }
   componentDidMount() {
     console.log('map loaded', this.props);
+  }
+
+  onPress(e) {
+    console.log('test 1', e);
+    const feature = {
+      type: 'Feature',
+      geometry: e.geometry,
+      id: Date.now(),
+      properties: {
+        customIcon: customIcons[this.state.featureCollection.features.length],
+      },
+    };
+
+    this.setState(({featureCollection}) => ({
+      featureCollection: {
+        type: 'FeatureCollection',
+        features: [...featureCollection.features, feature],
+      },
+    }));
   }
 
   //pin destination on the map
@@ -95,7 +121,7 @@ class MapView extends React.Component {
         coordinate={[this.state.currentLong, this.state.currentLat]}>
         <Image
           source={require('./../../Images/transportations1.png')}
-          style={{ height: 16, width: 16 }}
+          style={{height: 16, width: 16}}
         />
         {/* <Icon style={styles.search} name="location-on" size={16} color="red" /> */}
         <MapboxGL.Callout title={'From'} />
@@ -105,21 +131,23 @@ class MapView extends React.Component {
 
   loadMapPins(mapID) {
     if (mapID) {
-      this.setState({ mapPinsInProgress: true })
-      this.props.mapAction.getMapPins({ map_id: mapID, user_id: this.props.userData.id }).then((data) => {
-        let pinList = data.mapID.pin_list || [];
-        console.log("data => ", data)
-        this.setState({ mapPinsInProgress: false, pinList })
-      }).catch((err) => {
-        console.log("error => ", err)
-        this.setState({ mapPinsInProgress: false, pinList: [] })
-      })
+      this.setState({mapPinsInProgress: true});
+      this.props.mapAction
+        .getMapPins({map_id: mapID, user_id: this.props.userData.id})
+        .then(data => {
+          let pinList = data.mapID.pin_list || [];
+          console.log('data => ', data);
+          this.setState({mapPinsInProgress: false, pinList});
+        })
+        .catch(err => {
+          console.log('error => ', err);
+          this.setState({mapPinsInProgress: false, pinList: []});
+        });
     }
   }
 
   async onDidFinishLoadingStyle() {
-
-    const { width, height } = Dimensions.get('window');
+    const {width, height} = Dimensions.get('window');
     const bounds = geoViewport.bounds(
       CENTER_COORD,
       12,
@@ -130,7 +158,10 @@ class MapView extends React.Component {
     const options = {
       name: Math.random().toString(),
       styleURL: MapboxGL.StyleURL.Street,
-      bounds: [[bounds[0], bounds[1]], [bounds[2], bounds[3]]],
+      bounds: [
+        [bounds[0], bounds[1]],
+        [bounds[2], bounds[3]],
+      ],
       minZoom: 10,
       maxZoom: 20,
     };
@@ -140,74 +171,94 @@ class MapView extends React.Component {
   }
 
   onDownloadProgress = (offlineRegion, offlineRegionStatus) => {
-    console.log("offline region => ", offlineRegion)
-    console.log("offlineRegionStatus => ", offlineRegionStatus)
+    console.log('offline region => ', offlineRegion);
+    console.log('offlineRegionStatus => ', offlineRegionStatus);
     this.setState({
       name: offlineRegion.name,
       offlineRegion,
       offlineRegionStatus,
     });
-  }
+  };
 
   addNewPin() {
-    let { params } = this.props.navigation.state;
-    this.props.navigation.navigate('AddMapDetail', { mapID: params.mapID, mapName: params.mapName })
+    let {params} = this.props.navigation.state;
+    this.props.navigation.navigate('AddMapDetail', {
+      mapID: params.mapID,
+      mapName: params.mapName,
+    });
   }
 
   editPins() {
-    let { params } = this.props.navigation.state;
-    this.props.navigation.navigate('MapPins', { mapID: params.mapID, mapName: params.mapName })
+    let {params} = this.props.navigation.state;
+    this.props.navigation.navigate('MapPins', {
+      mapID: params.mapID,
+      mapName: params.mapName,
+    });
+  }
+
+  onSourceLayerPress(e) {
+    const feature = e.nativeEvent.payload;
+    console.log('You pressed a layer here is your feature', feature);
   }
 
   render() {
-    let { params } = this.props.navigation.state;
+    let {params} = this.props.navigation.state;
     params = params || {};
-    let { pinList } = this.state;
-    console.log("params => ",params)
+    let {pinList} = this.state;
+    console.log('params => ', params);
     let featureCollections = [];
     if (pinList && pinList.length > 0) {
-      let groupedPins = _.groupBy(pinList, (pin) => pin.categories);
-      Object.keys(groupedPins).map((categoryID) => {
+      let groupedPins = _.groupBy(pinList, pin => pin.categories);
+      Object.keys(groupedPins).map(categoryID => {
+        let randomId = Math.floor(Math.random() * 90000) + 10000;
         let pins = groupedPins[categoryID];
         let temp = [];
-        pins.map((pin) => {
+        pins.map(pin => {
           if (pin.longitude && pin.latitude) {
             temp.push({
               type: 'Feature',
               id: pin.id,
               properties: {
                 id: pin.id,
-                mapName:params.mapName,
-                mapID:params.mapID
+                mapName: params.mapName,
+                mapID: params.mapID,
               },
               geometry: {
                 type: 'Point',
-                coordinates: [parseFloat(pin.longitude), parseFloat(pin.latitude)],
+                coordinates: [
+                  parseFloat(pin.longitude),
+                  parseFloat(pin.latitude),
+                ],
               },
-            })
+            });
           }
-        })
+        });
 
         featureCollections.push({
           type: `FeatureCollection`,
           features: temp,
-          category: categoryID
-        })
-
-      })
+          category: categoryID,
+          id: randomId,
+        });
+      });
     }
 
-    let filteredCollections = featureCollections.filter(collection => collection && collection.features && collection.features.length > 0)
+    let filteredCollections = featureCollections.filter(
+      collection =>
+        collection && collection.features && collection.features.length > 0,
+    );
     return (
       <View style={styles.page}>
         <NavigationEvents
-          onWillFocus={payload => this.loadMapPins(payload.state.params && payload.state.params.mapID)}
+          onWillFocus={payload =>
+            this.loadMapPins(payload.state.params && payload.state.params.mapID)
+          }
         />
         <View style={styles.container}>
           <Spinner
             visible={this.state.mapPinsInProgress}
             textContent={'Fetching Pins...'}
-            textStyle={{ color: '#fff' }}
+            textStyle={{color: '#fff'}}
           />
 
           <Header
@@ -224,41 +275,47 @@ class MapView extends React.Component {
             styleURL={MapboxGL.StyleURL.Street}
             logoEnabled={false}
             attributionEnabled={false}
-            onDidFinishRenderingMapFully={(r) => {
-              this.setState({ followUserLocation: true })
-            }}
-          >
-            <MapboxGL.Camera
-              // followUserLocation={this.state.followUserLocation}
-              // followUserMode={MapboxGL.UserTrackingModes.FollowWithCourse}
-              centerCoordinate={
-                filteredCollections[0] ?
-                  [filteredCollections[0].features[0].geometry.coordinates[0], filteredCollections[0].features[0].geometry.coordinates[1]]
-                  :
-                  [this.state.currentLong, this.state.currentLat]
-              }
-              zoomLevel={10}
-              animationMode={'flyTo'}
-            />
-            {
-              filteredCollections && filteredCollections.length > 0 ?
-                filteredCollections.map((collection) => {
+            onDidFinishRenderingMapFully={r => {
+              this.setState({followUserLocation: true});
+            }}>
+            {filteredCollections[0] && (
+              <MapboxGL.Camera
+                // followUserLocation={this.state.followUserLocation}
+                // followUserMode={MapboxGL.UserTrackingModes.FollowWithCourse}
+                centerCoordinate={[
+                  filteredCollections[0].features[0].geometry.coordinates[0],
+                  filteredCollections[0].features[0].geometry.coordinates[1],
+                ]}
+                zoomLevel={10}
+                animationMode={'flyTo'}
+              />
+            )}
+
+            {filteredCollections && filteredCollections.length > 0
+              ? filteredCollections.map(collection => {
+                  console.log('collection => ', collection);
                   let random = Math.floor(Math.random() * 90000) + 10000;
                   return (
                     <MapboxGL.ShapeSource
-                      id={"symbolLocationSource" + random}
-                      hitbox={{ width: 20, height: 20 }}
+                      id={'symbolLocationSource' + random}
+                      key={'symbolLocationSource' + random}
+                      hitbox={{width: 20, height: 20}}
                       shape={collection}
                       cluster
                       clusterMaxZoomLevel={14}
                       clusterRadius={50}
                       onPress={e => {
-                        console.log("collection => ", e.nativeEvent.payload);
+                        console.log('collection => ', e.nativeEvent.payload);
                         let payload = e.nativeEvent.payload;
-                        this.props.navigation.navigate('PinView', { pinID: payload.id, mapID: payload.properties.mapID });
+                        if (payload.id && payload.properties.mapID) {
+                          this.props.navigation.navigate('PinView', {
+                            pinID: payload.id,
+                            mapID: payload.properties.mapID,
+                          });
+                        }
                       }}>
                       <MapboxGL.SymbolLayer
-                        id={"symbolLocationSymbols" + (random + 1)}
+                        id={'symbolLocationSymbols' + (random + 1)}
                         minZoomLevel={1}
                         style={{
                           iconImage: this.categoryImages[collection.category],
@@ -266,18 +323,16 @@ class MapView extends React.Component {
                           iconSize: 0.4,
                         }}
                       />
+
                       <MapboxGL.Callout title="Rivadavia 1841, 7º Piso, Of. 749." />
                     </MapboxGL.ShapeSource>
-                  )
+                  );
                 })
-                :
-                null
-            }
+              : null}
             <MapboxGL.UserLocation visible animated />
           </MapboxGL.MapView>
 
           <View style={[styles.mapControlButton]}>
-
             <TouchableOpacity
               style={[
                 styles.button,
@@ -286,7 +341,9 @@ class MapView extends React.Component {
                 styles.buttonDecline,
               ]}
               activeOpacity={0.8}
-              onPress={() => { this.editPins() }}>
+              onPress={() => {
+                this.editPins();
+              }}>
               <Text style={[styles.buttonText, styles.buttonTextGray]}>
                 Edit Pins
               </Text>
@@ -299,7 +356,9 @@ class MapView extends React.Component {
                 styles.buttonDecline,
               ]}
               activeOpacity={0.8}
-              onPress={() => { this.addNewPin() }}>
+              onPress={() => {
+                this.addNewPin();
+              }}>
               <Text style={[styles.buttonText, styles.buttonTextGray]}>
                 Add Pin
               </Text>
@@ -312,13 +371,14 @@ class MapView extends React.Component {
                 styles.buttonDecline,
               ]}
               activeOpacity={0.8}
-              onPress={() => { this.loadMapPins(params.mapID) }}>
+              onPress={() => {
+                this.loadMapPins(params.mapID);
+              }}>
               <Text style={[styles.buttonText, styles.buttonTextGray]}>
                 Reload Map
               </Text>
             </TouchableOpacity>
           </View>
-
         </View>
       </View>
     );
