@@ -201,6 +201,11 @@ class MapView extends React.Component {
     console.log('You pressed a layer here is your feature', feature);
   }
 
+  componentWillMount() {
+    const {params} = this.props.navigation.state;
+    this.loadMapPins(params && params.mapID);
+  }
+
   render() {
     let {params} = this.props.navigation.state;
     params = params || {};
@@ -249,11 +254,11 @@ class MapView extends React.Component {
     );
     return (
       <View style={styles.page}>
-        <NavigationEvents
+        {/* <NavigationEvents
           onWillFocus={payload =>
-            this.loadMapPins(payload.state.params && payload.state.params.mapID)
+            // this.loadMapPins(payload.state.params && payload.state.params.mapID)
           }
-        />
+        /> */}
         <View style={styles.container}>
           <Spinner
             visible={this.state.mapPinsInProgress}
@@ -278,27 +283,28 @@ class MapView extends React.Component {
             onDidFinishRenderingMapFully={r => {
               this.setState({followUserLocation: true});
             }}>
-            {filteredCollections[0] && (
-              <MapboxGL.Camera
-                // followUserLocation={this.state.followUserLocation}
-                // followUserMode={MapboxGL.UserTrackingModes.FollowWithCourse}
-                centerCoordinate={[
-                  filteredCollections[0].features[0].geometry.coordinates[0],
-                  filteredCollections[0].features[0].geometry.coordinates[1],
-                ]}
-                zoomLevel={10}
-                animationMode={'flyTo'}
-              />
-            )}
-
+            <MapboxGL.Camera
+              // followUserLocation={this.state.followUserLocation}
+              // followUserMode={MapboxGL.UserTrackingModes.FollowWithCourse}
+              centerCoordinate={
+                filteredCollections[0]
+                  ? [
+                      filteredCollections[0].features[0].geometry
+                        .coordinates[0],
+                      filteredCollections[0].features[0].geometry
+                        .coordinates[1],
+                    ]
+                  : null
+              }
+              zoomLevel={10}
+              animationMode={'flyTo'}
+            />
             {filteredCollections && filteredCollections.length > 0
               ? filteredCollections.map(collection => {
-                  console.log('collection => ', collection);
                   let random = Math.floor(Math.random() * 90000) + 10000;
                   return (
                     <MapboxGL.ShapeSource
                       id={'symbolLocationSource' + random}
-                      key={'symbolLocationSource' + random}
                       hitbox={{width: 20, height: 20}}
                       shape={collection}
                       cluster
@@ -307,12 +313,10 @@ class MapView extends React.Component {
                       onPress={e => {
                         console.log('collection => ', e.nativeEvent.payload);
                         let payload = e.nativeEvent.payload;
-                        if (payload.id && payload.properties.mapID) {
-                          this.props.navigation.navigate('PinView', {
-                            pinID: payload.id,
-                            mapID: payload.properties.mapID,
-                          });
-                        }
+                        this.props.navigation.navigate('PinView', {
+                          pinID: payload.id,
+                          mapID: payload.properties.mapID,
+                        });
                       }}>
                       <MapboxGL.SymbolLayer
                         id={'symbolLocationSymbols' + (random + 1)}
@@ -323,7 +327,6 @@ class MapView extends React.Component {
                           iconSize: 0.4,
                         }}
                       />
-
                       <MapboxGL.Callout title="Rivadavia 1841, 7º Piso, Of. 749." />
                     </MapboxGL.ShapeSource>
                   );
