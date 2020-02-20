@@ -149,7 +149,7 @@ class EditMapDetails extends React.Component {
         } = this.state;
         const { params } = this.props.navigation.state;
 
-        if (!pinDescription) return alert("Pin description is required")
+        // if (!pinDescription) return alert("Pin description is required")
         if (!pinTitle) return alert("Pin title is required")
         if (!selectedCategory) return alert("Category is required")
 
@@ -272,7 +272,7 @@ class EditMapDetails extends React.Component {
                                         <TouchableOpacity onPress={() => this.setState({ showPickerDialog: true })} style={[styles.uploadCoverCard]}>
                                             <AntDesign name={'pluscircleo'} size={36} color={'#2F80ED'} />
                                             <Text style={[styles.uploadCoverCardText]}>
-                                                Add Cover Image
+                                                Add Photos
                                             </Text>
                                         </TouchableOpacity>
                                 }

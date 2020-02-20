@@ -80,7 +80,6 @@ class EditMyTravelDetails extends React.Component {
 
   updateMap() {
     const { params } = this.props.navigation.state;
-    // this.props.navigation.navigate('MapView', { mapID: 479 })
     const {
       selectedAge,
       selectedBudget,
@@ -117,13 +116,23 @@ class EditMyTravelDetails extends React.Component {
     this.props.mapAction
       .updateMyMap(addMapObject)
       .then(data => {
-        this.setState({ addMapInProgress: false }, () => {
-          const resetAction = StackActions.reset({
-            index: 0,
-            actions: [NavigationActions.navigate({ routeName: 'MyTravel' })],
+        console.log("update data => ", data)
+        this.props.mapAction.getMapPins({ user_id: this.props.userData.id, map_id: params.mapData.id }).then((data) => {
+          this.setState({ addMapInProgress: false }, () => {
+            // const resetAction = StackActions.reset({
+            //   index: 0,
+            //   actions: [NavigationActions.navigate({ routeName: 'MyTravel' })],
+            // });
+            // this.props.navigation.dispatch(resetAction);
+            console.log("map data => ", data);
+            this.props.mapAction.fetchMyMaps({ user_id: this.props.userData.id, search: '', page: 1 });
+            this.props.navigation.state.params.setMapData(data && data.mapID);
+            this.props.navigation.goBack()
           });
-          this.props.navigation.dispatch(resetAction);
-        });
+        }).catch(err => {
+          this.props.navigation.goBack()
+          console.log("err => ", err);
+        })
       })
       .catch(err => {
         this.setState({ addMapInProgress: false }, () => {

@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Montserrat-Medium',
     padding: 0,
-    height: 40,
+    height: 56,
   },
   searchbarFilter: {
     fontSize: 16,

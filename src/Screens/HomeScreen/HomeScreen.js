@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   Text,
@@ -8,20 +8,20 @@ import {
   TouchableOpacity,
   Linking,
 } from 'react-native';
-import {Item, Input, Button} from 'native-base';
+import { Item, Input, Button } from 'native-base';
 import styles from './HomeScreen.style';
 import Carousel from 'react-native-snap-carousel';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from './../../components/header/header';
 
-import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import fontelloConfig from './../../selection.json';
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 
 //REDUX
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import * as authActions from './../../actions/authActions';
 import * as mapActions from './../../actions/mapActions';
@@ -31,7 +31,7 @@ class HomeScreen extends React.Component {
     super(props);
     this.state = {
       showSorting: false,
-      userData: {userName: 'test'},
+      userData: { userName: 'test' },
       carouselItems: [
         {
           title: 'Lonely Planet - Bangkok',
@@ -96,17 +96,14 @@ class HomeScreen extends React.Component {
     this._renderItem = this._renderItem.bind(this);
   }
 
-  _renderItem({item, index}) {
+  _renderItem({ item, index }) {
     let avgReview = parseInt(item.avrage_review);
     console.log('map => ', item);
     return (
       <TouchableOpacity
         style={styles.mapSlidCard}
         onPress={() =>
-          this.props.navigation.navigate('MapView', {
-            mapID: item.id,
-            mapName: item.name,
-          })
+          this.props.navigation.navigate('MapView', { mapID: item.id, mapName: item.name, })
         }
         activeOpacity={1}>
         <View style={styles.mapSlidCardInner}>
@@ -157,13 +154,13 @@ class HomeScreen extends React.Component {
     );
   }
 
-  _renderItemTop({item, index}) {
+  _renderItemTop({ item, index }) {
     return (
       <TouchableOpacity
         style={styles.mapSlidCard}
         activeOpacity={1}
         onPress={() =>
-          this.props.navigation.navigate('MapView', {mapID: item.id})
+          this.props.navigation.navigate('MapView', { mapID: item.id,mapName: item.name, })
         }>
         <View style={styles.mapSlidCardInner}>
           <Image
@@ -236,7 +233,7 @@ class HomeScreen extends React.Component {
     console.log(event.url);
   }
 
-  _renderItemCate = ({item, index}) => {
+  _renderItemCate = ({ item, index }) => {
     let category = this.state.carouselCateItems.find(c => c.title == item.name);
     let iconName = category.icon || 'other';
     return (
@@ -262,12 +259,12 @@ class HomeScreen extends React.Component {
       sort_by: 'rating',
       user_id: userID,
     });
-    this.props.navigation.navigate('MapList', {category: [categoryID]});
+    this.props.navigation.navigate('MapList', { category: [categoryID] });
   }
 
   fetchSearchedMaps() {
     let userID = this.props.userData && this.props.userData.id;
-    let {searchTerm} = this.state;
+    let { searchTerm } = this.state;
     console.log('searchTerm => ', searchTerm);
     this.props.mapAction.fetchMapList({
       page: 1,
@@ -275,18 +272,18 @@ class HomeScreen extends React.Component {
       user_id: userID,
       search: searchTerm,
     });
-    this.props.navigation.navigate('MapList', {searchTerm});
+    this.props.navigation.navigate('MapList', { searchTerm });
   }
 
   render() {
-    const {width} = Dimensions.get('window');
+    const { width } = Dimensions.get('window');
     return (
       <Fragment>
         <Header
           showMenu={true}
           title={'Discover Inn'}
           {...this.props}
-          style={{backgroundColor: '#F3F4F6'}}
+          style={{ backgroundColor: '#F3F4F6' }}
           rightEmpty={true}
           showRightButton={false}
         />
@@ -308,23 +305,23 @@ class HomeScreen extends React.Component {
                   style={styles.searchbarInput}
                   placeholder="Type in your next destination!"
                   value={this.state.searchTerm}
-                  onChangeText={searchTerm => this.setState({searchTerm})}
+                  onChangeText={searchTerm => this.setState({ searchTerm })}
                 />
                 <TouchableOpacity
                   onPress={() =>
-                    this.setState({showSorting: !this.state.showSorting})
+                    this.setState({ showSorting: !this.state.showSorting })
                   }>
                   <Feather style={styles.searchbarFilter} name="sliders" />
                 </TouchableOpacity>
+                <Button
+                  style={styles.searchbarCardButton}
+                  onPress={() => this.fetchSearchedMaps()}>
+                  <Feather
+                    style={styles.searchbarCardButtonIcon}
+                    name="arrow-right"
+                  />
+                </Button>
               </Item>
-              <Button
-                style={styles.searchbarCardButton}
-                onPress={() => this.fetchSearchedMaps()}>
-                <Feather
-                  style={styles.searchbarCardButtonIcon}
-                  name="arrow-right"
-                />
-              </Button>
             </View>
 
             {this.state.showSorting && (
@@ -338,7 +335,7 @@ class HomeScreen extends React.Component {
                     styles.buttonOutlinePrimary,
                     styles.buttonDisabled,
                   ]}
-                  onPress={() => this.setState({saveToListModal: false})}>
+                  onPress={() => this.setState({ saveToListModal: false })}>
                   <Text
                     style={
                       ([styles.buttonText],
@@ -362,9 +359,13 @@ class HomeScreen extends React.Component {
               sliderWidth={width}
               itemWidth={100}
               firstItem={2}
+              initialscrollindex={2}
               inactiveSlideOpacity={1}
               renderItem={this._renderItemCate}
               enableSnap={false}
+              getItemLayout={(data, index) => (
+                { length: 100, offset: 100 * index, index }
+              )}
             />
             <View style={styles.cateCard}>
               <Text style={styles.sectionTitle}>Most Popular</Text>

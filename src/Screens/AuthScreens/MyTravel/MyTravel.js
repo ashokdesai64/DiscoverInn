@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
-import { View, Text, ScrollView, Switch, Dimensions, Image, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, Dimensions, Image, ActivityIndicator } from 'react-native';
 import { Item, Input, Button, Content, Accordion, CheckBox } from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import Switch from './../../../components/Switch'
 import styles from './MyTravel.style';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Header from '../../../components/header/header';
@@ -76,28 +76,23 @@ class MyTravel extends React.Component {
     );
   }
 
+  changeMapStatus( mapID) {
+    this.props.mapAction.changeMapStatus({ user_id: this.props.userData.id, map_id: mapID })
+  }
+
   _renderContent = item => {
-    var commentIndex = this.props.myMaps.findIndex(function (c) {
-      return c.title == item.title;
-    });
-    console.log("item => ",item)
+    console.log("item => ", item)
     return (
       <View style={styles.accordionCardBody}>
         <View style={styles.myTravelCard}>
           <View style={styles.myTravelItem}>
             <Text style={styles.myTravelItemTitle}>Public</Text>
             <Switch
-              style={[
-                styles.myTravelItemSwitch,
-                { transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }] },
-              ]}
-              value={item.map_type == 'public'}
-              thumbColor={'#2F80ED'}
-              onValueChange={value =>
-                (this.props.myMaps[commentIndex].public = item.public
-                  ? false
-                  : true)
-              }
+              styles={styles.myTravelItemSwitch}
+              changeMapStatus={() => {
+                this.changeMapStatus(item.id)
+              }}
+              value={item.status == '1'}
             />
           </View>
         </View>
@@ -112,7 +107,7 @@ class MyTravel extends React.Component {
             <TouchableOpacity
               style={[styles.button, styles.buttonSm, styles.buttonPrimary]}
               onPress={() => {
-                this.props.navigation.navigate('MapView', { mapID: item.id,mapName:item.name });
+                this.props.navigation.navigate('MapView', { mapID: item.id, mapName: item.name, fromMyTravel: true });
               }}>
               <Text style={styles.buttonText}>View</Text>
             </TouchableOpacity>
@@ -347,7 +342,7 @@ class MyTravel extends React.Component {
                   styles.buttonOutlineGray,
                   styles.buttonDecline,
                 ]}
-                onPress={() => { this.setState({showDeleteModal:false}) }}>
+                onPress={() => { this.setState({ showDeleteModal: false }) }}>
                 <Text style={[styles.buttonText, styles.buttonTextGray]}>
                   Decline
                 </Text>

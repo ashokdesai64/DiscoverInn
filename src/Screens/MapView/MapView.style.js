@@ -1,4 +1,4 @@
-import {StyleSheet, Dimensions} from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const DEVICE_WIDTH = Dimensions.get('window').width;
 const styles = StyleSheet.create({
@@ -103,6 +103,32 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
+  },
+  mapSlidCard: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 15,
+    marginRight: 15,
+    width:320,
+    flexDirection:'row',
+    elevation:3
+  },
+  mapSlideCardImg: {
+    width: 120,
+    height: 95,
+    borderTopLeftRadius: 10,
+    borderBottomLeftRadius:10
+  },
+  mapSlideCardImg_overlay: {
+    flex: 1,
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    width: 280,
+    height: 280,
+    borderRadius: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
   },
   mapControlButton: {
     flexDirection: 'row',

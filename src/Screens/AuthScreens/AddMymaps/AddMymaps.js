@@ -71,7 +71,6 @@ class AddMymaps extends React.Component {
   }
 
   addMap() {
-    // this.props.navigation.navigate('MapView', { mapID: 479 })
     const { selectedAge, selectedBudget, travelType, month, year, mapTitle, mapDescription, isImageSelected, converImagePath, fileName, fileType } = this.state;
 
     this.setState({ addMapInProgress: true });
@@ -106,7 +105,7 @@ class AddMymaps extends React.Component {
 
     this.props.mapAction.addMyMap(addMapObject).then((data) => {
       this.setState({ addMapInProgress: false }, () => {
-        this.props.navigation.navigate('MapView', { mapID: data.mapID })
+        this.props.navigation.navigate('MapView', { mapID: data.mapID,mapName:mapTitle })
       });
     }).catch((err) => {
       this.setState({ addMapInProgress: false }, () => { alert(err) });

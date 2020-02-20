@@ -65,6 +65,7 @@ class AddMapDetail extends React.Component {
       addPinInProgress: false,
       addingPin: false,
       locationFromImage: true,
+      selectedCategory:7
     };
   }
 
@@ -134,7 +135,7 @@ class AddMapDetail extends React.Component {
     } = this.state;
     const {params} = this.props.navigation.state;
 
-    if (!pinDescription) return alert('Pin description is required');
+    // if (!pinDescription) return alert('Pin description is required');
     if (!pinTitle) return alert('Pin title is required');
     if (!selectedCategory) return alert('Category is required');
 
@@ -162,7 +163,7 @@ class AddMapDetail extends React.Component {
       .addMapPin(apiData)
       .then(data => {
         this.setState({addingPin: false}, () => {
-          this.props.navigation.navigate('MapView', {mapID: params.mapID});
+          this.props.navigation.navigate('MapView', {mapID: params.mapID,mapName:params.mapName});
         });
       })
       .catch(err => {
@@ -274,7 +275,7 @@ class AddMapDetail extends React.Component {
                       color={'#2F80ED'}
                     />
                     <Text style={[styles.uploadCoverCardText]}>
-                      Add Cover Image
+                      Add Photos
                     </Text>
                   </TouchableOpacity>
                 )}

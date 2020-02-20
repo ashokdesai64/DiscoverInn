@@ -672,6 +672,22 @@ export function addRemoveToTrip(apiData) {
     };
 }
 
+export function changeMapStatus(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.changeMapStatus,
+                apiData
+            );
+            if (response.status) {
+                resolve(response.data);
+            } else {
+                reject(response.message)
+            }
+        })
+    };
+}
+
 export function shareMap(apiData) {
     return function (dispatch, getState) {
         return new Promise(async (resolve, reject) => {

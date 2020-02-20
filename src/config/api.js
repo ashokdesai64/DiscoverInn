@@ -37,8 +37,8 @@ export const apiUrls = {
   visitorReviews: 'https://discover-inn.com/api/v1/visitor_reviews',
   yourReviews: 'https://discover-inn.com/api/v1/your_reviews',
   fetchAllUserNames: 'https://discover-inn.com/api/v1/get_username',
+  changeMapStatus: 'https://discover-inn.com/api/v1/change_map_status',
   //remaining
   sharedMapsList: 'https://discover-inn.com/api/v1/shared_maps_list',
   shareMap: 'https://discover-inn.com/api/v1/shared_your_map',
-  changeMapStatus: 'https://discover-inn.com/api/v1/change_map_status',
 };

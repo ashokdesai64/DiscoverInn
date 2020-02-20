@@ -118,19 +118,19 @@ class EditMyTravel extends React.Component {
 
   render() {
     const {params} = this.props.navigation.state;
-
-    let travel_type = params.type == 'edit' ? params.mapData.travel_type : '-';
+    console.log("this.state.mapData => ",this.state.mapData)
+    let travel_type = params.type == 'edit' ? this.state.mapData.travel_type : '-';
     let budget_limit =
-      params.type == 'edit' ? params.mapData.budget_limit : '-';
+      params.type == 'edit' ? this.state.mapData.budget_limit : '-';
     let date_created =
       params.type == 'edit'
-        ? moment(params.mapData.date_created).fromNow()
+        ? moment(this.state.mapData.date_created).fromNow()
         : '-';
     let age_at_travel =
-      params.type == 'edit' ? params.mapData.age_at_travel : '-';
+      params.type == 'edit' ? this.state.mapData.age_at_travel : '-';
     let mapID =
       params.type == 'edit' ? params.mapData.id : this.state.mapData.id;
-
+    let travelType = this.props.travelTypes.find(tt => tt.id == travel_type)
     return (
       <Fragment>
         <Header
@@ -236,7 +236,7 @@ class EditMyTravel extends React.Component {
                 <View style={styles.myTravelItem}>
                   <Text style={styles.myTravelItemTitle}>Travel Type</Text>
                   <Text style={styles.myTravelItemValue}>
-                    {travel_type || '-'}
+                    {travelType.name || '-'}
                   </Text>
                 </View>
                 <View style={styles.myTravelItem}>
@@ -274,6 +274,7 @@ class EditMyTravel extends React.Component {
                 this.props.navigation.navigate('EditMyTravelDetails', {
                   mapData: {...this.state.mapData, name: this.state.mapName},
                   type: params.type,
+                  setMapData:(mapData) => {this.setState({mapData})}
                 });
               }}>
               <Text style={styles.buttonTextGray}>Edit Map Details</Text>
@@ -305,6 +306,7 @@ class EditMyTravel extends React.Component {
 function mapStateToProps(state) {
   return {
     userData: state.user.userData,
+    travelTypes: state.maps.travelTypes,
   };
 }
 function mapDispatchToProps(dispatch) {
