@@ -256,6 +256,24 @@ class EditProfile extends React.Component {
                 <Text style={styles.buttonText}>Save</Text>
               )}
             </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: 20,
+              }}
+              onPress={() => this.props.navigation.navigate('ChangePassword')}>
+              <Text
+                style={{
+                  color: '#EB5757',
+                  fontFamily: 'Montserrat-Regular',
+                  fontSize: 16,
+                  marginLeft: 0,
+                }}>
+                Change Password
+              </Text>
+            </TouchableOpacity>
           </View>
           {this.state.showToast && (
             <View

@@ -135,7 +135,7 @@ class SideMenu extends Component {
                 <Text style={styles.menuList_LinkText}>Shared Maps</Text>
               </Icon.Button>
             </View>
-            <View style={styles.menuList_Item}>
+            {/* <View style={styles.menuList_Item}>
               <Icon.Button
                 style={styles.menuList_Link}
                 color="#828282"
@@ -148,7 +148,7 @@ class SideMenu extends Component {
                 }>
                 <Text style={styles.menuList_LinkText}>Change Password</Text>
               </Icon.Button>
-            </View>
+            </View> */}
             {/* 
             {this.props.userData && this.props.userData.id ? (
               <View style={styles.menuList_Item}>

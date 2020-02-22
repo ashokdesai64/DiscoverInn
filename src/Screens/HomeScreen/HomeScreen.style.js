@@ -54,8 +54,8 @@ const styles = StyleSheet.create({
     lineHeight: 15,
   },
   cateSlideCard: {
-    width: 88,
-    height: 88,
+    width: 80,
+    height: 80,
     marginBottom: 10,
     shadowOffset: {width: 0, height: 5},
     shadowColor: 'rgba(6, 18, 42, 0.08);',
@@ -96,7 +96,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 15,
-    marginRight: 15,
   },
   mapSlideCardImg: {
     width: 280,

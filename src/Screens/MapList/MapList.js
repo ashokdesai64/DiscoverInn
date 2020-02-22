@@ -1023,7 +1023,6 @@ class MapList extends React.Component {
                 <AutoComplete
                   autoCapitalize="none"
                   autoCorrect={false}
-                  // containerStyle={styles.autocompleteContainer}
                   data={
                     userNames.length === 1 && comp(query, userNames[0].username)
                       ? []
