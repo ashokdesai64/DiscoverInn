@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import {TouchableOpacity,PanResponder} from 'react-native';
-import {Item, Input, Button} from 'native-base';
+import React, { Component } from 'react';
+import { TouchableOpacity, PanResponder, TouchableWithoutFeedback } from 'react-native';
+import { Item, Input, Button } from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import axios from 'axios';
 import _ from 'underscore';
@@ -20,15 +20,19 @@ export default class GoogleAutoComplete extends Component {
     data: [],
     keyboardShouldPersistTaps: 'always',
     onStartShouldSetResponderCapture: () => false,
-    renderItem: ({item}) => <Text>{item}</Text>,
+    renderItem: ({ item }) => <Text>{item}</Text>,
     renderSeparator: null,
-    renderTextInput: props => (
-      <TextInput
-        {...props}
-        style={styles.formControl}
-        placeholderTextColor={'#828894'}
-      />
-    ),
+    renderTextInput: props => {
+      console.log("props => ", props)
+      return (
+        <TextInput
+          {...props}
+          style={styles.formControl}
+          placeholderTextColor={'#828894'}
+          value={props.value || ''}
+        />
+      )
+    },
     flatListProps: {},
   };
 
@@ -40,12 +44,11 @@ export default class GoogleAutoComplete extends Component {
       searchTerm: '',
       hideResults: true,
       placeList: [],
-      enableScrollViewScroll: true,
+
     };
     this.onRefListView = this.onRefListView.bind(this);
     this.onRefTextInput = this.onRefTextInput.bind(this);
     this.onEndEditing = this.onEndEditing.bind(this);
-    this._panResponder = null;
   }
 
   onEndEditing(e) {
@@ -64,7 +67,7 @@ export default class GoogleAutoComplete extends Component {
    * Proxy `blur()` to autocomplete's text input.
    */
   blur() {
-    const {textInput} = this;
+    const { textInput } = this;
     textInput && textInput.blur();
   }
 
@@ -72,7 +75,7 @@ export default class GoogleAutoComplete extends Component {
    * Proxy `focus()` to autocomplete's text input.
    */
   focus() {
-    const {textInput} = this;
+    const { textInput } = this;
     textInput && textInput.focus();
   }
 
@@ -80,7 +83,7 @@ export default class GoogleAutoComplete extends Component {
    * Proxy `isFocused()` to autocomplete's text input.
    */
   isFocused() {
-    const {textInput} = this;
+    const { textInput } = this;
     return textInput && textInput.isFocused();
   }
 
@@ -96,26 +99,40 @@ export default class GoogleAutoComplete extends Component {
       onEndReached,
       onEndReachedThreshold,
     } = this.props;
-    const {placeList} = this.state;
+    const { placeList } = this.state;
     console.log('result list => ', placeList);
     return (
       <FlatList
         ref={this.onRefListView}
         data={placeList}
         keyboardShouldPersistTaps={keyboardShouldPersistTaps}
-        renderItem={renderItem}
+        renderItem={({ item, i }) => (
+          <TouchableOpacity style={{ marginBottom: 10, padding: 5 }}
+            onPress={() => this.setState({ searchTerm: item.description }, () => {
+              this.props.onValueChange(item.description),
+              this.setState({searchTerm:'',hideResults:true})
+            })}
+          >
+            <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: 16 }}>
+              {item.description}
+            </Text>
+          </TouchableOpacity>
+        )}
         keyExtractor={keyExtractor}
         renderSeparator={renderSeparator}
         onEndReached={onEndReached}
         onEndReachedThreshold={onEndReachedThreshold}
         style={[styles.list, listStyle]}
+        ListEmptyComponent={() => (
+          <Text style={{ textAlign: 'center', color: '#bbb', fontSize: 14 }}>No Places Found</Text>
+        )}
         {...flatListProps}
       />
     );
   }
 
   renderTextInput() {
-    const {renderTextInput, style} = this.props;
+    const { renderTextInput, style } = this.props;
     const props = {
       style: [styles.input, style],
       ref: this.onRefTextInput,
@@ -134,53 +151,27 @@ export default class GoogleAutoComplete extends Component {
     try {
       let result = await axios.get(url);
       let places = result.data.predictions || [];
-      this.setState({placeList: places, hideResults: false});
+      this.setState({ placeList: places, hideResults: false });
       console.log('places => ', places);
     } catch (err) {
-      this.setState({placeList: []});
+      this.setState({ placeList: [] });
       console.log('err => ', err);
     }
   }
 
   searchPlaces = _.debounce(() => {
-    let searchTerm = this.state.searchTerm,
-      placeList = [];
+    let searchTerm = this.state.searchTerm;
     if (searchTerm.trim() != '') {
       this.fetchPlaces(searchTerm.trim());
     } else {
-      this.setState({hideResults: true});
+      this.setState({ hideResults: true });
     }
   }, 250);
-
-  onEnableScroll = value => {
-    this.setState({
-      enableScrollViewScroll: value,
-    });
-  };
-
-  componentWillMount() {
-    this._panResponder = PanResponder.create({
-      onMoveShouldSetResponderCapture: () => true,
-      onMoveShouldSetPanResponderCapture: () => true,
-      onPanResponderGrant: (e, gestureState) => {
-        this.props.setScroll(false)
-      },
-      onPanResponderMove: () => {
-
-      },
-      onPanResponderTerminationRequest: () => true,
-      onPanResponderRelease: () => {
-        this.props.setScroll(true)
-      },
-    })
-  }
 
   render() {
     const {
       data,
       containerStyle,
-      inputContainerStyle,
-      listContainerStyle,
       onShowResults,
       onStartShouldSetResponderCapture,
     } = this.props;
@@ -199,14 +190,14 @@ export default class GoogleAutoComplete extends Component {
               placeholder="Type in your next destination!"
               value={this.state.searchTerm}
               onChangeText={searchTerm =>
-                this.setState({searchTerm}, () => {
+                this.setState({ searchTerm }, () => {
                   this.searchPlaces();
                 })
               }
             />
             <TouchableOpacity
               onPress={() =>
-                this.setState({showSorting: !this.state.showSorting})
+                this.setState({ showSorting: !this.state.showSorting })
               }>
               <Feather style={styles.searchbarFilter} name="sliders" />
             </TouchableOpacity>
@@ -223,12 +214,9 @@ export default class GoogleAutoComplete extends Component {
 
         {!this.state.hideResults && (
           <ScrollView
-          {...this._panResponder.panHandlers}
-            keyboardShouldPersistTaps="always"
-            style={{marginHorizontal: 15}}
-            onStartShouldSetResponderCapture={onStartShouldSetResponderCapture}
-            scrollEnabled={true}
-            onScrollEndDrag={() => this.props.setScroll({ scrollEnabled: true })}
+            nestedScrollEnabled={true}
+            style={{ marginHorizontal: 15, maxHeight: 200 }}
+            keyboardShouldPersistTaps={'always'}
           >
             {this.renderResultList()}
           </ScrollView>
@@ -257,7 +245,9 @@ const androidStyles = {
     borderTopWidth: 0,
     marginTop: 0,
     ...border,
-    maxHeight: 180,
+    // maxHeight: 180,
+    padding: 10,
+    zIndex: 999
   },
 };
 
@@ -290,8 +280,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   ...Platform.select({
-    android: {...androidStyles},
-    ios: {...iosStyles},
+    android: { ...androidStyles },
+    ios: { ...iosStyles },
   }),
   searchbarCard: {
     marginHorizontal: 15,
@@ -303,7 +293,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
     shadowColor: '#000000',
     shadowOpacity: 0.05,
-    shadowOffset: {width: 0, height: 4},
+    shadowOffset: { width: 0, height: 4 },
     shadowRadius: 10,
   },
   searchbarInputBox: {
