@@ -266,7 +266,7 @@ class MapList extends React.Component {
                 style={[styles.mapDetaileChild, styles.mapDetaileChildRight]}>
                 <Text style={[styles.mapDetaileTitle]}>Created</Text>
                 <Text style={[styles.mapDetaileValue]}>
-                  {moment(item.date_created).fromNow() || '-'}
+                  {item.date_of_travel || moment(item.date_created).fromNow() || '-'}
                 </Text>
               </View>
             </View>
