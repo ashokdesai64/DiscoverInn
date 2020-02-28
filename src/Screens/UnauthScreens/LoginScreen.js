@@ -30,7 +30,6 @@ class LoginScreen extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('login screen props => ', nextProps);
     this.checkLogin(nextProps);
   }
 

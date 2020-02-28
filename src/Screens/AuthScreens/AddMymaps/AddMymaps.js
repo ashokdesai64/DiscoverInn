@@ -60,7 +60,6 @@ class AddMymaps extends React.Component {
     };
 
     ImagePicker.launchImageLibrary(options, response => {
-      console.log('response => ', response);
       this.setState({
         isImageSelected: true,
         converImagePath: response.uri,

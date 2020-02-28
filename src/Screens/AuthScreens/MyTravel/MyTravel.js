@@ -48,7 +48,6 @@ class MyTravel extends React.Component {
   };
 
   _updateSections = activeSections => {
-    console.log('activeSections => ', activeSections);
     this.setState({ activeSections });
   };
 
@@ -81,7 +80,6 @@ class MyTravel extends React.Component {
   }
 
   _renderContent = item => {
-    console.log("item => ", item)
     return (
       <View style={styles.accordionCardBody}>
         <View style={styles.myTravelCard}>

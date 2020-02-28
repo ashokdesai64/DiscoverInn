@@ -21,7 +21,6 @@ class MyReviews extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log("props => ", props)
     this.state = {
       selectedTab: 'your', //visitor
       myReviews: props.myReviews,
@@ -33,7 +32,6 @@ class MyReviews extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("nextProps => ", nextProps)
     if (nextProps.myReviews) {
       this.setState({ myReviews: nextProps.myReviews })
     }
@@ -124,7 +122,6 @@ class MyReviews extends React.Component {
           {
             this.state.selectedTab == 'visitor' ?
               this.state.visitorReviews && this.state.visitorReviews.map((review) => {
-                console.log("visitorReviews => ", review)
                 return (
                   <View style={styles.reviewCard} key={review.id}>
                     <View style={styles.reviewCardHeader}>
@@ -185,7 +182,6 @@ class MyReviews extends React.Component {
               })
               :
               this.state.myReviews && this.state.myReviews.map((review) => {
-                console.log("my review => ", review)
                 return (
                   <View style={styles.reviewCard} key={review.id}>
                     <View style={styles.reviewCardHeader}>
@@ -295,7 +291,7 @@ class MyReviews extends React.Component {
                     .map((d, i) => {
                       return (
                         <MaterialCommunityIcons
-                          onPress={() => { console.log(i + 1); this.setState({ editReviewValue: i + 1 }) }}
+                          onPress={() => { this.setState({ editReviewValue: i + 1 }) }}
                           style={styles.starIcon}
                           name="star"
                           size={20}
@@ -311,7 +307,7 @@ class MyReviews extends React.Component {
                     .map((d, i) => {
                       return (
                         <MaterialCommunityIcons
-                          onPress={() => { console.log(parseInt(this.state.editReviewValue) + i); this.setState({ editReviewValue: parseInt(this.state.editReviewValue) + i + 1 }) }}
+                          onPress={() => { this.setState({ editReviewValue: parseInt(this.state.editReviewValue) + i + 1 }) }}
                           style={styles.starIcon}
                           name="star-outline"
                           size={20}

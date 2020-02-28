@@ -104,12 +104,8 @@ class MapView extends React.Component {
     this.onSourceLayerPress = this.onSourceLayerPress.bind(this);
     this.onPress = this.onPress.bind(this);
   }
-  componentDidMount() {
-    console.log('map loaded', this.props);
-  }
 
   onPress(e) {
-    console.log('test 1', e);
     const feature = {
       type: 'Feature',
       geometry: e.geometry,
@@ -156,7 +152,6 @@ class MapView extends React.Component {
           let pinList = data.mapID.pin_list || [];
           let { params } = this.props.navigation.state;
           params = params || {};
-          console.log('data => ', data);
 
           let featureCollections = [], pinLatLongs = [], topLeft = null, bottomRight = null;
 
@@ -259,8 +254,6 @@ class MapView extends React.Component {
   }
 
   onDownloadProgress = (offlineRegion, offlineRegionStatus) => {
-    console.log('offline region => ', offlineRegion);
-    console.log('offlineRegionStatus => ', offlineRegionStatus);
     this.setState({
       name: offlineRegion.name,
       offlineRegion,
@@ -286,7 +279,6 @@ class MapView extends React.Component {
 
   onSourceLayerPress(e) {
     const feature = e.nativeEvent.payload;
-    console.log('You pressed a layer here is your feature', feature);
   }
 
   componentWillMount() {
@@ -314,7 +306,6 @@ class MapView extends React.Component {
     let { params } = this.props.navigation.state;
     params = params || {};
     let { topLeft, bottomRight, filteredCollections } = this.state;
-    console.log(filteredCollections)
     return (
       <View style={styles.page}>
         {/* <NavigationEvents
@@ -371,9 +362,8 @@ class MapView extends React.Component {
                         shape={collection}
                         cluster
                         clusterMaxZoomLevel={14}
-                        clusterRadius={50}
+                        clusterRadius={40}
                         onPress={e => {
-                          console.log('collection => ', e.nativeEvent.payload);
 
                           let payload = e.nativeEvent.payload;
                           if (!payload.properties.cluster) {
@@ -406,7 +396,7 @@ class MapView extends React.Component {
                         /> */}
 
                         <MapboxGL.CircleLayer
-                          id="singlePoint"
+                          id={`singlePoint${Math.random()}`}
                           filter={['has', 'point_count']}
                           style={{
                             circleColor: 'rgba(47,128,237,1)',
@@ -415,13 +405,16 @@ class MapView extends React.Component {
                             circleStrokeColor: 'white',
                           }}
                         />
-                        <MapboxGL.SymbolLayer id="pointCount"
+                        <MapboxGL.SymbolLayer
+                          id={`pointCount${Math.random()}`}
+                          filter={['has', 'point_count']}
                           style={{
                             textField: '{point_count}',
                             textSize: 14,
                             textHaloColor: '#fff',
                             textHaloWidth: 0.3,
                             textColor: '#fff',
+                            iconAllowOverlap:false
                           }}
                         />
                         <MapboxGL.SymbolLayer
@@ -430,6 +423,7 @@ class MapView extends React.Component {
                           style={{
                             iconImage: this.categoryImages[collection.category],
                             iconAllowOverlap: true,
+                            textAllowOverlap:true,
                             iconSize: 0.4
                           }}
                         />
@@ -446,7 +440,7 @@ class MapView extends React.Component {
                             textHaloColor: 'rgba(47,128,237,1)',
                             textHaloWidth: 5,
                             textTranslate: [-0.5, -0.5],
-                            textPadding: 2
+                            textPadding: 2,
                           }}
                         />
 
@@ -552,7 +546,6 @@ class MapView extends React.Component {
 }
 
 function mapStateToProps(state) {
-  console.log("state.maps.categories => ", state.maps.categories)
   return {
     categories: state.maps.categories,
     userData: state.user.userData,

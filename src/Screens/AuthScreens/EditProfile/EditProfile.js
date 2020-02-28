@@ -84,7 +84,6 @@ class EditProfile extends React.Component {
     };
 
     ImagePicker.launchImageLibrary(options, response => {
-      console.log('response => ', response);
       this.setState({
         isImageSelected: true,
         imagePath: response.uri,
@@ -155,12 +154,6 @@ class EditProfile extends React.Component {
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.images],
       });
-      console.log(
-        res.uri,
-        res.type, // mime type
-        res.name,
-        res.size,
-      );
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         // User cancelled the picker, exit any dialogs or menus and move on
@@ -171,7 +164,6 @@ class EditProfile extends React.Component {
   }
 
   render() {
-    console.log('this.props => ', this.props);
     const {userData} = this.props;
     return (
       <Fragment>

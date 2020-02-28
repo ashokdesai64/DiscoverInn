@@ -70,7 +70,6 @@ class HomeScreen extends React.Component {
 
   _renderItem({ item, index }) {
     let avgReview = parseInt(item.avrage_review);
-    console.log('map => ', item);
     return (
       <TouchableOpacity
         style={styles.mapSlidCard}
@@ -248,7 +247,6 @@ class HomeScreen extends React.Component {
   fetchSearchedMaps() {
     let userID = this.props.userData && this.props.userData.id;
     let { searchTerm } = this.state;
-    console.log('searchTerm => ', searchTerm);
     this.props.mapAction.fetchMapList({
       page: 1,
       sort_by: 'rating',
@@ -294,6 +292,7 @@ class HomeScreen extends React.Component {
               defaultValue={query}
               onChangeText={text => this.setState({ query: text })}
               placeholder="Type in your next destination"
+              fetchSearchedMaps={()=> this.fetchSearchedMaps()}
               onValueChange={(searchTerm)=>this.setState({searchTerm},()=>{this.fetchSearchedMaps()})}
             />
 
@@ -397,7 +396,6 @@ class HomeScreen extends React.Component {
 }
 
 function mapStateToProps(state) {
-  console.log('state.maps.categories => ', state.maps.categories);
   return {
     userData: state.user.userData,
     popularMaps: state.maps.popularMaps,

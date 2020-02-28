@@ -38,9 +38,6 @@ class SinglePinView extends React.Component {
   }
 
   render() {
-    console.log(this.props.navigation);
-    const {params} = this.props.navigation.state;
-    // let headerText = params.headerTitle;
     return (
       <ScrollView
         style={styles.scrollView}

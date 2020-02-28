@@ -48,7 +48,6 @@ class PinView extends React.Component {
     const { params } = this.props.navigation.state;
     let pinID = params.pinID;
     let mapID = params.mapID;
-    console.log("pin id => ",pinID,mapID)
     if (pinID && mapID) {
       this.setState({ pinDetailInProgress: true })
       this.props.mapAction.getSinglePinData({ pin_id: pinID, user_id: this.props.userData.id, map_id: mapID }).then((data) => {
@@ -56,7 +55,6 @@ class PinView extends React.Component {
         let isLocationSelected = pinData.latitude && pinData.longitude;
         let pinImages = (pinData.images && pinData.images.length >= 0) ? pinData.images : [];
         this.setState({ pinTitle: pinData.name, pinDescription: pinData.description, selectedCategory: pinData.categories, isLocationSelected, webImages: pinImages, pinDetailInProgress: false });
-        console.log("pin data => ", data);
       }).catch((err) => {
         this.setState({ pinDetailInProgress: false })
         console.log("err => ", err)
@@ -74,11 +72,9 @@ class PinView extends React.Component {
   };
 
   addToTrip(tripID) {
-    console.log(this.props);
     let { params } = this.props.navigation.state;
     if (params && params.mapID && params.pinID && tripID) {
       this.props.mapAction.addRemoveToTrip({ map_id: params.mapID, pin_id: params.pinID, favorite_id: tripID, user_id: this.props.userData.id }).then((data) => {
-        console.log("data => ", data);
         let listToAdded = [...this.state.listToAdded];
 
         let isAdded = listToAdded.indexOf(tripID);
@@ -241,7 +237,6 @@ class PinView extends React.Component {
                 <View style={styles.MVTripList}>
                   {
                     this.props.tripList.map((trip) => {
-                      console.log("this.state.listToAdded => ",this.state.listToAdded )
                       return (
                         <View style={styles.MVTripListItem}>
                           <Text style={styles.MVTripListItemTitle}>{trip.name}</Text>

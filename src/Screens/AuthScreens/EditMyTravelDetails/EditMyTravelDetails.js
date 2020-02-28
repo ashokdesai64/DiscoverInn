@@ -68,7 +68,6 @@ class EditMyTravelDetails extends React.Component {
     };
 
     ImagePicker.launchImageLibrary(options, response => {
-      console.log('response => ', response);
       this.setState({
         isImageSelected: true,
         converImagePath: response.uri,
@@ -116,15 +115,8 @@ class EditMyTravelDetails extends React.Component {
     this.props.mapAction
       .updateMyMap(addMapObject)
       .then(data => {
-        console.log("update data => ", data)
         this.props.mapAction.getMapPins({ user_id: this.props.userData.id, map_id: params.mapData.id }).then((data) => {
           this.setState({ addMapInProgress: false }, () => {
-            // const resetAction = StackActions.reset({
-            //   index: 0,
-            //   actions: [NavigationActions.navigate({ routeName: 'MyTravel' })],
-            // });
-            // this.props.navigation.dispatch(resetAction);
-            console.log("map data => ", data);
             this.props.mapAction.fetchMyMaps({ user_id: this.props.userData.id, search: '', page: 1 });
             this.props.navigation.state.params.setMapData(data && data.mapID);
             this.props.navigation.goBack()

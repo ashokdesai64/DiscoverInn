@@ -10,7 +10,6 @@ export function loadPopularAndRated() {
                 'GET'
             );
             if (response.status) {
-                console.log("response data => ", response.data)
                 dispatch({
                     type: 'popularMaps',
                     popularMaps: response.popular
@@ -36,7 +35,6 @@ export function loadCategories() {
                 'GET'
             );
             if (response.status) {
-                console.log("response data => ", response.data)
                 dispatch({
                     type: 'categories',
                     categories: response.data
@@ -58,7 +56,6 @@ export function loadTravelTypes() {
                 'GET'
             );
             if (response.status) {
-                console.log("response data => ", response.data)
                 dispatch({
                     type: 'travelTypes',
                     travelTypes: response.data
@@ -80,7 +77,6 @@ export function loadBudgetList() {
                 'GET'
             );
             if (response.status) {
-                console.log("response data => ", response.data)
                 dispatch({
                     type: 'budgetLists',
                     budgetLists: response.data
@@ -102,7 +98,6 @@ export function loadAgeList() {
                 'GET'
             );
             if (response.status) {
-                console.log("response data => ", response.data)
                 dispatch({
                     type: 'ageLists',
                     ageLists: response.data
@@ -356,7 +351,6 @@ export function addReview(apiData) {
 export function deleteReview(apiData) {
     return function (dispatch, getState) {
         return new Promise(async (resolve, reject) => {
-            console.log("api data => ", apiData)
             let response = await callAPI(
                 apiUrls.deleteReview,
                 apiData
@@ -381,7 +375,6 @@ export function deleteReview(apiData) {
 export function editReview(apiData) {
     return function (dispatch, getState) {
         return new Promise(async (resolve, reject) => {
-            console.log("api data => ", apiData)
             let response = await callAPI(
                 apiUrls.editReview,
                 apiData
@@ -431,7 +424,6 @@ export function updateMyMap(apiData) {
                 apiUrls.updateMapDetails,
                 apiData
             );
-            console.log("response => ", response)
             if (response.status) {
                 resolve({ response });
             } else {
@@ -488,7 +480,6 @@ export function getMapPinsList(apiData) {
                 apiUrls.getMapPins,
                 apiData
             );
-            console.log("response => ", response)
             if (response.status) {
                 resolve(response.data);
             } else {
@@ -505,7 +496,6 @@ export function deleteMapPin(apiData) {
                 apiUrls.deleteMapPin,
                 apiData
             );
-            console.log("response => ", response)
             if (response.status) {
                 resolve(response.data);
             } else {
@@ -522,7 +512,6 @@ export function addPinFromTripList(apiData) {
                 apiUrls.addPinFromTripList,
                 apiData
             );
-            console.log("response => ", response)
             if (response.status) {
                 resolve(response.data);
             } else {
@@ -539,7 +528,6 @@ export function getSinglePinData(apiData) {
                 apiUrls.getSinglePin,
                 apiData
             );
-            console.log("response => ", response)
             if (response.status) {
                 resolve(response.data);
             } else {
@@ -556,7 +544,6 @@ export function removeSinglePinImage(apiData) {
                 apiUrls.removeSinglePinImage,
                 apiData
             );
-            console.log("response => ", response)
             if (response.status) {
                 resolve(response.data);
             } else {
@@ -573,7 +560,6 @@ export function updateMapPin(apiData) {
                 apiUrls.updateMapPin,
                 apiData
             );
-            console.log("update map pin response => ", response)
             if (response.status) {
                 resolve(response.data);
             } else {
@@ -606,7 +592,6 @@ export function deleteFavouriteList(apiData) {
                 apiUrls.deleteFavouriteList,
                 apiData
             );
-            console.log("deleteFavouriteList resp => ", response)
             if (response.status) {
                 let tripLists = getState().maps.tripList || [];
                 let lists = [...tripLists];

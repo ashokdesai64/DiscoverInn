@@ -22,6 +22,7 @@ import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog'
 import ImagePicker from 'react-native-image-crop-picker';
 import Spinner from './../../../components/Loader';
 import ImageBlurLoading from './../../../components/ImageLoader'
+import axios from 'axios';
 
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 const DEVICE_WIDTH = Dimensions.get('window').width;
@@ -31,6 +32,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as mapActions from './../../../actions/mapActions';
+import AutoCompleteLocation from '../../../components/AutoCompleteLocation';
 
 const LocationCheckbox = ({
     selected,
@@ -41,7 +43,7 @@ const LocationCheckbox = ({
     text = '',
     ...props
 }) => (
-        <TouchableOpacity style={styles.useLoaction} disabled={true} onPress={onPress} {...props}>
+        <TouchableOpacity style={styles.useLoaction} disabled={false} onPress={onPress} {...props}>
             <Feather
                 size={size}
                 color={selected ? '#BDBDBD' : '#2F80ED'}
@@ -64,12 +66,19 @@ class EditMapDetails extends React.Component {
             pinTitle: '',
             pinDescription: '',
             isLocationSelected: true,
-            pinDetailInProgress: true
+            pinDetailInProgress: true,
+            locationFromImage: true,
         };
     }
 
     handleCheckBox = () => {
-        this.setState({ locationAccepted: !this.state.locationAccepted });
+        if (this.state.pinImages.length == 0) {
+            return alert('Please select image first');
+        }
+        this.setState({
+            locationAccepted: !this.state.locationAccepted,
+            locationFromImage: !this.state.locationAccepted,
+        });
     };
 
     showPicker(type) {
@@ -77,13 +86,12 @@ class EditMapDetails extends React.Component {
             ImagePicker.openPicker({
                 multiple: true,
                 waitAnimationEnd: false,
-                includeExif: false,
+                includeExif: true,
                 forceJpg: true,
                 compressImageQuality: 0.7,
             })
                 .then(response => {
                     let tempArray = [];
-                    console.log('responseimage-------', response);
                     response.forEach(item => {
                         let image = {
                             uri: item.path,
@@ -100,7 +108,8 @@ class EditMapDetails extends React.Component {
                 avoidEmptySpaceAroundImage: true,
                 mediaType: 'photo',
                 cropping: true,
-                compressImageQuality: 0.5
+                compressImageQuality: 0.5,
+                includeExif: true
             }).then(item => {
                 let image = {
                     uri: item.path,
@@ -131,7 +140,6 @@ class EditMapDetails extends React.Component {
                 let isLocationSelected = pinData.latitude && pinData.longitude;
                 let pinImages = (pinData.images && pinData.images.length >= 0) ? pinData.images : [];
                 this.setState({ pinTitle: pinData.name, pinDescription: pinData.description, selectedCategory: pinData.categories, isLocationSelected, webImages: pinImages, pinDetailInProgress: false });
-                console.log("pin data => ", data);
             }).catch((err) => {
                 this.setState({ pinDetailInProgress: false })
                 console.log("err => ", err)
@@ -198,10 +206,25 @@ class EditMapDetails extends React.Component {
         }
     }
 
+    async getGeocodeFromPlace(placeID) {
+
+        const APIKey = 'AIzaSyAWb4AJLePv_NjMW00JHNWp6TS_g1x3h60';
+        let url = `https://maps.googleapis.com/maps/api/place/details/json?key=${APIKey}&placeid=${placeID}&fields=geometry`;
+        try {
+            let result = await axios.get(url);
+            let res = result.data.result || {};
+            if (res && res.geometry && res.geometry.location) {
+                this.setState({ selectedLocation: res.geometry.location });
+            }
+        } catch (err) {
+            this.setState({ selectedLocation: false });
+            console.log('err => ', err);
+        }
+    }
+
     render() {
         const { pinImages, webImages } = this.state;
         const { params } = this.props.navigation.state;
-        console.log("params => ", params)
         return (
             <Fragment>
                 <ImageBackground
@@ -295,14 +318,18 @@ class EditMapDetails extends React.Component {
                                             <View style={styles.formGroup}>
                                                 <Text style={styles.formLabel}>
                                                     Location Name{' '}
-                                                    <Feather
-                                                        size={14}
-                                                        name="alert-triangle"
-                                                        color={'#F2994A'}
-                                                    />
+                                                    {!this.state.locationFromImage ? (
+                                                        <Feather
+                                                            size={14}
+                                                            name="alert-triangle"
+                                                            color={'#F2994A'}
+                                                        />
+                                                    ) : null}
                                                 </Text>
-
-                                                <GooglePlacesAutocomplete
+                                                <AutoCompleteLocation
+                                                    onValueChange={(placeID) => this.getGeocodeFromPlace(placeID)}
+                                                />
+                                                {/* <GooglePlacesAutocomplete
                                                     query={{
                                                         // available options: https://developers.google.com/places/web-service/autocomplete
                                                         key: 'AIzaSyBEd0rJ6DYhNEPKAkKHQG-jEBIrFKDQsRs',
@@ -325,7 +352,6 @@ class EditMapDetails extends React.Component {
                                                             paddingLeft: 10,
                                                             paddingRight: 10,
                                                             backgroundColor: 'transparent',
-
                                                             fontSize: 14,
                                                         },
                                                         textInput: {
@@ -349,7 +375,7 @@ class EditMapDetails extends React.Component {
                                                             selectedAddress: details.formatted_address,
                                                         });
                                                     }}
-                                                />
+                                                /> */}
                                             </View>
                                         </>
                                 }

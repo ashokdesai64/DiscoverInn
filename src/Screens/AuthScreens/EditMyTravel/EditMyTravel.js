@@ -29,11 +29,17 @@ class EditMyTravel extends React.Component {
   constructor(props) {
     super(props);
     const { params } = props.navigation.state;
+    let mapName = '', coverImage = false;
+
+    if (params.type == 'edit') {
+      mapName = params.mapData.name;
+      coverImage = params.mapData.cover_image
+    }
+
     this.state = {
       showNameInput: false,
-      mapName: params.type == 'edit' ? params.mapData.name || '' : '',
-      coverImage:
-        params.type == 'edit' ? params.mapData.cover_image || false : false,
+      mapName: mapName,
+      coverImage: coverImage,
       addCoverInProgress: false,
       mapData: params.mapData || {},
     };
@@ -118,7 +124,6 @@ class EditMyTravel extends React.Component {
 
   render() {
     const { params } = this.props.navigation.state;
-    console.log("this.state.mapData => ", this.state.mapData)
     let travel_type = params.type == 'edit' ? this.state.mapData.travel_type : '-';
     let budget_limit =
       params.type == 'edit' ? this.state.mapData.budget_limit : '-';
@@ -158,7 +163,7 @@ class EditMyTravel extends React.Component {
                 {!this.state.showNameInput ? (
                   <TouchableOpacity
                     onPress={() => this.setState({ showNameInput: true })}
-                    style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+                    style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                     <Text
                       style={[
                         styles.myTravelNameText,
@@ -236,7 +241,7 @@ class EditMyTravel extends React.Component {
                 <View style={styles.myTravelItem}>
                   <Text style={styles.myTravelItemTitle}>Travel Type</Text>
                   <Text style={styles.myTravelItemValue}>
-                    {travelType.name || '-'}
+                    {(travelType && travelType.name) || '-'}
                   </Text>
                 </View>
                 <View style={styles.myTravelItem}>

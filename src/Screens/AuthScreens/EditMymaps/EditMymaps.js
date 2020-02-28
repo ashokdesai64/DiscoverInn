@@ -64,7 +64,6 @@ class EditMymaps extends React.Component {
   };
 
   _updateSections = activeSections => {
-    console.log("activeSections => ", activeSections)
     this.setState({ activeSections });
   };
 
@@ -158,7 +157,6 @@ class EditMymaps extends React.Component {
               <TouchableOpacity
                 style={styles.editImage}
                 onPress={() => {
-                  console.log("currentMap.cover_image => ", item.cover_image)
                   this.setState({ currentMap: item, changeCoverModal: true });
                 }}>
                 <Text

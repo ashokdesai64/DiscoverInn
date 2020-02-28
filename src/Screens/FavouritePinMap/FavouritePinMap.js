@@ -53,7 +53,6 @@ class FavouritePinMap extends React.Component {
         if (tripID) {
             this.props.mapAction.singleFavouritePinList({ user_id: this.props.userData.id, favorite_id: tripID, page: 1 }).then((data) => {
                 this.setState({ pinList: data.favorite_pin || [], mapPinsInProgress: false })
-                console.log("trip data ", data.favorite_pin);
             }).catch((err) => {
                 this.setState({ pinList: [], isPinListFetching: false })
                 console.log("err => ", err)
@@ -151,7 +150,6 @@ class FavouritePinMap extends React.Component {
                                             clusterMaxZoomLevel={14}
                                             clusterRadius={50}
                                             onPress={e => {
-                                                console.log("collection => ",e.nativeEvent.payload);
                                                 let payload = e.nativeEvent.payload;
                                                 this.props.navigation.navigate('PinView',{pinID:payload.id,mapID:payload.properties.mapID});
                                             }}>

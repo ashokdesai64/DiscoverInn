@@ -207,7 +207,6 @@ class MyTripList extends React.Component {
 
 
 function mapStateToProps(state) {
-  console.log(state.maps);
   return {
     userData: state.user.userData,
     tripList: state.maps.tripList,

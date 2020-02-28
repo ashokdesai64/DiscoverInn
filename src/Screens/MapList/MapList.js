@@ -39,7 +39,6 @@ class MapList extends React.Component {
     super(props);
     this.pageNo = 1;
     const {params} = props.navigation.state;
-    console.log('params => ', params);
     this.state = {
       showTripList: false,
       shareModal: false,
@@ -485,7 +484,6 @@ class MapList extends React.Component {
           email: selectedUserEmails.join(','),
         })
         .then(data => {
-          console.log('share complete ', data);
           this.setState({
             shareModal: false,
             selectedUserNames: [],
@@ -494,7 +492,6 @@ class MapList extends React.Component {
           });
         })
         .catch(err => {
-          console.log('got error while sharing map ', err);
           this.setState({
             shareModal: false,
             selectedUserNames: [],

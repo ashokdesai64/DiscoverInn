@@ -28,10 +28,8 @@ class TripPinList extends React.Component {
   }
 
   changeTripName(tripName) {
-    console.log("trip name => ", tripName);
     const { params } = this.props.navigation.state;
     this.props.mapAction.updateFavouriteList({ user_id: this.props.userData.id, name: tripName, favorite_id: params.trip.id }).then((data) => {
-      console.log("trip updated");
     }).catch((err) => {
       console.log("err => ", err)
     })
@@ -45,7 +43,6 @@ class TripPinList extends React.Component {
     const { params } = this.props.navigation.state;
     this.props.mapAction.singleFavouritePinList({ user_id: this.props.userData.id, favorite_id: params.trip.id, page: 1 }).then((data) => {
       this.setState({ pinList: data.favorite_pin || [], isPinListFetching: false })
-      console.log("trip data ", data);
     }).catch((err) => {
       this.setState({ pinList: [], isPinListFetching: false })
       console.log("err => ", err)
@@ -59,7 +56,6 @@ class TripPinList extends React.Component {
     if (deletePin.map_id && deletePin.id && params.trip.id) {
       this.setState({ deletingPin: true })
       this.props.mapAction.addRemoveToTrip({ map_id: deletePin.map_id, pin_id: deletePin.id, favorite_id: params.trip.id, user_id: this.props.userData.id }).then((data) => {
-        console.log("data => ", data);
         this.fetchPinList()
         this.setState({ showDeletePinModal: false, deletingPin: false })
       }).catch((err) => {
@@ -74,7 +70,6 @@ class TripPinList extends React.Component {
 
   render() {
     const { params } = this.props.navigation.state;
-    console.log("params => ", params)
 
     if (this.state.isPinListFetching) {
       return (
@@ -249,7 +244,6 @@ class TripPinList extends React.Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state.maps);
   return {
     userData: state.user.userData,
     tripList: state.maps.tripList,

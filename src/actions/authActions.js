@@ -9,7 +9,6 @@ export function userLogin(email, password) {
         apiUrls.login,
         postData,
       );
-      console.log('login response =>< ', response);
 
       if (response.status) {
         dispatch({
@@ -32,7 +31,6 @@ export function userSignup(postData) {
         apiUrls.signup,
         postData,
       );
-      console.log('signup response =>< ', response);
 
       if (response.status) {
         dispatch({
@@ -55,7 +53,6 @@ export function forgotPassword(postData) {
         apiUrls.forgotPassword,
         postData,
       );
-      console.log('forgot pass response =>< ', response);
 
       if (response.status) {
         resolve(response.message)
@@ -73,7 +70,6 @@ export function changePassword(postData) {
         apiUrls.changePassword,
         postData,
       );
-      console.log('change pass response =>< ', response);
 
       if (response.status) {
         resolve(response.message)

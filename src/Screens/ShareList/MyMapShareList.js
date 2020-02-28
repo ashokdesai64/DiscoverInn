@@ -43,7 +43,6 @@ class MyMapShareList extends React.Component {
           allMaps: data,
           fetchingMaps: false,
         });
-        console.log('data => ', data);
       })
       .catch(err => {
         this.setState({carouselItems: [], fetchingMaps: false});
@@ -243,7 +242,6 @@ class MyMapShareList extends React.Component {
 }
 
 function mapStateToProps(state) {
-  console.log('user data => ', state.user.userData);
   return {
     categories: state.maps.categories,
     userData: state.user.userData,

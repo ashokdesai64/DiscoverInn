@@ -23,7 +23,6 @@ export default class GoogleAutoComplete extends Component {
     renderItem: ({ item }) => <Text>{item}</Text>,
     renderSeparator: null,
     renderTextInput: props => {
-      console.log("props => ", props)
       return (
         <TextInput
           {...props}
@@ -100,7 +99,6 @@ export default class GoogleAutoComplete extends Component {
       onEndReachedThreshold,
     } = this.props;
     const { placeList } = this.state;
-    console.log('result list => ', placeList);
     return (
       <FlatList
         ref={this.onRefListView}
@@ -110,7 +108,7 @@ export default class GoogleAutoComplete extends Component {
           <TouchableOpacity style={{ marginBottom: 10, padding: 5 }}
             onPress={() => this.setState({ searchTerm: item.description }, () => {
               this.props.onValueChange(item.description),
-              this.setState({searchTerm:'',hideResults:true})
+                this.setState({ searchTerm: '', hideResults: true })
             })}
           >
             <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: 16 }}>
@@ -203,7 +201,12 @@ export default class GoogleAutoComplete extends Component {
             </TouchableOpacity>
             <Button
               style={styles.searchbarCardButton}
-              onPress={() => this.fetchSearchedMaps()}>
+              onPress={() =>
+                this.setState({ searchTerm: '' }, () => {
+                  this.props.fetchSearchedMaps(),
+                    this.setState({ searchTerm: '', hideResults: true })
+                })
+              }>
               <Feather
                 style={styles.searchbarCardButtonIcon}
                 name="arrow-right"
@@ -212,16 +215,18 @@ export default class GoogleAutoComplete extends Component {
           </Item>
         </View>
 
-        {!this.state.hideResults && (
-          <ScrollView
-            nestedScrollEnabled={true}
-            style={{ marginHorizontal: 15, maxHeight: 200 }}
-            keyboardShouldPersistTaps={'always'}
-          >
-            {this.renderResultList()}
-          </ScrollView>
-        )}
-      </View>
+        {
+          !this.state.hideResults && (
+            <ScrollView
+              nestedScrollEnabled={true}
+              style={{ marginHorizontal: 15, maxHeight: 200 }}
+              keyboardShouldPersistTaps={'always'}
+            >
+              {this.renderResultList()}
+            </ScrollView>
+          )
+        }
+      </View >
     );
   }
 }
