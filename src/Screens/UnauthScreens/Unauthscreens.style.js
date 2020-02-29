@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   unauthContent: {
-    paddingHorizontal: 30,
+    paddingHorizontal: 10,
     paddingBottom: 0,
     flex: 1,
   },

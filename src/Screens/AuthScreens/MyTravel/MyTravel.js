@@ -1,26 +1,34 @@
-import React, { Fragment } from 'react';
-import { View, Text, ScrollView, Dimensions, Image, ActivityIndicator } from 'react-native';
-import { Item, Input, Button, Content, Accordion, CheckBox } from 'native-base';
+import React, {Fragment} from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  Dimensions,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
+import {Item, Input, Button, Content, Accordion, CheckBox} from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
-import Switch from './../../../components/Switch'
+import Switch from './../../../components/Switch';
 import styles from './MyTravel.style';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import Header from '../../../components/header/header';
-import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog';
-
+import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
+import Spinner from './../../../components/Loader';
 //REDUX
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
 import * as mapActions from '../../../actions/mapActions';
 
-const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
   const paddingToBottom = 20;
   return (
     layoutMeasurement.height + contentOffset.y >=
     contentSize.height - paddingToBottom
   );
 };
+
 class MyTravel extends React.Component {
   constructor(props) {
     super(props);
@@ -45,14 +53,15 @@ class MyTravel extends React.Component {
         public: true,
       },
     ],
+    fetchingMaps:false
   };
 
   _updateSections = activeSections => {
-    this.setState({ activeSections });
+    this.setState({activeSections});
   };
 
   componentDidMount() {
-    this.fetchMaps();
+    this.fetchFirstMaps();
   }
 
   _renderHeader(item, expanded) {
@@ -69,14 +78,17 @@ class MyTravel extends React.Component {
         {expanded ? (
           <Feather style={styles.accordionCardHeaderIcon} name="chevron-up" />
         ) : (
-            <Feather style={styles.accordionCardHeaderIcon} name="chevron-down" />
-          )}
+          <Feather style={styles.accordionCardHeaderIcon} name="chevron-down" />
+        )}
       </View>
     );
   }
 
-  changeMapStatus( mapID) {
-    this.props.mapAction.changeMapStatus({ user_id: this.props.userData.id, map_id: mapID })
+  changeMapStatus(mapID) {
+    this.props.mapAction.changeMapStatus({
+      user_id: this.props.userData.id,
+      map_id: mapID,
+    });
   }
 
   _renderContent = item => {
@@ -88,7 +100,7 @@ class MyTravel extends React.Component {
             <Switch
               styles={styles.myTravelItemSwitch}
               changeMapStatus={() => {
-                this.changeMapStatus(item.id)
+                this.changeMapStatus(item.id);
               }}
               value={item.status == '1'}
             />
@@ -105,7 +117,11 @@ class MyTravel extends React.Component {
             <TouchableOpacity
               style={[styles.button, styles.buttonSm, styles.buttonPrimary]}
               onPress={() => {
-                this.props.navigation.navigate('MapView', { mapID: item.id, mapName: item.name, fromMyTravel: true });
+                this.props.navigation.navigate('MapView', {
+                  mapID: item.id,
+                  mapName: item.name,
+                  fromMyTravel: true,
+                });
               }}>
               <Text style={styles.buttonText}>View</Text>
             </TouchableOpacity>
@@ -114,10 +130,13 @@ class MyTravel extends React.Component {
                 styles.button,
                 styles.buttonSm,
                 styles.buttonSuccess,
-                { marginLeft: 5 },
+                {marginLeft: 5},
               ]}
               onPress={() => {
-                this.props.navigation.navigate('EditMyTravel', { type: 'edit', mapData: item });
+                this.props.navigation.navigate('EditMyTravel', {
+                  type: 'edit',
+                  mapData: item,
+                });
               }}>
               <Text style={styles.buttonText}>Edit</Text>
             </TouchableOpacity>
@@ -126,10 +145,10 @@ class MyTravel extends React.Component {
                 styles.button,
                 styles.buttonSm,
                 styles.buttonDanger,
-                { marginLeft: 5 },
+                {marginLeft: 5},
               ]}
               onPress={() => {
-                this.setState({ showDeleteModal: true, selectedMap: item });
+                this.setState({showDeleteModal: true, selectedMap: item});
               }}>
               <Text style={styles.buttonText}>Delete</Text>
             </TouchableOpacity>
@@ -139,7 +158,24 @@ class MyTravel extends React.Component {
     );
   };
 
-  fetchMaps() {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.fetchingMaps != this.state.fetchingMaps) {
+      this.setState({fetchingMaps:nextProps.fetchingMaps})
+    }
+  }
+
+  fetchFirstMaps() {
+    this.props.mapAction.fetchMyFirstMaps({
+      user_id: this.props.userData.id,
+      search: this.state.search,
+      page: 1,
+    });
+  }
+
+  fetchMaps(showLoader = false) {
+    if (showLoader) {
+      this.setState({fetchingMaps:true})
+    }
     this.props.mapAction.fetchMyMaps({
       user_id: this.props.userData.id,
       search: this.state.search,
@@ -148,14 +184,20 @@ class MyTravel extends React.Component {
   }
 
   deleteMap() {
-    this.setState({ deleteInProgrss: true })
-    this.props.mapAction.removeMap({ map_id: this.state.selectedMap.id, user_id: this.props.userData.id }).then((data) => {
-      this.setState({ deleteInProgrss: false, showDeleteModal: false })
-    }).catch((err) => {
-      this.setState({ deleteInProgrss: false, showDeleteModal: false }, () => {
-        alert(err);
+    this.setState({deleteInProgrss: true});
+    this.props.mapAction
+      .removeMap({
+        map_id: this.state.selectedMap.id,
+        user_id: this.props.userData.id,
       })
-    })
+      .then(data => {
+        this.setState({deleteInProgrss: false, showDeleteModal: false});
+      })
+      .catch(err => {
+        this.setState({deleteInProgrss: false, showDeleteModal: false}, () => {
+          alert(err);
+        });
+      });
   }
 
   render() {
@@ -176,13 +218,19 @@ class MyTravel extends React.Component {
               showsHorizontalScrollIndicator={false}
               keyboardShouldPersistTaps={'always'}
               showsVerticalScrollIndicator={false}
-              // onScroll={({ nativeEvent }) => {
-              //   if (isCloseToBottom(nativeEvent)) {
-              //     this.pageNo += 1;
-              //     this.fetchMaps();
-              //   }
-              // }}
+              onScroll={({ nativeEvent }) => {
+                if (isCloseToBottom(nativeEvent) && !this.state.fetchingMaps) {
+                  console.log('scrolled to bottom');
+                  this.pageNo += 1;
+                  this.fetchMaps(true);
+                }
+              }}
               scrollEventThrottle={400}>
+              <Spinner
+                visible={this.state.fetchingMaps}
+                textContent={'Fetching more maps...'}
+                textStyle={{color: '#fff'}}
+              />
               <View searchBar style={styles.searchbarCard}>
                 <Item style={styles.searchbarInputBox}>
                   <Feather style={styles.searchbarIcon} name="search" />
@@ -190,7 +238,7 @@ class MyTravel extends React.Component {
                     style={styles.searchbarInput}
                     placeholder="Search your maps"
                     value={this.state.search}
-                    onChangeText={search => this.setState({ search })}
+                    onChangeText={search => this.setState({search})}
                   />
                 </Item>
                 <Button
@@ -211,30 +259,30 @@ class MyTravel extends React.Component {
                     renderHeader={this._renderHeader}
                     renderContent={this._renderContent}
                     onChange={this._updateSections}
-                    contentStyle={{ marginBottom: 10 }}
+                    contentStyle={{marginBottom: 10}}
                   />
                 </Content>
               ) : (
-                  <Text
-                    style={[
-                      styles.buttonText,
-                      {
-                        marginTop: 20,
-                        fontSize: 16,
-                        color: 'grey',
-                        alignSelf: 'center',
-                      },
-                    ]}>
-                    No Maps Found.
+                <Text
+                  style={[
+                    styles.buttonText,
+                    {
+                      marginTop: 20,
+                      fontSize: 16,
+                      color: 'grey',
+                      alignSelf: 'center',
+                    },
+                  ]}>
+                  No Maps Found.
                 </Text>
-                )}
+              )}
             </ScrollView>
           </View>
           <View style={styles.footerButton}>
             <TouchableOpacity
               style={[styles.button, styles.buttonPrimary, styles.buttonNewMap]}
               onPress={() => {
-                this.props.navigation.navigate('EditMyTravel', { type: 'add' });
+                this.props.navigation.navigate('EditMyTravel', {type: 'add'});
               }}>
               <Text style={styles.buttonText}>Add New Map</Text>
             </TouchableOpacity>
@@ -302,7 +350,7 @@ class MyTravel extends React.Component {
           hasOverlay={true}
           animationDuration={1}
           onTouchOutside={() => {
-            this.setState({ showDeleteModal: false });
+            this.setState({showDeleteModal: false});
           }}
           dialogAnimation={
             new FadeAnimation({
@@ -312,7 +360,7 @@ class MyTravel extends React.Component {
             })
           }
           onHardwareBackPress={() => {
-            this.setState({ showDeleteModal: false });
+            this.setState({showDeleteModal: false});
             return true;
           }}
           dialogStyle={styles.customPopup}>
@@ -321,7 +369,7 @@ class MyTravel extends React.Component {
               <Text style={styles.customPopupHeaderTitle}>Delete Map</Text>
               <TouchableOpacity
                 style={styles.buttonClose}
-                onPress={() => this.setState({ showDeleteModal: false })}>
+                onPress={() => this.setState({showDeleteModal: false})}>
                 <Feather name={'x'} style={styles.buttonCloseIcon} />
               </TouchableOpacity>
             </View>
@@ -340,20 +388,23 @@ class MyTravel extends React.Component {
                   styles.buttonOutlineGray,
                   styles.buttonDecline,
                 ]}
-                onPress={() => { this.setState({ showDeleteModal: false }) }}>
+                onPress={() => {
+                  this.setState({showDeleteModal: false});
+                }}>
                 <Text style={[styles.buttonText, styles.buttonTextGray]}>
                   Decline
                 </Text>
               </Button>
               <Button
                 style={[styles.button, styles.buttonDanger, styles.buttonSave]}
-                onPress={() => { this.deleteMap() }}>
-                {
-                  this.state.deleteInProgrss ?
-                    <ActivityIndicator size={'small'} color={'white'} />
-                    :
-                    <Text style={styles.buttonText}>Yes Sure</Text>
-                }
+                onPress={() => {
+                  this.deleteMap();
+                }}>
+                {this.state.deleteInProgrss ? (
+                  <ActivityIndicator size={'small'} color={'white'} />
+                ) : (
+                  <Text style={styles.buttonText}>Yes Sure</Text>
+                )}
               </Button>
             </View>
           </DialogContent>
@@ -368,6 +419,7 @@ function mapStateToProps(state) {
     userData: state.user.userData,
     categories: state.maps.categories,
     myMaps: state.maps.ownMaps,
+    fetchingMaps: state.maps.fetchingMaps,
   };
 }
 function mapDispatchToProps(dispatch) {

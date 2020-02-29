@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, {Fragment} from 'react';
 import {
   View,
   Text,
@@ -8,14 +8,15 @@ import {
   SafeAreaView,
   TouchableOpacity,
   KeyboardAvoidingView,
-  Platform,
-  ActivityIndicator
+  Dimensions,
+  ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import styles from './Unauthscreens.style';
-
+const DEVICE_HEIGHT = Dimensions.get('window').height;
 //REDUX
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import * as authActions from './../../actions/authActions';
 
 class LoginScreen extends React.Component {
@@ -24,7 +25,7 @@ class LoginScreen extends React.Component {
     this.state = {
       email: 'ketanlathiya@gmail.com',
       password: 'admin@1234',
-      loggingIn:false
+      loggingIn: false,
     };
     this.checkLogin(props);
   }
@@ -42,17 +43,17 @@ class LoginScreen extends React.Component {
   login() {
     // this.props.navigation.navigate('Home');
     // return
-    this.setState({loggingIn:true})
-    let { email, password } = this.state;
+    this.setState({loggingIn: true});
+    let {email, password} = this.state;
     if (!email) {
       return alert('Please enter email');
     }
     if (!password) {
       return alert('Please enter password');
     }
-    this.props.authAction.userLogin(email, password).catch((e)=>{
+    this.props.authAction.userLogin(email, password).catch(e => {
       alert(e);
-      this.setState({loggingIn:false})
+      this.setState({loggingIn: false});
     });
   }
 
@@ -64,18 +65,18 @@ class LoginScreen extends React.Component {
           style={{
             width: '100%',
             height: '100%',
-          }}>
+          }}
+        >
           <Image
             style={styles.blackOverlay}
             source={require('./../../Images/login-overlay.png')}
             resizeMode="stretch"
           />
           <SafeAreaView style={styles.container}>
-            <KeyboardAvoidingView
-              style={{ flex: 1 }}
-              behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-              keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
-            >
+            <ScrollView
+              style={[styles.container, styles.unauthContent]}
+              keyboardShouldPersistTaps={'always'}
+              contentContainerStyle={{height: DEVICE_HEIGHT - 80}}>
               <View style={styles.unauthContent}>
                 <Text style={styles.logoText}>Discover - Inn</Text>
                 <View style={styles.unauthForm}>
@@ -85,7 +86,7 @@ class LoginScreen extends React.Component {
                     <TextInput
                       style={styles.formControl}
                       onChangeText={email => {
-                        this.setState({ email: email.trim() });
+                        this.setState({email: email.trim()});
                       }}
                       value={this.state.email}
                       autoCapitalize={'none'}
@@ -107,7 +108,7 @@ class LoginScreen extends React.Component {
                       secureTextEntry={true}
                       style={styles.formControl}
                       onChangeText={password => {
-                        this.setState({ password: password.trim() });
+                        this.setState({password: password.trim()});
                       }}
                       value={this.state.password}
                       autoCapitalize={'none'}
@@ -118,12 +119,11 @@ class LoginScreen extends React.Component {
                     onPress={() => {
                       this.login();
                     }}>
-                    {
-                      this.state.loggingIn ?
-                        <ActivityIndicator size="small" color="#fff" />
-                        :
-                        <Text style={styles.buttonText}>Sign In</Text>
-                    }
+                    {this.state.loggingIn ? (
+                      <ActivityIndicator size="small" color="#fff" />
+                    ) : (
+                      <Text style={styles.buttonText}>Sign In</Text>
+                    )}
                   </TouchableOpacity>
                 </View>
                 <Text style={styles.toggleText}>
@@ -138,7 +138,7 @@ class LoginScreen extends React.Component {
                   </Text>
                 </Text>
               </View>
-            </KeyboardAvoidingView>
+            </ScrollView>
           </SafeAreaView>
         </ImageBackground>
       </Fragment>

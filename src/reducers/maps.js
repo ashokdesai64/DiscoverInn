@@ -48,6 +48,7 @@ export default function maps(state = initialState, action = {}) {
             return {
                 ...state,
                 ownMaps: action.ownMaps || (state.ownMaps || {}),
+                fetchingMaps:action.fetchingMaps || false
             };
         }
         case 'tripList': {

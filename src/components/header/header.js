@@ -231,7 +231,7 @@ class Header extends Component {
                 }
 
                 <TouchableOpacity
-                  onPress={() => }
+                  onPress={() => console.log("how it works")}
                   style={[styles.loginDialogLink, styles.loginDialogLinkLast]}>
                   <AntDesign
                     name={'customerservice'}

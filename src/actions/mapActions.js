@@ -131,7 +131,7 @@ export function loadCreatedWithin() {
     };
 }
 
-export function fetchMyMaps(apiData) {
+export function fetchMyFirstMaps(apiData) {
     return function (dispatch, getState) {
         return new Promise(async (resolve, reject) => {
             let response = await callAPI(
@@ -141,13 +141,42 @@ export function fetchMyMaps(apiData) {
             if (response.status) {
                 dispatch({
                     type: 'ownMaps',
-                    ownMaps: response.data
+                    ownMaps: response.data,
+                    fetchingMaps:false
                 });
                 resolve(response.data);
             } else {
                 dispatch({
                     type: 'ownMaps',
-                    ownMaps: []
+                    ownMaps: [],
+                    fetchingMaps:false
+                });
+                reject(response.message)
+            }
+        })
+    };
+}
+export function fetchMyMaps(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let response = await callAPI(
+                apiUrls.myMaps,
+                apiData
+            );
+            if (response.status) {
+                let oldMaps = getState().maps.ownMaps;
+                let newMaps = [...oldMaps, ...response.data];
+                dispatch({
+                    type: 'ownMaps',
+                    ownMaps: newMaps,
+                    fetchingMaps:false
+                });
+                resolve(newMaps);
+            } else {
+                dispatch({
+                    type: 'ownMaps',
+                    ownMaps: [],
+                    fetchingMaps:false
                 });
                 reject(response.message)
             }

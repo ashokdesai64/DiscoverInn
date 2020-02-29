@@ -9,6 +9,12 @@ export default class SwitchComponent extends React.PureComponent {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.value != this.props.value) {
+            this.setState({switchValue:nextProps.value})
+        }
+    }
+
     changeSwitchValue(value) {
         this.setState({ switchValue: value }, () => {
             this.props.changeMapStatus();
@@ -28,7 +34,7 @@ export default class SwitchComponent extends React.PureComponent {
                     { transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }] },
                 ]}
                 value={this.state.switchValue}
-                thumbColor={'#2F80ED'}
+                thumbColor={this.state.switchValue ? '#2F80ED' : '#ddd'}
                 onValueChange={(value) => {
                     this.changeSwitchValue(value)
                 }}
