@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {View, BackHandler,Alert} from 'react-native';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as userActions from './../actions/authActions';
@@ -23,6 +23,14 @@ class DefaultScreen extends Component {
   }
 
   componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      Alert.alert('Quit App?', 'Are you sure you want to exit App?', [
+        {text: 'Yes', onPress: () => BackHandler.exitApp()},
+        {text: 'No', onPress: () => {}},
+      ]);
+      return true;
+    });
+
     this.fetchInitialData();
     this.redirectToApp(this.props);
   }
@@ -62,7 +70,6 @@ class DefaultScreen extends Component {
     if (this.props && !this.props.allUserNames) {
       this.props.mapAction.fetchAllUserNames({user_id: 1, page: 1});
     }
-
   }
 
   componentWillReceiveProps(nextProps) {

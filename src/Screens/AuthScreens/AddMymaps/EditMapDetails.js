@@ -81,7 +81,8 @@ class EditMapDetails extends React.Component {
       isLocationSelected: true,
       pinDetailInProgress: true,
       locationFromImage: false,
-      placeName:''
+      placeName: '',
+      locationName:''
     };
   }
 
@@ -112,7 +113,6 @@ class EditMapDetails extends React.Component {
       })
         .then(response => {
           if (response && response.length) {
-            console.log('response => ', response);
             let tempArray = [];
             response.forEach(item => {
               let image = {
@@ -141,7 +141,6 @@ class EditMapDetails extends React.Component {
         includeExif: true,
       }).then(item => {
         if (item) {
-          console.log('item => ', item);
           let image = {
             uri: item.path,
             name: item.path.split('/').slice(-1)[0] || `${+new Date()}.jpg`,
@@ -157,22 +156,14 @@ class EditMapDetails extends React.Component {
   }
 
   async getLocationFromSelectedImages() {
-    console.log(
-      'this.state.isLocationSelected => ',
-      this.state.isLocationSelected,
-    );
-    console.log('this.state.selectedLocation => ', this.state.selectedLocation);
-    console.log('this.state.locationAccepted => ', this.state.locationAccepted);
     if (
       !this.state.isLocationSelected &&
       this.state.locationAccepted
     ) {
       let imageLocation = false;
-      console.log("inside location check")
       for (var i = 0; i < this.state.pinImages.length; i++) {
         let item = this.state.pinImages[i];
         if (item.exif && item.exif.GPSLongitude && item.exif.GPSLatitude) {
-          console.log("inside location get")
           let latitude = item.exif.GPSLatitude;
           let longitude = item.exif.GPSLongitude;
 
@@ -200,7 +191,6 @@ class EditMapDetails extends React.Component {
                   lng: finalLongitude,
                 };
                 imageLocation = selectedLocation;
-                console.log('selected location => ', selectedLocation);
                 this.setState({selectedLocation, locationFromImage: true});
                 break;
               }
@@ -208,20 +198,25 @@ class EditMapDetails extends React.Component {
           }
         }
       }
-      console.log("selected location => ",imageLocation)
       if (imageLocation && imageLocation.lat && imageLocation.lng) {
         let latlng = `${imageLocation.lat},${imageLocation.lng}`;
         try {
-          let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlng}&key=AIzaSyDVk4w7Wo8sefykoGcdjxk7aot3vPsRNxU`
+          let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlng}&key=AIzaSyDVk4w7Wo8sefykoGcdjxk7aot3vPsRNxU`;
           let result = await axios.get(url);
-          console.log(result.data)
-          let placeName = result.data.plus_code && result.data.plus_code.compound_code || [];
-          this.setState({ placeName:placeName });
+          let results = result.data.results || [];
+          let addressRes = results.find((r) => r.types && (r.types.includes('locality') || r.types.includes('administrative_area_level_2') || r.types.includes('administrative_area_level_1')));
+          let placeName = (result.data.plus_code && result.data.plus_code.compound_code) || '';
+          if (addressRes && addressRes.formatted_address) {
+            placeName =addressRes.formatted_address
+          }
+          this.setState({locationName: placeName});
         } catch (err) {
-          this.setState({ placeName:'' });
+          this.setState({ locationName:'' });
           console.log('err => ', err);
         }
         
+      } else {
+        this.setState({locationFromImage:false})
       }
     }
   }
@@ -335,14 +330,14 @@ class EditMapDetails extends React.Component {
     }
   }
 
-  async getGeocodeFromPlace(placeID) {
+  async getGeocodeFromPlace(placeID,description) {
     const APIKey = 'AIzaSyAWb4AJLePv_NjMW00JHNWp6TS_g1x3h60';
     let url = `https://maps.googleapis.com/maps/api/place/details/json?key=${APIKey}&placeid=${placeID}&fields=geometry`;
     try {
       let result = await axios.get(url);
       let res = result.data.result || {};
       if (res && res.geometry && res.geometry.location) {
-        this.setState({selectedLocation: res.geometry.location,locationFromImage:false});
+        this.setState({selectedLocation: res.geometry.location,locationFromImage:false,locationName:description});
       }
     } catch (err) {
       this.setState({selectedLocation: false});
@@ -531,11 +526,14 @@ class EditMapDetails extends React.Component {
                           : null}
                       </Text>
                       <AutoCompleteLocation
-                          onValueChange={placeID =>
-                            this.getGeocodeFromPlace(placeID)
+                          onValueSelected={(placeID,description) =>
+                            this.getGeocodeFromPlace(placeID,description)
                           }
-                          locationFromImage={this.state.locationFromImage}
-                          value={this.state.placeName}
+                          onValueChange={(name) =>
+                            this.setState({locationName:name})
+                          }
+                          locationFromImage={this.state.locationFromImage && this.state.locationAccepted}
+                          value={this.state.locationName}
                       />
                     </View>
                   </>

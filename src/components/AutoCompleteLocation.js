@@ -114,7 +114,7 @@ export default class AutoCompleteLocation extends Component {
               this.setState(
                 {searchTerm: item.description, hideResults: true},
                 () => {
-                  this.props.onValueChange(item.place_id);
+                  this.props.onValueSelected(item.place_id, item.description);
                 },
               )
             }>
@@ -174,12 +174,12 @@ export default class AutoCompleteLocation extends Component {
       this.setState({hideResults: true});
     }
   }, 250);
-    componentWillReceiveProps(nextProps) {
-        console.log("nextprops => ",nextProps)
-        if (nextProps.locationFromImage && nextProps.value) {
-        this.setState({searchTerm:nextProps.value})
-    }
-  }
+  //     componentWillReceiveProps(nextProps) {
+  //         console.log("nextprops => ",nextProps)
+  //         if (nextProps.locationFromImage && nextProps.value) {
+  //         this.setState({searchTerm:nextProps.value})
+  //     }
+  //   }
   render() {
     const {
       data,
@@ -191,15 +191,17 @@ export default class AutoCompleteLocation extends Component {
 
     // Notify listener if the suggestion will be shown.
     onShowResults && onShowResults(showResults);
-
+      let isDisabled = this.props.locationFromImage && this.props.value;
     return (
       <View style={[styles.container, containerStyle]}>
         <Item style={styles.searchbarInputBox}>
           <Input
-            style={styles.searchbarInput}
+            style={[styles.searchbarInput,{backgroundColor:isDisabled?'#ddd':'transparent'}]}
             placeholder="Type in your next destination!"
-            value={this.state.searchTerm}
+            value={this.props.value}
+            disabled={isDisabled}
             onChangeText={searchTerm => {
+              this.props.onValueChange(searchTerm);
               if (!this.props.locationFromImage) {
                 this.setState({searchTerm}, () => {
                   this.searchPlaces();
