@@ -3,7 +3,7 @@ import {
   View,
   Dimensions,
   StyleSheet,
-  Image,
+  Keyboard,
   Text,
   ScrollView,
   TouchableOpacity,
@@ -49,7 +49,29 @@ class PinView extends React.Component {
   }
 
   componentWillMount() {
+    this.keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      this._keyboardDidShow.bind(this),
+    );
+    this.keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      this._keyboardDidHide.bind(this),
+    );
+
     this.fetchSinglePinData();
+  }
+
+  componentWillUnmount() {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
+
+  _keyboardDidShow() {
+    this.setState({keyboardOpened: true});
+  }
+
+  _keyboardDidHide() {
+    this.setState({keyboardOpened: false});
   }
 
   fetchSinglePinData() {
@@ -65,7 +87,7 @@ class PinView extends React.Component {
           map_id: mapID,
         })
         .then(data => {
-          console.log("data => ",data)
+          console.log('data => ', data);
           let pinData = data.pin_data;
           let isLocationSelected = pinData.latitude && pinData.longitude;
           let pinImages =
@@ -113,12 +135,9 @@ class PinView extends React.Component {
           user_id: this.props.userData.id,
         })
         .then(data => {
-          this.setState(
-            {saveToListModal: false},
-            () => {
-              this.fetchSinglePinData();
-            },
-          );
+          this.setState({saveToListModal: false}, () => {
+            this.fetchSinglePinData();
+          });
         })
         .catch(err => {
           console.log('err => ', err);
@@ -346,64 +365,71 @@ class PinView extends React.Component {
               </TouchableOpacity>
             </View>
 
-            {this.props.tripList && this.props.tripList.length > 0 && (
-              <>
-                <View style={styles.orDivider}>
-                  <Text style={styles.orDividerBorder}></Text>
-                  <Text style={styles.orDividerText}>OR</Text>
-                </View>
-                <ScrollView style={styles.MVTripList} contentContainerStyle={{maxHeight:200,flexGrow:0}} showsVerticalScrollIndicator={true}>
-                  {[...this.props.tripList,...this.props.tripList].map(trip => {
-                    return (
-                      <View style={styles.MVTripListItem}>
-                        <Text style={styles.MVTripListItemTitle}>
-                          {trip.name}
-                        </Text>
-                        <TouchableOpacity
-                          onPress={() => this.addToTrip(trip.id)}>
-                          {this.state.isSaved == trip.id ? (
-                            <AntDesign
-                              name={'heart'}
-                              color={'#2F80ED'}
-                              size={15}
-                            />
-                          ) : (
-                            <AntDesign
-                              name={'hearto'}
-                              color={'#2F80ED'}
-                              size={15}
-                            />
-                          )}
-                        </TouchableOpacity>
-                      </View>
-                    );
-                  })}
-                </ScrollView>
-              </>
-            )}
+            {!this.state.keyboardOpened &&
+              this.props.tripList &&
+              this.props.tripList.length > 0 && (
+                <>
+                  <View style={styles.orDivider}>
+                    <Text style={styles.orDividerBorder}></Text>
+                    <Text style={styles.orDividerText}>OR</Text>
+                  </View>
+                  <ScrollView
+                    style={styles.MVTripList}
+                    contentContainerStyle={{maxHeight: 200, flexGrow: 0}}
+                    showsVerticalScrollIndicator={true}>
+                    {this.props.tripList.map(trip => {
+                      return (
+                        <View style={styles.MVTripListItem}>
+                          <Text style={styles.MVTripListItemTitle}>
+                            {trip.name}
+                          </Text>
+                          <TouchableOpacity
+                            onPress={() => this.addToTrip(trip.id)}>
+                            {this.state.isSaved == trip.id ? (
+                              <AntDesign
+                                name={'heart'}
+                                color={'#2F80ED'}
+                                size={15}
+                              />
+                            ) : (
+                              <AntDesign
+                                name={'hearto'}
+                                color={'#2F80ED'}
+                                size={15}
+                              />
+                            )}
+                          </TouchableOpacity>
+                        </View>
+                      );
+                    })}
+                  </ScrollView>
+                </>
+              )}
 
-            <TouchableOpacity
-              style={{
-                paddingVertical: 10,
-                paddingHorizontal: 30,
-                marginTop: 15,
-                backgroundColor: '#2F80ED',
-                width: 140,
-                justifyContent: 'center',
-                alignItems: 'center',
-                alignSelf: 'center',
-                borderRadius: 5,
-              }}
-              onPress={() => this.setState({saveToListModal: false})}>
-              <Text
+            {!this.state.keyboardOpened && (
+              <TouchableOpacity
                 style={{
-                  fontFamily: 'Montserrat-Regular',
-                  fontSize: 12,
-                  color: 'white',
-                }}>
-                Done
-              </Text>
-            </TouchableOpacity>
+                  paddingVertical: 10,
+                  paddingHorizontal: 30,
+                  marginTop: 15,
+                  backgroundColor: '#2F80ED',
+                  width: 140,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  alignSelf: 'center',
+                  borderRadius: 5,
+                }}
+                onPress={() => this.setState({saveToListModal: false})}>
+                <Text
+                  style={{
+                    fontFamily: 'Montserrat-Regular',
+                    fontSize: 12,
+                    color: 'white',
+                  }}>
+                  Done
+                </Text>
+              </TouchableOpacity>
+            )}
           </DialogContent>
         </Dialog>
       </SafeAreaView>
@@ -671,7 +697,7 @@ const styles = StyleSheet.create({
   },
   MVTripList: {
     marginBottom: 20,
-    maxHeight:100
+    maxHeight: 100,
   },
   MVTripListItem: {
     flexDirection: 'row',

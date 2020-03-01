@@ -316,6 +316,9 @@ class HomeScreen extends React.Component {
                   this.fetchSearchedMaps();
                 })
               }
+              showSorting={() => {
+                this.setState({showSorting:!this.state.showSorting}) 
+              }}
             />
 
             {this.state.showSorting && (

@@ -195,7 +195,7 @@ export default class GoogleAutoComplete extends Component {
             />
             <TouchableOpacity
               onPress={() =>
-                this.setState({ showSorting: !this.state.showSorting })
+                this.props.showSorting()
               }>
               <Feather style={styles.searchbarFilter} name="sliders" />
             </TouchableOpacity>
