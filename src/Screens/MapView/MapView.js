@@ -147,7 +147,7 @@ class MapView extends React.Component {
     if (mapID) {
       this.setState({ mapPinsInProgress: true });
       this.props.mapAction
-        .getMapPins({ map_id: mapID, user_id: this.props.userData.id })
+        .fetchMapPinList({ map_id: mapID, user_id: this.props.userData.id })
         .then(data => {
           let pinList = data.mapID.pin_list || [];
           let { params } = this.props.navigation.state;
@@ -286,22 +286,6 @@ class MapView extends React.Component {
     this.loadMapPins(params && params.mapID);
   }
 
-  _renderItem({ item, index }) {
-    return (
-      <View style={styles.mapSlidCard}>
-        <View style={styles.mapSlidCardInner}>
-          <Image
-            style={styles.mapViewCardImg}
-            source={require('./../../Images/login-bg.jpg')}
-          />
-          <View style={styles.mapViewCardContent}>
-            <Text style={styles.mapViewCardTitle}>{item.title}</Text>
-          </View>
-        </View>
-      </View>
-    );
-  }
-
   render() {
     let { params } = this.props.navigation.state;
     params = params || {};
@@ -375,25 +359,6 @@ class MapView extends React.Component {
                           }
 
                         }}>
-
-                        {/* <MapboxGL.SymbolLayer
-                          id={'symbolLocationSymbols' + (random + 1)}
-                          minZoomLevel={1}
-                          style={{
-                            iconImage: this.categoryImages[collection.category],
-                            iconAllowOverlap: true,
-                            iconSize: 0.4,
-                            textField: '2',
-                            textColor: 'white',
-                            textJustify: 'left',
-                            textAnchor: 'bottom-right',
-                            textOffset: [-0.5, -1],
-                            textHaloColor: 'rgba(47,128,237,1)',
-                            textHaloWidth: 5,
-                            textTranslate: [-0.5, -0.5],
-                            textPadding: 2
-                          }}
-                        /> */}
 
                         <MapboxGL.CircleLayer
                           id={`singlePoint${Math.random()}`}

@@ -23,14 +23,7 @@ class DefaultScreen extends Component {
   }
 
   componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', () => {
-      Alert.alert('Quit App?', 'Are you sure you want to exit App?', [
-        {text: 'Yes', onPress: () => BackHandler.exitApp()},
-        {text: 'No', onPress: () => {}},
-      ]);
-      return true;
-    });
-
+    
     this.fetchInitialData();
     this.redirectToApp(this.props);
   }

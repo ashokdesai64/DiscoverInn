@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, {Fragment} from 'react';
 import {
   View,
   Dimensions,
@@ -9,22 +9,23 @@ import {
   TouchableOpacity,
   TextInput,
   SafeAreaView,
+  ActivityIndicator,
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
-import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog';
+import Carousel, {Pagination} from 'react-native-snap-carousel';
+import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
 import fontelloConfig from './../../selection.json';
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
-
+import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
+import ImageBlurLoading from './../../components/ImageLoader';
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const DEVICE_WIDTH = Dimensions.get('window').width;
-
+import Spinner from './../../components/Loader';
 //REDUX
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
 import * as mapActions from './../../actions/mapActions';
 
@@ -38,78 +39,186 @@ class PinView extends React.Component {
       carouselItems: [
         {
           image: 'https://discover-inn.com/assets/images/map-image.jpeg ',
-        }
+        },
       ],
-      listToAdded: []
+      listToAdded: [],
+      tripListName: '',
+      pinLoader: false,
+      loaderMsg: '',
     };
   }
 
   componentWillMount() {
-    const { params } = this.props.navigation.state;
+    this.fetchSinglePinData();
+  }
+
+  fetchSinglePinData() {
+    const {params} = this.props.navigation.state;
     let pinID = params.pinID;
     let mapID = params.mapID;
     if (pinID && mapID) {
-      this.setState({ pinDetailInProgress: true })
-      this.props.mapAction.getSinglePinData({ pin_id: pinID, user_id: this.props.userData.id, map_id: mapID }).then((data) => {
-        let pinData = data.pin_data;
-        let isLocationSelected = pinData.latitude && pinData.longitude;
-        let pinImages = (pinData.images && pinData.images.length >= 0) ? pinData.images : [];
-        this.setState({ pinTitle: pinData.name, pinDescription: pinData.description, selectedCategory: pinData.categories, isLocationSelected, webImages: pinImages, pinDetailInProgress: false });
-      }).catch((err) => {
-        this.setState({ pinDetailInProgress: false })
-        console.log("err => ", err)
-      })
+      this.setState({loaderMsg: 'Fetching Pin Data', pinLoader: true});
+      this.props.mapAction
+        .getSinglePinData({
+          pin_id: pinID,
+          user_id: this.props.userData.id,
+          map_id: mapID,
+        })
+        .then(data => {
+          console.log("data => ",data)
+          let pinData = data.pin_data;
+          let isLocationSelected = pinData.latitude && pinData.longitude;
+          let pinImages =
+            pinData.images && pinData.images.length >= 0 ? pinData.images : [];
+          this.setState({
+            pinTitle: pinData.name,
+            pinDescription: pinData.description,
+            selectedCategory: pinData.categories,
+            isLocationSelected,
+            webImages: pinImages,
+            loaderMsg: '',
+            pinLoader: false,
+            addedFrom: pinData.added_from,
+            isSaved: pinData.save_triplist,
+          });
+        })
+        .catch(err => {
+          this.setState({loaderMsg: '', pinLoader: false});
+          console.log('err => ', err);
+        });
     }
   }
 
-  _renderItemCate = ({ item, index }) => {
+  _renderItemCate = ({item, index}) => {
     return (
-      <Image
-        source={{ uri: item.image }}
+      <ImageBlurLoading
+        withIndicator
         style={styles.cateSlideCardIcon}
+        source={{uri: item.image}}
+        thumbnailSource={{
+          uri: 'https://picsum.photos/id/1/50/50',
+        }}
       />
     );
   };
 
   addToTrip(tripID) {
-    let { params } = this.props.navigation.state;
+    let {params} = this.props.navigation.state;
     if (params && params.mapID && params.pinID && tripID) {
-      this.props.mapAction.addRemoveToTrip({ map_id: params.mapID, pin_id: params.pinID, favorite_id: tripID, user_id: this.props.userData.id }).then((data) => {
-        let listToAdded = [...this.state.listToAdded];
-
-        let isAdded = listToAdded.indexOf(tripID);
-        if (isAdded>=0) {
-          listToAdded.splice(isAdded, 1);
-        } else {
-          listToAdded.push(tripID);
-        }
-        this.setState({ listToAdded })
-      }).catch((err) => {
-        console.log("err => ", err);
-      })
+      this.props.mapAction
+        .addRemoveToTrip({
+          map_id: params.mapID,
+          pin_id: params.pinID,
+          favorite_id: tripID,
+          user_id: this.props.userData.id,
+        })
+        .then(data => {
+          this.setState(
+            {saveToListModal: false},
+            () => {
+              this.fetchSinglePinData();
+            },
+          );
+        })
+        .catch(err => {
+          console.log('err => ', err);
+        });
     }
   }
 
+  saveToNewTripList() {
+    if (!this.state.tripListName.trim()) {
+      return alert('Please enter trip list name');
+    }
+    this.setState({creatingTripList: true});
+    let {params} = this.props.navigation.state;
+    this.props.mapAction
+      .createFavouriteList({
+        user_id: this.props.userData.id,
+        name: this.state.tripListName,
+      })
+      .then(data => {
+        console.log('data => ', data);
+
+        let tripListID = data.id;
+        this.props.mapAction
+          .addRemoveToTrip({
+            map_id: params.mapID,
+            pin_id: params.pinID,
+            favorite_id: tripListID,
+            user_id: this.props.userData.id,
+          })
+          .then(data => {
+            this.setState(
+              {saveToListModal: false, creatingTripList: false},
+              () => {
+                this.fetchSinglePinData();
+              },
+            );
+          })
+          .catch(err => {
+            alert(err);
+            this.setState({saveToListModal: false, creatingTripList: false});
+          });
+      })
+      .catch(err => {
+        alert(err);
+        this.setState({saveToListModal: false, creatingTripList: false});
+      });
+  }
+
+  removeFromTrip(tripListID) {
+    let {params} = this.props.navigation.state;
+    this.setState({loaderMsg: 'Removing pin...', pinLoader: true});
+    this.props.mapAction
+      .addRemoveToTrip({
+        map_id: params.mapID,
+        pin_id: params.pinID,
+        favorite_id: tripListID,
+        user_id: this.props.userData.id,
+      })
+      .then(data => {
+        this.setState({loaderMsg: '', pinLoader: false}, () => {
+          this.fetchSinglePinData();
+        });
+      })
+      .catch(err => {
+        alert(err);
+      });
+  }
+
   render() {
-    let { categories } = this.props;
-    const { params } = this.props.navigation.state;
-    let selectedCategory = categories && categories.find((c) => c.id == this.state.selectedCategory);
+    let {categories} = this.props;
+    const {params} = this.props.navigation.state;
+    let selectedCategory =
+      categories && categories.find(c => c.id == this.state.selectedCategory);
     let categoryName = (selectedCategory && selectedCategory.name) || '';
-    
+
     let isWebImages = this.state.webImages && this.state.webImages.length > 0;
     return (
       <SafeAreaView>
-
         <View style={[styles.pinHeader]}>
           <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
             <Feather name={'arrow-left'} size={24} color={'white'} />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => this.setState({ saveToListModal: true })}>
-            <Feather name={'heart'} size={24} color={'white'} />
-          </TouchableOpacity>
-        </View>
 
+          {this.state.isSaved ? (
+            <TouchableOpacity
+              onPress={() => this.removeFromTrip(this.state.isSaved)}>
+              <AntDesign name={'heart'} size={24} color={'white'} />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => this.setState({saveToListModal: true})}>
+              <AntDesign name={'hearto'} size={24} color={'white'} />
+            </TouchableOpacity>
+          )}
+        </View>
+        <Spinner
+          visible={this.state.pinLoader}
+          textContent={this.state.loaderMsg}
+          textStyle={{color: '#fff'}}
+        />
         <Carousel
           data={isWebImages ? this.state.webImages : this.state.carouselItems}
           sliderWidth={DEVICE_WIDTH}
@@ -124,7 +233,7 @@ class PinView extends React.Component {
           }}
           firstItem={0}
           renderItem={this._renderItemCate}
-          onSnapToItem={index => this.setState({ activeSlide: index })}
+          onSnapToItem={index => this.setState({activeSlide: index})}
         />
 
         <Pagination
@@ -155,13 +264,18 @@ class PinView extends React.Component {
         <ScrollView style={styles.pinScrollView}>
           <Text style={styles.pinViewTitle}>{this.state.pinTitle}</Text>
           <View style={styles.pinViewCate}>
-            <IconMoon name={categoryName.toLowerCase()} style={styles.pinViewCateIcon} />
+            <IconMoon
+              name={categoryName.toLowerCase()}
+              style={styles.pinViewCateIcon}
+            />
             <Text style={styles.pinViewCateText}> {categoryName}</Text>
           </View>
-          {
-            this.state.pinTitle &&
-            <Text style={[styles.pinViewCateText, { marginBottom: 15 }]}> Added From: {params.mapName}</Text>
-          }
+          {this.state.pinTitle && this.state.addedFrom && (
+            <Text style={[styles.pinViewCateText, {marginBottom: 15}]}>
+              {' '}
+              Added From: {this.state.addedFrom || ''}
+            </Text>
+          )}
           <Text style={styles.pinViewContent}>{this.state.pinDescription}</Text>
         </ScrollView>
 
@@ -171,7 +285,7 @@ class PinView extends React.Component {
           hasOverlay={true}
           animationDuration={1}
           onTouchOutside={() => {
-            this.setState({ saveToListModal: false });
+            this.setState({saveToListModal: false});
           }}
           dialogAnimation={
             new FadeAnimation({
@@ -181,7 +295,7 @@ class PinView extends React.Component {
             })
           }
           onHardwareBackPress={() => {
-            this.setState({ saveToListModal: false });
+            this.setState({saveToListModal: false});
             return true;
           }}
           dialogStyle={styles.customPopup}>
@@ -190,7 +304,7 @@ class PinView extends React.Component {
               <Text style={styles.customPopupHeaderTitle}>Save to list</Text>
               <TouchableOpacity
                 style={styles.buttonClose}
-                onPress={() => this.setState({ saveToListModal: false })}>
+                onPress={() => this.setState({saveToListModal: false})}>
                 <Feather style={styles.buttonCloseIcon} name={'x'} />
               </TouchableOpacity>
             </View>
@@ -200,6 +314,7 @@ class PinView extends React.Component {
                 style={styles.formControl}
                 placeholder={'Enter trip list name'}
                 placeholderTextColor={'#828894'}
+                onChangeText={tripListName => this.setState({tripListName})}
               />
             </View>
             <View style={styles.buttonCTGroup}>
@@ -210,7 +325,7 @@ class PinView extends React.Component {
                   styles.buttonCTCancel,
                   styles.buttonOutline,
                 ]}
-                onPress={() => this.setState({ saveToListModal: false })}>
+                onPress={() => this.setState({saveToListModal: false})}>
                 <Text style={[styles.buttonText, styles.buttonTextDark]}>
                   Cancel
                 </Text>
@@ -222,61 +337,50 @@ class PinView extends React.Component {
                   styles.buttonCTSubmit,
                   styles.buttonPrimary,
                 ]}
-                onPress={() => this.setState({ saveToListModal: false })}>
-                <Text style={styles.buttonText}>Submit</Text>
+                onPress={() => this.saveToNewTripList()}>
+                {this.state.creatingTripList ? (
+                  <ActivityIndicator color={'white'} size={'small'} />
+                ) : (
+                  <Text style={styles.buttonText}>Submit</Text>
+                )}
               </TouchableOpacity>
             </View>
 
-            {
-              this.props.tripList && this.props.tripList.length > 0 &&
+            {this.props.tripList && this.props.tripList.length > 0 && (
               <>
                 <View style={styles.orDivider}>
                   <Text style={styles.orDividerBorder}></Text>
                   <Text style={styles.orDividerText}>OR</Text>
                 </View>
-                <View style={styles.MVTripList}>
-                  {
-                    this.props.tripList.map((trip) => {
-                      return (
-                        <View style={styles.MVTripListItem}>
-                          <Text style={styles.MVTripListItemTitle}>{trip.name}</Text>
-                          <TouchableOpacity onPress={() => this.addToTrip(trip.id)}>
-                            {
-                              this.state.listToAdded.indexOf(trip.id) >= 0 ?
-                                <AntDesign name={'heart'} color={'#2F80ED'} size={15} />
-                                :
-                                <AntDesign name={'hearto'} color={'#2F80ED'} size={15} />
-                            }
-                          </TouchableOpacity>
-                        </View>
-                      )
-                    })
-                  }
-
-                </View>
-
-                {/* <View activeOpacity={0.9} style={styles.mapViewCard}>
-                  <Image
-                    style={styles.mapViewCardImg}
-                    source={require('./../../Images/login-bg.jpg')}
-                  />
-                  <View style={styles.mapViewCardContent}>
-                    <View style={styles.mapViewTitle}>
-                      <Text style={styles.mapViewTitleText}>Planet - Bangkok</Text>
-                      <SimpleLineIcons name={'heart'} size={15} color={'#EB5757'} />
-                    </View>
-                    <View style={styles.mapViewCate}>
-                      <IconMoon name="sights" style={styles.mapViewCateIcon} />
-                      <Text style={styles.mapViewCateText}> Sights</Text>
-                    </View>
-                    <Text style={styles.mapViewContentText}>
-                      Australian chef-author David Thompson is the man behind one of
-                      Bangkok's
-                </Text>
-                  </View>
-                </View> */}
+                <ScrollView style={styles.MVTripList} contentContainerStyle={{maxHeight:200,flexGrow:0}} showsVerticalScrollIndicator={true}>
+                  {[...this.props.tripList,...this.props.tripList].map(trip => {
+                    return (
+                      <View style={styles.MVTripListItem}>
+                        <Text style={styles.MVTripListItemTitle}>
+                          {trip.name}
+                        </Text>
+                        <TouchableOpacity
+                          onPress={() => this.addToTrip(trip.id)}>
+                          {this.state.isSaved == trip.id ? (
+                            <AntDesign
+                              name={'heart'}
+                              color={'#2F80ED'}
+                              size={15}
+                            />
+                          ) : (
+                            <AntDesign
+                              name={'hearto'}
+                              color={'#2F80ED'}
+                              size={15}
+                            />
+                          )}
+                        </TouchableOpacity>
+                      </View>
+                    );
+                  })}
+                </ScrollView>
               </>
-            }
+            )}
 
             <TouchableOpacity
               style={{
@@ -290,7 +394,7 @@ class PinView extends React.Component {
                 alignSelf: 'center',
                 borderRadius: 5,
               }}
-              onPress={() => this.setState({ saveToListModal: false })}>
+              onPress={() => this.setState({saveToListModal: false})}>
               <Text
                 style={{
                   fontFamily: 'Montserrat-Regular',
@@ -364,7 +468,7 @@ const styles = StyleSheet.create({
   cateSlideCard: {
     height: 375,
     marginBottom: 10,
-    shadowOffset: { width: 0, height: 5 },
+    shadowOffset: {width: 0, height: 5},
     shadowColor: 'rgba(6, 18, 42, 0.08);',
     shadowOpacity: 1.0,
     backgroundColor: '#fff',
@@ -442,7 +546,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     shadowColor: '#000',
     shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: -2 },
+    shadowOffset: {width: 0, height: -2},
     shadowRadius: 10,
     maxHeight: DEVICE_HEIGHT - 100,
     overflow: 'scroll',
@@ -567,6 +671,7 @@ const styles = StyleSheet.create({
   },
   MVTripList: {
     marginBottom: 20,
+    maxHeight:100
   },
   MVTripListItem: {
     flexDirection: 'row',

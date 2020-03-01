@@ -49,8 +49,8 @@ class MyTripList extends React.Component {
     })
   }
 
-  viewPinsOnMap(tripID){
-    this.props.navigation.navigate('FavouritePinMap',{tripID})
+  viewPinsOnMap(tripID,tripName){
+    this.props.navigation.navigate('FavouritePinMap',{tripID,tripName})
   }
 
   render() {
@@ -108,7 +108,7 @@ class MyTripList extends React.Component {
                         <View style={styles.myTravelActionRight}>
                           <TouchableOpacity
                             style={[styles.button, styles.buttonSm, styles.buttonPrimary]}
-                            onPress={() => { this.viewPinsOnMap(trip.id) }}>
+                            onPress={() => { this.viewPinsOnMap(trip.id,trip.name) }}>
                             <Text style={styles.buttonText}>View</Text>
                           </TouchableOpacity>
                           <TouchableOpacity

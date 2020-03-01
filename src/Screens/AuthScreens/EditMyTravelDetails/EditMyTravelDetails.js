@@ -153,14 +153,12 @@ class EditMyTravelDetails extends React.Component {
             textContent={'Updating Map...'}
             textStyle={{ color: '#fff' }}
           />
-          <View style={styles.container}>
             <View style={styles.pageContent}>
               <ScrollView
-                style={styles.scrollView}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps={'always'}
-                contentContainerStyle={{ height: '100%' }}
+                // contentContainerStyle={{ height: '100%' }}
               >
                 <View style={styles.formGroup}>
                   <Text style={styles.formLabel}>Description</Text>
@@ -325,10 +323,11 @@ class EditMyTravelDetails extends React.Component {
                       <Picker.Item label="2020" value="2020" />
                     </Picker>
                   </View>
+                  
                 </View>
 
-
-                <View style={styles.footerButton}>
+                
+                <View style={styles.actionButton}>
                   <TouchableOpacity
                     style={[
                       styles.button,
@@ -353,7 +352,6 @@ class EditMyTravelDetails extends React.Component {
               </ScrollView>
             </View>
 
-          </View>
         </ImageBackground>
       </Fragment>
     );

@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingBottom: 0,
     flex: 1,
+    position:'relative'
   },
   logoText: {
     fontSize: 36,
@@ -88,12 +89,14 @@ const styles = StyleSheet.create({
   },
   unauthBottomText: {
     color: '#fff',
-    justifyContent: 'center',
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    alignItems: 'center',
+    justifyContent: 'flex-end',
+    flex:1,
+    // left: 0,
+    // right: 0,
+    // bottom: 0,
+    alignItems: 'flex-end',
+    // alignSelf: 'flex-end',
+    // alignContent:'flex-end'
   },
   toggleText: {
     color: '#fff',
@@ -106,7 +109,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'bottom',
     marginBottom: 20,
     position: 'absolute',
-    bottom: '0%',
+    bottom: 0,
   },
   fixedFooter: {
     position: 'absolute',

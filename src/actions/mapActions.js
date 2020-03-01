@@ -358,6 +358,25 @@ export function getMapPins(apiData) {
     };
 }
 
+export function fetchMapPinList(apiData) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+
+            let response = await callAPI(
+                apiUrls.getMapPinsList,
+                apiData
+            );
+
+            if (response.status) {
+                resolve({ mapID: response.data });
+            } else {
+                reject(response.message)
+            }
+
+        })
+    };
+}
+
 export function addReview(apiData) {
     return function (dispatch, getState) {
         return new Promise(async (resolve, reject) => {
@@ -606,7 +625,7 @@ export function createFavouriteList(apiData) {
                 apiData
             );
             if (response.status) {
-                resolve(response.data);
+                resolve(response);
             } else {
                 reject(response.message)
             }

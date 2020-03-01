@@ -200,6 +200,13 @@ const styles = StyleSheet.create({
     right: 0,
     left: 0,
   },
+  actionButton: {
+    flexDirection: 'row',
+    marginTop: 20,
+    alignItems: 'flex-end',
+    marginBottom: 20,
+    justifyContent: 'space-between',
+  },
   button: {
     paddingVertical: 5,
     paddingHorizontal: 30,

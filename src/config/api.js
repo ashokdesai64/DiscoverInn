@@ -16,6 +16,7 @@ export const apiUrls = {
   addMyMap: 'https://discover-inn.com/api/v1/add_map',
   addMapPin: 'https://discover-inn.com/api/v1/add_map_pin',
   getMapPins: 'https://discover-inn.com/api/v1/pin_list',
+  getMapPinsList: 'https://discover-inn.com/api/v1/map_pin_list',
   deleteReview: 'https://discover-inn.com/api/v1/delete_review',
   editReview: 'https://discover-inn.com/api/v1/update_review',
   updateMapTitle: 'https://discover-inn.com/api/v1/update_map_title',

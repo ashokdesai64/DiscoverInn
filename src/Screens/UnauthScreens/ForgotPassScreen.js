@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, {Fragment} from 'react';
 import {
   View,
   Text,
@@ -8,38 +8,40 @@ import {
   SafeAreaView,
   TouchableOpacity,
   KeyboardAvoidingView,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import styles from './Unauthscreens.style';
 
 //REDUX
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import * as authActions from './../../actions/authActions';
 
 class ForgotPassScreen extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      email: 'tony@stark.com',
-      inProgress: false
-    }
-
+      email: '',
+      inProgress: false,
+    };
   }
 
   forgotPassword() {
     if (!this.state.email) {
-      alert("Please enter email."); return
+      alert('Please enter email.');
+      return;
     }
-    this.setState({ inProgress: true });
-    this.props.authAction.forgotPassword({ email: this.state.email }).then((msg) => {
-      alert(msg);
-      this.setState({ inProgress: false })
-    }).catch((e) => {
-      alert(e);
-      this.setState({ inProgress: false })
-    });
+    this.setState({inProgress: true});
+    this.props.authAction
+      .forgotPassword({email: this.state.email})
+      .then(msg => {
+        alert(msg);
+        this.setState({inProgress: false});
+      })
+      .catch(e => {
+        alert(e);
+        this.setState({inProgress: false});
+      });
   }
 
   render() {
@@ -62,11 +64,9 @@ class ForgotPassScreen extends React.Component {
               height: '100%',
             }}>
             <KeyboardAvoidingView
-              style={{ flex: 1 }}
+              style={{flex: 1}}
               behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-              keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
-            >
-
+              keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}>
               <View style={styles.container}>
                 <View style={styles.unauthContent}>
                   <Text style={styles.logoText}>Discover - Inn</Text>
@@ -74,30 +74,37 @@ class ForgotPassScreen extends React.Component {
                     <Text style={styles.formTitle}>Forgot Password</Text>
                     <View style={styles.formGroup}>
                       <Text style={styles.formLabel}>Email</Text>
-                      <TextInput style={styles.formControl} value={this.state.email} onChangeText={(email) => { this.setState({ email: email.trim() }) }} />
+                      <TextInput
+                        style={styles.formControl}
+                        value={this.state.email}
+                        onChangeText={email => {
+                          this.setState({email: email.trim()});
+                        }}
+                      />
                     </View>
                     <TouchableOpacity
                       style={[styles.button, styles.buttonPrimary]}
                       onPress={() => this.forgotPassword()}>
-                      {
-                        this.state.inProgress ?
-                          <ActivityIndicator size="small" color="#fff" />
-                          :
-                          <Text style={styles.buttonText}>Submit</Text>
-                      }
+                      {this.state.inProgress ? (
+                        <ActivityIndicator size="small" color="#fff" />
+                      ) : (
+                        <Text style={styles.buttonText}>Submit</Text>
+                      )}
                     </TouchableOpacity>
                   </View>
-                  <Text style={styles.toggleText}>
+
+                  <Text style={styles.fixedFooter}>
                     Back to?
-                  <Text
+                    <Text
                       style={styles.toggleTextLink}
                       onPress={() =>
                         this.props.navigation.navigate('LoginScreen')
                       }>
                       {' '}
                       SignIn
+                    </Text>
                   </Text>
-                  </Text>
+
                 </View>
               </View>
             </KeyboardAvoidingView>
