@@ -118,7 +118,7 @@ class PinView extends React.Component {
         style={styles.cateSlideCardIcon}
         source={{uri: item.image}}
         thumbnailSource={{
-          uri: 'https://picsum.photos/id/1/50/50',
+          uri: 'https://discover-inn.com/upload/cover/map-image.jpeg',
         }}
       />
     );

@@ -2,7 +2,52 @@ import { StyleSheet, Dimensions } from 'react-native';
 const { width } = Dimensions.get('window');
 const height = Dimensions.get('window').height;
 
+const border = {
+  borderColor: '#b9b9b9',
+  borderRadius: 1,
+  borderWidth: 1,
+};
+
+const androidStyles = {
+  container: {
+    flex: 1,
+    // marginTop: 25
+  },
+  inputContainer: {
+    marginBottom: 0,
+  },
+  list: {
+    backgroundColor: 'white',
+    borderTopWidth: 0,
+    marginTop: 0,
+    ...border,
+    // maxHeight: 180,
+    padding: 10,
+    zIndex: 999,
+  },
+};
+
+const iosStyles = {
+  container: {
+    zIndex: 1,
+    // marginTop: 25
+  },
+  list: {
+    backgroundColor: 'white',
+    borderTopWidth: 0,
+    // left: 0,
+    // position: 'absolute',
+    // right: 0,
+    ...border,
+    maxHeight: 180,
+  },
+};
+
 const styles = StyleSheet.create({
+  ...Platform.select({
+    android: { ...androidStyles },
+    ios: { ...iosStyles },
+  }),
   container: {
     paddingVertical: 5,
   },

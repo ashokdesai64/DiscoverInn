@@ -394,7 +394,7 @@ class EditMapDetails extends React.Component {
                             style={{height: 80, width: 80, borderRadius: 5}}
                             source={{uri: image.image}}
                             thumbnailSource={{
-                              uri: 'https://picsum.photos/id/1/50/50',
+                              uri: 'https://discover-inn.com/upload/cover/map-image.jpeg',
                             }}
                           />
                           <TouchableOpacity

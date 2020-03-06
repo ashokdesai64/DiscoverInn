@@ -163,19 +163,20 @@ export function fetchMyMaps(apiData) {
                 apiUrls.myMaps,
                 apiData
             );
+            let oldMaps = getState().maps.ownMaps;
             if (response.status) {
-                let oldMaps = getState().maps.ownMaps;
                 let newMaps = [...oldMaps, ...response.data];
                 dispatch({
                     type: 'ownMaps',
-                    ownMaps: newMaps,
+                    ownMaps: apiData.page > 1 ? newMaps : [...response.data],
                     fetchingMaps:false
                 });
                 resolve(newMaps);
             } else {
+                console.log("apiData.page => ",apiData.page)
                 dispatch({
                     type: 'ownMaps',
-                    ownMaps: [],
+                    ownMaps: apiData.page > 1 ? [...oldMaps] : [],
                     fetchingMaps:false
                 });
                 reject(response.message)

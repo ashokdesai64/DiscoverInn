@@ -130,7 +130,7 @@ class MyReviews extends React.Component {
                           withIndicator
                           style={styles.reviewCardAvatar}
                           source={{ uri: review.image }}
-                          thumbnailSource={{ uri: 'https://picsum.photos/id/1/50/50' }}
+                          thumbnailSource={{ uri: 'https://discover-inn.com/upload/cover/map-image.jpeg' }}
                         />
                         <View style={styles.reviewCardHeading}>
                           <Text style={styles.reviewCardTitle}>
@@ -190,7 +190,7 @@ class MyReviews extends React.Component {
                           withIndicator
                           style={styles.reviewCardAvatar}
                           source={{ uri: review.image }}
-                          thumbnailSource={{ uri: 'https://picsum.photos/id/1/50/50' }}
+                          thumbnailSource={{ uri: 'https://discover-inn.com/upload/cover/map-image.jpeg' }}
                         />
                         <View style={styles.reviewCardHeading}>
                           <Text style={styles.reviewCardTitle}>

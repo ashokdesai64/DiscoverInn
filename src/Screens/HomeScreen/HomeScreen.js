@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   Text,
@@ -16,13 +16,14 @@ import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from './../../components/header/header';
 import GoogleAutoComplete from './../../components/GoogleAutoComplete';
-import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import fontelloConfig from './../../selection.json';
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
+import ImageBlurLoading from './../../components/ImageLoader';
 
 //REDUX
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import * as authActions from './../../actions/authActions';
 import * as mapActions from './../../actions/mapActions';
@@ -32,7 +33,7 @@ class HomeScreen extends React.Component {
     super(props);
     this.state = {
       showSorting: false,
-      userData: {userName: 'test'},
+      userData: { userName: 'test' },
       carouselCateItems: [
         {
           title: 'Sights',
@@ -70,8 +71,10 @@ class HomeScreen extends React.Component {
     this._renderItem = this._renderItem.bind(this);
   }
 
-  _renderItem({item, index}) {
+  _renderItem({ item, index }) {
     let avgReview = parseInt(item.avrage_review);
+    let coverImage = item.cover_image ? { uri: item.cover_image } : require('./../../Images/login-bg.jpg');
+    console.log(item.cover_image)
     return (
       <TouchableOpacity
         style={styles.mapSlidCard}
@@ -83,9 +86,13 @@ class HomeScreen extends React.Component {
         }
         activeOpacity={1}>
         <View style={styles.mapSlidCardInner}>
-          <Image
+          <ImageBlurLoading
+            withIndicator
             style={styles.mapSlideCardImg}
-            source={require('./../../Images/login-bg.jpg')}
+            source={coverImage}
+            thumbnailSource={{
+              uri: 'https://discover-inn.com/upload/cover/map-image.jpeg',
+            }}
           />
           <View style={styles.mapSlideCardImg_overlay} />
           <View style={styles.mapSlideCardContent}>
@@ -130,7 +137,8 @@ class HomeScreen extends React.Component {
     );
   }
 
-  _renderItemTop({item, index}) {
+  _renderItemTop({ item, index }) {
+    let coverImage = item.cover_image ? { uri: item.cover_image } : require('./../../Images/login-bg.jpg')
     return (
       <TouchableOpacity
         style={styles.mapSlidCard}
@@ -142,9 +150,13 @@ class HomeScreen extends React.Component {
           })
         }>
         <View style={styles.mapSlidCardInner}>
-          <Image
+          <ImageBlurLoading
+            withIndicator
             style={styles.mapSlideCardImg}
-            source={require('./../../Images/login-bg.jpg')}
+            source={coverImage}
+            thumbnailSource={{
+              uri: 'https://discover-inn.com/upload/cover/map-image.jpeg',
+            }}
           />
           <View style={styles.mapSlideCardImg_overlay} />
           <View style={styles.mapSlideCardContent}>
@@ -206,9 +218,9 @@ class HomeScreen extends React.Component {
               onPress: () => console.log('Cancel Pressed'),
               style: 'cancel',
             },
-            {text: 'Yes', onPress: () => BackHandler.exitApp()},
+            { text: 'Yes', onPress: () => BackHandler.exitApp() },
           ],
-          {cancelable: false},
+          { cancelable: false },
         );
         return true
       }
@@ -232,7 +244,7 @@ class HomeScreen extends React.Component {
     console.log(event.url);
   }
 
-  _renderItemCate = ({item, index}) => {
+  _renderItemCate = ({ item, index }) => {
     let category = this.state.carouselCateItems.find(c => c.title == item.name);
     let iconName = category.icon || 'other';
     return (
@@ -254,32 +266,32 @@ class HomeScreen extends React.Component {
 
   fetchCategoryMaps(categoryID) {
     let userID = this.props.userData && this.props.userData.id;
-    this.props.mapAction.fetchMapList({
+    let searchObj = {
       categorie: [categoryID],
       page: 1,
       sort_by: 'rating',
       user_id: userID,
-    });
-    this.props.navigation.navigate('MapList', {category: [categoryID]});
+    };
+    this.props.navigation.navigate('MapList', { category: [categoryID], searchObj });
   }
 
   fetchSearchedMaps() {
     let userID = this.props.userData && this.props.userData.id;
-    let {searchTerm} = this.state;
-    this.props.mapAction.fetchMapList({
+    let { searchTerm } = this.state;
+    let searchObj = {
       page: 1,
       sort_by: 'rating',
       user_id: userID,
       search: searchTerm,
-    });
+    };
 
-    this.props.navigation.navigate('MapList', {searchTerm});
+    this.props.navigation.navigate('MapList', { searchTerm, searchObj });
   }
 
   render() {
-    const {width} = Dimensions.get('window');
+    const { width } = Dimensions.get('window');
 
-    const {query} = this.state;
+    const { query } = this.state;
 
     return (
       <Fragment>
@@ -287,7 +299,7 @@ class HomeScreen extends React.Component {
           showMenu={true}
           title={'Discover Inn'}
           {...this.props}
-          style={{backgroundColor: '#F3F4F6'}}
+          style={{ backgroundColor: '#F3F4F6' }}
           rightEmpty={true}
           showRightButton={false}
         />
@@ -308,16 +320,16 @@ class HomeScreen extends React.Component {
               autoCapitalize="none"
               autoCorrect={false}
               defaultValue={query}
-              onChangeText={text => this.setState({query: text})}
+              onChangeText={text => this.setState({ query: text })}
               placeholder="Type in your next destination"
               fetchSearchedMaps={() => this.fetchSearchedMaps()}
               onValueChange={searchTerm =>
-                this.setState({searchTerm}, () => {
+                this.setState({ searchTerm }, () => {
                   this.fetchSearchedMaps();
                 })
               }
               showSorting={() => {
-                this.setState({showSorting:!this.state.showSorting}) 
+                this.setState({ showSorting: !this.state.showSorting })
               }}
             />
 
@@ -332,7 +344,7 @@ class HomeScreen extends React.Component {
                     styles.buttonOutlinePrimary,
                     styles.buttonDisabled,
                   ]}
-                  onPress={() => this.setState({saveToListModal: false})}>
+                  onPress={() => this.setState({ saveToListModal: false })}>
                   <Text
                     style={
                       ([styles.buttonText],
@@ -352,7 +364,7 @@ class HomeScreen extends React.Component {
 
             <ScrollView
               horizontal={true}
-              contentContainerStyle={{paddingRight: 15}}>
+              contentContainerStyle={{ paddingRight: 15 }}>
               {this.props.categories &&
                 this.props.categories.map(item => {
                   let category = this.state.carouselCateItems.find(
@@ -382,10 +394,6 @@ class HomeScreen extends React.Component {
 
             <View style={styles.cateCard}>
               <Text style={styles.sectionTitle}>Most Popular</Text>
-              {/* <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('MapList')}>
-                <Text style={styles.seeAll}>See All</Text>
-              </TouchableOpacity> */}
             </View>
             <View style={styles.carouselMapView}>
               <Carousel

@@ -29,6 +29,7 @@ class EditMyTravel extends React.Component {
   constructor(props) {
     super(props);
     const {params} = props.navigation.state;
+    console.log("params.mapData => ",params.mapData)
     let mapName = '',
       coverImage = false;
 

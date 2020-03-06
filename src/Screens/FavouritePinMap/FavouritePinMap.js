@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import { View } from 'react-native';
 import styles from './FavouritePinMap.style';
 
 import sights1 from './../../Images/sights1.png';
@@ -13,14 +13,14 @@ import Header from './../../components/header/header';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import Spinner from './../../components/Loader';
 import _ from 'underscore';
-import {getBoundingBox} from 'geolocation-utils';
+import { getBoundingBox } from 'geolocation-utils';
 MapboxGL.setAccessToken(
   'pk.eyJ1IjoiYWJyaWxsbyIsImEiOiJjanNlbHVjb28wanFwNDNzNzkyZzFnczNpIn0.39svco2wAZvwcrFD6qOlMw',
 );
 
 //REDUX
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import * as mapActions from './../../actions/mapActions';
 
@@ -51,8 +51,8 @@ class FavouritePinMap extends React.Component {
   }
 
   componentWillMount() {
-      const { params } = this.props.navigation.state;
-      console.log("params => ",params)
+    const { params } = this.props.navigation.state;
+    console.log("params => ", params)
     let tripID = params.tripID;
     if (tripID) {
       this.props.mapAction
@@ -68,7 +68,7 @@ class FavouritePinMap extends React.Component {
           });
           console.log('data => ', data);
           let pinList = data.favorite_pin || [];
-          let {params} = this.props.navigation.state;
+          let { params } = this.props.navigation.state;
           params = params || {};
 
           let featureCollections = [],
@@ -77,53 +77,49 @@ class FavouritePinMap extends React.Component {
             bottomRight = null;
 
           if (pinList && pinList.length > 0) {
-            var splitByString = function(source, splitBy) {
+            var splitByString = function (source, splitBy) {
               var splitter = splitBy.split('');
               splitter.push([source]); //Push initial value
 
-              return splitter.reduceRight(function(accumulator, curValue) {
+              return splitter.reduceRight(function (accumulator, curValue) {
                 var k = [];
                 accumulator.forEach(v => (k = [...k, ...v.split(curValue)]));
                 return k;
               });
             };
 
-            let groupedPins = _.groupBy(pinList, pin => pin.categories);
-            Object.keys(groupedPins).map((categoryID, index) => {
-              let randomId = Math.floor(Math.random() * 90000) + 10000;
-              let pins = groupedPins[categoryID];
-              let temp = [];
-              pins.map(pin => {
-                if (pin.longitude && pin.latitude) {
-                  let exploded = splitByString(pin.name, '.,-');
-                  let parsed = parseInt(exploded[0]);
-                  temp.push({
-                    type: 'Feature',
-                    id: pin.id,
-                    properties: {
-                      id: pin.id,
-                      mapName: data.mapName,
-                      mapID: pin.map_id,
-                      hasNumber: !isNaN(parsed),
-                      number: parsed,
-                    },
-                    geometry: {
-                      type: 'Point',
-                      coordinates: [
-                        parseFloat(pin.longitude),
-                        parseFloat(pin.latitude),
-                      ],
-                    },
-                  });
-                }
-              });
+            let temp = [];
+            pinList.map(pin => {
 
-              featureCollections.push({
-                type: `FeatureCollection`,
-                features: temp,
-                category: categoryID,
-                id: randomId,
-              });
+              if (pin.longitude && pin.latitude) {
+                let exploded = splitByString(pin.name, '.,-');
+                let parsed = parseInt(exploded[0]);
+                temp.push({
+                  type: 'Feature',
+                  id: pin.id,
+                  properties: {
+                    id: pin.id,
+                    mapName: data.mapName,
+                    mapID: pin.map_id,
+                    hasNumber: !isNaN(parsed),
+                    number: parsed,
+                    category: pin.categories
+                  },
+                  geometry: {
+                    type: 'Point',
+                    coordinates: [
+                      parseFloat(pin.longitude),
+                      parseFloat(pin.latitude),
+                    ],
+                  },
+                });
+              }
+            });
+
+            featureCollections.push({
+              type: `FeatureCollection`,
+              features: temp,
+              id: Math.random(),
             });
 
             pinList.map(t => {
@@ -138,7 +134,7 @@ class FavouritePinMap extends React.Component {
             topLeft = boundsResult.topLeft;
             bottomRight = boundsResult.bottomRight;
           }
-          console.log(topLeft, bottomRight);
+
           let filteredCollections = featureCollections.filter(
             collection =>
               collection &&
@@ -154,16 +150,16 @@ class FavouritePinMap extends React.Component {
           });
         })
         .catch(err => {
-          this.setState({pinList: [], isPinListFetching: false});
+          this.setState({ pinList: [], isPinListFetching: false });
           console.log('err => ', err);
         });
     }
   }
 
   render() {
-    let {params} = this.props.navigation.state;
+    let { params } = this.props.navigation.state;
     params = params || {};
-    let {topLeft, bottomRight, filteredCollections} = this.state;
+    let { topLeft, bottomRight, filteredCollections } = this.state;
 
     return (
       <View style={styles.page}>
@@ -171,7 +167,7 @@ class FavouritePinMap extends React.Component {
           <Spinner
             visible={this.state.mapPinsInProgress}
             textContent={'Fetching Pins...'}
-            textStyle={{color: '#fff'}}
+            textStyle={{ color: '#fff' }}
           />
 
           <Header
@@ -188,9 +184,10 @@ class FavouritePinMap extends React.Component {
               style={styles.map}
               styleURL={MapboxGL.StyleURL.Street}
               logoEnabled={false}
+              rotateEnabled={false}
               attributionEnabled={false}
               onDidFinishRenderingMapFully={r => {
-                this.setState({followUserLocation: true});
+                this.setState({ followUserLocation: true });
               }}>
               {topLeft && bottomRight && (
                 <MapboxGL.Camera
@@ -201,78 +198,90 @@ class FavouritePinMap extends React.Component {
                 />
               )}
 
+              <MapboxGL.Images
+                images={{
+                  '1': this.categoryImages['1'],
+                  '2': this.categoryImages['2'],
+                  '3': this.categoryImages['3'],
+                  '4': this.categoryImages['4'],
+                  '5': this.categoryImages['5'],
+                  '6': this.categoryImages['6'],
+                  '7': this.categoryImages['7']
+                }}
+              />
+
               {filteredCollections && filteredCollections.length > 0
                 ? filteredCollections.map(collection => {
-                    let random = Math.floor(Math.random() * 90000) + 10000;
-                    return (
-                      <MapboxGL.ShapeSource
-                        id={'symbolLocationSource' + random}
-                        hitbox={{width: 20, height: 20}}
-                        shape={collection}
-                        cluster
-                        clusterMaxZoomLevel={14}
-                        clusterRadius={40}
-                        onPress={e => {
-                          let payload = e.nativeEvent.payload;
-                          if (!payload.properties.cluster) {
-                            this.props.navigation.navigate('PinView', {
-                              pinID: payload.id,
-                              mapID: payload.properties.mapID,
-                              mapName: params.mapName,
-                            });
-                          }
-                        }}>
-                        <MapboxGL.CircleLayer
-                          id={`singlePoint${Math.random()}`}
-                          filter={['has', 'point_count']}
-                          style={{
-                            circleColor: 'rgba(47,128,237,1)',
-                            circleRadius: 20,
-                            circleStrokeWidth: 2,
-                            circleStrokeColor: 'white',
-                          }}
-                        />
-                        <MapboxGL.SymbolLayer
-                          id={`pointCount${Math.random()}`}
-                          filter={['has', 'point_count']}
-                          style={{
-                            textField: '{point_count}',
-                            textSize: 14,
-                            textHaloColor: '#fff',
-                            textHaloWidth: 0.3,
-                            textColor: '#fff',
-                            iconAllowOverlap: false,
-                          }}
-                        />
-                        <MapboxGL.SymbolLayer
-                          id={`singlePointSelected${collection.id}`}
-                          filter={['!has', 'point_count']}
-                          style={{
-                            iconImage: this.categoryImages[collection.category],
-                            iconAllowOverlap: true,
-                            textAllowOverlap: true,
-                            iconSize: 0.4,
-                          }}
-                        />
+                  let random = Math.floor(Math.random() * 90000) + 10000;
+                  return (
+                    <MapboxGL.ShapeSource
+                      id={'symbolLocationSource' + random}
+                      hitbox={{ width: 20, height: 20 }}
+                      shape={collection}
+                      cluster
+                      clusterMaxZoomLevel={14}
+                      clusterRadius={40}
+                      onPress={e => {
+                        let payload = e.nativeEvent.payload;
+                        if (!payload.properties.cluster) {
+                          this.props.navigation.navigate('PinView', {
+                            pinID: payload.id,
+                            mapID: payload.properties.mapID,
+                            mapName: params.mapName,
+                          });
+                        }
+                      }}>
+                      <MapboxGL.CircleLayer
+                        id={`singlePoint${Math.random()}`}
+                        filter={['has', 'point_count']}
+                        style={{
+                          circleColor: 'rgba(47,128,237,1)',
+                          circleRadius: 20,
+                          circleStrokeWidth: 2,
+                          circleStrokeColor: 'white',
+                        }}
+                      />
+                      <MapboxGL.SymbolLayer
+                        id={`pointCount${Math.random()}`}
+                        filter={['has', 'point_count']}
+                        style={{
+                          textField: '{point_count}',
+                          textSize: 14,
+                          textHaloColor: '#fff',
+                          textHaloWidth: 0.3,
+                          textColor: '#fff',
+                          iconAllowOverlap: false,
+                        }}
+                      />
+                      <MapboxGL.SymbolLayer
+                        id={`singlePointSelected${collection.id}`}
+                        filter={['!has', 'point_count']}
+                        style={{
+                          iconImage: ['get', 'category'],
+                          iconAllowOverlap: true,
+                          textAllowOverlap: true,
+                          iconSize: 0.4,
+                        }}
+                      />
 
-                        <MapboxGL.SymbolLayer
-                          id={`singleNumberSelected${collection.id}`}
-                          filter={['==', 'hasNumber', true]}
-                          style={{
-                            textField: '{number}',
-                            textColor: 'white',
-                            textJustify: 'left',
-                            textAnchor: 'bottom-right',
-                            textOffset: [-0.5, -1],
-                            textHaloColor: 'rgba(47,128,237,1)',
-                            textHaloWidth: 5,
-                            textTranslate: [-0.5, -0.5],
-                            textPadding: 2,
-                          }}
-                        />
-                      </MapboxGL.ShapeSource>
-                    );
-                  })
+                      <MapboxGL.SymbolLayer
+                        id={`singleNumberSelected${collection.id}`}
+                        filter={['==', 'hasNumber', true]}
+                        style={{
+                          textField: '{number}',
+                          textColor: 'white',
+                          textJustify: 'left',
+                          textAnchor: 'bottom-right',
+                          textOffset: [-0.5, -1],
+                          textHaloColor: 'rgba(47,128,237,1)',
+                          textHaloWidth: 5,
+                          textTranslate: [-0.5, -0.5],
+                          textPadding: 2,
+                        }}
+                      />
+                    </MapboxGL.ShapeSource>
+                  );
+                })
                 : null}
               {/* <MapboxGL.UserLocation visible animated /> */}
             </MapboxGL.MapView>
