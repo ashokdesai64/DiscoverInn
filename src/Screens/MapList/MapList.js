@@ -89,12 +89,13 @@ class MapList extends React.Component {
       registeredEmail: '',
       wrongEmail: false,
       sharingMap: false,
-      showPlaces: false
+      showPlaces: false,
+      selectedMapCategories: { map_id: null, categories: [] }
     };
   }
 
-  navigateToMap(mapID, mapName) {
-    this.props.navigation.navigate('MapView', { mapID, mapName });
+  navigateToMap(mapID, mapName, categories = []) {
+    this.props.navigation.navigate('MapView', { mapID, mapName, filterCategories: categories });
   }
 
   componentWillMount() {
@@ -114,8 +115,34 @@ class MapList extends React.Component {
     }
   }
 
+  pinToggle(categoryID, mapID, mapName) {
+    let { selectedMapCategories } = this.state;
+    if (selectedMapCategories.map_id != mapID) {
+      this.setState({ selectedMapCategories: { map_id: mapID, categories: [categoryID] } }, () => {
+        let categories = this.state.selectedMapCategories && this.state.selectedMapCategories.categories || []
+        this.navigateToMap(mapID, mapName, categories)
+      })
+    } else {
+      let categories = selectedMapCategories.categories;
+      let categoryIndex = categories.findIndex((a) => a == categoryID);
+      if (categoryIndex >= 0) {
+        categories.splice(categoryIndex, 1);
+      } else {
+        categories.push(categoryID);
+      }
+      this.setState({ selectedMapCategories: { map_id: mapID, categories: [...categories] } }, () => {
+        let categories = this.state.selectedMapCategories && this.state.selectedMapCategories.categories || []
+        if (categories.length > 0) {
+          this.navigateToMap(mapID, mapName, categories)
+        }
+      })
+    }
+
+  }
+
   _renderItem(item, index) {
     let avgReview = parseInt(item.avrage_review);
+    let { selectedMapCategories } = this.state;
     return (
       <View style={[styles.mapSlideCard]}>
         <View style={styles.mapSlideCardHeader}>
@@ -203,21 +230,36 @@ class MapList extends React.Component {
                   c => c.title == category.name,
                 );
                 let isCategoryActive = parseInt(category.disabled) || 0;
+                let isCategorySelected = false;
+                if (selectedMapCategories.map_id == item.id && selectedMapCategories.categories.includes(category.id)) {
+                  isCategorySelected = true;
+                }
                 return (
                   <View
-                    style={[
-                      styles.singlePin,
-                      {
-                        backgroundColor: isCategoryActive
-                          ? '#2F80ED'
-                          : 'rgba(47, 128, 237, 0.1)',
-                      },
-                    ]}>
-                    <IconMoon
-                      size={14}
-                      name={categoryIcon.icon}
-                      color={isCategoryActive ? 'white' : '#2F80ED'}
-                    />
+                    style={
+                      isCategorySelected ? styles.selectedCat : styles.unSelectedCat
+                    }
+                  >
+                    <TouchableOpacity
+                      onPress={() => this.pinToggle(category.id, item.id, item.name)}
+                      style={[
+                        {
+                          borderRadius: 3,
+                          height: isCategorySelected ? 25 : 30,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          width: isCategorySelected ? 25 : 30,
+                          backgroundColor: isCategoryActive
+                            ? '#2F80ED'
+                            : 'rgba(47, 128, 237, 0.1)',
+                        },
+                      ]}>
+                      <IconMoon
+                        size={14}
+                        name={categoryIcon.icon}
+                        color={isCategoryActive ? 'white' : '#2F80ED'}
+                      />
+                    </TouchableOpacity>
                   </View>
                 );
               })}
@@ -584,7 +626,7 @@ class MapList extends React.Component {
                   style={styles.searchbarInput}
                   placeholder="Type in your next destination!"
                   value={this.state.searchTerm}
-                  onChangeText={searchTerm => this.setState({ searchTerm },()=>{this.searchPlaces();})}
+                  onChangeText={searchTerm => this.setState({ searchTerm }, () => { this.searchPlaces(); })}
                 />
               </Item>
               <Button
@@ -633,7 +675,7 @@ class MapList extends React.Component {
             this.state.showPlaces && (
               <ScrollView
                 nestedScrollEnabled={true}
-                style={{ maxHeight: 200,position:'absolute',zIndex:99999,top:45,marginHorizontal:10,borderWidth:1,borderColor:'#ddd' }}
+                style={{ maxHeight: 200, position: 'absolute', zIndex: 99999, top: 45, marginHorizontal: 10, borderWidth: 1, borderColor: '#ddd' }}
                 keyboardShouldPersistTaps={'always'}>
                 {this.renderResultList()}
               </ScrollView>
@@ -1391,7 +1433,6 @@ class MapList extends React.Component {
 }
 
 function mapStateToProps(state) {
-  console.log("state.maps.mapList => ", state.maps.mapList)
   return {
     userData: state.user.userData,
     mapList: state.maps.mapList,

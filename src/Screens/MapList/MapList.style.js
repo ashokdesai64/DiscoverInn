@@ -259,12 +259,29 @@ const styles = StyleSheet.create({
   singlePin: {
     color: 'white',
     fontSize: 14,
-    height: 30,
-    width: 30,
+
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
     marginRight: 8,
+  },
+  selectedCat: {
+    borderWidth: 2,
+    borderColor: '#2F80ED',
+    marginRight: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 34,
+    height: 34,
+    borderRadius: 7,
+  },
+  unSelectedCat: {
+    marginRight: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 30,
+    height: 30,
+    borderRadius: 5,
   },
   rateList: {
     flexDirection: 'row',

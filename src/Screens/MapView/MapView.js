@@ -88,6 +88,11 @@ class MapView extends React.Component {
             }
 
             let temp = [];
+
+            if(params && params.filterCategories && params.filterCategories.length > 0){
+              pinList = pinList.filter((pin)=> params.filterCategories.indexOf(pin.categories) >= 0 )
+            }
+
             pinList.map(pin => {
               if (pin.longitude && pin.latitude) {
                 let exploded = splitByString(pin.name, '.,-');
@@ -218,8 +223,8 @@ class MapView extends React.Component {
             absoluteHeader={true}
           />
 
-          {
-            this.state.filteredCollections.length > 0 ?
+          {/* {
+            this.state.filteredCollections.length > 0 ? */}
 
               <MapboxGL.MapView
                 style={styles.map}
@@ -332,9 +337,9 @@ class MapView extends React.Component {
                   : null}
                 {/* <MapboxGL.UserLocation visible animated /> */}
               </MapboxGL.MapView>
-              :
+              {/* :
               null
-          }
+          } */}
           {
             params.fromMyTravel ?
               <View style={[styles.mapControlButton]}>
