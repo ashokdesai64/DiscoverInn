@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
     height: 90,
     borderBottomWidth: 1,
     borderBottomColor: '#F2F2F2',
+    alignItems:'center'
   },
   profileHeader_img: {
     marginRight: 10,
@@ -22,6 +23,15 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 5,
+  },
+  guestAvatar: {
+    width: 60,
+    height: 60,
+    borderRadius: 5,
+    backgroundColor: '#ddd',
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems:'center'
   },
   profileHeader_name: {
     fontSize: 14,

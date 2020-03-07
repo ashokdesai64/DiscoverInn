@@ -27,6 +27,7 @@ import { bindActionCreators } from 'redux';
 
 import * as authActions from './../../actions/authActions';
 import * as mapActions from './../../actions/mapActions';
+import { NavigationEvents } from 'react-navigation';
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -74,7 +75,6 @@ class HomeScreen extends React.Component {
   _renderItem({ item, index }) {
     let avgReview = parseInt(item.avrage_review);
     let coverImage = item.cover_image ? { uri: item.cover_image } : require('./../../Images/login-bg.jpg');
-    console.log(item.cover_image)
     return (
       <TouchableOpacity
         style={styles.mapSlidCard}
@@ -270,7 +270,7 @@ class HomeScreen extends React.Component {
       categorie: [categoryID],
       page: 1,
       sort_by: 'rating',
-      user_id: userID,
+      // user_id: userID,
     };
     this.props.navigation.navigate('MapList', { category: [categoryID], searchObj });
   }
@@ -281,7 +281,7 @@ class HomeScreen extends React.Component {
     let searchObj = {
       page: 1,
       sort_by: 'rating',
-      user_id: userID,
+      // user_id: userID,
       search: searchTerm,
     };
 
@@ -302,6 +302,9 @@ class HomeScreen extends React.Component {
           style={{ backgroundColor: '#F3F4F6' }}
           rightEmpty={true}
           showRightButton={false}
+        />
+        <NavigationEvents
+          onWillFocus={()=> this.setState({searchTerm:''})}
         />
         <ScrollView
           style={styles.scrollView}

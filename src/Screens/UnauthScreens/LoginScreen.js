@@ -65,8 +65,7 @@ class LoginScreen extends React.Component {
           style={{
             width: '100%',
             height: '100%',
-          }}
-        >
+          }}>
           <Image
             style={styles.blackOverlay}
             source={require('./../../Images/login-overlay.png')}
@@ -138,6 +137,17 @@ class LoginScreen extends React.Component {
                   </Text>
                 </Text>
               </View>
+              <Text
+                style={{
+                  color: 'white',
+                  alignSelf: 'center',
+                  textDecorationLine: 'underline',
+                  fontFamily: 'Montserrat-SemiBold',
+                }}
+                onPress={()=> this.props.navigation.navigate('App')}
+              >
+                Skip
+              </Text>
             </ScrollView>
           </SafeAreaView>
         </ImageBackground>

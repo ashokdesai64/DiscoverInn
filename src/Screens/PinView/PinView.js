@@ -206,6 +206,14 @@ class PinView extends React.Component {
       });
   }
 
+  openSaveToListModal() {
+    if (this.props.userData && this.props.userData.id) {
+      this.setState({saveToListModal: true})
+    } else {
+      alert("You need to login to access this feature")
+    }
+  }
+
   render() {
     let {categories} = this.props;
     const {params} = this.props.navigation.state;
@@ -228,7 +236,7 @@ class PinView extends React.Component {
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
-              onPress={() => this.setState({saveToListModal: true})}>
+              onPress={() => this.openSaveToListModal()}>
               <AntDesign name={'hearto'} size={24} color={'white'} />
             </TouchableOpacity>
           )}

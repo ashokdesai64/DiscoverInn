@@ -214,7 +214,12 @@ class FilterScreen extends React.Component {
                               styles.checkboxCustom,
                               isCreatedWithinSelected ? styles.CheckboxYellow : styles.UnCheckboxYellow,
                             ]}
-                            onPress={() => { this.toggleFilterValue('selectedCreatedWithin', createdWithin.value) }}>
+                            onPress={() => {
+                              this.setState({
+                                selectedCreatedWithin : this.state.selectedCreatedWithin == createdWithin.value ? '' : createdWithin.value
+                              })
+                              // this.toggleFilterValue('', createdWithin.value)
+                            }}>
                             <Text
                               style={[
                                 styles.checkboxCustomText,

@@ -11,11 +11,11 @@ class DefaultScreen extends Component {
   }
 
   redirectToApp(props) {
-    if (props && props.userData && props.userData.userId) {
+    // if (props && props.userData && props.userData.userId) {
       this.resetAction('App');
-    } else {
-      this.resetAction('Auth');
-    }
+    // } else {
+    //   this.resetAction('Auth');
+    // }
   }
 
   logout() {

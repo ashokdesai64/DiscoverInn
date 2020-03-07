@@ -82,12 +82,13 @@ class EditMapDetails extends React.Component {
       pinDetailInProgress: true,
       locationFromImage: false,
       placeName: '',
-      locationName:''
+      locationName: '',
+      gotTrueLocation: false,
     };
   }
 
   handleCheckBox = () => {
-    if (this.state.pinImages.length == 0) {
+    if (!this.state.locationAccepted && this.state.pinImages.length == 0) {
       return alert('Please select image first');
     }
     this.setState(
@@ -110,28 +111,26 @@ class EditMapDetails extends React.Component {
         includeExif: true,
         forceJpg: true,
         compressImageQuality: 0.7,
-      })
-        .then(response => {
-          if (response && response.length) {
-            let tempArray = [];
-            response.forEach(item => {
-              let image = {
-                uri: item.path,
-                name: item.path.split('/').slice(-1)[0] || `${+new Date()}.jpg`,
-                type: item.mime,
-                exif: item.exif,
-              };
-              tempArray.push(image);
-            });
-            this.setState(
-              {pinImages: [...this.state.pinImages, ...tempArray]},
-              () => {
-                this.getLocationFromSelectedImages();
-              },
-            );
-          }
-        })
-        .catch(e => alert(e));
+      }).then(response => {
+        if (response && response.length) {
+          let tempArray = [];
+          response.forEach(item => {
+            let image = {
+              uri: item.path,
+              name: item.path.split('/').slice(-1)[0] || `${+new Date()}.jpg`,
+              type: item.mime,
+              exif: item.exif,
+            };
+            tempArray.push(image);
+          });
+          this.setState(
+            {pinImages: [...this.state.pinImages, ...tempArray]},
+            () => {
+              this.getLocationFromSelectedImages();
+            },
+          );
+        }
+      });
     } else {
       ImagePicker.openCamera({
         avoidEmptySpaceAroundImage: true,
@@ -156,10 +155,7 @@ class EditMapDetails extends React.Component {
   }
 
   async getLocationFromSelectedImages() {
-    if (
-      !this.state.isLocationSelected &&
-      this.state.locationAccepted
-    ) {
+    if (this.state.locationAccepted) {
       let imageLocation = false;
       for (var i = 0; i < this.state.pinImages.length; i++) {
         let item = this.state.pinImages[i];
@@ -204,19 +200,26 @@ class EditMapDetails extends React.Component {
           let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlng}&key=AIzaSyDVk4w7Wo8sefykoGcdjxk7aot3vPsRNxU`;
           let result = await axios.get(url);
           let results = result.data.results || [];
-          let addressRes = results.find((r) => r.types && (r.types.includes('locality') || r.types.includes('administrative_area_level_2') || r.types.includes('administrative_area_level_1')));
-          let placeName = (result.data.plus_code && result.data.plus_code.compound_code) || '';
+          let addressRes = results.find(
+            r =>
+              r.types &&
+              (r.types.includes('locality') ||
+                r.types.includes('administrative_area_level_2') ||
+                r.types.includes('administrative_area_level_1')),
+          );
+          let placeName =
+            (result.data.plus_code && result.data.plus_code.compound_code) ||
+            '';
           if (addressRes && addressRes.formatted_address) {
-            placeName =addressRes.formatted_address
+            placeName = addressRes.formatted_address;
           }
           this.setState({locationName: placeName});
         } catch (err) {
-          this.setState({ locationName:'' });
+          this.setState({locationName: ''});
           console.log('err => ', err);
         }
-        
       } else {
-        this.setState({locationFromImage:false})
+        this.setState({locationFromImage: false,locationName:''});
       }
     }
   }
@@ -225,7 +228,34 @@ class EditMapDetails extends React.Component {
     let images = [...this.state.pinImages];
     let removeIndex = images.findIndex(image => image.uri == imageData.uri);
     images.splice(removeIndex, 1);
-    this.setState({pinImages: images});
+    this.setState({pinImages: images}, () => {
+      this.getLocationFromSelectedImages();
+    });
+  }
+
+  async getLocationNameFromLatLong(latitude, longitude) {
+    let latlng = `${latitude},${longitude}`;
+    try {
+      let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlng}&key=AIzaSyDVk4w7Wo8sefykoGcdjxk7aot3vPsRNxU`;
+      let result = await axios.get(url);
+      let results = result.data.results || [];
+      let addressRes = results.find(
+        r =>
+          r.types &&
+          (r.types.includes('locality') ||
+            r.types.includes('administrative_area_level_2') ||
+            r.types.includes('administrative_area_level_1')),
+      );
+      let placeName =
+        (result.data.plus_code && result.data.plus_code.compound_code) || '';
+      if (addressRes && addressRes.formatted_address) {
+        placeName = addressRes.formatted_address;
+      }
+      this.setState({locationName: placeName, gotTrueLocation: true});
+    } catch (err) {
+      this.setState({locationName: '', gotTrueLocation: false});
+      console.log('err => ', err);
+    }
   }
 
   componentWillMount() {
@@ -244,6 +274,13 @@ class EditMapDetails extends React.Component {
           let isLocationSelected = pinData.latitude && pinData.longitude;
           let pinImages =
             pinData.images && pinData.images.length >= 0 ? pinData.images : [];
+
+          if (isLocationSelected) {
+            this.getLocationNameFromLatLong(
+              pinData.latitude,
+              pinData.longitude,
+            );
+          }
           this.setState({
             pinTitle: pinData.name,
             pinDescription: pinData.description,
@@ -330,14 +367,19 @@ class EditMapDetails extends React.Component {
     }
   }
 
-  async getGeocodeFromPlace(placeID,description) {
+  async getGeocodeFromPlace(placeID, description) {
     const APIKey = 'AIzaSyAWb4AJLePv_NjMW00JHNWp6TS_g1x3h60';
     let url = `https://maps.googleapis.com/maps/api/place/details/json?key=${APIKey}&placeid=${placeID}&fields=geometry`;
     try {
       let result = await axios.get(url);
       let res = result.data.result || {};
       if (res && res.geometry && res.geometry.location) {
-        this.setState({selectedLocation: res.geometry.location,locationFromImage:false,locationName:description});
+        this.setState({
+          selectedLocation: res.geometry.location,
+          locationFromImage: false,
+          locationName: description,
+          gotTrueLocation: true,
+        });
       }
     } catch (err) {
       this.setState({selectedLocation: false});
@@ -346,7 +388,12 @@ class EditMapDetails extends React.Component {
   }
 
   render() {
-    const {pinImages, webImages} = this.state;
+    const {
+      pinImages,
+      webImages,
+      gotTrueLocation,
+      locationFromImage,
+    } = this.state;
     const {params} = this.props.navigation.state;
     return (
       <Fragment>
@@ -394,7 +441,8 @@ class EditMapDetails extends React.Component {
                             style={{height: 80, width: 80, borderRadius: 5}}
                             source={{uri: image.image}}
                             thumbnailSource={{
-                              uri: 'https://discover-inn.com/upload/cover/map-image.jpeg',
+                              uri:
+                                'https://discover-inn.com/upload/cover/map-image.jpeg',
                             }}
                           />
                           <TouchableOpacity
@@ -490,7 +538,46 @@ class EditMapDetails extends React.Component {
                   </TouchableOpacity>
                 )}
 
-                {this.state.isLocationSelected ? (
+                <View>
+                  <LocationCheckbox
+                    selected={this.state.locationAccepted}
+                    onPress={this.handleCheckBox}
+                    text="Use photo location"
+                  />
+                </View>
+                <View style={styles.ckaiush}></View>
+                <View style={styles.formGroup}>
+                  <Text style={styles.formLabel}>
+                    Location Name{' '}
+                    {(this.state.locationAccepted || !gotTrueLocation)
+                      ? (!locationFromImage || !gotTrueLocation) && (
+                          <Feather
+                            size={14}
+                            name="alert-triangle"
+                            color={'#F2994A'}
+                          />
+                        )
+                      : null}
+                  </Text>
+                  <AutoCompleteLocation
+                    onValueSelected={(placeID, description) =>
+                      this.getGeocodeFromPlace(placeID, description)
+                    }
+                    onValueChange={name =>
+                      this.setState({
+                        locationName: name,
+                        gotTrueLocation: false,
+                      })
+                    }
+                    locationFromImage={
+                      this.state.locationFromImage &&
+                      this.state.locationAccepted
+                    }
+                    value={this.state.locationName}
+                  />
+                </View>
+
+                {/* {this.state.isLocationSelected ? (
                   <View
                     style={{
                       marginBottom: 15,
@@ -537,7 +624,7 @@ class EditMapDetails extends React.Component {
                       />
                     </View>
                   </>
-                )}
+                )} */}
 
                 <View style={styles.mapPins}>
                   {this.props.categories &&
