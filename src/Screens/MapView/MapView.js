@@ -66,7 +66,7 @@ class MapView extends React.Component {
     if (mapID) {
       this.setState({ mapPinsInProgress: true });
       this.props.mapAction
-        .fetchMapPinList({ map_id: mapID, user_id: this.props.userData.id })
+        .fetchMapPinList({ map_id: mapID, user_id: this.props.userData && this.props.userData.id })
         .then(data => {
           let pinList = data.mapID.pin_list || [];
           let { params } = this.props.navigation.state;

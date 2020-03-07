@@ -40,7 +40,7 @@ class MapPins extends React.Component {
   fetchMapPins() {
     const { params } = this.props.navigation.state;
     this.props.mapAction
-      .getMapPinsList({ user_id: this.props.userData.id, map_id: params.mapID })
+      .getMapPinsList({ user_id: this.props.userData && this.props.userData.id, map_id: params.mapID })
       .then(data => {
 
         let mapData = { ...data };
