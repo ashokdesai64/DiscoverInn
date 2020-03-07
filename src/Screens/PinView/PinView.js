@@ -83,7 +83,7 @@ class PinView extends React.Component {
       this.props.mapAction
         .getSinglePinData({
           pin_id: pinID,
-          user_id: this.props.userData.id,
+          user_id: this.props.userData && this.props.userData.id,
           map_id: mapID,
         })
         .then(data => {
