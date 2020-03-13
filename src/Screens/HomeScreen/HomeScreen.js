@@ -280,7 +280,7 @@ class HomeScreen extends React.Component {
     let { searchTerm } = this.state;
     let searchObj = {
       page: 1,
-      sort_by: 'rating',
+      sort_by: 'popularity',
       // user_id: userID,
       search: searchTerm,
     };

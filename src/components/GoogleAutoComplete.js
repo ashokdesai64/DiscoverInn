@@ -107,7 +107,10 @@ export default class GoogleAutoComplete extends Component {
         renderItem={({ item, i }) => (
           <TouchableOpacity style={{ marginBottom: 10, padding: 5 }}
             onPress={() => this.setState({ searchTerm: item.description }, () => {
-              this.props.onValueChange(item.description),
+              let description = item.description;
+              description = description.replace('Roma,','Rome,')
+              description = description.replace('roma,','rome,')
+              this.props.onValueChange(description),
                 this.setState({ searchTerm: '', hideResults: true })
             })}
           >

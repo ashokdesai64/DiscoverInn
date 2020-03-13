@@ -90,11 +90,16 @@ class MapList extends React.Component {
       wrongEmail: false,
       sharingMap: false,
       showPlaces: false,
-      selectedMapCategories: {map_id: null, categories: []},
+      selectedMapCategories: { map_id: null, categories: [] },
+      sortBy:params && params.searchObj && params.searchObj.sort_by || 'popularity'
     };
   }
 
-  navigateToMap(mapID, mapName, categories = []) {
+  navigateToMap(mapID, mapName) {
+    let categories = [];
+    if (mapID == this.state.selectedMapCategories.map_id) {
+      categories = this.state.selectedMapCategories.categories;
+    }
     this.props.navigation.navigate('MapView', {
       mapID,
       mapName,
@@ -122,16 +127,9 @@ class MapList extends React.Component {
   pinToggle(categoryID, mapID, mapName) {
     let {selectedMapCategories} = this.state;
     if (selectedMapCategories.map_id != mapID) {
-      this.setState(
-        {selectedMapCategories: {map_id: mapID, categories: [categoryID]}},
-        () => {
-          let categories =
-            (this.state.selectedMapCategories &&
-              this.state.selectedMapCategories.categories) ||
-            [];
-          this.navigateToMap(mapID, mapName, categories);
-        },
-      );
+      this.setState({
+        selectedMapCategories: { map_id: mapID, categories: [categoryID] }
+      });
     } else {
       let categories = selectedMapCategories.categories;
       let categoryIndex = categories.findIndex(a => a == categoryID);
@@ -140,18 +138,9 @@ class MapList extends React.Component {
       } else {
         categories.push(categoryID);
       }
-      this.setState(
-        {selectedMapCategories: {map_id: mapID, categories: [...categories]}},
-        () => {
-          let categories =
-            (this.state.selectedMapCategories &&
-              this.state.selectedMapCategories.categories) ||
-            [];
-          if (categories.length > 0) {
-            this.navigateToMap(mapID, mapName, categories);
-          }
-        },
-      );
+      this.setState({
+        selectedMapCategories: { map_id: mapID, categories: [...categories] }
+      });
     }
   }
 
