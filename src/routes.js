@@ -33,7 +33,7 @@ import PrivacyPolicyScreen from './Screens/PrivacyPolicyScreen/PrivacyPolicyScre
 import TermsConditionScreen from './Screens/TermsConditionScreen/TermsConditionScreen';
 import MapPins from './Screens/MapPins/MapPins';
 import SideMenu from './components/SideMenu/SideMenu';
-
+import Test from './Test'
 import DefaultScreen from './Screens/DefaultScreen';
 import { Router, Scene, Stack, Drawer } from 'react-native-router-flux';
 import MenuIcon from '../src/Images/hamburger.png';
@@ -168,6 +168,9 @@ const App = createSwitchNavigator(
     AuthLoading: {
       screen: DefaultScreen,
     },
+    Test: {
+      screen:Test
+    },
     App: {
       screen: DrawerStack,
     },
@@ -176,7 +179,7 @@ const App = createSwitchNavigator(
     },
   },
   {
-    initialRouteName: 'AuthLoading',
+    initialRouteName: 'Test',
   },
 );
 
