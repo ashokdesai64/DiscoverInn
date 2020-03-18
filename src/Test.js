@@ -168,10 +168,9 @@ export default class Test extends React.Component {
       [width, height],
       MAPBOX_VECTOR_TILE_SIZE,
     );
-
+      console.log("vbounds => ",bounds)
     const options = {
       name: this.state.name,
-      test: 123,
       styleURL: MapboxGL.StyleURL.Dark,
       bounds: [
         [bounds[0], bounds[1]],

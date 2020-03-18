@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import ImageBlurLoading from './../../components/ImageLoader';
 
-import styles from './MapView.style';
+import styles from './OfflineMapView.styles';
 import geoViewport from '@mapbox/geo-viewport';
 import sights1 from './../../Images/sights1.png';
 import activities1 from './../../Images/activities1.png';
@@ -40,7 +40,7 @@ import * as mapActions from './../../actions/mapActions';
 const CENTER_COORD = [-73.970895, 40.723279];
 const MAPBOX_VECTOR_TILE_SIZE = 512;
 
-class MapView extends React.Component {
+class OfflineMapView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -62,150 +62,17 @@ class MapView extends React.Component {
 
   }
 
-  loadMapPins(mapID) {
-    if (mapID) {
-      this.setState({ mapPinsInProgress: true });
-      this.props.mapAction
-        .fetchMapPinList({ map_id: mapID, user_id: this.props.userData && this.props.userData.id })
-        .then(data => {
-          let pinList = data.mapID.pin_list || [];
-          let { params } = this.props.navigation.state;
-          params = params || {};
-
-          let featureCollections = [], pinLatLongs = [], topLeft = null, bottomRight = null;
-
-          if (pinList && pinList.length > 0) {
-
-            var splitByString = function (source, splitBy) {
-              var splitter = splitBy.split('');
-              splitter.push([source]); //Push initial value
-
-              return splitter.reduceRight(function (accumulator, curValue) {
-                var k = [];
-                accumulator.forEach(v => k = [...k, ...v.split(curValue)]);
-                return k;
-              });
-            }
-
-            let temp = [];
-
-            if(params && params.filterCategories && params.filterCategories.length > 0){
-              pinList = pinList.filter((pin)=> params.filterCategories.indexOf(pin.categories) >= 0 )
-            }
-
-            pinList.map(pin => {
-              if (pin.longitude && pin.latitude) {
-                let exploded = splitByString(pin.name, '.,-');
-                let parsed = parseInt(exploded[0]);
-                temp.push({
-                  type: 'Feature',
-                  id: pin.id,
-                  properties: {
-                    id: pin.id,
-                    mapName: params.mapName,
-                    mapID: params.mapID,
-                    hasNumber: !isNaN(parsed),
-                    number: parsed,
-                    category: pin.categories
-                  },
-                  geometry: {
-                    type: 'Point',
-                    coordinates: [
-                      parseFloat(pin.longitude),
-                      parseFloat(pin.latitude),
-                    ],
-                  },
-                });
-              }
-            });
-
-            featureCollections.push({
-              type: `FeatureCollection`,
-              features: temp,
-              id: Math.random(),
-            });
-
-            pinList.map((t) => {
-              if (t.latitude && t.longitude) {
-                pinLatLongs.push({ lat: parseFloat(t.latitude), lon: parseFloat(t.longitude) })
-              }
-            })
-            let boundsResult = getBoundingBox(pinLatLongs, 10000);
-            topLeft = boundsResult.topLeft;
-            bottomRight = boundsResult.bottomRight;
-          }
-
-          let filteredCollections = featureCollections.filter(
-            collection =>
-              collection && collection.features && collection.features.length > 0,
-          );
-          this.setState({ mapPinsInProgress: false, pinList, filteredCollections, topLeft, bottomRight });
-        })
-        .catch(err => {
-          console.log('error => ', err);
-          this.setState({ mapPinsInProgress: false, pinList: [] });
-        });
-    }
-  }
-
-  async onDidFinishLoadingStyle() {
-    const { width, height } = Dimensions.get('window');
-    const bounds = geoViewport.bounds(
-      CENTER_COORD,
-      12,
-      [width, height],
-      MAPBOX_VECTOR_TILE_SIZE,
-    );
-
-    const options = {
-      name: Math.random().toString(),
-      styleURL: MapboxGL.StyleURL.Street,
-      bounds: [
-        [bounds[0], bounds[1]],
-        [bounds[2], bounds[3]],
-      ],
-      minZoom: 10,
-      maxZoom: 20,
-    };
-
-    // start download
-    MapboxGL.offlineManager.createPack(options, this.onDownloadProgress);
-  }
-
-  onDownloadProgress = (offlineRegion, offlineRegionStatus) => {
-    this.setState({
-      name: offlineRegion.name,
-      offlineRegion,
-      offlineRegionStatus,
-    });
-  };
-
-  addNewPin() {
-    let { params } = this.props.navigation.state;
-    this.props.navigation.navigate('AddMapDetail', {
-      mapID: params.mapID,
-      mapName: params.mapName,
-    });
-  }
-
-  editPins() {
-    let { params } = this.props.navigation.state;
-    this.props.navigation.navigate('MapPins', {
-      mapID: params.mapID,
-      mapName: params.mapName,
-    });
-  }
-
   componentWillMount() {
     const { params } = this.props.navigation.state;
-    this.loadMapPins(params && params.mapID);
+      console.log("params => ", params);
+      this.setState({mapData:params.mapData,filteredCollections:params.mapData.pinData})
   }
 
   render() {
     let { params } = this.props.navigation.state;
     params = params || {};
-    let { topLeft, bottomRight, filteredCollections } = this.state;
-    console.log("filteredCollections => ",filteredCollections)
+      let { topLeft, bottomRight, filteredCollections,mapData } = this.state;
+      console.log("filteredCollections => ",filteredCollections)
     return (
       <View style={styles.page}>
         <View style={styles.container}>
@@ -219,7 +86,7 @@ class MapView extends React.Component {
             showBack={true}
             rightEmpty={true}
             showRightButton={false}
-            title={params.mapName}
+            title={params.mapData.name}
             {...this.props}
             absoluteHeader={true}
           />
@@ -238,12 +105,9 @@ class MapView extends React.Component {
                 }}>
 
                 {
-                  topLeft && bottomRight &&
+                  mapData.bounds &&
                   <MapboxGL.Camera
-                    bounds={{
-                      ne: [topLeft.lon, topLeft.lat],
-                      sw: [bottomRight.lon, bottomRight.lat],
-                    }}
+                    bounds={mapData.bounds}
                   />
                 }
 
@@ -452,4 +316,4 @@ function mapDispatchToProps(dispatch) {
     mapAction: bindActionCreators(mapActions, dispatch),
   };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(MapView);
+export default connect(mapStateToProps, mapDispatchToProps)(OfflineMapView);

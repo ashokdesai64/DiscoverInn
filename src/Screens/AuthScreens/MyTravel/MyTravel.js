@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, {Fragment} from 'react';
 import {
   View,
   Text,
@@ -7,21 +7,24 @@ import {
   Image,
   ActivityIndicator,
 } from 'react-native';
-import { Item, Input, Button, Content, Accordion, CheckBox } from 'native-base';
+import {Item, Input, Button, Content, Accordion, CheckBox} from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import Switch from './../../../components/Switch';
 import styles from './MyTravel.style';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import Header from '../../../components/header/header';
-import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog';
+import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
 import Spinner from './../../../components/Loader';
+import _ from 'underscore';
+import {getBoundingBox} from 'geolocation-utils';
+import MapboxGL from '@react-native-mapbox-gl/maps';
 //REDUX
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
 import * as mapActions from '../../../actions/mapActions';
 
-const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
   const paddingToBottom = 20;
   return (
     layoutMeasurement.height + contentOffset.y >=
@@ -32,6 +35,7 @@ const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
 class MyTravel extends React.Component {
   constructor(props) {
     super(props);
+    this.onDownloadProgress = this.onDownloadProgress.bind(this);
   }
   pageNo = 1;
   state = {
@@ -53,11 +57,11 @@ class MyTravel extends React.Component {
         public: true,
       },
     ],
-    fetchingMaps: false
+    fetchingMaps: false,
   };
 
   _updateSections = activeSections => {
-    this.setState({ activeSections });
+    this.setState({activeSections});
   };
 
   componentDidMount() {
@@ -78,8 +82,8 @@ class MyTravel extends React.Component {
         {expanded ? (
           <Feather style={styles.accordionCardHeaderIcon} name="chevron-up" />
         ) : (
-            <Feather style={styles.accordionCardHeaderIcon} name="chevron-down" />
-          )}
+          <Feather style={styles.accordionCardHeaderIcon} name="chevron-down" />
+        )}
       </View>
     );
   }
@@ -88,6 +92,155 @@ class MyTravel extends React.Component {
     this.props.mapAction.changeMapStatus({
       user_id: this.props.userData.id,
       map_id: mapID,
+    });
+  }
+
+  async downloadMap(mapData) {
+    console.log('mapdata => ', mapData);
+    MapboxGL.offlineManager.deletePack(`${mapData.id}${mapData.name}`);
+    let packs = await MapboxGL.offlineManager.getPacks();
+    let isDownloaded = packs.find(
+      pack => pack.name == `${mapData.id}${mapData.name}`,
+    );
+    if (isDownloaded) {
+      alert('This map is already downloaded');
+    } else {
+      this.props.mapAction
+        .getMapPins({
+          map_id: mapData.id,
+          user_id: this.props.userData && this.props.userData.id,
+        })
+        .then(data => {
+          console.log("data => ",data)
+          let pinList = data.mapID.pin_list || [];
+
+          let featureCollections = [],
+            pinLatLongs = [],
+            topLeft = null,
+            bottomRight = null;
+
+          if (pinList && pinList.length > 0) {
+            this.setState({mapDownloadInProgress:true,downloadSpinnerMsg:`Preparing to download map.`})
+            var splitByString = function(source, splitBy) {
+              var splitter = splitBy.split('');
+              splitter.push([source]); //Push initial value
+
+              return splitter.reduceRight(function(accumulator, curValue) {
+                var k = [];
+                accumulator.forEach(v => (k = [...k, ...v.split(curValue)]));
+                return k;
+              });
+            };
+
+            let temp = [];
+
+            pinList.map(pin => {
+              if (pin.longitude && pin.latitude) {
+                let exploded = splitByString(pin.name, '.,-');
+                let parsed = parseInt(exploded[0]);
+                temp.push({
+                  type: 'Feature',
+                  id: pin.id,
+                  properties: {
+                    id: pin.id,
+                    mapName: mapData.name,
+                    mapID: mapData.id,
+                    hasNumber: !isNaN(parsed),
+                    number: parsed,
+                    category: pin.categories,
+                  },
+                  geometry: {
+                    type: 'Point',
+                    coordinates: [
+                      parseFloat(pin.longitude),
+                      parseFloat(pin.latitude),
+                    ],
+                  },
+                });
+              }
+            });
+
+            featureCollections.push({
+              type: `FeatureCollection`,
+              features: temp,
+              id: Math.random(),
+            });
+
+            pinList.map(t => {
+              if (t.latitude && t.longitude) {
+                pinLatLongs.push({
+                  lat: parseFloat(t.latitude),
+                  lon: parseFloat(t.longitude),
+                });
+              }
+            });
+            let boundsResult = getBoundingBox(pinLatLongs, 10000);
+            topLeft = boundsResult.topLeft;
+            bottomRight = boundsResult.bottomRight;
+            let filteredCollections = featureCollections.filter(
+              collection =>
+                collection &&
+                collection.features &&
+                collection.features.length > 0,
+            );
+
+            const options = {
+              name: `${mapData.id}${mapData.name}`,
+              styleURL: MapboxGL.StyleURL.Dark,
+              bounds: [
+                [topLeft.lon, topLeft.lat],
+                [bottomRight.lon, bottomRight.lat],
+              ],
+              minZoom: 10,
+              maxZoom: 20,
+            };
+            console.log("options => ",options)
+            MapboxGL.offlineManager.createPack(
+              options,
+              (offlineRegion, offlineRegionStatus) => {
+                console.log("offlineRegionStatus => ",offlineRegionStatus)
+                this.setState({
+                  name: offlineRegion.name,
+                  offlineRegion,
+                  offlineRegionStatus,
+                  downloadSpinnerMsg:
+                    Math.floor(offlineRegionStatus.percentage) + '% downloaded',
+                });
+                if (offlineRegionStatus.percentage == 100) {
+                  this.setState({downloadSpinnerMsg:"Storing map locally"})
+                  this.props.mapAction
+                    .storeOfflineMapData({
+                      mapData,
+                      pinData: filteredCollections,
+                      bounds:{
+                        ne: [topLeft.lon, topLeft.lat],
+                        sw: [bottomRight.lon, bottomRight.lat],
+                      }
+                    })
+                    .then(data => {
+                      setTimeout(() => {
+                        this.setState({mapDownloadInProgress: false});
+                      }, 1500);
+                    });
+                }
+              },
+            );
+          } else {
+            alert("This map can't be downloaded as it doesn't have any pin")
+          }
+        })
+        .catch(err => {
+          this.setState({mapDownloadInProgress: false});
+        });
+    }
+  }
+
+  onDownloadProgress(offlineRegion, offlineRegionStatus) {
+    console.log('offlineRegionStatus => ', offlineRegionStatus);
+    this.setState({
+      name: offlineRegion.name,
+      offlineRegion,
+      offlineRegionStatus,
     });
   }
 
@@ -109,7 +262,8 @@ class MyTravel extends React.Component {
         <View style={styles.myTravelAction}>
           <View style={styles.myTravelActionLeft}>
             <TouchableOpacity
-              style={[styles.buttonIcon, styles.buttonIconPrimary]}>
+              style={[styles.buttonIcon, styles.buttonIconPrimary]}
+              onPress={() => this.downloadMap(item)}>
               <Feather style={styles.buttonIconText} name="download-cloud" />
             </TouchableOpacity>
           </View>
@@ -130,7 +284,7 @@ class MyTravel extends React.Component {
                 styles.button,
                 styles.buttonSm,
                 styles.buttonSuccess,
-                { marginLeft: 5 },
+                {marginLeft: 5},
               ]}
               onPress={() => {
                 this.props.navigation.navigate('EditMyTravel', {
@@ -145,10 +299,10 @@ class MyTravel extends React.Component {
                 styles.button,
                 styles.buttonSm,
                 styles.buttonDanger,
-                { marginLeft: 5 },
+                {marginLeft: 5},
               ]}
               onPress={() => {
-                this.setState({ showDeleteModal: true, selectedMap: item });
+                this.setState({showDeleteModal: true, selectedMap: item});
               }}>
               <Text style={styles.buttonText}>Delete</Text>
             </TouchableOpacity>
@@ -159,8 +313,9 @@ class MyTravel extends React.Component {
   };
 
   componentWillReceiveProps(nextProps) {
+    console.log('nextProps => ', nextProps);
     if (nextProps.fetchingMaps != this.state.fetchingMaps) {
-      this.setState({ fetchingMaps: nextProps.fetchingMaps })
+      this.setState({fetchingMaps: nextProps.fetchingMaps});
     }
   }
 
@@ -174,7 +329,7 @@ class MyTravel extends React.Component {
 
   fetchMaps(showLoader = false) {
     if (showLoader) {
-      this.setState({ fetchingMaps: true })
+      this.setState({fetchingMaps: true});
     }
     this.props.mapAction.fetchMyMaps({
       user_id: this.props.userData.id,
@@ -184,17 +339,17 @@ class MyTravel extends React.Component {
   }
 
   deleteMap() {
-    this.setState({ deleteInProgrss: true });
+    this.setState({deleteInProgrss: true});
     this.props.mapAction
       .removeMap({
         map_id: this.state.selectedMap.id,
         user_id: this.props.userData.id,
       })
       .then(data => {
-        this.setState({ deleteInProgrss: false, showDeleteModal: false });
+        this.setState({deleteInProgrss: false, showDeleteModal: false});
       })
       .catch(err => {
-        this.setState({ deleteInProgrss: false, showDeleteModal: false }, () => {
+        this.setState({deleteInProgrss: false, showDeleteModal: false}, () => {
           alert(err);
         });
       });
@@ -218,7 +373,7 @@ class MyTravel extends React.Component {
               showsHorizontalScrollIndicator={false}
               keyboardShouldPersistTaps={'always'}
               showsVerticalScrollIndicator={false}
-              onScroll={({ nativeEvent }) => {
+              onScroll={({nativeEvent}) => {
                 if (isCloseToBottom(nativeEvent) && !this.state.fetchingMaps) {
                   console.log('scrolled to bottom');
                   this.pageNo += 1;
@@ -229,7 +384,12 @@ class MyTravel extends React.Component {
               <Spinner
                 visible={this.state.fetchingMaps}
                 textContent={'Fetching more maps...'}
-                textStyle={{ color: '#fff' }}
+                textStyle={{color: '#fff'}}
+              />
+              <Spinner
+                visible={this.state.mapDownloadInProgress}
+                textContent={this.state.downloadSpinnerMsg}
+                textStyle={{color: '#fff'}}
               />
               <View searchBar style={styles.searchbarCard}>
                 <Item style={styles.searchbarInputBox}>
@@ -238,14 +398,14 @@ class MyTravel extends React.Component {
                     style={styles.searchbarInput}
                     placeholder="Search your maps"
                     value={this.state.search}
-                    onChangeText={search => this.setState({ search })}
+                    onChangeText={search => this.setState({search})}
                   />
                 </Item>
                 <Button
                   style={styles.searchbarCardButton}
                   onPress={() => {
                     this.pageNo = 1;
-                    this.fetchMaps()
+                    this.fetchMaps();
                   }}>
                   <Feather
                     style={styles.searchbarCardButtonIcon}
@@ -262,30 +422,30 @@ class MyTravel extends React.Component {
                     renderHeader={this._renderHeader}
                     renderContent={this._renderContent}
                     onChange={this._updateSections}
-                    contentStyle={{ marginBottom: 10 }}
+                    contentStyle={{marginBottom: 10}}
                   />
                 </Content>
               ) : (
-                  <Text
-                    style={[
-                      styles.buttonText,
-                      {
-                        marginTop: 20,
-                        fontSize: 16,
-                        color: 'grey',
-                        alignSelf: 'center',
-                      },
-                    ]}>
-                    No Maps Found.
+                <Text
+                  style={[
+                    styles.buttonText,
+                    {
+                      marginTop: 20,
+                      fontSize: 16,
+                      color: 'grey',
+                      alignSelf: 'center',
+                    },
+                  ]}>
+                  No Maps Found.
                 </Text>
-                )}
+              )}
             </ScrollView>
           </View>
           <View style={styles.footerButton}>
             <TouchableOpacity
               style={[styles.button, styles.buttonPrimary, styles.buttonNewMap]}
               onPress={() => {
-                this.props.navigation.navigate('EditMyTravel', { type: 'add' });
+                this.props.navigation.navigate('EditMyTravel', {type: 'add'});
               }}>
               <Text style={styles.buttonText}>Add New Map</Text>
             </TouchableOpacity>
@@ -353,7 +513,7 @@ class MyTravel extends React.Component {
           hasOverlay={true}
           animationDuration={1}
           onTouchOutside={() => {
-            this.setState({ showDeleteModal: false });
+            this.setState({showDeleteModal: false});
           }}
           dialogAnimation={
             new FadeAnimation({
@@ -363,7 +523,7 @@ class MyTravel extends React.Component {
             })
           }
           onHardwareBackPress={() => {
-            this.setState({ showDeleteModal: false });
+            this.setState({showDeleteModal: false});
             return true;
           }}
           dialogStyle={styles.customPopup}>
@@ -372,7 +532,7 @@ class MyTravel extends React.Component {
               <Text style={styles.customPopupHeaderTitle}>Delete Map</Text>
               <TouchableOpacity
                 style={styles.buttonClose}
-                onPress={() => this.setState({ showDeleteModal: false })}>
+                onPress={() => this.setState({showDeleteModal: false})}>
                 <Feather name={'x'} style={styles.buttonCloseIcon} />
               </TouchableOpacity>
             </View>
@@ -392,7 +552,7 @@ class MyTravel extends React.Component {
                   styles.buttonDecline,
                 ]}
                 onPress={() => {
-                  this.setState({ showDeleteModal: false });
+                  this.setState({showDeleteModal: false});
                 }}>
                 <Text style={[styles.buttonText, styles.buttonTextGray]}>
                   Decline
@@ -406,8 +566,8 @@ class MyTravel extends React.Component {
                 {this.state.deleteInProgrss ? (
                   <ActivityIndicator size={'small'} color={'white'} />
                 ) : (
-                    <Text style={styles.buttonText}>Yes Sure</Text>
-                  )}
+                  <Text style={styles.buttonText}>Yes Sure</Text>
+                )}
               </Button>
             </View>
           </DialogContent>
@@ -418,6 +578,7 @@ class MyTravel extends React.Component {
 }
 
 function mapStateToProps(state) {
+  console.log('state.maps => ', state.maps.offlineMaps);
   return {
     userData: state.user.userData,
     categories: state.maps.categories,

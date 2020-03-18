@@ -32,6 +32,8 @@ import AboutUsScreen from './Screens/AboutUsScreen/AboutUsScreen';
 import PrivacyPolicyScreen from './Screens/PrivacyPolicyScreen/PrivacyPolicyScreen';
 import TermsConditionScreen from './Screens/TermsConditionScreen/TermsConditionScreen';
 import MapPins from './Screens/MapPins/MapPins';
+import OfflineMaps from './Screens/OfflineMaps/OfflineMaps';
+import OfflineMapView from './Screens/OfflineMaps/OfflineMapView';
 import SideMenu from './components/SideMenu/SideMenu';
 import Test from './Test'
 import DefaultScreen from './Screens/DefaultScreen';
@@ -124,6 +126,12 @@ const userStack = createStackNavigator(
     DefaultScreen: {
       screen: DefaultScreen,
     },
+    OfflineMaps: {
+      screen:OfflineMaps
+    },
+    OfflineMapView: {
+      screen:OfflineMapView
+    }
   },
   {
     headerMode: 'none',
@@ -179,7 +187,7 @@ const App = createSwitchNavigator(
     },
   },
   {
-    initialRouteName: 'Test',
+    initialRouteName: 'AuthLoading',
   },
 );
 

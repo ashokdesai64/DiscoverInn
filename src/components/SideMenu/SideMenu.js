@@ -126,7 +126,7 @@ class SideMenu extends Component {
                 size={12}
                 paddingRight={0}
                 backgroundColor="#ffffff"
-                onPress={() => this.navigateTo('AddMymaps')}>
+                onPress={() => this.navigateTo('OfflineMaps')}>
                 <Text style={styles.menuList_LinkText}>Downloaded Maps</Text>
               </Icon.Button>
             </View>

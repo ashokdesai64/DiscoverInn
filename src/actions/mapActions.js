@@ -777,3 +777,22 @@ export function sharedMapsList(apiData) {
         })
     };
 }
+
+export function storeOfflineMapData({mapData,pinData,bounds}) {
+    return function (dispatch, getState) {
+        return new Promise(async (resolve, reject) => {
+            let offlineMaps = getState().maps.offlineMaps || [];
+            let maps = [...offlineMaps];
+            let isAlreadyDownloadedIndex = maps.findIndex((d) => d.mapData.id == mapData.id);
+            if (isAlreadyDownloadedIndex >= 0) {
+                maps.splice(isAlreadyDownloadedIndex, 1);
+            }
+            maps.push({mapData,pinData,bounds})
+            dispatch({
+                type: 'offlineMaps',
+                offlineMaps: maps
+            });
+            resolve(maps);
+        })
+    };
+}

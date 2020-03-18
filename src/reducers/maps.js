@@ -63,6 +63,12 @@ export default function maps(state = initialState, action = {}) {
                 mapList: action.mapList || (state.mapList || []),
             };
         }
+        case 'offlineMaps': {
+            return {
+                ...state,
+                offlineMaps: action.offlineMaps || (state.offlineMaps || []),
+            };
+        }
         case 'mapPagination': {
             return {
                 ...state,
