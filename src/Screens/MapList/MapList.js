@@ -24,16 +24,20 @@ import fontelloConfig from './../../selection.json';
 import moment from 'moment';
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 import ImageBlurLoading from './../../components/ImageLoader';
-import _ from 'underscore';
 import Spinner from './../../components/Loader';
 import AutoComplete from './../../components/AutoComplete';
 import axios from 'axios';
+import _ from 'underscore';
+import {getBoundingBox} from 'geolocation-utils';
+import MapboxGL from '@react-native-mapbox-gl/maps';
+
 //REDUX
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
 import * as authActions from './../../actions/authActions';
 import * as mapActions from './../../actions/mapActions';
+// MapboxGL.offlineManager.setTileCountLimit(10000);
 
 class MapList extends React.Component {
   constructor(props) {
@@ -90,8 +94,10 @@ class MapList extends React.Component {
       wrongEmail: false,
       sharingMap: false,
       showPlaces: false,
-      selectedMapCategories: { map_id: null, categories: [] },
-      sortBy:params && params.searchObj && params.searchObj.sort_by || 'popularity'
+      selectedMapCategories: {map_id: null, categories: []},
+      sortBy:
+        (params && params.searchObj && params.searchObj.sort_by) ||
+        'popularity',
     };
   }
 
@@ -128,7 +134,7 @@ class MapList extends React.Component {
     let {selectedMapCategories} = this.state;
     if (selectedMapCategories.map_id != mapID) {
       this.setState({
-        selectedMapCategories: { map_id: mapID, categories: [categoryID] }
+        selectedMapCategories: {map_id: mapID, categories: [categoryID]},
       });
     } else {
       let categories = selectedMapCategories.categories;
@@ -139,8 +145,155 @@ class MapList extends React.Component {
         categories.push(categoryID);
       }
       this.setState({
-        selectedMapCategories: { map_id: mapID, categories: [...categories] }
+        selectedMapCategories: {map_id: mapID, categories: [...categories]},
       });
+    }
+  }
+
+  async downloadMap(mapData) {
+    MapboxGL.offlineManager.deletePack(`${mapData.id}${mapData.name}`);
+    let packs = await MapboxGL.offlineManager.getPacks();
+    let isDownloaded = packs.find(
+      pack => pack.name == `${mapData.id}${mapData.name}`,
+    );
+    if (isDownloaded) {
+      alert('This map is already downloaded');
+    } else {
+      this.props.mapAction
+        .getMapPins({
+          map_id: mapData.id,
+          user_id: this.props.userData && this.props.userData.id,
+        })
+        .then(data => {
+          console.log('data => ', data);
+          let pinList = data.mapID.pin_list || [];
+
+          let featureCollections = [],
+            pinLatLongs = [],
+            topLeft = null,
+            bottomRight = null;
+
+          if (pinList && pinList.length > 0) {
+            this.setState({
+              mapDownloadInProgress: true,
+              downloadSpinnerMsg: `Preparing to download map.`,
+            });
+            var splitByString = function(source, splitBy) {
+              var splitter = splitBy.split('');
+              splitter.push([source]); //Push initial value
+
+              return splitter.reduceRight(function(accumulator, curValue) {
+                var k = [];
+                accumulator.forEach(v => (k = [...k, ...v.split(curValue)]));
+                return k;
+              });
+            };
+
+            let temp = [];
+
+            pinList.map(pin => {
+              if (pin.longitude && pin.latitude) {
+                let exploded = splitByString(pin.name, '.,-');
+                let parsed = parseInt(exploded[0]);
+                temp.push({
+                  type: 'Feature',
+                  id: pin.id,
+                  properties: {
+                    id: pin.id,
+                    mapName: mapData.name,
+                    mapID: mapData.id,
+                    hasNumber: !isNaN(parsed),
+                    number: parsed,
+                    category: pin.categories,
+                  },
+                  geometry: {
+                    type: 'Point',
+                    coordinates: [
+                      parseFloat(pin.longitude),
+                      parseFloat(pin.latitude),
+                    ],
+                  },
+                });
+              }
+            });
+
+            featureCollections.push({
+              type: `FeatureCollection`,
+              features: temp,
+              id: Math.random(),
+            });
+
+            pinList.map(t => {
+              if (t.latitude && t.longitude) {
+                pinLatLongs.push({
+                  lat: parseFloat(t.latitude),
+                  lon: parseFloat(t.longitude),
+                });
+              }
+            });
+            let boundsResult = getBoundingBox(pinLatLongs);
+            console.log("boundsResult => ",boundsResult)
+            topLeft = boundsResult.topLeft;
+            bottomRight = boundsResult.bottomRight;
+            let filteredCollections = featureCollections.filter(
+              collection =>
+                collection &&
+                collection.features &&
+                collection.features.length > 0,
+            );
+
+            const options = {
+              name: `${mapData.id}${mapData.name}`,
+              styleURL: MapboxGL.StyleURL.Dark,
+              bounds: [
+                [topLeft.lon, topLeft.lat],
+                [bottomRight.lon, bottomRight.lat],
+              ],
+              minZoom: 10,
+              maxZoom: 20,
+            };
+            console.log('options => ', options);
+            console.time('download')
+            MapboxGL.offlineManager.createPack(
+              options,
+              (offlineRegion, offlineRegionStatus) => {
+                console.log('offlineRegionStatus => ', offlineRegionStatus);
+                this.setState({
+                  name: offlineRegion.name,
+                  offlineRegion,
+                  offlineRegionStatus,
+                  downloadSpinnerMsg:
+                    Math.floor(offlineRegionStatus.percentage) + '% downloaded',
+                });
+                if (offlineRegionStatus.percentage == 100) {
+                  console.timeEnd('download')
+                  this.setState({downloadSpinnerMsg: 'Storing map locally'});
+                  this.props.mapAction
+                    .storeOfflineMapData({
+                      mapData,
+                      pinData: filteredCollections,
+                      bounds: {
+                        ne: [topLeft.lon, topLeft.lat],
+                        sw: [bottomRight.lon, bottomRight.lat],
+                      },
+                    })
+                    .then(data => {
+                      setTimeout(() => {
+                        this.setState({mapDownloadInProgress: false});
+                      }, 1500);
+                    });
+                }
+              }, (offlineRegion, err) => {
+                console.log("err download => ",offlineRegion,err)
+              }
+            );
+          } else {
+            alert("This map can't be downloaded as it doesn't have any pin");
+          }
+        })
+        .catch(err => {
+          this.setState({mapDownloadInProgress: false});
+        });
     }
   }
 
@@ -313,18 +466,31 @@ class MapList extends React.Component {
                 </Text>
               </View>
             </View>
-
-            <TouchableOpacity
-              style={[styles.button, styles.buttonReview, styles.buttonPrimary]}
-              onPress={() => {
-                if (this.props.userData && this.props.userData.id) {
-                  this.setState({showAddReviewModal: true, selectedMap: item});
-                } else {
-                  alert('You need to login to access this feature.');
-                }
-              }}>
-              <Text style={styles.buttonText}>Add Review</Text>
-            </TouchableOpacity>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[styles.buttonIcon, styles.buttonIconPrimary]}
+                onPress={() => this.downloadMap(item)}>
+                <Feather style={styles.buttonIconText} name="download-cloud" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.button,
+                  styles.buttonReview,
+                  styles.buttonPrimary,
+                ]}
+                onPress={() => {
+                  if (this.props.userData && this.props.userData.id) {
+                    this.setState({
+                      showAddReviewModal: true,
+                      selectedMap: item,
+                    });
+                  } else {
+                    alert('You need to login to access this feature.');
+                  }
+                }}>
+                <Text style={styles.buttonText}>Add Review</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
@@ -624,6 +790,11 @@ class MapList extends React.Component {
         <Spinner
           visible={this.state.fetchingMaps}
           textContent={'Loading maps...'}
+          textStyle={{color: '#fff'}}
+        />
+        <Spinner
+          visible={this.state.mapDownloadInProgress}
+          textContent={this.state.downloadSpinnerMsg}
           textStyle={{color: '#fff'}}
         />
         <Header
@@ -963,7 +1134,9 @@ class MapList extends React.Component {
             </View>
 
             <View style={styles.selectList}>
-              <TouchableOpacity onPress={()=> this.sortBy('popularity')} style={styles.selectListItem}>
+              <TouchableOpacity
+                onPress={() => this.sortBy('popularity')}
+                style={styles.selectListItem}>
                 <CheckBox
                   checked={this.state.sortBy == 'popularity'}
                   color={'#2F80ED'}
@@ -972,7 +1145,9 @@ class MapList extends React.Component {
                 />
                 <Text style={styles.selectListText}>Popularity</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={()=> this.sortBy('rating')}  style={styles.selectListItem}>
+              <TouchableOpacity
+                onPress={() => this.sortBy('rating')}
+                style={styles.selectListItem}>
                 <CheckBox
                   checked={this.state.sortBy == 'rating'}
                   color={'#2F80ED'}
@@ -980,7 +1155,9 @@ class MapList extends React.Component {
                 />
                 <Text style={styles.selectListText}>Rating</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={()=> this.sortBy('distance')} style={[styles.selectListItem, {borderBottomWidth: 0}]}>
+              <TouchableOpacity
+                onPress={() => this.sortBy('distance')}
+                style={[styles.selectListItem, {borderBottomWidth: 0}]}>
                 <CheckBox
                   checked={this.state.sortBy == 'distance'}
                   color={'#2F80ED'}
