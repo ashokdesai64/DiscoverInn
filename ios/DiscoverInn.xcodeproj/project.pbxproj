@@ -20,14 +20,11 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* DiscoverInnTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* DiscoverInnTests.m */; };
-		38C9B02344F4CBCC2C8E2AF5 /* libPods-DiscoverInn.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8ABE48F20F9C6B13FCB86ABD /* libPods-DiscoverInn.a */; };
 		4021A3EC661644BFAE1EA4DC /* Montserrat-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2CFBB0F07E8E4B09829F8BEE /* Montserrat-MediumItalic.ttf */; };
-		43361162F88D0790DDD54188 /* libPods-DiscoverInn-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6ECD37ACC7AEF82EDE7D274D /* libPods-DiscoverInn-tvOSTests.a */; };
 		508A51E371694003ACF98050 /* iconsmind.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0576B9FA858B4F2F8E246D57 /* iconsmind.ttf */; };
-		52B1E8119020DA7D7647301E /* libPods-DiscoverInn-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F3CE2AEA6844B82EE0ED5AAD /* libPods-DiscoverInn-tvOS.a */; };
+		6C80EE3925701B503390F8F8 /* libPods-DiscoverInnTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ED3B38F7E5558100A81286C4 /* libPods-DiscoverInnTests.a */; };
 		75341077C7574828A90732A1 /* Montserrat-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E8B8588119A94F3D947B86DB /* Montserrat-Thin.ttf */; };
 		772FED0665F548AA955B8048 /* Montserrat-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1266BC56741249ABB972ABEC /* Montserrat-ThinItalic.ttf */; };
-		80352A559CF69657A2CB4F52 /* libPods-DiscoverInnTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65B98D0BB627DE63E576FACB /* libPods-DiscoverInnTests.a */; };
 		83C87FBA9ECF44AEB70973BF /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3AD4FEADDCDD48B3A31297DE /* Roboto.ttf */; };
 		86FC1661A4AA46899C3866CE /* Montserrat-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D89080F84FEC4104AC4104F6 /* Montserrat-SemiBoldItalic.ttf */; };
 		87EFD70F0C8D449291E883AF /* Montserrat-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7A4E93DB21EF4C88BEE26E89 /* Montserrat-ExtraBold.ttf */; };
@@ -40,6 +37,9 @@
 		A308D4D74D6641CEA37C73DE /* Montserrat-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 42D234CA6FCB4E18A0971F0A /* Montserrat-BlackItalic.ttf */; };
 		B0218420A2A04050B002AD97 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BE08E14A9BAF409BBBBB0D81 /* Montserrat-Bold.ttf */; };
 		BBD986919A5548CE87ACB192 /* Montserrat-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EF4DE268170D49D3A722C0B2 /* Montserrat-Italic.ttf */; };
+		C312E8F6A7317474581CBC8E /* libPods-DiscoverInn.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BCDEE3C46AC781612D156274 /* libPods-DiscoverInn.a */; };
+		C4E8BAFA24A4E9FE28FC758C /* libPods-DiscoverInn-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0700E29C7333DB22F3C6E89C /* libPods-DiscoverInn-tvOS.a */; };
+		DFB6429728B392B321CA72C5 /* libPods-DiscoverInn-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AE03BDC56A1EE127477ADA1E /* libPods-DiscoverInn-tvOSTests.a */; };
 		E0B034BC773841238576629D /* Montserrat-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 06D8CB04CB754F86906027CD /* Montserrat-ExtraBoldItalic.ttf */; };
 		ECD11D50B2FA4DD28A0F5EAE /* Montserrat-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CAC8062B639A4B0E8C554E3F /* Montserrat-ExtraLight.ttf */; };
 		FB10543C4D50463CAD499896 /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 70B9F6C1FF5E464D8DFD25B7 /* Montserrat-SemiBold.ttf */; };
@@ -69,7 +69,8 @@
 		00E356F21AD99517003FC87E /* DiscoverInnTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DiscoverInnTests.m; sourceTree = "<group>"; };
 		0576B9FA858B4F2F8E246D57 /* iconsmind.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = iconsmind.ttf; path = ../assets/fonts/iconsmind.ttf; sourceTree = "<group>"; };
 		06D8CB04CB754F86906027CD /* Montserrat-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-ExtraBoldItalic.ttf"; path = "../assets/fonts/Montserrat-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
-		0EE665CA97869E49EF0ED703 /* Pods-DiscoverInn.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiscoverInn.release.xcconfig"; path = "Target Support Files/Pods-DiscoverInn/Pods-DiscoverInn.release.xcconfig"; sourceTree = "<group>"; };
+		0700E29C7333DB22F3C6E89C /* libPods-DiscoverInn-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DiscoverInn-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0FEDD7034C4EFC124560A603 /* Pods-DiscoverInn.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiscoverInn.release.xcconfig"; path = "Target Support Files/Pods-DiscoverInn/Pods-DiscoverInn.release.xcconfig"; sourceTree = "<group>"; };
 		1266BC56741249ABB972ABEC /* Montserrat-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-ThinItalic.ttf"; path = "../assets/fonts/Montserrat-ThinItalic.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* DiscoverInn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DiscoverInn.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = DiscoverInn/AppDelegate.h; sourceTree = "<group>"; };
@@ -79,20 +80,18 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = DiscoverInn/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = DiscoverInn/main.m; sourceTree = "<group>"; };
 		19BD5DE3AFCD40F8A3E4723D /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Regular.ttf"; path = "../assets/fonts/Montserrat-Regular.ttf"; sourceTree = "<group>"; };
+		23EB576D634FC7334CD0B1B9 /* Pods-DiscoverInn-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiscoverInn-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-DiscoverInn-tvOSTests/Pods-DiscoverInn-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		2CFBB0F07E8E4B09829F8BEE /* Montserrat-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-MediumItalic.ttf"; path = "../assets/fonts/Montserrat-MediumItalic.ttf"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* DiscoverInn-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DiscoverInn-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* DiscoverInn-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "DiscoverInn-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		32E61356BB3D46308F205262 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/native-base/Fonts/Feather.ttf"; sourceTree = "<group>"; };
+		37C1303965ECF29CCAE05BEB /* Pods-DiscoverInn-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiscoverInn-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-DiscoverInn-tvOS/Pods-DiscoverInn-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		3AD4FEADDCDD48B3A31297DE /* Roboto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto.ttf; path = "../node_modules/native-base/Fonts/Roboto.ttf"; sourceTree = "<group>"; };
+		3BB499C5A18CB996F73FD006 /* Pods-DiscoverInn.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiscoverInn.debug.xcconfig"; path = "Target Support Files/Pods-DiscoverInn/Pods-DiscoverInn.debug.xcconfig"; sourceTree = "<group>"; };
+		3ED5F409DBEA3DED6B0E85E4 /* Pods-DiscoverInnTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiscoverInnTests.release.xcconfig"; path = "Target Support Files/Pods-DiscoverInnTests/Pods-DiscoverInnTests.release.xcconfig"; sourceTree = "<group>"; };
 		405728D0CEC448BC94F397E9 /* Montserrat-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Medium.ttf"; path = "../assets/fonts/Montserrat-Medium.ttf"; sourceTree = "<group>"; };
 		42D234CA6FCB4E18A0971F0A /* Montserrat-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-BlackItalic.ttf"; path = "../assets/fonts/Montserrat-BlackItalic.ttf"; sourceTree = "<group>"; };
-		4603BF7E929B953C040CA965 /* Pods-DiscoverInn.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiscoverInn.debug.xcconfig"; path = "Target Support Files/Pods-DiscoverInn/Pods-DiscoverInn.debug.xcconfig"; sourceTree = "<group>"; };
-		51FD729ABE0335EE2AFC476F /* Pods-DiscoverInnTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiscoverInnTests.debug.xcconfig"; path = "Target Support Files/Pods-DiscoverInnTests/Pods-DiscoverInnTests.debug.xcconfig"; sourceTree = "<group>"; };
-		5D36E642FF25EA534066AC1D /* Pods-DiscoverInn-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiscoverInn-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-DiscoverInn-tvOSTests/Pods-DiscoverInn-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		641C91C6889B47399519C763 /* Montserrat-ExtraLightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-ExtraLightItalic.ttf"; path = "../assets/fonts/Montserrat-ExtraLightItalic.ttf"; sourceTree = "<group>"; };
-		65B98D0BB627DE63E576FACB /* libPods-DiscoverInnTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DiscoverInnTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6ECD37ACC7AEF82EDE7D274D /* libPods-DiscoverInn-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DiscoverInn-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6FE6ACCF4095800B91599BBC /* Pods-DiscoverInnTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiscoverInnTests.release.xcconfig"; path = "Target Support Files/Pods-DiscoverInnTests/Pods-DiscoverInnTests.release.xcconfig"; sourceTree = "<group>"; };
 		70B9F6C1FF5E464D8DFD25B7 /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-SemiBold.ttf"; path = "../assets/fonts/Montserrat-SemiBold.ttf"; sourceTree = "<group>"; };
 		72FBBC7403DC421E80F72619 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/native-base/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		7444E647C4824558BF7B7A3E /* Roboto_medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto_medium.ttf; path = "../node_modules/native-base/Fonts/Roboto_medium.ttf"; sourceTree = "<group>"; };
@@ -101,20 +100,21 @@
 		7A4E93DB21EF4C88BEE26E89 /* Montserrat-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-ExtraBold.ttf"; path = "../assets/fonts/Montserrat-ExtraBold.ttf"; sourceTree = "<group>"; };
 		7B3AD1503F9C4FDF86F07E79 /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/native-base/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
 		7DC3F2328F924FE7967D2653 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
-		812A48EFA33F7D96D119F5BD /* Pods-DiscoverInn-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiscoverInn-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-DiscoverInn-tvOS/Pods-DiscoverInn-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		82ADEB91D258480BBD5940EF /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		84F4038E7B1E4481B9AFC963 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		87C2D87F18B34688BA002B3F /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/native-base/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		88153B8F23BE4C1500186554 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = main.jsbundle; path = DiscoverInn/main.jsbundle; sourceTree = "<group>"; };
-		8ABE48F20F9C6B13FCB86ABD /* libPods-DiscoverInn.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DiscoverInn.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A005B8ABF38D4E06ACD1BEE2 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		A070537AFA7B485E8CEC0254 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		A15209839A2046368CA62CB0 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/native-base/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
-		A5187EEE3E0AA04E128EB8EA /* Pods-DiscoverInn-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiscoverInn-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-DiscoverInn-tvOSTests/Pods-DiscoverInn-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		A51A7A28E5A94726AD232699 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
+		AE03BDC56A1EE127477ADA1E /* libPods-DiscoverInn-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DiscoverInn-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BCDEE3C46AC781612D156274 /* libPods-DiscoverInn.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DiscoverInn.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE08E14A9BAF409BBBBB0D81 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Bold.ttf"; path = "../assets/fonts/Montserrat-Bold.ttf"; sourceTree = "<group>"; };
 		BFAEFD0184F24344A9AD1044 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
+		C0B2FE9A00DF7140640DDA71 /* Pods-DiscoverInn-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiscoverInn-tvOS.release.xcconfig"; path = "Target Support Files/Pods-DiscoverInn-tvOS/Pods-DiscoverInn-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		C518E5AFDF514D26BB6D36A8 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
+		C540C489CB83A701BCDD8919 /* Pods-DiscoverInn-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiscoverInn-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-DiscoverInn-tvOSTests/Pods-DiscoverInn-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C7E2C61BE1B149AC85DC58FB /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/native-base/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		CAC8062B639A4B0E8C554E3F /* Montserrat-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-ExtraLight.ttf"; path = "../assets/fonts/Montserrat-ExtraLight.ttf"; sourceTree = "<group>"; };
 		CD16360AC3EA4613B333BBD1 /* Montserrat-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Black.ttf"; path = "../assets/fonts/Montserrat-Black.ttf"; sourceTree = "<group>"; };
@@ -129,11 +129,11 @@
 		E8B8588119A94F3D947B86DB /* Montserrat-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Thin.ttf"; path = "../assets/fonts/Montserrat-Thin.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		ED3B38F7E5558100A81286C4 /* libPods-DiscoverInnTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DiscoverInnTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF4DE268170D49D3A722C0B2 /* Montserrat-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Italic.ttf"; path = "../assets/fonts/Montserrat-Italic.ttf"; sourceTree = "<group>"; };
-		F3CE2AEA6844B82EE0ED5AAD /* libPods-DiscoverInn-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DiscoverInn-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F858577A64DA7E8C8E05639D /* Pods-DiscoverInnTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiscoverInnTests.debug.xcconfig"; path = "Target Support Files/Pods-DiscoverInnTests/Pods-DiscoverInnTests.debug.xcconfig"; sourceTree = "<group>"; };
 		FC2D43E1D8604A3DBBFA6791 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		FC575745BE3B4780B43F7C14 /* Montserrat-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-LightItalic.ttf"; path = "../assets/fonts/Montserrat-LightItalic.ttf"; sourceTree = "<group>"; };
-		FEC72A59A8020AC87518E8E3 /* Pods-DiscoverInn-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DiscoverInn-tvOS.release.xcconfig"; path = "Target Support Files/Pods-DiscoverInn-tvOS/Pods-DiscoverInn-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		FF544F85E9124EC6891DFC52 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/native-base/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -142,7 +142,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				80352A559CF69657A2CB4F52 /* libPods-DiscoverInnTests.a in Frameworks */,
+				6C80EE3925701B503390F8F8 /* libPods-DiscoverInnTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,7 +150,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				38C9B02344F4CBCC2C8E2AF5 /* libPods-DiscoverInn.a in Frameworks */,
+				C312E8F6A7317474581CBC8E /* libPods-DiscoverInn.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,7 +158,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				52B1E8119020DA7D7647301E /* libPods-DiscoverInn-tvOS.a in Frameworks */,
+				C4E8BAFA24A4E9FE28FC758C /* libPods-DiscoverInn-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -166,7 +166,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43361162F88D0790DDD54188 /* libPods-DiscoverInn-tvOSTests.a in Frameworks */,
+				DFB6429728B392B321CA72C5 /* libPods-DiscoverInn-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,10 +209,10 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				8ABE48F20F9C6B13FCB86ABD /* libPods-DiscoverInn.a */,
-				65B98D0BB627DE63E576FACB /* libPods-DiscoverInnTests.a */,
-				F3CE2AEA6844B82EE0ED5AAD /* libPods-DiscoverInn-tvOS.a */,
-				6ECD37ACC7AEF82EDE7D274D /* libPods-DiscoverInn-tvOSTests.a */,
+				BCDEE3C46AC781612D156274 /* libPods-DiscoverInn.a */,
+				0700E29C7333DB22F3C6E89C /* libPods-DiscoverInn-tvOS.a */,
+				AE03BDC56A1EE127477ADA1E /* libPods-DiscoverInn-tvOSTests.a */,
+				ED3B38F7E5558100A81286C4 /* libPods-DiscoverInnTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -306,14 +306,14 @@
 		B35E72B126E329D771972230 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				4603BF7E929B953C040CA965 /* Pods-DiscoverInn.debug.xcconfig */,
-				0EE665CA97869E49EF0ED703 /* Pods-DiscoverInn.release.xcconfig */,
-				51FD729ABE0335EE2AFC476F /* Pods-DiscoverInnTests.debug.xcconfig */,
-				6FE6ACCF4095800B91599BBC /* Pods-DiscoverInnTests.release.xcconfig */,
-				812A48EFA33F7D96D119F5BD /* Pods-DiscoverInn-tvOS.debug.xcconfig */,
-				FEC72A59A8020AC87518E8E3 /* Pods-DiscoverInn-tvOS.release.xcconfig */,
-				5D36E642FF25EA534066AC1D /* Pods-DiscoverInn-tvOSTests.debug.xcconfig */,
-				A5187EEE3E0AA04E128EB8EA /* Pods-DiscoverInn-tvOSTests.release.xcconfig */,
+				3BB499C5A18CB996F73FD006 /* Pods-DiscoverInn.debug.xcconfig */,
+				0FEDD7034C4EFC124560A603 /* Pods-DiscoverInn.release.xcconfig */,
+				37C1303965ECF29CCAE05BEB /* Pods-DiscoverInn-tvOS.debug.xcconfig */,
+				C0B2FE9A00DF7140640DDA71 /* Pods-DiscoverInn-tvOS.release.xcconfig */,
+				C540C489CB83A701BCDD8919 /* Pods-DiscoverInn-tvOSTests.debug.xcconfig */,
+				23EB576D634FC7334CD0B1B9 /* Pods-DiscoverInn-tvOSTests.release.xcconfig */,
+				F858577A64DA7E8C8E05639D /* Pods-DiscoverInnTests.debug.xcconfig */,
+				3ED5F409DBEA3DED6B0E85E4 /* Pods-DiscoverInnTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -325,7 +325,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "DiscoverInnTests" */;
 			buildPhases = (
-				6C9F5CC9B575AA75E0F4DA61 /* [CP] Check Pods Manifest.lock */,
+				ECFF0A6E537E2D3B2252D7A5 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
@@ -344,14 +344,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "DiscoverInn" */;
 			buildPhases = (
-				3852037A93C20E17E40894D4 /* [CP] Check Pods Manifest.lock */,
+				56F762FDDF2BB039E14B6E4C /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				DD43828D44DDA8374D8BB142 /* [CP] Copy Pods Resources */,
-				98FFC66989AD500104A80079 /* [CP] Embed Pods Frameworks */,
+				CFB341E2B1916C3FFDA6880A /* [CP] Embed Pods Frameworks */,
+				FEC245567167C88ACC2C2E73 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -366,7 +366,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "DiscoverInn-tvOS" */;
 			buildPhases = (
-				63264ABD53D444E8EE97DD0D /* [CP] Check Pods Manifest.lock */,
+				F41E2E3515CF0315D59FED7E /* [CP] Check Pods Manifest.lock */,
 				FD10A7F122414F3F0027D42C /* Start Packager */,
 				2D02E4771E0B4A5D006451C7 /* Sources */,
 				2D02E4781E0B4A5D006451C7 /* Frameworks */,
@@ -386,7 +386,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "DiscoverInn-tvOSTests" */;
 			buildPhases = (
-				10520465EB11F9333DCF131C /* [CP] Check Pods Manifest.lock */,
+				D4E1206460F54390E219F055 /* [CP] Check Pods Manifest.lock */,
 				2D02E48C1E0B4A5D006451C7 /* Sources */,
 				2D02E48D1E0B4A5D006451C7 /* Frameworks */,
 				2D02E48E1E0B4A5D006451C7 /* Resources */,
@@ -519,28 +519,6 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
-		10520465EB11F9333DCF131C /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-DiscoverInn-tvOSTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -555,7 +533,7 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
-		3852037A93C20E17E40894D4 /* [CP] Check Pods Manifest.lock */ = {
+		56F762FDDF2BB039E14B6E4C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -577,7 +555,25 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		63264ABD53D444E8EE97DD0D /* [CP] Check Pods Manifest.lock */ = {
+		CFB341E2B1916C3FFDA6880A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DiscoverInn/Pods-DiscoverInn-frameworks.sh",
+				"${PODS_ROOT}/../../node_modules/@react-native-mapbox-gl/maps/ios/Mapbox.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mapbox.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DiscoverInn/Pods-DiscoverInn-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D4E1206460F54390E219F055 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -592,14 +588,14 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-DiscoverInn-tvOS-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-DiscoverInn-tvOSTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6C9F5CC9B575AA75E0F4DA61 /* [CP] Check Pods Manifest.lock */ = {
+		ECFF0A6E537E2D3B2252D7A5 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -621,25 +617,67 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		98FFC66989AD500104A80079 /* [CP] Embed Pods Frameworks */ = {
+		F41E2E3515CF0315D59FED7E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-DiscoverInn/Pods-DiscoverInn-frameworks.sh",
-				"${PODS_ROOT}/../../node_modules/@react-native-mapbox-gl/maps/ios/Mapbox.framework",
+			inputFileListPaths = (
 			);
-			name = "[CP] Embed Pods Frameworks";
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mapbox.framework",
+				"$(DERIVED_FILE_DIR)/Pods-DiscoverInn-tvOS-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DiscoverInn/Pods-DiscoverInn-frameworks.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		DD43828D44DDA8374D8BB142 /* [CP] Copy Pods Resources */ = {
+		FD10A7F022414F080027D42C /* Start Packager */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Start Packager";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		FD10A7F122414F3F0027D42C /* Start Packager */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Start Packager";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		FEC245567167C88ACC2C2E73 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -689,44 +727,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DiscoverInn/Pods-DiscoverInn-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		FD10A7F022414F080027D42C /* Start Packager */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Start Packager";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		FD10A7F122414F3F0027D42C /* Start Packager */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Start Packager";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -796,7 +796,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 51FD729ABE0335EE2AFC476F /* Pods-DiscoverInnTests.debug.xcconfig */;
+			baseConfigurationReference = F858577A64DA7E8C8E05639D /* Pods-DiscoverInnTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -819,7 +819,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6FE6ACCF4095800B91599BBC /* Pods-DiscoverInnTests.release.xcconfig */;
+			baseConfigurationReference = 3ED5F409DBEA3DED6B0E85E4 /* Pods-DiscoverInnTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -839,7 +839,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4603BF7E929B953C040CA965 /* Pods-DiscoverInn.debug.xcconfig */;
+			baseConfigurationReference = 3BB499C5A18CB996F73FD006 /* Pods-DiscoverInn.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
@@ -859,7 +859,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0EE665CA97869E49EF0ED703 /* Pods-DiscoverInn.release.xcconfig */;
+			baseConfigurationReference = 0FEDD7034C4EFC124560A603 /* Pods-DiscoverInn.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
@@ -878,7 +878,7 @@
 		};
 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 812A48EFA33F7D96D119F5BD /* Pods-DiscoverInn-tvOS.debug.xcconfig */;
+			baseConfigurationReference = 37C1303965ECF29CCAE05BEB /* Pods-DiscoverInn-tvOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -906,7 +906,7 @@
 		};
 		2D02E4981E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FEC72A59A8020AC87518E8E3 /* Pods-DiscoverInn-tvOS.release.xcconfig */;
+			baseConfigurationReference = C0B2FE9A00DF7140640DDA71 /* Pods-DiscoverInn-tvOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -934,7 +934,7 @@
 		};
 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5D36E642FF25EA534066AC1D /* Pods-DiscoverInn-tvOSTests.debug.xcconfig */;
+			baseConfigurationReference = C540C489CB83A701BCDD8919 /* Pods-DiscoverInn-tvOSTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -961,7 +961,7 @@
 		};
 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A5187EEE3E0AA04E128EB8EA /* Pods-DiscoverInn-tvOSTests.release.xcconfig */;
+			baseConfigurationReference = 23EB576D634FC7334CD0B1B9 /* Pods-DiscoverInn-tvOSTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;

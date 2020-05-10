@@ -31,6 +31,9 @@ import _ from 'underscore';
 import {getBoundingBox} from 'geolocation-utils';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
+MapboxGL.setAccessToken(
+  'pk.eyJ1IjoiZGlzY292ZXItaW5uIiwiYSI6ImNrOHBhbTB1ZDFpOHkzZ253azNiZWwwajcifQ.4Ajx3MymPUgns4rNashfLA'
+);
 //REDUX
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -249,8 +252,8 @@ class MapList extends React.Component {
                 [topLeft.lon, topLeft.lat],
                 [bottomRight.lon, bottomRight.lat],
               ],
-              minZoom: 10,
-              maxZoom: 20,
+              minZoom: 5,
+              maxZoom: 5,
             };
             console.log('options => ', options);
             console.time('download')

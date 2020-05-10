@@ -29,7 +29,7 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import fontelloConfig from './../../selection.json';
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 MapboxGL.setAccessToken(
-  'pk.eyJ1IjoiYWJyaWxsbyIsImEiOiJjanNlbHVjb28wanFwNDNzNzkyZzFnczNpIn0.39svco2wAZvwcrFD6qOlMw',
+  'pk.eyJ1IjoicmF2aXNvaml0cmF3b3JrIiwiYSI6ImNrYTByc3RqNjBldGozbHBtcmgwZXA0cGQifQ.6p5CTW54hkMu5Q00dKD0ew'
 );
 
 //REDUX
@@ -37,8 +37,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as mapActions from './../../actions/mapActions';
-const CENTER_COORD = [-73.970895, 40.723279];
-const MAPBOX_VECTOR_TILE_SIZE = 512;
 
 class MapView extends React.Component {
   constructor(props) {
@@ -147,38 +145,6 @@ class MapView extends React.Component {
         });
     }
   }
-
-  async onDidFinishLoadingStyle() {
-    const { width, height } = Dimensions.get('window');
-    const bounds = geoViewport.bounds(
-      CENTER_COORD,
-      12,
-      [width, height],
-      MAPBOX_VECTOR_TILE_SIZE,
-    );
-
-    const options = {
-      name: Math.random().toString(),
-      styleURL: MapboxGL.StyleURL.Street,
-      bounds: [
-        [bounds[0], bounds[1]],
-        [bounds[2], bounds[3]],
-      ],
-      minZoom: 10,
-      maxZoom: 20,
-    };
-
-    // start download
-    MapboxGL.offlineManager.createPack(options, this.onDownloadProgress);
-  }
-
-  onDownloadProgress = (offlineRegion, offlineRegionStatus) => {
-    this.setState({
-      name: offlineRegion.name,
-      offlineRegion,
-      offlineRegionStatus,
-    });
-  };
 
   addNewPin() {
     let { params } = this.props.navigation.state;
@@ -307,7 +273,7 @@ class MapView extends React.Component {
                         />
                         <MapboxGL.SymbolLayer
                           id={`singlePointSelected${collection.id}`}
-                          filter={['!has', 'point_count']}
+                          filter={['!',['has', 'point_count']]}
                           style={{
                             iconImage: ['get', 'category'],
                             iconAllowOverlap: true,

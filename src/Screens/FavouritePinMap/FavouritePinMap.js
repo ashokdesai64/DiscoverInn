@@ -15,7 +15,7 @@ import Spinner from './../../components/Loader';
 import _ from 'underscore';
 import { getBoundingBox } from 'geolocation-utils';
 MapboxGL.setAccessToken(
-  'pk.eyJ1IjoiYWJyaWxsbyIsImEiOiJjanNlbHVjb28wanFwNDNzNzkyZzFnczNpIn0.39svco2wAZvwcrFD6qOlMw',
+  'pk.eyJ1IjoiZGlzY292ZXItaW5uIiwiYSI6ImNrOHBhbTB1ZDFpOHkzZ253azNiZWwwajcifQ.4Ajx3MymPUgns4rNashfLA',
 );
 
 //REDUX
@@ -255,7 +255,7 @@ class FavouritePinMap extends React.Component {
                       />
                       <MapboxGL.SymbolLayer
                         id={`singlePointSelected${collection.id}`}
-                        filter={['!has', 'point_count']}
+                        filter={['!',['has', 'point_count']]}
                         style={{
                           iconImage: ['get', 'category'],
                           iconAllowOverlap: true,

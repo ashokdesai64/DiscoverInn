@@ -25,28 +25,11 @@ class OfflineMaps extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      carouselItems: [],
       allMaps: [],
       searchTerm: '',
       fetchingMaps: true,
       offlineMaps:props.offlineMaps
     };
-  }
-
-  componentWillMount() {
-    this.props.mapAction
-      .sharedMapsList({email: this.props.userData.email, page: '1'})
-      .then(data => {
-        this.setState({
-          carouselItems: data,
-          allMaps: data,
-          fetchingMaps: false,
-        });
-      })
-      .catch(err => {
-        this.setState({carouselItems: [], fetchingMaps: false});
-        console.log('err => ', err);
-      });
   }
 
   searchSharedMaps = _.debounce(() => {

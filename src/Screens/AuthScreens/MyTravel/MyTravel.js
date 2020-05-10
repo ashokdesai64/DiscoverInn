@@ -21,9 +21,11 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 //REDUX
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-
+MapboxGL.setAccessToken(
+  'pk.eyJ1IjoiZGlzY292ZXItaW5uIiwiYSI6ImNrOHBhbTB1ZDFpOHkzZ253azNiZWwwajcifQ.4Ajx3MymPUgns4rNashfLA'
+);
 import * as mapActions from '../../../actions/mapActions';
-
+// MapboxGL.offlineManager.setTileCountLimit(10000);
 const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
   const paddingToBottom = 20;
   return (
@@ -191,10 +193,10 @@ class MyTravel extends React.Component {
                 [topLeft.lon, topLeft.lat],
                 [bottomRight.lon, bottomRight.lat],
               ],
-              minZoom: 10,
-              maxZoom: 20,
+              minZoom: 5,
+              maxZoom: 5,
             };
-            console.log("options => ",options)
+            console.log("options => ", options);
             MapboxGL.offlineManager.createPack(
               options,
               (offlineRegion, offlineRegionStatus) => {

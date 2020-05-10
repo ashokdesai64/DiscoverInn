@@ -21,11 +21,20 @@ export async function callAPI(url, data, method = 'POST') {
       apiSkeleton['body'] = formData;
     }
 
-    console.log('formdata => ', url,formData);
-    let response = await fetch(url, apiSkeleton);
-    console.log('response => ', response);
-    let apiResponse = await response.json();
-    console.log('url ' + url + ' => ', apiResponse);
-    resolve(apiResponse);
+    console.log('formdata => ', url, formData);
+
+    try {
+      let response = await fetch(url, apiSkeleton);
+      console.log('response => ', response);
+
+      try {
+        let apiResponse = await response.json();
+        resolve(apiResponse);
+      } catch (error) {
+        reject({error, status: false});
+      }
+    } catch (err) {
+      reject({err, status: false});
+    }
   });
 }

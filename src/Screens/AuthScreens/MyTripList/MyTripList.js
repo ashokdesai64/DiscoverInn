@@ -99,12 +99,13 @@ class MyTripList extends React.Component {
                       </View>
 
                       <View style={styles.myTravelAction}>
-                        <View style={styles.myTravelActionLeft}>
+                        {/* <View style={styles.myTravelActionLeft}>
                           <TouchableOpacity
                             style={[styles.buttonIcon, styles.buttonIconPrimary]}>
                             <Feather style={styles.buttonIconText} name="download-cloud" />
                           </TouchableOpacity>
-                        </View>
+                        </View> */}
+                        <View></View>
                         <View style={styles.myTravelActionRight}>
                           <TouchableOpacity
                             style={[styles.button, styles.buttonSm, styles.buttonPrimary]}

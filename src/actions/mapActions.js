@@ -368,7 +368,7 @@ export function fetchMapPinList(apiData) {
                 apiData
             );
 
-            if (response.status) {
+            if (response && response.status) {
                 resolve({ mapID: response.data });
             } else {
                 reject(response.message)

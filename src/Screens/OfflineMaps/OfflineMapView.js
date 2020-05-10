@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   View,
-  Dimensions,
   Text,
   ScrollView,
   TouchableOpacity,
@@ -9,7 +8,6 @@ import {
 import ImageBlurLoading from './../../components/ImageLoader';
 
 import styles from './OfflineMapView.styles';
-import geoViewport from '@mapbox/geo-viewport';
 import sights1 from './../../Images/sights1.png';
 import activities1 from './../../Images/activities1.png';
 import restaurants1 from './../../Images/restaurants1.png';
@@ -21,15 +19,12 @@ import Header from './../../components/header/header';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import Spinner from './../../components/Loader';
 import _ from 'underscore';
-import {
-  getBoundingBox
-} from 'geolocation-utils'
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import fontelloConfig from './../../selection.json';
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 MapboxGL.setAccessToken(
-  'pk.eyJ1IjoiYWJyaWxsbyIsImEiOiJjanNlbHVjb28wanFwNDNzNzkyZzFnczNpIn0.39svco2wAZvwcrFD6qOlMw',
+  'pk.eyJ1IjoiZGlzY292ZXItaW5uIiwiYSI6ImNrOHBhbTB1ZDFpOHkzZ253azNiZWwwajcifQ.4Ajx3MymPUgns4rNashfLA',
 );
 
 //REDUX
@@ -171,7 +166,7 @@ class OfflineMapView extends React.Component {
                         />
                         <MapboxGL.SymbolLayer
                           id={`singlePointSelected${collection.id}`}
-                          filter={['!has', 'point_count']}
+                          filter={["!",['has', 'point_count']]}
                           style={{
                             iconImage: ['get', 'category'],
                             iconAllowOverlap: true,
