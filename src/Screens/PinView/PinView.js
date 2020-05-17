@@ -32,6 +32,7 @@ import * as mapActions from './../../actions/mapActions';
 class PinView extends React.Component {
   constructor(props) {
     super(props);
+    const {params} = props.navigation.state;
     this.state = {
       saveToListModal: false,
       activeSlide: 0,
@@ -45,6 +46,8 @@ class PinView extends React.Component {
       tripListName: '',
       pinLoader: false,
       loaderMsg: '',
+      isOffline: params.isOffline,
+      offlinePath: params.offlinePath,
     };
   }
 
@@ -58,7 +61,21 @@ class PinView extends React.Component {
       this._keyboardDidHide.bind(this),
     );
 
-    this.fetchSinglePinData();
+    if (this.state.isOffline) {
+      const { params } = this.props.navigation.state;
+      let pinData = params.pinData || {};
+      let isLocationSelected = pinData.latitude && pinData.longitude;
+      this.setState({
+        pinTitle: pinData.name,
+        pinDescription: pinData.description,
+        selectedCategory: pinData.categories,
+        isLocationSelected,
+        addedFrom: pinData.added_from,
+        isSaved: pinData.save_triplist,
+      });
+    } else {
+      this.fetchSinglePinData();
+    }
   }
 
   componentWillUnmount() {
@@ -87,11 +104,11 @@ class PinView extends React.Component {
           map_id: mapID,
         })
         .then(data => {
-          console.log('data => ', data);
           let pinData = data.pin_data;
           let isLocationSelected = pinData.latitude && pinData.longitude;
           let pinImages =
             pinData.images && pinData.images.length >= 0 ? pinData.images : [];
+
           this.setState({
             pinTitle: pinData.name,
             pinDescription: pinData.description,
@@ -111,7 +128,7 @@ class PinView extends React.Component {
     }
   }
 
-  _renderItemCate = ({item, index}) => {
+  _renderItemCate = ({ item, index }) => {
     return (
       <ImageBlurLoading
         withIndicator
@@ -207,21 +224,24 @@ class PinView extends React.Component {
   }
 
   openSaveToListModal() {
+    if (this.state.isOffline) {
+      return alert('Please connect to internet');
+    }
     if (this.props.userData && this.props.userData.id) {
-      this.setState({saveToListModal: true})
+      this.setState({saveToListModal: true});
     } else {
-      alert("You need to login to access this feature")
+      alert('You need to login to access this feature');
     }
   }
 
   render() {
     let {categories} = this.props;
-    const {params} = this.props.navigation.state;
     let selectedCategory =
       categories && categories.find(c => c.id == this.state.selectedCategory);
     let categoryName = (selectedCategory && selectedCategory.name) || '';
 
     let isWebImages = this.state.webImages && this.state.webImages.length > 0;
+    let sliderData = isWebImages ? this.state.webImages : this.state.carouselItems;
     return (
       <SafeAreaView>
         <View style={[styles.pinHeader]}>
@@ -235,8 +255,7 @@ class PinView extends React.Component {
               <AntDesign name={'heart'} size={24} color={'white'} />
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity
-              onPress={() => this.openSaveToListModal()}>
+            <TouchableOpacity onPress={() => this.openSaveToListModal()}>
               <AntDesign name={'hearto'} size={24} color={'white'} />
             </TouchableOpacity>
           )}
@@ -246,22 +265,34 @@ class PinView extends React.Component {
           textContent={this.state.loaderMsg}
           textStyle={{color: '#fff'}}
         />
-        <Carousel
-          data={isWebImages ? this.state.webImages : this.state.carouselItems}
-          sliderWidth={DEVICE_WIDTH}
-          itemWidth={DEVICE_WIDTH}
-          inactiveSlideOpacity={1}
-          inactiveSlideScale={1}
-          containerCustomStyle={{
-            height: 400,
-            width: DEVICE_WIDTH,
-            top: 0,
-            position: 'absolute',
-          }}
-          firstItem={0}
-          renderItem={this._renderItemCate}
-          onSnapToItem={index => this.setState({activeSlide: index})}
-        />
+
+        {this.state.isOffline ? (
+          <ImageBlurLoading
+            withIndicator
+            style={styles.cateSlideCardIcon}
+            source={{uri: this.state.offlinePath}}
+            thumbnailSource={{
+              uri: this.state.offlinePath,
+            }}
+          />
+        ) : (
+          <Carousel
+            data={sliderData}
+            sliderWidth={DEVICE_WIDTH}
+            itemWidth={DEVICE_WIDTH}
+            inactiveSlideOpacity={1}
+            inactiveSlideScale={1}
+            containerCustomStyle={{
+              height: 400,
+              width: DEVICE_WIDTH,
+              top: 0,
+              position: 'absolute',
+            }}
+            firstItem={0}
+            renderItem={this._renderItemCate}
+            onSnapToItem={index => this.setState({activeSlide: index})}
+          />
+        )}
 
         <Pagination
           dotsLength={this.state.webImages && this.state.webImages.length}
@@ -378,7 +409,7 @@ class PinView extends React.Component {
               this.props.tripList.length > 0 && (
                 <>
                   <View style={styles.orDivider}>
-                    <Text style={styles.orDividerBorder}></Text>
+                    <Text style={styles.orDividerBorder} />
                     <Text style={styles.orDividerText}>OR</Text>
                   </View>
                   <ScrollView
@@ -734,4 +765,7 @@ function mapDispatchToProps(dispatch) {
     mapAction: bindActionCreators(mapActions, dispatch),
   };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(PinView);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(PinView);

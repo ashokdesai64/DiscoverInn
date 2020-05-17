@@ -862,10 +862,10 @@
     eslint-plugin-react-native "3.6.0"
     prettier "1.16.4"
 
-"@react-native-mapbox-gl/maps@7.0.8":
-  version "7.0.8"
-  resolved "https://registry.yarnpkg.com/@react-native-mapbox-gl/maps/-/maps-7.0.8.tgz#f2d4ee09a889d1c62217c20ea29743f8ce0f886e"
-  integrity sha512-6LCvTx0ZJwaySjxlOtf4zUKHkMXOGCTANDBLtGoxZtrYdcvJNfd/rtSyR7c/0amljZEhxN0u1k0Q8hkNkxOgHg==
+"@react-native-mapbox-gl/maps@^7.0.8":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@react-native-mapbox-gl/maps/-/maps-7.2.0.tgz#8b0c56ce15b690009f3bed19c9e9759e343a2a68"
+  integrity sha512-C+y4ynYx3hvz8orXJK8DoBy4ZO8LHG50YsKi/O65ZcdusIgWhQLgj3r+pRAydELmOsmeZVzOownpTgTbEw1jOA==
   dependencies:
     "@mapbox/geo-viewport" ">= 0.4.0"
     "@turf/along" ">= 4.0.0 <7.0.0"
@@ -5019,6 +5019,11 @@ react-native-keyboard-aware-scroll-view@0.9.1:
     prop-types "^15.6.2"
     react-native-iphone-x-helper "^1.0.3"
 
+react-native-location@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/react-native-location/-/react-native-location-2.5.0.tgz#b6d2f7e9c3dbe13fbe87587f9533b8bf943b6a35"
+  integrity sha512-myT54tZuFmN6d5RruMVfoa8eY+voJWkSd73xUVhjzJDnQr5uu5MFoH7hMg3trHF1CAkaY/2gIneOspUdGxv59Q==
+
 react-native-popup-dialog@^0.18.3:
   version "0.18.3"
   resolved "https://registry.yarnpkg.com/react-native-popup-dialog/-/react-native-popup-dialog-0.18.3.tgz#5d7a13fd7d9f817cf2121965a3b100a257201b67"
@@ -5510,6 +5515,14 @@ rimraf@~2.2.6:
 rn-fetch-blob@^0.10.16:
   version "0.10.16"
   resolved "https://registry.yarnpkg.com/rn-fetch-blob/-/rn-fetch-blob-0.10.16.tgz#bd54f66c94f7a8e06c213077483646478ae8d230"
+  dependencies:
+    base-64 "0.1.0"
+    glob "7.0.6"
+
+rn-fetch-blob@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/rn-fetch-blob/-/rn-fetch-blob-0.12.0.tgz#ec610d2f9b3f1065556b58ab9c106eeb256f3cba"
+  integrity sha512-+QnR7AsJ14zqpVVUbzbtAjq0iI8c9tCg49tIoKO2ezjzRunN7YL6zFSFSWZm6d+mE/l9r+OeDM3jmb2tBb2WbA==
   dependencies:
     base-64 "0.1.0"
     glob "7.0.6"

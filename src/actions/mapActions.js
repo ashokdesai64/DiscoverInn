@@ -168,7 +168,8 @@ export function fetchMyMaps(apiData) {
                 let newMaps = [...oldMaps, ...response.data];
                 dispatch({
                     type: 'ownMaps',
-                    ownMaps: apiData.page > 1 ? newMaps : [...response.data],
+                    // ownMaps: apiData.page > 1 ? newMaps : [...response.data],
+                    ownMaps: [],
                     fetchingMaps:false
                 });
                 resolve(newMaps);
@@ -778,7 +779,7 @@ export function sharedMapsList(apiData) {
     };
 }
 
-export function storeOfflineMapData({mapData,pinData,bounds}) {
+export function storeOfflineMapData({mapData,pinData,bounds,pinList}) {
     return function (dispatch, getState) {
         return new Promise(async (resolve, reject) => {
             let offlineMaps = getState().maps.offlineMaps || [];
@@ -787,7 +788,7 @@ export function storeOfflineMapData({mapData,pinData,bounds}) {
             if (isAlreadyDownloadedIndex >= 0) {
                 maps.splice(isAlreadyDownloadedIndex, 1);
             }
-            maps.push({mapData,pinData,bounds})
+            maps.push({mapData,pinData,bounds,pinList})
             dispatch({
                 type: 'offlineMaps',
                 offlineMaps: maps

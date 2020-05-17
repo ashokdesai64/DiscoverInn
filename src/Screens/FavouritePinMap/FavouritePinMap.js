@@ -15,7 +15,7 @@ import Spinner from './../../components/Loader';
 import _ from 'underscore';
 import { getBoundingBox } from 'geolocation-utils';
 MapboxGL.setAccessToken(
-  'pk.eyJ1IjoiZGlzY292ZXItaW5uIiwiYSI6ImNrOHBhbTB1ZDFpOHkzZ253azNiZWwwajcifQ.4Ajx3MymPUgns4rNashfLA',
+  'sk.eyJ1IjoicmF2aXNvaml0cmF3b3JrIiwiYSI6ImNrYTByeHVxZjBqbGszZXBtZjF3NmJleWgifQ.idSimILJ3_sk1gSWs2sMsQ',
 );
 
 //REDUX

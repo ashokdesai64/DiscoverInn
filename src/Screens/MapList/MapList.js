@@ -11,9 +11,12 @@ import {
   FlatList,
 } from 'react-native';
 import Share from 'react-native-share';
+import {checkIfHasPermission} from './../../config/permission';
+
 import {Item, Input, Button, Icon, Textarea, List, CheckBox} from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import styles from './MapList.style';
+import RNFetchBlob from 'rn-fetch-blob';
 import Carousel from 'react-native-snap-carousel';
 import Header from './../../components/header/header';
 import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
@@ -32,7 +35,7 @@ import {getBoundingBox} from 'geolocation-utils';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
 MapboxGL.setAccessToken(
-  'pk.eyJ1IjoiZGlzY292ZXItaW5uIiwiYSI6ImNrOHBhbTB1ZDFpOHkzZ253azNiZWwwajcifQ.4Ajx3MymPUgns4rNashfLA'
+  'sk.eyJ1IjoicmF2aXNvaml0cmF3b3JrIiwiYSI6ImNrYTByeHVxZjBqbGszZXBtZjF3NmJleWgifQ.idSimILJ3_sk1gSWs2sMsQ',
 );
 //REDUX
 import {connect} from 'react-redux';
@@ -40,7 +43,7 @@ import {bindActionCreators} from 'redux';
 
 import * as authActions from './../../actions/authActions';
 import * as mapActions from './../../actions/mapActions';
-// MapboxGL.offlineManager.setTileCountLimit(10000);
+MapboxGL.offlineManager.setTileCountLimit(15000);
 
 class MapList extends React.Component {
   constructor(props) {
@@ -153,7 +156,26 @@ class MapList extends React.Component {
     }
   }
 
+  async downloadAssets(pinImages = []) {
+    let downloadPromises = [];
+    pinImages.map(pinURL => {
+      let fileName = pinURL.split('/').pop();
+      downloadPromises.push(
+        RNFetchBlob.config({
+          fileCache: true,
+          path: RNFetchBlob.fs.dirs.DocumentDir + fileName,
+        }).fetch('GET', pinURL),
+      );
+    });
+    return await Promise.all(downloadPromises);
+  }
+
   async downloadMap(mapData) {
+
+    if (!this.props.userData || !this.props.userData.id) {
+      return alert("You need to login to access this feature")
+    }
+
     MapboxGL.offlineManager.deletePack(`${mapData.id}${mapData.name}`);
     let packs = await MapboxGL.offlineManager.getPacks();
     let isDownloaded = packs.find(
@@ -162,141 +184,172 @@ class MapList extends React.Component {
     if (isDownloaded) {
       alert('This map is already downloaded');
     } else {
-      this.props.mapAction
-        .getMapPins({
-          map_id: mapData.id,
-          user_id: this.props.userData && this.props.userData.id,
-        })
-        .then(data => {
-          console.log('data => ', data);
-          let pinList = data.mapID.pin_list || [];
+      let hasPermission = await checkIfHasPermission('write_storage');
+      if ((Platform.OS == 'android' && hasPermission) || Platform.OS == 'ios') {
+        this.props.mapAction
+          .getMapPins({
+            map_id: mapData.id,
+            user_id: this.props.userData && this.props.userData.id,
+          })
+          .then(data => {
+            console.log('data => ', data);
+            let pinList = data.mapID.pin_list || [];
 
-          let featureCollections = [],
-            pinLatLongs = [],
-            topLeft = null,
-            bottomRight = null;
+            let featureCollections = [],
+              pinLatLongs = [],
+              topLeft = null,
+              bottomRight = null;
 
-          if (pinList && pinList.length > 0) {
-            this.setState({
-              mapDownloadInProgress: true,
-              downloadSpinnerMsg: `Preparing to download map.`,
-            });
-            var splitByString = function(source, splitBy) {
-              var splitter = splitBy.split('');
-              splitter.push([source]); //Push initial value
-
-              return splitter.reduceRight(function(accumulator, curValue) {
-                var k = [];
-                accumulator.forEach(v => (k = [...k, ...v.split(curValue)]));
-                return k;
+            if (pinList && pinList.length > 0) {
+              this.setState({
+                mapDownloadInProgress: true,
+                downloadSpinnerMsg: `Preparing to download map.`,
               });
-            };
+              var splitByString = function(source, splitBy) {
+                var splitter = splitBy.split('');
+                splitter.push([source]); //Push initial value
 
-            let temp = [];
+                return splitter.reduceRight(function(accumulator, curValue) {
+                  var k = [];
+                  accumulator.forEach(v => (k = [...k, ...v.split(curValue)]));
+                  return k;
+                });
+              };
 
-            pinList.map(pin => {
-              if (pin.longitude && pin.latitude) {
-                let exploded = splitByString(pin.name, '.,-');
-                let parsed = parseInt(exploded[0]);
-                temp.push({
-                  type: 'Feature',
-                  id: pin.id,
-                  properties: {
+              let temp = [];
+              let pinImages = [];
+              pinList.map(pin => {
+                if (pin.longitude && pin.latitude) {
+                  let exploded = splitByString(pin.name, '.,-');
+                  let parsed = parseInt(exploded[0]);
+                  temp.push({
+                    type: 'Feature',
                     id: pin.id,
-                    mapName: mapData.name,
-                    mapID: mapData.id,
-                    hasNumber: !isNaN(parsed),
-                    number: parsed,
-                    category: pin.categories,
-                  },
-                  geometry: {
-                    type: 'Point',
-                    coordinates: [
-                      parseFloat(pin.longitude),
-                      parseFloat(pin.latitude),
-                    ],
-                  },
-                });
-              }
-            });
-
-            featureCollections.push({
-              type: `FeatureCollection`,
-              features: temp,
-              id: Math.random(),
-            });
-
-            pinList.map(t => {
-              if (t.latitude && t.longitude) {
-                pinLatLongs.push({
-                  lat: parseFloat(t.latitude),
-                  lon: parseFloat(t.longitude),
-                });
-              }
-            });
-            let boundsResult = getBoundingBox(pinLatLongs);
-            console.log("boundsResult => ",boundsResult)
-            topLeft = boundsResult.topLeft;
-            bottomRight = boundsResult.bottomRight;
-            let filteredCollections = featureCollections.filter(
-              collection =>
-                collection &&
-                collection.features &&
-                collection.features.length > 0,
-            );
-
-            const options = {
-              name: `${mapData.id}${mapData.name}`,
-              styleURL: MapboxGL.StyleURL.Dark,
-              bounds: [
-                [topLeft.lon, topLeft.lat],
-                [bottomRight.lon, bottomRight.lat],
-              ],
-              minZoom: 5,
-              maxZoom: 5,
-            };
-            console.log('options => ', options);
-            console.time('download')
-            MapboxGL.offlineManager.createPack(
-              options,
-              (offlineRegion, offlineRegionStatus) => {
-                console.log('offlineRegionStatus => ', offlineRegionStatus);
-                this.setState({
-                  name: offlineRegion.name,
-                  offlineRegion,
-                  offlineRegionStatus,
-                  downloadSpinnerMsg:
-                    Math.floor(offlineRegionStatus.percentage) + '% downloaded',
-                });
-                if (offlineRegionStatus.percentage == 100) {
-                  console.timeEnd('download')
-                  this.setState({downloadSpinnerMsg: 'Storing map locally'});
-                  this.props.mapAction
-                    .storeOfflineMapData({
-                      mapData,
-                      pinData: filteredCollections,
-                      bounds: {
-                        ne: [topLeft.lon, topLeft.lat],
-                        sw: [bottomRight.lon, bottomRight.lat],
-                      },
-                    })
-                    .then(data => {
-                      setTimeout(() => {
-                        this.setState({mapDownloadInProgress: false});
-                      }, 1500);
-                    });
+                    properties: {
+                      id: pin.id,
+                      mapName: mapData.name,
+                      mapID: mapData.id,
+                      hasNumber: !isNaN(parsed),
+                      number: parsed,
+                      category: pin.categories,
+                    },
+                    geometry: {
+                      type: 'Point',
+                      coordinates: [
+                        parseFloat(pin.longitude),
+                        parseFloat(pin.latitude),
+                      ],
+                    },
+                  });
+                  if (typeof pin.images == 'string') {
+                    pinImages.push(pin.images);
+                  } else if (
+                    Array.isArray(pin.images) &&
+                    pin.images.length > 0
+                  ) {
+                    pinImages.push(pin.images[0]);
+                  }
                 }
-              }, (offlineRegion, err) => {
-                console.log("err download => ",offlineRegion,err)
-              }
-            );
-          } else {
-            alert("This map can't be downloaded as it doesn't have any pin");
-          }
-        })
-        .catch(err => {
-          this.setState({mapDownloadInProgress: false});
-        });
+              });
+
+              featureCollections.push({
+                type: `FeatureCollection`,
+                features: temp,
+                id: Math.random(),
+              });
+
+              pinList.map(t => {
+                if (t.latitude && t.longitude) {
+                  pinLatLongs.push({
+                    lat: parseFloat(t.latitude),
+                    lon: parseFloat(t.longitude),
+                  });
+                }
+              });
+              let boundsResult = getBoundingBox(pinLatLongs);
+              console.log('boundsResult => ', boundsResult);
+              topLeft = boundsResult.topLeft;
+              bottomRight = boundsResult.bottomRight;
+              let filteredCollections = featureCollections.filter(
+                collection =>
+                  collection &&
+                  collection.features &&
+                  collection.features.length > 0,
+              );
+
+              const options = {
+                name: `${mapData.id}${mapData.name}`,
+                styleURL: MapboxGL.StyleURL.Dark,
+                bounds: [
+                  [topLeft.lon, topLeft.lat],
+                  [bottomRight.lon, bottomRight.lat],
+                ],
+                minZoom: 10,
+                maxZoom: 15,
+              };
+              console.log('options => ', options);
+              MapboxGL.offlineManager.createPack(
+                options,
+                async (offlineRegion, offlineRegionStatus) => {
+                  console.log('offlineRegionStatus => ', offlineRegionStatus);
+                  this.setState({
+                    name: offlineRegion.name,
+                    offlineRegion,
+                    offlineRegionStatus,
+                    downloadSpinnerMsg:
+                      Math.floor(offlineRegionStatus.percentage) +
+                      '% downloaded',
+                  });
+                  if (offlineRegionStatus.percentage == 100) {
+                    this.setState({
+                      downloadSpinnerMsg: 'Downloading assets...',
+                    });
+
+                    console.log("pinImages => ",pinImages)
+                    //Download pin images
+                    let downloadResult = await this.downloadAssets(
+                      pinImages,
+                      mapData.cover_image || '',
+                    );
+                    let paths = [];
+                    downloadResult.map(d => {
+                      paths.push(d.path());
+                    });
+
+                    this.setState({downloadSpinnerMsg: 'Storing map locally'});
+                    this.props.mapAction
+                      .storeOfflineMapData({
+                        mapData,
+                        pinData: filteredCollections,
+                        pinList,
+                        bounds: {
+                          ne: [topLeft.lon, topLeft.lat],
+                          sw: [bottomRight.lon, bottomRight.lat],
+                        },
+                      })
+                      .then(data => {
+                        setTimeout(() => {
+                          this.setState({mapDownloadInProgress: false});
+                        }, 1500);
+                      });
+                  }
+                },
+                (offlineRegion, err) => {
+                  console.log('err download => ', offlineRegion, err);
+                },
+              );
+            } else {
+              alert("This map can't be downloaded as it doesn't have any pin");
+            }
+          })
+          .catch(err => {
+            this.setState({mapDownloadInProgress: false});
+          });
+      } else {
+        alert(
+          'Please Go into Settings -> Applications -> DiscoverInn -> Permissions and Allow permissions to continue',
+        );
+      }
     }
   }
 
@@ -608,7 +661,9 @@ class MapList extends React.Component {
       Share.shareSingle({
         social: Share.Social.FACEBOOK,
         message: map.name,
-        url: `https://discover-inn.com/search-maps?map-id=${map.id}&fb=true&appId=1223643894484714`,
+        url: `https://discover-inn.com/search-maps?map-id=${
+          map.id
+        }&fb=true&appId=1223643894484714`,
       })
         .then(res => {
           this.setState({shareModal: false});
@@ -621,7 +676,9 @@ class MapList extends React.Component {
       Share.shareSingle({
         social: Share.Social.TWITTER,
         message: map.name,
-        url: `https://discover-inn.com/search-maps?map-id=${map.id}&fb=true&appId=1223643894484714`,
+        url: `https://discover-inn.com/search-maps?map-id=${
+          map.id
+        }&fb=true&appId=1223643894484714`,
       })
         .then(res => {
           this.setState({shareModal: false});
@@ -963,7 +1020,7 @@ class MapList extends React.Component {
 
             {this.props.tripList && (
               <View style={styles.orDivider}>
-                <Text style={styles.orDividerBorder}></Text>
+                <Text style={styles.orDividerBorder} />
                 <Text style={styles.orDividerText}>OR</Text>
               </View>
             )}
@@ -1065,7 +1122,7 @@ class MapList extends React.Component {
               </TouchableOpacity>
             </View>
             <View style={styles.orDivider}>
-              <Text style={styles.orDividerBorder}></Text>
+              <Text style={styles.orDividerBorder} />
               <Text style={styles.orDividerText}>OR</Text>
             </View>
 
@@ -1314,7 +1371,7 @@ class MapList extends React.Component {
               {this.props.userData && this.props.userData.id && (
                 <>
                   <View style={styles.orDivider}>
-                    <Text style={styles.orDividerBorder}></Text>
+                    <Text style={styles.orDividerBorder} />
                     <Text style={styles.orDividerText}>OR</Text>
                   </View>
 
@@ -1668,4 +1725,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MapList);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(MapList);

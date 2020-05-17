@@ -1,19 +1,14 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  Image,
-  Dimensions,
-} from 'react-native';
+import {View, Text, ScrollView, Image, Dimensions} from 'react-native';
 import {Item, Input, Button} from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import styles from './OfflineMaps.style';
 import Carousel from 'react-native-snap-carousel';
 import Header from './../../components/header/header';
+import ImageBlurLoading from './../../components/ImageLoader';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import _ from 'underscore';
-
+import RNFetchBlob from 'rn-fetch-blob'
 //REDUX
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -28,7 +23,7 @@ class OfflineMaps extends React.Component {
       allMaps: [],
       searchTerm: '',
       fetchingMaps: true,
-      offlineMaps:props.offlineMaps
+      offlineMaps: props.offlineMaps,
     };
   }
 
@@ -52,22 +47,35 @@ class OfflineMaps extends React.Component {
   }
 
   navigateToOfflineMap(mapData) {
-    console.log("mapData => ", mapData);
     this.props.navigation.navigate('OfflineMapView', {mapData});
   }
 
   _renderItem({item, index}) {
     let avgReview = item.avrage_review || 0;
+    let fileName = item.cover_image && item.cover_image.split('/').pop();
     return (
       <View style={[styles.mapSlideCard]}>
         <TouchableOpacity
           style={styles.mapSlideCardHeader}
           activeOpacity={0.5}
           onPress={() => this.navigateToOfflineMap(item)}>
-          <Image
+          
+          {/* <Image
             style={styles.mapSlideCardImg}
             source={{uri: item.cover_image}}
+          /> */}
+
+          <ImageBlurLoading
+            withIndicator
+            style={styles.mapSlideCardImg}
+            source={{
+              uri: 'file://' + RNFetchBlob.fs.dirs.DocumentDir + fileName,
+            }}
+            thumbnailSource={{
+              uri: 'file://' + RNFetchBlob.fs.dirs.DocumentDir + fileName,
+            }}
           />
+
           <View style={styles.mapSlideCardImg_overlay} />
           {/* <Button style={styles.shareButton}>
             <Feather style={styles.shareButtonText} name="share-2" />
@@ -128,10 +136,12 @@ class OfflineMaps extends React.Component {
   render() {
     const {width} = Dimensions.get('window');
     let {offlineMaps} = this.state;
+    console.log('offlineMaps => ', offlineMaps);
     let maps = (offlineMaps || []).map(data => {
       data.mapData['pinData'] = data.pinData;
       data.mapData['bounds'] = data.bounds;
-      return data.mapData
+      data.mapData['pinList'] = data.pinList;
+      return data.mapData;
     });
     return (
       <ScrollView
@@ -211,4 +221,7 @@ function mapDispatchToProps(dispatch) {
     mapAction: bindActionCreators(mapActions, dispatch),
   };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(OfflineMaps);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(OfflineMaps);

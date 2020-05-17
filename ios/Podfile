@@ -38,11 +38,13 @@ target 'DiscoverInn' do
 
   pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'DiscoverInnTests' do
     inherit! :search_paths
     # Pods for testing
   end
-
+  use_frameworks!
   use_native_modules!
 end
 

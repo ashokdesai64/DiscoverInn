@@ -25,10 +25,10 @@ export async function callAPI(url, data, method = 'POST') {
 
     try {
       let response = await fetch(url, apiSkeleton);
-      console.log('response => ', response);
-
+      
       try {
         let apiResponse = await response.json();
+        console.log('response => ', apiResponse);
         resolve(apiResponse);
       } catch (error) {
         reject({error, status: false});
