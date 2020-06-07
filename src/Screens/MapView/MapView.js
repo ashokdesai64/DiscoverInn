@@ -403,12 +403,12 @@ class MapView extends React.Component {
                     activeOpacity={0.9}
                     style={styles.mapViewCard}
                     onPress={() =>
-                      // this.props.navigation.navigate('PinView', {
-                      //   pinID: pin.id,
-                      //   mapID: params.mapID,
-                      //   mapName: params.mapName,
-                      // })
-                      this.setState({followUserLocation: true})
+                      this.props.navigation.navigate('PinView', {
+                        pinID: pin.id,
+                        mapID: params.mapID,
+                        mapName: params.mapName,
+                      })
+                      // this.setState({followUserLocation: true})
                     }>
                     {/* <Image
                           style={styles.mapViewCardImg}

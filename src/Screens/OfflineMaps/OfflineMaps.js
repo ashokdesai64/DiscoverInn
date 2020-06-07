@@ -8,7 +8,7 @@ import Header from './../../components/header/header';
 import ImageBlurLoading from './../../components/ImageLoader';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import _ from 'underscore';
-import RNFetchBlob from 'rn-fetch-blob'
+import RNFetchBlob from 'rn-fetch-blob';
 //REDUX
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -52,14 +52,14 @@ class OfflineMaps extends React.Component {
 
   _renderItem({item, index}) {
     let avgReview = item.avrage_review || 0;
-    let fileName = item.cover_image && item.cover_image.split('/').pop();
+    let imagePath = item.thumb_cover_image || item.cover_image || '';
+    let fileName = imagePath && imagePath.split('/').pop();
     return (
       <View style={[styles.mapSlideCard]}>
         <TouchableOpacity
           style={styles.mapSlideCardHeader}
           activeOpacity={0.5}
           onPress={() => this.navigateToOfflineMap(item)}>
-          
           {/* <Image
             style={styles.mapSlideCardImg}
             source={{uri: item.cover_image}}

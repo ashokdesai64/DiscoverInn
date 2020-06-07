@@ -159,23 +159,24 @@ class MapList extends React.Component {
   async downloadAssets(pinImages = []) {
     let downloadPromises = [];
     pinImages.map(pinURL => {
-      let fileName = pinURL.split('/').pop();
-      downloadPromises.push(
-        RNFetchBlob.config({
-          fileCache: true,
-          path: RNFetchBlob.fs.dirs.DocumentDir + fileName,
-        }).fetch('GET', pinURL),
-      );
+      if (pinURL) {
+        let fileName = pinURL.split('/').pop();
+        downloadPromises.push(
+          RNFetchBlob.config({
+            fileCache: true,
+            path: RNFetchBlob.fs.dirs.DocumentDir + fileName,
+          }).fetch('GET', pinURL),
+        );
+      }
     });
     return await Promise.all(downloadPromises);
   }
 
   async downloadMap(mapData) {
-
     if (!this.props.userData || !this.props.userData.id) {
-      return alert("You need to login to access this feature")
+      return alert('You need to login to access this feature');
     }
-
+    console.log('map data => ', mapData);
     MapboxGL.offlineManager.deletePack(`${mapData.id}${mapData.name}`);
     let packs = await MapboxGL.offlineManager.getPacks();
     let isDownloaded = packs.find(
@@ -305,12 +306,15 @@ class MapList extends React.Component {
                       downloadSpinnerMsg: 'Downloading assets...',
                     });
 
-                    console.log("pinImages => ",pinImages)
+                    console.log('pinImages => ', pinImages);
+
                     //Download pin images
-                    let downloadResult = await this.downloadAssets(
-                      pinImages,
-                      mapData.cover_image || '',
-                    );
+                    if (mapData.thumb_cover_image || mapData.cover_image) {
+                      pinImages.push(
+                        mapData.thumb_cover_image || mapData.cover_image,
+                      );
+                    }
+                    let downloadResult = await this.downloadAssets(pinImages);
                     let paths = [];
                     downloadResult.map(d => {
                       paths.push(d.path());
@@ -406,7 +410,9 @@ class MapList extends React.Component {
               </Text>
             </View>
           </View>
-          <Text style={styles.mapSlideCardTitle}>{item.name}</Text>
+          <Text style={styles.mapSlideCardTitle} numberOfLines={1}>
+            {item.name}
+          </Text>
           <TouchableOpacity
             style={styles.rateList}
             onPress={() => this.setState({showReviewModal: true})}>

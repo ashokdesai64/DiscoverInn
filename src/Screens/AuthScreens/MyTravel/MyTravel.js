@@ -99,28 +99,26 @@ class MyTravel extends React.Component {
     });
   }
 
-  async downloadAssets(pinImages = [], mapImage) {
+  async downloadAssets(pinImages = []) {
     let downloadPromises = [];
-    if (mapImage) {
-      pinImages.push(mapImage);
-    }
     console.log('pin Images => ', JSON.stringify(pinImages));
     pinImages.map(pinURL => {
-      let fileName = pinURL.split('/').pop();
-      downloadPromises.push(
-        RNFetchBlob.config({
-          fileCache: true,
-          path: RNFetchBlob.fs.dirs.DocumentDir + fileName,
-        }).fetch('GET', pinURL),
-      );
+      if (pinURL) {
+        let fileName = pinURL.split('/').pop();
+        downloadPromises.push(
+          RNFetchBlob.config({
+            fileCache: true,
+            path: RNFetchBlob.fs.dirs.DocumentDir + fileName,
+          }).fetch('GET', pinURL),
+        );
+      }
     });
     return await Promise.all(downloadPromises);
   }
 
   async downloadMap(mapData) {
-
     if (!this.props.userData || !this.props.userData.id) {
-      return alert("You need to login to access this feature")
+      return alert('You need to login to access this feature');
     }
 
     console.log('mapdata => ', mapData);
@@ -252,10 +250,10 @@ class MyTravel extends React.Component {
                       downloadSpinnerMsg: 'Downloading assets...',
                     });
 
-                    let downloadResult = await this.downloadAssets(
-                      pinImages,
-                      mapData.cover_image || '',
+                    pinImages.push(
+                      mapData.thumb_cover_image || mapData.cover_image || '',
                     );
+                    let downloadResult = await this.downloadAssets(pinImages);
                     let paths = [];
                     downloadResult.map(d => {
                       paths.push(d.path());
@@ -346,11 +344,11 @@ class MyTravel extends React.Component {
                 {marginLeft: 5},
               ]}
               onPress={() => {
-                this.props.navigation.navigate('Test');
-                // this.props.navigation.navigate('EditMyTravel', {
-                //   type: 'edit',
-                //   mapData: item,
-                // });
+                // this.props.navigation.navigate('Test');
+                this.props.navigation.navigate('EditMyTravel', {
+                  type: 'edit',
+                  mapData: item,
+                });
               }}>
               <Text style={styles.buttonText}>Edit</Text>
             </TouchableOpacity>
