@@ -191,7 +191,8 @@ class MapView extends React.Component {
   render() {
     let {params} = this.props.navigation.state;
     params = params || {};
-    let {topLeft, bottomRight, filteredCollections} = this.state;
+    let { topLeft, bottomRight, filteredCollections } = this.state;
+    let hasCollection = filteredCollections && filteredCollections.length > 0;
     return (
       <View style={styles.page}>
         <View style={styles.container}>
@@ -205,7 +206,7 @@ class MapView extends React.Component {
             showBack={true}
             rightEmpty={true}
             showRightButton={false}
-            title={params.mapName}
+            // title={params.mapName}
             {...this.props}
             absoluteHeader={true}
           />
@@ -227,7 +228,7 @@ class MapView extends React.Component {
                 this.setState({followUserLocation: false});
               }
             }}>
-            {topLeft && bottomRight && (
+            {topLeft && bottomRight && hasCollection && (
               <MapboxGL.Camera
                 bounds={{
                   ne: [topLeft.lon, topLeft.lat],
@@ -250,11 +251,12 @@ class MapView extends React.Component {
               }}
             />
 
-            {filteredCollections && filteredCollections.length > 0
+            {hasCollection
               ? filteredCollections.map(collection => {
                   let random = Math.floor(Math.random() * 90000) + 10000;
                   return (
                     <MapboxGL.ShapeSource
+                      key={collection.id}
                       id={'symbolLocationSource' + random}
                       hitbox={{width: 20, height: 20}}
                       shape={collection}
@@ -423,7 +425,7 @@ class MapView extends React.Component {
                           'https://discover-inn.com/upload/cover/map-image.jpeg',
                       }}
                     />
-                    <View style={styles.mapViewCardContent}>
+                    <View style={[styles.mapViewCardContent,{height:95}]}>
                       <View style={styles.mapViewTitle}>
                         <Text
                           style={styles.mapViewTitleText}

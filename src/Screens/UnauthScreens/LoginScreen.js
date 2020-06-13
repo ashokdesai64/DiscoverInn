@@ -125,7 +125,7 @@ class LoginScreen extends React.Component {
                     )}
                   </TouchableOpacity>
                 </View>
-                <Text style={styles.toggleText}>
+                <Text style={[styles.toggleText,{marginBottom:5}]}>
                   New User?
                   <Text
                     style={styles.toggleTextLink}
@@ -143,6 +143,8 @@ class LoginScreen extends React.Component {
                   alignSelf: 'center',
                   textDecorationLine: 'underline',
                   fontFamily: 'Montserrat-SemiBold',
+                  paddingHorizontal: 20,
+                  paddingVertical:10,
                 }}
                 onPress={()=> this.props.navigation.navigate('App')}
               >

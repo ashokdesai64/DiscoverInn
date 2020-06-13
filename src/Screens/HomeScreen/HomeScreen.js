@@ -345,7 +345,7 @@ class HomeScreen extends React.Component {
               autoCorrect={false}
               defaultValue={query}
               onChangeText={text => this.setState({query: text})}
-              placeholder="Type in your next destination"
+              placeholder="Type in the Location name!"
               fetchSearchedMaps={() => this.fetchSearchedMaps()}
               onValueChange={searchTerm =>
                 this.setState({searchTerm}, () => {

@@ -62,7 +62,7 @@ class PinView extends React.Component {
     );
 
     if (this.state.isOffline) {
-      const { params } = this.props.navigation.state;
+      const {params} = this.props.navigation.state;
       let pinData = params.pinData || {};
       let isLocationSelected = pinData.latitude && pinData.longitude;
       this.setState({
@@ -128,7 +128,7 @@ class PinView extends React.Component {
     }
   }
 
-  _renderItemCate = ({ item, index }) => {
+  _renderItemCate = ({item, index}) => {
     return (
       <ImageBlurLoading
         withIndicator
@@ -241,7 +241,9 @@ class PinView extends React.Component {
     let categoryName = (selectedCategory && selectedCategory.name) || '';
 
     let isWebImages = this.state.webImages && this.state.webImages.length > 0;
-    let sliderData = isWebImages ? this.state.webImages : this.state.carouselItems;
+    let sliderData = isWebImages
+      ? this.state.webImages
+      : this.state.carouselItems;
     return (
       <SafeAreaView>
         <View style={[styles.pinHeader]}>
@@ -418,12 +420,13 @@ class PinView extends React.Component {
                     showsVerticalScrollIndicator={true}>
                     {this.props.tripList.map(trip => {
                       return (
-                        <View style={styles.MVTripListItem}>
+                        <TouchableOpacity
+                          style={styles.MVTripListItem}
+                          onPress={() => this.addToTrip(trip.id)}>
                           <Text style={styles.MVTripListItemTitle}>
                             {trip.name}
                           </Text>
-                          <TouchableOpacity
-                            onPress={() => this.addToTrip(trip.id)}>
+                          <View>
                             {this.state.isSaved == trip.id ? (
                               <AntDesign
                                 name={'heart'}
@@ -437,8 +440,8 @@ class PinView extends React.Component {
                                 size={15}
                               />
                             )}
-                          </TouchableOpacity>
-                        </View>
+                          </View>
+                        </TouchableOpacity>
                       );
                     })}
                   </ScrollView>
@@ -494,6 +497,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 400,
     marginTop: -100,
+    minHeight:200
   },
   pinViewTitle: {
     fontFamily: 'Montserrat-Medium',

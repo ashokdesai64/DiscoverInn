@@ -498,7 +498,7 @@ class MapList extends React.Component {
                 style={[styles.mapDetaileChild, styles.mapDetaileChildLeft]}>
                 <Text style={[styles.mapDetaileTitle]}>Travel Type</Text>
                 <Text style={[styles.mapDetaileValue]}>
-                  {item.travel_type || '-'}
+                  {item.travel_type == '0' ? '-' : item.travel_type}
                 </Text>
               </View>
               <View
@@ -538,7 +538,7 @@ class MapList extends React.Component {
                 style={[
                   styles.button,
                   styles.buttonReview,
-                  styles.buttonPrimary,
+                  styles.buttonPrimary
                 ]}
                 onPress={() => {
                   if (this.props.userData && this.props.userData.id) {
@@ -794,7 +794,10 @@ class MapList extends React.Component {
           <TouchableOpacity
             style={{marginBottom: 10, padding: 5}}
             onPress={() =>
-              this.setState({searchTerm: item.description, showPlaces: false})
+              this.setState({ searchTerm: item.description, showPlaces: false }, () => {
+                this.pageNo = 1;
+                this.fetchMapList()
+              })
             }>
             <Text style={{fontFamily: 'Montserrat-Medium', fontSize: 16}}>
               {item.description}
@@ -880,7 +883,7 @@ class MapList extends React.Component {
                 <Feather style={styles.searchbarIcon} name="search" />
                 <Input
                   style={styles.searchbarInput}
-                  placeholder="Type in your next destination!"
+                  placeholder="Type in the Location name!"
                   value={this.state.searchTerm}
                   onChangeText={searchTerm =>
                     this.setState({searchTerm}, () => {
@@ -1131,40 +1134,6 @@ class MapList extends React.Component {
               <Text style={styles.orDividerBorder} />
               <Text style={styles.orDividerText}>OR</Text>
             </View>
-
-            <ScrollView style={{height: 200}}>
-              <View style={styles.selectListItem}>
-                <Text style={styles.selectListText}>Manali</Text>
-              </View>
-              <View style={styles.selectListItem}>
-                <Text style={styles.selectListText}>Leh Ladakh</Text>
-              </View>
-              <View style={styles.selectListItem}>
-                <Text style={styles.selectListText}>Karala</Text>
-              </View>
-              <View style={styles.selectListItem}>
-                <Text style={styles.selectListText}>Sikkim</Text>
-              </View>
-              <View style={styles.selectListItem}>
-                <Text style={styles.selectListText}>Sikkim</Text>
-              </View>
-              <View style={styles.selectListItem}>
-                <Text style={styles.selectListText}>Sikkim</Text>
-              </View>
-              <View style={styles.selectListItem}>
-                <Text style={styles.selectListText}>Sikkim</Text>
-              </View>
-
-              <View style={styles.selectListItem}>
-                <Text style={styles.selectListText}>Sikkim</Text>
-              </View>
-              <View style={styles.selectListItem}>
-                <Text style={styles.selectListText}>Sikkim</Text>
-              </View>
-              <View style={[styles.selectListItem, {borderBottomWidth: 0}]}>
-                <Text style={styles.selectListText}>Sikkim</Text>
-              </View>
-            </ScrollView>
           </DialogContent>
         </Dialog>
 

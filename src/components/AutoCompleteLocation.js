@@ -197,7 +197,7 @@ export default class AutoCompleteLocation extends Component {
         <Item style={styles.searchbarInputBox}>
           <Input
             style={[styles.searchbarInput,{backgroundColor:isDisabled?'#ddd':'transparent'}]}
-            placeholder="Type in your next destination!"
+            placeholder="Type in the Location name!"
             value={this.props.value}
             disabled={isDisabled}
             onChangeText={searchTerm => {

@@ -168,8 +168,8 @@ export function fetchMyMaps(apiData) {
                 let newMaps = [...oldMaps, ...response.data];
                 dispatch({
                     type: 'ownMaps',
-                    // ownMaps: apiData.page > 1 ? newMaps : [...response.data],
-                    ownMaps: [],
+                    ownMaps: apiData.page > 1 ? newMaps : [...response.data],
+                    // ownMaps: [],
                     fetchingMaps:false
                 });
                 resolve(newMaps);
@@ -231,6 +231,7 @@ export function fetchMapList(apiData) {
                 mapListLoaded: true
             });
             if (response.status) {
+                console.log("response => ",response)
                 dispatch({
                     type: apiData.page > 1 ? 'mapPagination' : 'mapList',
                     mapList: response.data

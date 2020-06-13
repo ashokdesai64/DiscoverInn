@@ -389,6 +389,11 @@ class MyTravel extends React.Component {
     if (showLoader) {
       this.setState({fetchingMaps: true});
     }
+    console.log({
+      user_id: this.props.userData.id,
+      search: this.state.search,
+      page: this.pageNo,
+    })
     this.props.mapAction.fetchMyMaps({
       user_id: this.props.userData.id,
       search: this.state.search,

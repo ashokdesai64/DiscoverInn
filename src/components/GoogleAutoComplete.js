@@ -188,7 +188,7 @@ export default class GoogleAutoComplete extends Component {
             <Feather style={styles.searchbarIcon} name="search" />
             <Input
               style={styles.searchbarInput}
-              placeholder="Type in your next destination!"
+              placeholder="Type in the Location name!"
               value={this.state.searchTerm}
               onChangeText={searchTerm =>
                 this.setState({ searchTerm }, () => {

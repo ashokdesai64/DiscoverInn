@@ -395,7 +395,7 @@ const styles = StyleSheet.create({
     // marginTop: 15,
   },
   buttonContainer: {
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
     flexDirection: 'row',
     marginTop: 10,

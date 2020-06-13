@@ -29,7 +29,7 @@ class EditMyTravel extends React.Component {
   constructor(props) {
     super(props);
     const {params} = props.navigation.state;
-    console.log("params.mapData => ",params.mapData)
+    console.log('params.mapData => ', params.mapData);
     let mapName = '',
       coverImage = false;
 
@@ -133,10 +133,11 @@ class EditMyTravel extends React.Component {
       params.type == 'edit' ? this.state.mapData.travel_type : '-';
     let budget_limit =
       params.type == 'edit' ? this.state.mapData.budget_limit : '-';
-    let date_created = params.type == 'edit'
+    let date_created =
+      params.type == 'edit'
         ? moment(this.state.mapData.date_of_travel).fromNow()
-      : '-';
-    date_created = date_created == 'Invalid date' ? '-' : date_created
+        : '-';
+    date_created = date_created == 'Invalid date' ? '-' : date_created;
     let age_at_travel =
       params.type == 'edit' ? this.state.mapData.age_at_travel : '-';
     let mapID =
@@ -315,6 +316,31 @@ class EditMyTravel extends React.Component {
                   <Text style={styles.buttonText}>Edit Pins</Text>
                 </Button>
               </View>
+              {params.type == 'edit' && (
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.navigate('MapView', {
+                      mapID,
+                      mapName: this.state.mapName
+                    });
+                  }}
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: '#2F80ED',
+                    height: 50,
+                  }}>
+                  <Text
+                    style={{
+                      color: '#fff',
+                      fontFamily: 'Montserrat-Medium',
+                      fontSize: 18,
+                    }}>
+                    View "{this.state.mapName}"
+                  </Text>
+                </TouchableOpacity>
+              )}
             </ScrollView>
           </View>
         </View>
@@ -334,4 +360,7 @@ function mapDispatchToProps(dispatch) {
     mapAction: bindActionCreators(mapActions, dispatch),
   };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(EditMyTravel);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(EditMyTravel);

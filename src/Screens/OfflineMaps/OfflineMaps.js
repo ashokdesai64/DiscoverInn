@@ -82,7 +82,7 @@ class OfflineMaps extends React.Component {
           </Button> */}
         </TouchableOpacity>
         <View style={styles.mapSlideCardBody}>
-          <View style={styles.mapSlideBadgeGroup}>
+          {/* <View style={styles.mapSlideBadgeGroup}>
             <View style={[styles.badgeRed, styles.badge]}>
               <Text style={[styles.badgeText, styles.badgeRedText]}>
                 {item.view || 0} <Feather style={styles.badgeIcon} name="eye" />
@@ -94,7 +94,7 @@ class OfflineMaps extends React.Component {
                 <Feather style={styles.badgeIcon} name="star" />
               </Text>
             </View>
-          </View>
+          </View> */}
           <Text style={styles.mapSlideCardTitle}>{item.name}</Text>
           <View style={styles.rateList}>
             {Array(avgReview)
