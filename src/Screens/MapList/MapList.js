@@ -360,6 +360,9 @@ class MapList extends React.Component {
   _renderItem(item, index) {
     let avgReview = parseInt(item.avrage_review);
     let {selectedMapCategories} = this.state;
+
+    let travelType = item.travel_type == '0' ? '-' : item.travel_type;
+    console.log(JSON.stringify(item.categories))
     return (
       <View style={[styles.mapSlideCard]}>
         <View style={styles.mapSlideCardHeader}>
@@ -498,7 +501,7 @@ class MapList extends React.Component {
                 style={[styles.mapDetaileChild, styles.mapDetaileChildLeft]}>
                 <Text style={[styles.mapDetaileTitle]}>Travel Type</Text>
                 <Text style={[styles.mapDetaileValue]}>
-                  {item.travel_type == '0' ? '-' : item.travel_type}
+                  {travelType}
                 </Text>
               </View>
               <View
@@ -1691,6 +1694,7 @@ function mapStateToProps(state) {
     tripList: state.maps.tripList,
     mapListLoaded: state.maps.mapListLoaded,
     allUserNames: state.maps.allUserNames,
+    travelTypes:state.maps.travelTypes
   };
 }
 function mapDispatchToProps(dispatch) {

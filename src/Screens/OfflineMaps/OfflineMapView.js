@@ -34,13 +34,24 @@ class OfflineMapView extends React.Component {
   constructor(props) {
     super(props);
     const { params } = props.navigation.state;
+    let pinList = params.mapData.pinList || [];
+    if (
+      params &&
+      params.filterCategories &&
+      params.filterCategories.length > 0
+    ) {
+      pinList = pinList.filter(
+        pin => params.filterCategories.indexOf(pin.categories) >= 0,
+      );
+    }
+
     this.state = {
       showTripList: false,
       mapPinsInProgress: false,
       followUserLocation: false,
       mapData: params.mapData,
       filteredCollections: params.mapData.pinData,
-      pinList: params.mapData.pinList,
+      pinList: pinList,
     };
     this.categoryImages = {
       '1': sights1,

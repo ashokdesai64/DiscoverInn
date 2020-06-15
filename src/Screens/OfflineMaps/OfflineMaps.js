@@ -9,12 +9,14 @@ import ImageBlurLoading from './../../components/ImageLoader';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import _ from 'underscore';
 import RNFetchBlob from 'rn-fetch-blob';
+import MapboxGL from '@react-native-mapbox-gl/maps';
 //REDUX
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
 import * as mapActions from './../../actions/mapActions';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import moment from 'moment';
 
 class OfflineMaps extends React.Component {
   constructor(props) {
@@ -24,7 +26,14 @@ class OfflineMaps extends React.Component {
       searchTerm: '',
       fetchingMaps: true,
       offlineMaps: props.offlineMaps,
+      selectedMapCategories: {map_id: null, categories: []},
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.offlineMaps && nextProps.offlineMaps.length != this.state.offlineMaps) {
+      this.setState({offlineMaps:nextProps.offlineMaps})
+    }
   }
 
   searchSharedMaps = _.debounce(() => {
@@ -42,24 +51,60 @@ class OfflineMaps extends React.Component {
     this.setState({offlineMaps: filteredMapList});
   }, 250);
 
-  navigateToMap(mapID, mapName) {
-    this.props.navigation.navigate('MapView', {mapID, mapName});
+  navigateToOfflineMap(mapData, mapID) {
+    let categories = [];
+    if (mapID == this.state.selectedMapCategories.map_id) {
+      categories = this.state.selectedMapCategories.categories;
+    }
+    this.props.navigation.navigate('OfflineMapView', {
+      mapData,
+      filterCategories: categories,
+    });
   }
 
-  navigateToOfflineMap(mapData) {
-    this.props.navigation.navigate('OfflineMapView', {mapData});
+  pinToggle(categoryID, mapID) {
+    let {selectedMapCategories} = this.state;
+    if (selectedMapCategories.map_id != mapID) {
+      this.setState({
+        selectedMapCategories: {map_id: mapID, categories: [categoryID]},
+      });
+    } else {
+      let categories = selectedMapCategories.categories;
+      let categoryIndex = categories.findIndex(a => a == categoryID);
+      if (categoryIndex >= 0) {
+        categories.splice(categoryIndex, 1);
+      } else {
+        categories.push(categoryID);
+      }
+      this.setState({
+        selectedMapCategories: {map_id: mapID, categories: [...categories]},
+      });
+    }
+  }
+
+  deleteOfflineMap(mapData) {
+    MapboxGL.offlineManager.deletePack(`${mapData.id}${mapData.name}`);
+    this.props.mapAction.removeOfflineMapData(mapData);
   }
 
   _renderItem({item, index}) {
     let avgReview = item.avrage_review || 0;
     let imagePath = item.thumb_cover_image || item.cover_image || '';
     let fileName = imagePath && imagePath.split('/').pop();
+
+    let travelType = item.travel_type == '0' ? '-' : item.travel_type;
+    if (this.props.travelTypes) {
+      let currentTravelType = this.props.travelTypes.find(
+        type => type.id == travelType,
+      );
+      travelType = (currentTravelType && currentTravelType.name) || '-';
+    }
     return (
       <View style={[styles.mapSlideCard]}>
         <TouchableOpacity
           style={styles.mapSlideCardHeader}
           activeOpacity={0.5}
-          onPress={() => this.navigateToOfflineMap(item)}>
+          onPress={() => this.navigateToOfflineMap(item, item.id)}>
           {/* <Image
             style={styles.mapSlideCardImg}
             source={{uri: item.cover_image}}
@@ -125,8 +170,96 @@ class OfflineMaps extends React.Component {
               ({item.total_reviews || 0} Reviews)
             </Text>
           </View>
-          <View style={styles.mapShareDescription}>
-            <Text style={styles.mapShareDescText}>{item.description}</Text>
+          <View style={styles.mapPins}>
+            {item.categories &&
+              item.categories.map(category => {
+                let categoryIcon = this.state.carouselCateItems.find(
+                  c => c.title == category.name,
+                );
+                let isCategoryActive = category.disabled == '0';
+                let isCategorySelected = false;
+                if (
+                  selectedMapCategories.map_id == item.id &&
+                  selectedMapCategories.categories.includes(category.id)
+                ) {
+                  isCategorySelected = true;
+                }
+                return (
+                  <View
+                    style={
+                      isCategorySelected
+                        ? styles.selectedCat
+                        : styles.unSelectedCat
+                    }>
+                    <TouchableOpacity
+                      onPress={() =>
+                        isCategoryActive && this.pinToggle(category.id, item.id)
+                      }
+                      style={[
+                        {
+                          borderRadius: 3,
+                          height: isCategorySelected ? 25 : 30,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          width: isCategorySelected ? 25 : 30,
+                          backgroundColor: isCategoryActive
+                            ? '#2F80ED'
+                            : 'rgba(47, 128, 237, 0.1)',
+                        },
+                      ]}>
+                      <IconMoon
+                        size={14}
+                        name={categoryIcon.icon}
+                        color={isCategoryActive ? 'white' : '#2F80ED'}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                );
+              })}
+          </View>
+          <View style={styles.mapDetaileGrid}>
+            <View style={[styles.mapDetaileItem, styles.mapDetaileItemTop]}>
+              <View
+                style={[styles.mapDetaileChild, styles.mapDetaileChildLeft]}>
+                <Text style={[styles.mapDetaileTitle]}>Travel Type</Text>
+                <Text style={[styles.mapDetaileValue]}>{travelType}</Text>
+              </View>
+              <View
+                style={[styles.mapDetaileChild, styles.mapDetaileChildRight]}>
+                <Text style={[styles.mapDetaileTitle]}>Budget</Text>
+                <Text style={[styles.mapDetaileValue]}>
+                  {item.budget || '-'}
+                </Text>
+              </View>
+            </View>
+
+            <View style={[styles.mapDetaileItem, styles.mapDetaileItemBottom]}>
+              <View
+                style={[styles.mapDetaileChild, styles.mapDetaileChildLeft]}>
+                <Text style={[styles.mapDetaileTitle]}>Age</Text>
+                <Text style={[styles.mapDetaileValue]}>
+                  {item.age_at_travel || '-'}
+                </Text>
+              </View>
+              <View
+                style={[styles.mapDetaileChild, styles.mapDetaileChildRight]}>
+                <Text style={[styles.mapDetaileTitle]}>Created</Text>
+                <Text style={[styles.mapDetaileValue]}>
+                  {moment(item.date_created).format('YYYY-MM-DD') ||
+                    moment(item.date_created).fromNow() ||
+                    '-'}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[styles.button, styles.deleteButton]}
+                onPress={() => {
+                  this.deleteOfflineMap(item);
+                }}>
+                <Text style={styles.buttonText}>Delete</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
@@ -136,7 +269,6 @@ class OfflineMaps extends React.Component {
   render() {
     const {width} = Dimensions.get('window');
     let {offlineMaps} = this.state;
-    console.log('offlineMaps => ', offlineMaps);
     let maps = (offlineMaps || []).map(data => {
       data.mapData['pinData'] = data.pinData;
       data.mapData['bounds'] = data.bounds;
@@ -214,6 +346,7 @@ function mapStateToProps(state) {
     categories: state.maps.categories,
     userData: state.user.userData,
     offlineMaps: state.maps.offlineMaps,
+    travelTypes: state.maps.travelTypes,
   };
 }
 function mapDispatchToProps(dispatch) {

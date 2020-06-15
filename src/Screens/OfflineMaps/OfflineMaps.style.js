@@ -167,6 +167,104 @@ const styles = StyleSheet.create({
     lineHeight: 15,
     marginLeft: 10,
   },
+  mapPins: {
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  selectedCat: {
+    borderWidth: 2,
+    borderColor: '#2F80ED',
+    marginRight: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 34,
+    height: 34,
+    borderRadius: 7,
+  },
+  unSelectedCat: {
+    marginRight: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 30,
+    height: 30,
+    borderRadius: 5,
+  },
+  mapDetaileGrid: {
+    marginTop: 10,
+  },
+  mapDetaileItem: {
+    flexDirection: 'row',
+  },
+  mapDetaileItemTop: {
+    borderBottomColor: 'rgba(224, 224, 224, 0.4)',
+    borderBottomWidth: 0.5,
+  },
+  mapDetaileItemBottom: {
+    borderTopColor: 'rgba(224, 224, 224, 0.4)',
+    borderTopWidth: 0.5,
+  },
+  mapDetaileChild: {
+    width: '50%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+  },
+  mapDetaileChildLeft: {
+    borderRightColor: 'rgba(224, 224, 224, 0.4)',
+    borderRightWidth: 0.5,
+  },
+  mapDetaileChildRight: {
+    borderLeftColor: 'rgba(224, 224, 224, 0.4)',
+    borderLeftWidth: 0.5,
+  },
+  mapDetaileTitle: {
+    fontSize: 14,
+    color: '#BDBDBD',
+    marginBottom: 5,
+    fontFamily: 'Montserrat-Medium',
+  },
+  mapDetaileValue: {
+    fontSize: 14,
+    color: '#4F4F4F',
+    fontFamily: 'Montserrat-SemiBold',
+  },
+  buttonContainer: {
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginTop: 10,
+  },
+  buttonIcon: {
+    margin: 5,
+    padding: 5,
+    borderRadius: 5,
+    width: 30,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonIconPrimary: {
+    backgroundColor: 'rgba(47, 128, 237, 0.2)',
+  },
+  buttonIconText: {
+    fontSize: 14,
+    color: 'rgba(47, 128, 237, 1)',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 12,
+    fontFamily: 'Montserrat-Medium',
+  },
+  buttonPrimary: {
+    backgroundColor: '#2F80ED',
+  },
+  deleteButton: {
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    marginTop: 10,
+    backgroundColor:'#dc3545'
+  },  
   shareMapContant: {
     paddingTop: 20,
     alignItems: 'flex-start',
