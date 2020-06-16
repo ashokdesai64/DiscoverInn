@@ -3,6 +3,7 @@ import {
   TouchableOpacity,
   PanResponder,
   TouchableWithoutFeedback,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {Item, Input, Button} from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
@@ -160,6 +161,7 @@ export default class AutoCompleteLocation extends Component {
       let places = result.data.predictions || [];
       this.setState({placeList: places, hideResults: false});
       console.log('places => ', places);
+      this.props.scroll && this.props.scroll()
     } catch (err) {
       this.setState({placeList: []});
       console.log('err => ', err);
@@ -193,7 +195,7 @@ export default class AutoCompleteLocation extends Component {
     onShowResults && onShowResults(showResults);
       let isDisabled = this.props.locationFromImage && this.props.value;
     return (
-      <View style={[styles.container, containerStyle]}>
+      <KeyboardAvoidingView behavior={'padding'} style={[styles.container, containerStyle]}>
         <Item style={styles.searchbarInputBox}>
           <Input
             style={[styles.searchbarInput,{backgroundColor:isDisabled?'#ddd':'transparent'}]}
@@ -215,11 +217,13 @@ export default class AutoCompleteLocation extends Component {
           <ScrollView
             nestedScrollEnabled={true}
             style={{maxHeight: 200}}
-            keyboardShouldPersistTaps={'always'}>
+            keyboardShouldPersistTaps={'always'}
+            ref='_scrollView'
+          >
             {this.renderResultList()}
           </ScrollView>
         )}
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }

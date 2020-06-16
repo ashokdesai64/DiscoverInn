@@ -422,7 +422,9 @@ class EditMapDetails extends React.Component {
             <View style={styles.pageContent}>
               <ScrollView
                 keyboardShouldPersistTaps={'always'}
-                showsVerticalScrollIndicator={false}>
+                showsVerticalScrollIndicator={false}
+                ref={'_scrollView'}
+              >
                 {(pinImages && pinImages.length) ||
                 (webImages && webImages.length) ? (
                   <View
@@ -574,6 +576,7 @@ class EditMapDetails extends React.Component {
                       this.state.locationAccepted
                     }
                     value={this.state.locationName}
+                    scroll={() =>this.refs._scrollView.scrollTo({x: 0, y: 200, animated: true})}
                   />
                 </View>
 

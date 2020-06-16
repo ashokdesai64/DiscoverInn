@@ -316,7 +316,9 @@ class AddMapDetail extends React.Component {
             <View style={styles.pageContent}>
               <ScrollView
                 keyboardShouldPersistTaps={'always'}
-                showsVerticalScrollIndicator={false}>
+                showsVerticalScrollIndicator={false}
+                ref={'_scrollView'}
+              >
                 {pinImages && pinImages.length ? (
                   <View
                     style={{
@@ -428,6 +430,7 @@ class AddMapDetail extends React.Component {
                       this.state.locationAccepted
                     }
                     value={this.state.locationName}
+                    scroll={() =>this.refs._scrollView.scrollTo({x: 0, y: 200, animated: true})}
                   />
                 </View>
 
