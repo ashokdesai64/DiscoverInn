@@ -92,22 +92,20 @@ class MapPins extends React.Component {
     const { params } = this.props.navigation.state;
     this.setState({ selectedTripID: tripID });
 
-    if (tripID) {
-      this.props.mapAction
-        .addPinFromTripList({
-          user_id: this.props.userData.id,
-          map_id: params.mapID,
-          favorite_id: tripID,
-        })
-        .then(data => {
-          this.setState({ fetchingPins: true }, () => {
-            this.fetchMapPins();
-          });
-        })
-        .catch(err => {
-          console.log('err => ', err);
+    this.props.mapAction
+      .addPinFromTripList({
+        user_id: this.props.userData.id,
+        map_id: params.mapID,
+        favorite_id: tripID || '0',
+      })
+      .then(data => {
+        this.setState({ fetchingPins: true }, () => {
+          this.fetchMapPins();
         });
-    }
+      })
+      .catch(err => {
+        console.log('err => ', err);
+      });
   };
 
   searchPins = _.debounce(() => {

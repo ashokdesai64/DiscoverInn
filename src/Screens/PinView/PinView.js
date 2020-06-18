@@ -23,6 +23,7 @@ import ImageBlurLoading from './../../components/ImageLoader';
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const DEVICE_WIDTH = Dimensions.get('window').width;
 import Spinner from './../../components/Loader';
+import GestureRecognizer from './../../components/GestureRecognizer';
 //REDUX
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -105,6 +106,7 @@ class PinView extends React.Component {
         })
         .then(data => {
           let pinData = data.pin_data;
+          console.log("pin data => ",pinData)
           let isLocationSelected = pinData.latitude && pinData.longitude;
           let pinImages =
             pinData.images && pinData.images.length >= 0 ? pinData.images : [];
@@ -234,6 +236,10 @@ class PinView extends React.Component {
     }
   }
 
+  onPinSwipe(direction, state) {
+    alert(direction);
+  }
+
   render() {
     let {categories} = this.props;
     let selectedCategory =
@@ -322,21 +328,30 @@ class PinView extends React.Component {
         />
 
         <ScrollView style={styles.pinScrollView}>
-          <Text style={styles.pinViewTitle}>{this.state.pinTitle}</Text>
-          <View style={styles.pinViewCate}>
-            <IconMoon
-              name={categoryName.toLowerCase()}
-              style={styles.pinViewCateIcon}
-            />
-            <Text style={styles.pinViewCateText}> {categoryName}</Text>
-          </View>
-          {this.state.pinTitle && this.state.addedFrom && (
-            <Text style={[styles.pinViewCateText, {marginBottom: 15}]}>
-              {' '}
-              Added From: {this.state.addedFrom || ''}
+          <GestureRecognizer
+            // onSwipe={(direction, state) => this.onPinSwipe(direction, state)}
+            onSwipeLeft={state => this.onPinSwipe('NEXT', state)}
+            onSwipeRight={state => this.onPinSwipe('PREV', state)}
+            config={{velocityThreshold: 0.3, directionalOffsetThreshold: 80}}
+            style={{flex: 1}}>
+            <Text style={styles.pinViewTitle}>{this.state.pinTitle}</Text>
+            <View style={styles.pinViewCate}>
+              <IconMoon
+                name={categoryName.toLowerCase()}
+                style={styles.pinViewCateIcon}
+              />
+              <Text style={styles.pinViewCateText}> {categoryName}</Text>
+            </View>
+            {this.state.pinTitle && this.state.addedFrom && (
+              <Text style={[styles.pinViewCateText, {marginBottom: 15}]}>
+                {' '}
+                Added From: {this.state.addedFrom || ''}
+              </Text>
+            )}
+            <Text style={styles.pinViewContent}>
+              {this.state.pinDescription}
             </Text>
-          )}
-          <Text style={styles.pinViewContent}>{this.state.pinDescription}</Text>
+          </GestureRecognizer>
         </ScrollView>
 
         <Dialog
@@ -497,7 +512,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 400,
     marginTop: -100,
-    minHeight:200
+    minHeight: 200,
   },
   pinViewTitle: {
     fontFamily: 'Montserrat-Medium',

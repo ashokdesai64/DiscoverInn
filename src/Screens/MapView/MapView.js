@@ -5,7 +5,6 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  BackHandler,
 } from 'react-native';
 import ImageBlurLoading from './../../components/ImageLoader';
 
@@ -184,21 +183,8 @@ class MapView extends React.Component {
   }
 
   componentDidMount() {
-    const {params} = this.props.navigation.state;
+    const { params } = this.props.navigation.state;
     this.loadMapPins(params && params.mapID);
-
-    BackHandler.addEventListener('hardwareBackPress', () => {
-      console.log("removed")
-      if (this.state.mapPinsInProgress) {
-        this.setState({ mapPinsInProgress: false });
-        return true;
-      }
-      return false;
-    });
-  }
-
-  componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress')
   }
 
   render() {
@@ -212,7 +198,10 @@ class MapView extends React.Component {
           <Spinner
             visible={this.state.mapPinsInProgress}
             textContent={'Fetching Pins...'}
-            textStyle={{color: '#fff'}}
+            textStyle={{ color: '#fff' }}
+            onClose={() => {
+              this.setState({mapPinsInProgress:false})
+            }}
           />
 
           <Header
@@ -224,54 +213,52 @@ class MapView extends React.Component {
             absoluteHeader={true}
           />
 
-          {
-            this.state.filteredCollections.length > 0 ?
-
-              <MapboxGL.MapView
-                style={styles.map}
-                styleURL={MapboxGL.StyleURL.Street}
-                logoEnabled={false}
-                attributionEnabled={false}
-                rotateEnabled={false}
-                onDidFinishRenderingMapFully={r => {
-                  this.setState({ followUserLocation: false, mapHasLoaded: true });
-                }}
-                onRegionDidChange={() => {
-                  if (!this.state.followUserLocation) {
-                    this.setState({ followUserLocation: false });
-                  }
-                }}>
-                {topLeft && bottomRight && hasCollection && mapHasLoaded && (
-                  <MapboxGL.Camera
-                    bounds={{
-                      ne: [topLeft.lon, topLeft.lat],
-                      sw: [bottomRight.lon, bottomRight.lat],
-                    }}
-                    followUserMode={'normal'}
-                    followUserLocation={this.state.followUserLocation}
-                  />
-                )}
-
-                <MapboxGL.Images
-                  images={{
-                    '1': this.categoryImages['1'],
-                    '2': this.categoryImages['2'],
-                    '3': this.categoryImages['3'],
-                    '4': this.categoryImages['4'],
-                    '5': this.categoryImages['5'],
-                    '6': this.categoryImages['6'],
-                    '7': this.categoryImages['7'],
+          {this.state.filteredCollections.length > 0 ? (
+            <MapboxGL.MapView
+              style={styles.map}
+              styleURL={MapboxGL.StyleURL.Street}
+              logoEnabled={false}
+              attributionEnabled={false}
+              rotateEnabled={false}
+              onDidFinishRenderingMapFully={r => {
+                this.setState({followUserLocation: false, mapHasLoaded: true});
+              }}
+              onRegionDidChange={() => {
+                if (!this.state.followUserLocation) {
+                  this.setState({followUserLocation: false});
+                }
+              }}>
+              {topLeft && bottomRight && hasCollection && mapHasLoaded && (
+                <MapboxGL.Camera
+                  bounds={{
+                    ne: [topLeft.lon, topLeft.lat],
+                    sw: [bottomRight.lon, bottomRight.lat],
                   }}
+                  followUserMode={'normal'}
+                  followUserLocation={this.state.followUserLocation}
                 />
+              )}
 
-                {hasCollection
-                  ? filteredCollections.map(collection => {
+              <MapboxGL.Images
+                images={{
+                  '1': this.categoryImages['1'],
+                  '2': this.categoryImages['2'],
+                  '3': this.categoryImages['3'],
+                  '4': this.categoryImages['4'],
+                  '5': this.categoryImages['5'],
+                  '6': this.categoryImages['6'],
+                  '7': this.categoryImages['7'],
+                }}
+              />
+
+              {hasCollection
+                ? filteredCollections.map(collection => {
                     let random = Math.floor(Math.random() * 90000) + 10000;
                     return (
                       <MapboxGL.ShapeSource
                         key={collection.id}
                         id={'symbolLocationSource' + random}
-                        hitbox={{ width: 20, height: 20 }}
+                        hitbox={{width: 20, height: 20}}
                         shape={collection}
                         cluster
                         clusterMaxZoomLevel={14}
@@ -337,17 +324,16 @@ class MapView extends React.Component {
                       </MapboxGL.ShapeSource>
                     );
                   })
-                  : null}
+                : null}
 
-                <MapboxGL.UserLocation
-                  visible={true}
-                  animated
-                  showsUserHeadingIndicator
-                  androidRenderMode={'gps'}
-                />
-              </MapboxGL.MapView>
-              :
-              null}
+              <MapboxGL.UserLocation
+                visible={true}
+                animated
+                showsUserHeadingIndicator
+                androidRenderMode={'gps'}
+              />
+            </MapboxGL.MapView>
+          ) : null}
           {params.fromMyTravel ? (
             <View style={[styles.mapControlButton]}>
               <TouchableOpacity

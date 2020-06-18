@@ -310,7 +310,10 @@ class AddMapDetail extends React.Component {
           <Spinner
             visible={this.state.addingPin}
             textContent={'Adding Pin...'}
-            textStyle={{color: '#fff'}}
+            textStyle={{ color: '#fff' }}
+            onClose={() => {
+              this.setState({addingPin:false})
+            }}
           />
           <View style={styles.container}>
             <View style={styles.pageContent}>

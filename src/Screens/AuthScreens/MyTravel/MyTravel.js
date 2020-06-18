@@ -103,7 +103,7 @@ class MyTravel extends React.Component {
     let downloadPromises = [];
     console.log('pin Images => ', JSON.stringify(pinImages));
     pinImages.map(pinURL => {
-      if (pinURL) {
+      if (pinURL && (pinURL.startsWith('http://') || pinURL.startsWith('https://'))) {
         let fileName = pinURL.split('/').pop();
         downloadPromises.push(
           RNFetchBlob.config({
@@ -121,8 +121,6 @@ class MyTravel extends React.Component {
       return alert('You need to login to access this feature');
     }
 
-    console.log('mapdata => ', mapData);
-    MapboxGL.offlineManager.deletePack(`${mapData.id}${mapData.name}`);
     let packs = await MapboxGL.offlineManager.getPacks();
     let isDownloaded = packs.find(
       pack => pack.name == `${mapData.id}${mapData.name}`,

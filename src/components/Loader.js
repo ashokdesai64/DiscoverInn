@@ -93,6 +93,9 @@ export default class Spinner extends React.PureComponent {
     }
 
     _handleOnRequestClose() {
+        if (this.props.onClose) {
+            this.props.onClose();
+        }
         if (this.props.cancelable) {
             this.close();
         }

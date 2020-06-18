@@ -162,7 +162,8 @@ export function fetchTripList() {
       let userData = getState().user && getState().user.userData;
 
       if (userData && userData.id) {
-        let response = await callAPI(apiUrls.tripList, {user_id: userData.id});
+        let response = await callAPI(apiUrls.tripList, { user_id: userData.id });
+        console.log("response = ",response)
         if (response.status) {
           dispatch({
             type: 'tripList',

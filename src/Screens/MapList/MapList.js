@@ -177,7 +177,6 @@ class MapList extends React.Component {
       return alert('You need to login to access this feature');
     }
     console.log('map data => ', mapData);
-    MapboxGL.offlineManager.deletePack(`${mapData.id}${mapData.name}`);
     let packs = await MapboxGL.offlineManager.getPacks();
     let isDownloaded = packs.find(
       pack => pack.name == `${mapData.id}${mapData.name}`,
