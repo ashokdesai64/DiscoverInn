@@ -247,7 +247,7 @@ class MapList extends React.Component {
                     Array.isArray(pin.images) &&
                     pin.images.length > 0
                   ) {
-                    pinImages.push(pin.images[0]);
+                    pinImages.push(pin.images[0].thumb_image || pin.images[0].image);
                   }
                 }
               });

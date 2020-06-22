@@ -45,6 +45,7 @@ class MapView extends React.Component {
       followUserLocation: false,
       filteredCollections: [],
       mapHasLoaded: false,
+      allPins: [],
     };
     this.categoryImages = {
       '1': sights1,
@@ -74,9 +75,11 @@ class MapView extends React.Component {
           let featureCollections = [],
             pinLatLongs = [],
             topLeft = null,
-            bottomRight = null;
+            bottomRight = null,
+            allPins = [];
 
           if (pinList && pinList.length > 0) {
+            allPins = [...pinList];
             var splitByString = function(source, splitBy) {
               var splitter = splitBy.split('');
               splitter.push([source]); //Push initial value
@@ -157,6 +160,7 @@ class MapView extends React.Component {
             filteredCollections,
             topLeft,
             bottomRight,
+            allPins,
           });
         })
         .catch(err => {
@@ -183,7 +187,7 @@ class MapView extends React.Component {
   }
 
   componentDidMount() {
-    const { params } = this.props.navigation.state;
+    const {params} = this.props.navigation.state;
     this.loadMapPins(params && params.mapID);
   }
 
@@ -198,9 +202,9 @@ class MapView extends React.Component {
           <Spinner
             visible={this.state.mapPinsInProgress}
             textContent={'Fetching Pins...'}
-            textStyle={{ color: '#fff' }}
+            textStyle={{color: '#fff'}}
             onClose={() => {
-              this.setState({mapPinsInProgress:false})
+              this.setState({mapPinsInProgress: false});
             }}
           />
 
@@ -213,7 +217,6 @@ class MapView extends React.Component {
             absoluteHeader={true}
           />
 
-          {this.state.filteredCollections.length > 0 ? (
             <MapboxGL.MapView
               style={styles.map}
               styleURL={MapboxGL.StyleURL.Street}
@@ -270,6 +273,7 @@ class MapView extends React.Component {
                               pinID: payload.id,
                               mapID: payload.properties.mapID,
                               mapName: params.mapName,
+                              allPins: this.state.allPins
                             });
                           }
                         }}>
@@ -333,7 +337,6 @@ class MapView extends React.Component {
                 androidRenderMode={'gps'}
               />
             </MapboxGL.MapView>
-          ) : null}
           {params.fromMyTravel ? (
             <View style={[styles.mapControlButton]}>
               <TouchableOpacity
@@ -395,8 +398,8 @@ class MapView extends React.Component {
                 let category = this.props.categories.find(
                   c => c.id == pin.categories,
                 );
-                let image = pin.pin_image
-                  ? {uri: pin.pin_image}
+                let imageData = pin.images && pin.images[0] && pin.images[0];
+                let image = imageData ? {uri: imageData.thumb_image || imageData.image}
                   : require('./../../Images/login-bg.jpg');
                 return (
                   <TouchableOpacity

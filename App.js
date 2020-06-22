@@ -2,6 +2,7 @@ import React, {Component, Fragment} from 'react';
 import Routes from './src/routes';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import VideoPlayer from './src/components/Video'
 Feather.loadFont();
 Ionicons.loadFont();
 
@@ -33,6 +34,7 @@ export default class App extends Component {
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <Routes />
+          {/* <VideoPlayer /> */}
         </PersistGate>
       </Provider>
     );

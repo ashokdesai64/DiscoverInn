@@ -40,11 +40,14 @@ target 'DiscoverInn' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'react-native-video', :path => '../node_modules/react-native-video'
+
   target 'DiscoverInnTests' do
     inherit! :search_paths
     # Pods for testing
   end
-  use_frameworks!
+  use_frameworks! :linkage => :static
+
   use_native_modules!
 end
 

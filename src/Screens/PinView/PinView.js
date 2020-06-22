@@ -65,12 +65,10 @@ class PinView extends React.Component {
     if (this.state.isOffline) {
       const {params} = this.props.navigation.state;
       let pinData = params.pinData || {};
-      let isLocationSelected = pinData.latitude && pinData.longitude;
       this.setState({
         pinTitle: pinData.name,
         pinDescription: pinData.description,
         selectedCategory: pinData.categories,
-        isLocationSelected,
         addedFrom: pinData.added_from,
         isSaved: pinData.save_triplist,
       });
@@ -99,28 +97,26 @@ class PinView extends React.Component {
     if (pinID && mapID) {
       this.setState({loaderMsg: 'Fetching Pin Data', pinLoader: true});
       this.props.mapAction
-        .getSinglePinData({
-          pin_id: pinID,
+        .fetchMapPinList({
+          // pin_id: pinID,
           user_id: this.props.userData && this.props.userData.id,
           map_id: mapID,
         })
         .then(data => {
-          let pinData = data.pin_data;
-          console.log("pin data => ",pinData)
-          let isLocationSelected = pinData.latitude && pinData.longitude;
-          let pinImages =
-            pinData.images && pinData.images.length >= 0 ? pinData.images : [];
-
+          let pinData = (data && data.mapID && data.mapID.pin_list) || [];
+          let pinIndex = pinData.findIndex(p => p.id == pinID)
           this.setState({
-            pinTitle: pinData.name,
-            pinDescription: pinData.description,
-            selectedCategory: pinData.categories,
-            isLocationSelected,
-            webImages: pinImages,
+            mapPins: pinData,
+            currentPinData:pinData[pinIndex],
+            pinTitle: pinData[pinIndex].name,
+            pinDescription: pinData[pinIndex].description,
+            selectedCategory: pinData[pinIndex].categories,
+            webImages: pinData[pinIndex].images || this.state.carouselItems,
             loaderMsg: '',
             pinLoader: false,
-            addedFrom: pinData.added_from,
-            isSaved: pinData.save_triplist,
+            addedFrom: pinData[pinIndex].added_from,
+            isSaved: pinData[pinIndex].save_triplist,
+            currentPinIndex: pinIndex,
           });
         })
         .catch(err => {
@@ -135,7 +131,7 @@ class PinView extends React.Component {
       <ImageBlurLoading
         withIndicator
         style={styles.cateSlideCardIcon}
-        source={{uri: item.image}}
+        source={{uri: item.thumb_image || item.image}}
         thumbnailSource={{
           uri: 'https://discover-inn.com/upload/cover/map-image.jpeg',
         }}
@@ -145,11 +141,11 @@ class PinView extends React.Component {
 
   addToTrip(tripID) {
     let {params} = this.props.navigation.state;
-    if (params && params.mapID && params.pinID && tripID) {
+    if (params && params.mapID && this.state.currentPinData && this.state.currentPinData.id && tripID) {
       this.props.mapAction
         .addRemoveToTrip({
           map_id: params.mapID,
-          pin_id: params.pinID,
+          pin_id: this.state.currentPinData.id,
           favorite_id: tripID,
           user_id: this.props.userData.id,
         })
@@ -237,7 +233,36 @@ class PinView extends React.Component {
   }
 
   onPinSwipe(direction, state) {
-    alert(direction);
+    let allPins = [...this.state.mapPins],
+      indexToSwipe = -1,
+      currentPinIndex = this.state.currentPinIndex;
+    
+    if (direction == 'NEXT') {
+      if (currentPinIndex == allPins.length - 1) {
+        alert('There is no more pin to swipe');
+      } else {
+        indexToSwipe = currentPinIndex + 1;
+      }
+    } else if (direction == 'PREV') {
+      if (currentPinIndex == 0) {
+        alert('There is no previous pin');
+      } else {
+        indexToSwipe = currentPinIndex - 1;
+      }
+    }
+    if (indexToSwipe != -1 && indexToSwipe != currentPinIndex) {
+      let pinData = allPins[indexToSwipe];
+      this.setState({
+        pinTitle: pinData.name,
+        currentPinData:{...pinData},
+        pinDescription: pinData.description,
+        selectedCategory: pinData.categories,
+        webImages: pinData.images || this.state.carouselItems,
+        addedFrom: pinData.added_from,
+        isSaved: pinData.save_triplist,
+        currentPinIndex:indexToSwipe
+      });
+    }
   }
 
   render() {

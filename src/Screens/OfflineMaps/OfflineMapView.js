@@ -235,7 +235,7 @@ class OfflineMapView extends React.Component {
                 if (typeof pin.images == 'string') {
                   imagePath = pin.images;
                 } else if (Array.isArray(pin.images) && pin.images.length > 0) {
-                  imagePath = pin.images[0];
+                  imagePath = pin.images[0].thumb_image || pin.images[0].image
                 }
 
                 let fileName = imagePath.split('/').pop();
