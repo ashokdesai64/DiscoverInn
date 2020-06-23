@@ -91,38 +91,51 @@ class PinView extends React.Component {
   }
 
   fetchSinglePinData() {
-    const {params} = this.props.navigation.state;
+    const { params } = this.props.navigation.state;
+    console.log("params => ",params)
     let pinID = params.pinID;
     let mapID = params.mapID;
+    let fromFav = params.fromFav;
+    const setPinData = (pins, index) => {
+      console.log("fromFav => ",pins, index)
+
+      this.setState({
+        mapPins: pins,
+        currentPinData: pins[index],
+        pinTitle: pins[index].name,
+        pinDescription: pins[index].description,
+        selectedCategory: pins[index].categories,
+        webImages: pins[index].images || pins[index].pin_images || this.state.carouselItems,
+        loaderMsg: '',
+        pinLoader: false,
+        addedFrom: pins[index].added_from,
+        isSaved: pins[index].save_triplist,
+        currentPinIndex: index,
+      });
+    };
+
     if (pinID && mapID) {
-      this.setState({loaderMsg: 'Fetching Pin Data', pinLoader: true});
-      this.props.mapAction
-        .fetchMapPinList({
-          // pin_id: pinID,
-          user_id: this.props.userData && this.props.userData.id,
-          map_id: mapID,
-        })
-        .then(data => {
-          let pinData = (data && data.mapID && data.mapID.pin_list) || [];
-          let pinIndex = pinData.findIndex(p => p.id == pinID)
-          this.setState({
-            mapPins: pinData,
-            currentPinData:pinData[pinIndex],
-            pinTitle: pinData[pinIndex].name,
-            pinDescription: pinData[pinIndex].description,
-            selectedCategory: pinData[pinIndex].categories,
-            webImages: pinData[pinIndex].images || this.state.carouselItems,
-            loaderMsg: '',
-            pinLoader: false,
-            addedFrom: pinData[pinIndex].added_from,
-            isSaved: pinData[pinIndex].save_triplist,
-            currentPinIndex: pinIndex,
+      if (fromFav) {
+        let pinData = params.pinList || [];
+        let pinIndex = pinData.findIndex(p => p.id == pinID);
+        setPinData(pinData, pinIndex);
+      } else {
+        this.setState({loaderMsg: 'Fetching Pin Data', pinLoader: true});
+        this.props.mapAction
+          .fetchMapPinList({
+            user_id: this.props.userData && this.props.userData.id,
+            map_id: mapID
+          })
+          .then(data => {
+            let pinData = (data && data.mapID && data.mapID.pin_list) || [];
+            let pinIndex = pinData.findIndex(p => p.id == pinID);
+            setPinData(pinData, pinIndex);
+          })
+          .catch(err => {
+            this.setState({loaderMsg: '', pinLoader: false});
+            console.log('err => ', err);
           });
-        })
-        .catch(err => {
-          this.setState({loaderMsg: '', pinLoader: false});
-          console.log('err => ', err);
-        });
+      }
     }
   }
 
@@ -141,7 +154,13 @@ class PinView extends React.Component {
 
   addToTrip(tripID) {
     let {params} = this.props.navigation.state;
-    if (params && params.mapID && this.state.currentPinData && this.state.currentPinData.id && tripID) {
+    if (
+      params &&
+      params.mapID &&
+      this.state.currentPinData &&
+      this.state.currentPinData.id &&
+      tripID
+    ) {
       this.props.mapAction
         .addRemoveToTrip({
           map_id: params.mapID,
@@ -236,7 +255,7 @@ class PinView extends React.Component {
     let allPins = [...this.state.mapPins],
       indexToSwipe = -1,
       currentPinIndex = this.state.currentPinIndex;
-    
+
     if (direction == 'NEXT') {
       if (currentPinIndex == allPins.length - 1) {
         alert('There is no more pin to swipe');
@@ -254,13 +273,13 @@ class PinView extends React.Component {
       let pinData = allPins[indexToSwipe];
       this.setState({
         pinTitle: pinData.name,
-        currentPinData:{...pinData},
+        currentPinData: {...pinData},
         pinDescription: pinData.description,
         selectedCategory: pinData.categories,
-        webImages: pinData.images || this.state.carouselItems,
+        webImages: pinData.images || pinData.pin_images || this.state.carouselItems,
         addedFrom: pinData.added_from,
         isSaved: pinData.save_triplist,
-        currentPinIndex:indexToSwipe
+        currentPinIndex: indexToSwipe,
       });
     }
   }

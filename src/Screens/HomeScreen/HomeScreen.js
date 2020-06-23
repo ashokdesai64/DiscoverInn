@@ -243,6 +243,10 @@ class HomeScreen extends React.Component {
           {cancelable: false},
         );
         return true;
+      } else {
+        // console.log(this.props.navigation)
+        this.props.navigation.navigate('Home')
+        return true;
       }
     });
 

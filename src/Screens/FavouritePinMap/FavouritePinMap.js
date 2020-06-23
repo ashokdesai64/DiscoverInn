@@ -38,6 +38,7 @@ class FavouritePinMap extends React.Component {
       mapPinsInProgress: true,
       followUserLocation: false,
       filteredCollections: [],
+      allPins:[]
     };
     this.categoryImages = {
       '1': sights1,
@@ -63,6 +64,7 @@ class FavouritePinMap extends React.Component {
         })
         .then(data => {
           this.setState({
+            allPins:data.favorite_pin || [],
             pinList: data.favorite_pin || [],
             mapPinsInProgress: false,
           });
@@ -168,6 +170,9 @@ class FavouritePinMap extends React.Component {
             visible={this.state.mapPinsInProgress}
             textContent={'Fetching Pins...'}
             textStyle={{ color: '#fff' }}
+            onClose={() => {
+              this.setState({mapPinsInProgress: false});
+            }}
           />
 
           <Header
@@ -228,6 +233,8 @@ class FavouritePinMap extends React.Component {
                             pinID: payload.id,
                             mapID: payload.properties.mapID,
                             mapName: params.mapName,
+                            fromFav: true,
+                            pinList:this.state.allPins
                           });
                         }
                       }}>

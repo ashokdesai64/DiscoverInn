@@ -37,8 +37,6 @@ import OfflineMapView from './Screens/OfflineMaps/OfflineMapView';
 import SideMenu from './components/SideMenu/SideMenu';
 import Test from './Test'
 import DefaultScreen from './Screens/DefaultScreen';
-import { Router, Scene, Stack, Drawer } from 'react-native-router-flux';
-import MenuIcon from '../src/Images/hamburger.png';
 
 const userStack = createStackNavigator(
   {
