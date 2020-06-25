@@ -295,7 +295,7 @@ class PinView extends React.Component {
       ? this.state.webImages
       : this.state.carouselItems;
     return (
-      <SafeAreaView>
+      <View>
         <View style={[styles.pinHeader]}>
           <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
             <Feather name={'arrow-left'} size={24} color={'white'} />
@@ -533,7 +533,7 @@ class PinView extends React.Component {
             )}
           </DialogContent>
         </Dialog>
-      </SafeAreaView>
+      </View>
     );
   }
 }

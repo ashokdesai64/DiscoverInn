@@ -49,6 +49,7 @@ class MapList extends React.Component {
   constructor(props) {
     super(props);
     this.pageNo = 1;
+    this.carousel = null;
     const {params} = props.navigation.state;
     this.state = {
       showTripList: false,
@@ -361,7 +362,6 @@ class MapList extends React.Component {
     let {selectedMapCategories} = this.state;
 
     let travelType = item.travel_type == '0' ? '-' : item.travel_type;
-    console.log(JSON.stringify(item.categories))
     return (
       <View style={[styles.mapSlideCard]}>
         <View style={styles.mapSlideCardHeader}>
@@ -610,7 +610,11 @@ class MapList extends React.Component {
     this.props.mapAction
       .fetchMapList(apiData)
       .then(data => {
-        this.setState({fetchingMaps: false});
+        this.setState({ fetchingMaps: false }, () => {
+          if (this.pageNo == 1) {
+            this.carousel.snapToItem(0,false)
+          }
+        });
       })
       .catch(err => {
         this.setState({fetchingMaps: false});
@@ -973,6 +977,7 @@ class MapList extends React.Component {
           </View>
           <View style={styles.shareMapContant}>
             <Carousel
+              ref={(c) => this.carousel = c}  
               data={this.props.mapList}
               sliderWidth={width}
               itemWidth={310}

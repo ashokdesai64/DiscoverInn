@@ -243,11 +243,12 @@ class HomeScreen extends React.Component {
           {cancelable: false},
         );
         return true;
-      } else {
-        // console.log(this.props.navigation)
-        this.props.navigation.navigate('Home')
-        return true;
       }
+      // else {
+      //   console.log(this.props.navigation)
+      //   this.props.navigation.navigate('Home')
+      //   return true;
+      // }
     });
 
     Linking.getInitialURL()
@@ -263,6 +264,7 @@ class HomeScreen extends React.Component {
 
   componentWillUnmount() {
     Linking.removeEventListener('url', this._handleOpenURL);
+    BackHandler.removeEventListener('hardwareBackPress',()=>{})
   }
   _handleOpenURL(event) {
     console.log(event.url);

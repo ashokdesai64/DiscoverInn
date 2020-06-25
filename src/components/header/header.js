@@ -288,7 +288,7 @@ class Header extends Component {
                     style={styles.loginDialogLinkIcon}
                     size={18}
                   />
-                  <Text style={styles.loginDialogLinkText}>How It Work</Text>
+                  <Text style={styles.loginDialogLinkText}>How It Works</Text>
                 </TouchableOpacity>
               </View>
             </DialogContent>

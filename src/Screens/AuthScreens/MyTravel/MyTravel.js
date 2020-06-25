@@ -39,7 +39,7 @@ const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
 class MyTravel extends React.Component {
   constructor(props) {
     super(props);
-    this.onDownloadProgress = this.onDownloadProgress.bind(this);
+    this.mounted = null;
   }
   pageNo = 1;
   state = {
@@ -69,7 +69,12 @@ class MyTravel extends React.Component {
   };
 
   componentDidMount() {
+    this.mounted = true;
     this.fetchFirstMaps();
+  }
+
+  componentWillUnmount() {
+    this.mounted = false;
   }
 
   _renderHeader(item, expanded) {
@@ -101,9 +106,11 @@ class MyTravel extends React.Component {
 
   async downloadAssets(pinImages = []) {
     let downloadPromises = [];
-    console.log('pin Images => ', JSON.stringify(pinImages));
     pinImages.map(pinURL => {
-      if (pinURL && (pinURL.startsWith('http://') || pinURL.startsWith('https://'))) {
+      if (
+        pinURL &&
+        (pinURL.startsWith('http://') || pinURL.startsWith('https://'))
+      ) {
         let fileName = pinURL.split('/').pop();
         downloadPromises.push(
           RNFetchBlob.config({
@@ -122,9 +129,11 @@ class MyTravel extends React.Component {
     }
 
     let packs = await MapboxGL.offlineManager.getPacks();
+
     let isDownloaded = packs.find(
       pack => pack.name == `${mapData.id}${mapData.name}`,
     );
+    
     if (isDownloaded) {
       alert('This map is already downloaded');
     } else {
@@ -135,8 +144,7 @@ class MyTravel extends React.Component {
             map_id: mapData.id,
             user_id: this.props.userData && this.props.userData.id,
           })
-          .then(data => {
-            console.log('data => ', data);
+          .then(async data => {
             let pinList = data.mapID.pin_list || [];
 
             let featureCollections = [],
@@ -147,7 +155,7 @@ class MyTravel extends React.Component {
             if (pinList && pinList.length > 0) {
               this.setState({
                 mapDownloadInProgress: true,
-                downloadSpinnerMsg: `Preparing to download map.`,
+                downloadSpinnerMsg: `Downloading assets...`,
               });
               var splitByString = function(source, splitBy) {
                 var splitter = splitBy.split('');
@@ -162,6 +170,9 @@ class MyTravel extends React.Component {
 
               let temp = [];
               let pinImages = [];
+              pinImages.push(
+                mapData.thumb_cover_image || mapData.cover_image || '',
+              );
               pinList.map(pin => {
                 if (pin.longitude && pin.latitude) {
                   let exploded = splitByString(pin.name, '.,-');
@@ -191,7 +202,9 @@ class MyTravel extends React.Component {
                     Array.isArray(pin.images) &&
                     pin.images.length > 0
                   ) {
-                    pinImages.push(pin.images[0].thumb_image || pin.images[0].image);
+                    pinImages.push(
+                      pin.images[0].thumb_image || pin.images[0].image,
+                    );
                   }
                 }
               });
@@ -210,6 +223,7 @@ class MyTravel extends React.Component {
                   });
                 }
               });
+
               let boundsResult = getBoundingBox(pinLatLongs, 10000);
               topLeft = boundsResult.topLeft;
               bottomRight = boundsResult.bottomRight;
@@ -220,6 +234,18 @@ class MyTravel extends React.Component {
                   collection.features.length > 0,
               );
 
+              await this.downloadAssets(pinImages);
+
+              await this.props.mapAction.storeOfflineMapData({
+                        mapData,
+                        pinData: filteredCollections,
+                        pinList,
+                        bounds: {
+                          ne: [topLeft.lon, topLeft.lat],
+                          sw: [bottomRight.lon, bottomRight.lat],
+                        },
+                      })
+              
               const options = {
                 name: `${mapData.id}${mapData.name}`,
                 styleURL: MapboxGL.StyleURL.Dark,
@@ -230,48 +256,28 @@ class MyTravel extends React.Component {
                 minZoom: 10,
                 maxZoom: 15,
               };
-              console.log('options => ', options);
+
+              this.setState({
+                downloadSpinnerMsg: 'Downloading map...',
+                canGoBack:true
+              })
+
               MapboxGL.offlineManager.createPack(
                 options,
                 async (offlineRegion, offlineRegionStatus) => {
                   console.log('offlineRegionStatus => ', offlineRegionStatus);
-                  this.setState({
-                    name: offlineRegion.name,
-                    offlineRegion,
-                    offlineRegionStatus,
-                    downloadSpinnerMsg:
-                      Math.floor(offlineRegionStatus.percentage) +
-                      '% downloaded',
-                  });
-                  if (offlineRegionStatus.percentage == 100) {
+                  if (this.mounted) {
                     this.setState({
-                      downloadSpinnerMsg: 'Downloading assets...',
+                      name: offlineRegion.name,
+                      offlineRegion,
+                      offlineRegionStatus,
+                      downloadSpinnerMsg:
+                        Math.floor(offlineRegionStatus.percentage) +
+                        '% map downloaded',
                     });
-
-                    pinImages.push(
-                      mapData.thumb_cover_image || mapData.cover_image || '',
-                    );
-                    let downloadResult = await this.downloadAssets(pinImages);
-                    let paths = [];
-                    downloadResult.map(d => {
-                      paths.push(d.path());
-                    });
-                    this.setState({downloadSpinnerMsg: 'Storing map locally'});
-                    this.props.mapAction
-                      .storeOfflineMapData({
-                        mapData,
-                        pinData: filteredCollections,
-                        pinList,
-                        bounds: {
-                          ne: [topLeft.lon, topLeft.lat],
-                          sw: [bottomRight.lon, bottomRight.lat],
-                        },
-                      })
-                      .then(data => {
-                        setTimeout(() => {
-                          this.setState({mapDownloadInProgress: false});
-                        }, 1500);
-                      });
+                  }
+                  if (offlineRegionStatus.percentage == 100) {
+                    alert("Map downloaded")
                   }
                 },
               );
@@ -288,15 +294,6 @@ class MyTravel extends React.Component {
         );
       }
     }
-  }
-
-  onDownloadProgress(offlineRegion, offlineRegionStatus) {
-    console.log('offlineRegionStatus => ', offlineRegionStatus);
-    this.setState({
-      name: offlineRegion.name,
-      offlineRegion,
-      offlineRegionStatus,
-    });
   }
 
   _renderContent = item => {
@@ -391,7 +388,7 @@ class MyTravel extends React.Component {
       user_id: this.props.userData.id,
       search: this.state.search,
       page: this.pageNo,
-    })
+    });
     this.props.mapAction.fetchMyMaps({
       user_id: this.props.userData.id,
       search: this.state.search,
@@ -450,7 +447,10 @@ class MyTravel extends React.Component {
               <Spinner
                 visible={this.state.mapDownloadInProgress}
                 textContent={this.state.downloadSpinnerMsg}
-                textStyle={{color: '#fff'}}
+                textStyle={{ color: '#fff' }}
+                canGoBack={this.state.canGoBack}
+                backButtonText={'Download in background'}
+                onGoBack={()=> this.setState({mapDownloadInProgress:false,canGoBack:false})}
               />
               <View searchBar style={styles.searchbarCard}>
                 <Item style={styles.searchbarInputBox}>

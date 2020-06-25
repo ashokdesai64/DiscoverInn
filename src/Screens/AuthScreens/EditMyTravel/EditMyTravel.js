@@ -337,7 +337,7 @@ class EditMyTravel extends React.Component {
                       fontFamily: 'Montserrat-Medium',
                       fontSize: 18,
                     }}>
-                    View "{this.state.mapName}"
+                    View Map
                   </Text>
                 </TouchableOpacity>
               )}

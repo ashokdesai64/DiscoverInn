@@ -7,10 +7,11 @@ import {
   TextInput,
   SafeAreaView,
   TouchableOpacity,
-  KeyboardAvoidingView,
+  BackHandler,
   Dimensions,
   ScrollView,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import styles from './Unauthscreens.style';
 const DEVICE_HEIGHT = Dimensions.get('window').height;
@@ -32,6 +33,13 @@ class LoginScreen extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.checkLogin(nextProps);
+  }
+
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      this.props.navigation.navigate('Home');
+      return true;
+    });
   }
 
   checkLogin(props) {
@@ -125,7 +133,7 @@ class LoginScreen extends React.Component {
                     )}
                   </TouchableOpacity>
                 </View>
-                <Text style={[styles.toggleText,{marginBottom:5}]}>
+                <Text style={[styles.toggleText, {marginBottom: 5}]}>
                   New User?
                   <Text
                     style={styles.toggleTextLink}
@@ -144,10 +152,9 @@ class LoginScreen extends React.Component {
                   textDecorationLine: 'underline',
                   fontFamily: 'Montserrat-SemiBold',
                   paddingHorizontal: 20,
-                  paddingVertical:10,
+                  paddingVertical: 10,
                 }}
-                onPress={()=> this.props.navigation.navigate('App')}
-              >
+                onPress={() => this.props.navigation.navigate('App')}>
                 Skip
               </Text>
             </ScrollView>
@@ -169,4 +176,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(LoginScreen);
