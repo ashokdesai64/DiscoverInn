@@ -50,6 +50,7 @@ class MapList extends React.Component {
     super(props);
     this.pageNo = 1;
     this.carousel = null;
+    this.mounted = null;
     const {params} = props.navigation.state;
     this.state = {
       showTripList: false,
@@ -137,6 +138,14 @@ class MapList extends React.Component {
     }
   }
 
+  componentDidMount() {
+    this.mounted = true;
+  }
+
+  componentWillUnmount() {
+    this.mounted = false;
+  }
+
   pinToggle(categoryID, mapID, mapName) {
     let {selectedMapCategories} = this.state;
     if (selectedMapCategories.map_id != mapID) {
@@ -192,7 +201,7 @@ class MapList extends React.Component {
             map_id: mapData.id,
             user_id: this.props.userData && this.props.userData.id,
           })
-          .then(data => {
+          .then(async data => {
             console.log('data => ', data);
             let pinList = data.mapID.pin_list || [];
 
@@ -219,6 +228,9 @@ class MapList extends React.Component {
 
               let temp = [];
               let pinImages = [];
+              pinImages.push(
+                mapData.thumb_cover_image || mapData.cover_image || '',
+              );
               pinList.map(pin => {
                 if (pin.longitude && pin.latitude) {
                   let exploded = splitByString(pin.name, '.,-');
@@ -248,7 +260,9 @@ class MapList extends React.Component {
                     Array.isArray(pin.images) &&
                     pin.images.length > 0
                   ) {
-                    pinImages.push(pin.images[0].thumb_image || pin.images[0].image);
+                    pinImages.push(
+                      pin.images[0].thumb_image || pin.images[0].image,
+                    );
                   }
                 }
               });
@@ -278,6 +292,18 @@ class MapList extends React.Component {
                   collection.features.length > 0,
               );
 
+              await this.downloadAssets(pinImages);
+
+              await this.props.mapAction.storeOfflineMapData({
+                mapData,
+                pinData: filteredCollections,
+                pinList,
+                bounds: {
+                  ne: [topLeft.lon, topLeft.lat],
+                  sw: [bottomRight.lon, bottomRight.lat],
+                },
+              });
+
               const options = {
                 name: `${mapData.id}${mapData.name}`,
                 styleURL: MapboxGL.StyleURL.Dark,
@@ -289,57 +315,32 @@ class MapList extends React.Component {
                 maxZoom: 15,
               };
               console.log('options => ', options);
+
+              this.setState({
+                downloadSpinnerMsg: 'Downloading map...',
+                canGoBack: true,
+              });
+
               MapboxGL.offlineManager.createPack(
                 options,
                 async (offlineRegion, offlineRegionStatus) => {
                   console.log('offlineRegionStatus => ', offlineRegionStatus);
-                  this.setState({
-                    name: offlineRegion.name,
-                    offlineRegion,
-                    offlineRegionStatus,
-                    downloadSpinnerMsg:
-                      Math.floor(offlineRegionStatus.percentage) +
-                      '% downloaded',
-                  });
-                  if (offlineRegionStatus.percentage == 100) {
+                  if (this.mounted) {
                     this.setState({
-                      downloadSpinnerMsg: 'Downloading assets...',
+                      name: offlineRegion.name,
+                      offlineRegion,
+                      offlineRegionStatus,
+                      downloadSpinnerMsg:
+                        Math.floor(offlineRegionStatus.percentage) +
+                        '% map downloaded',
                     });
-
-                    console.log('pinImages => ', pinImages);
-
-                    //Download pin images
-                    if (mapData.thumb_cover_image || mapData.cover_image) {
-                      pinImages.push(
-                        mapData.thumb_cover_image || mapData.cover_image,
-                      );
-                    }
-                    let downloadResult = await this.downloadAssets(pinImages);
-                    let paths = [];
-                    downloadResult.map(d => {
-                      paths.push(d.path());
-                    });
-
-                    this.setState({downloadSpinnerMsg: 'Storing map locally'});
-                    this.props.mapAction
-                      .storeOfflineMapData({
-                        mapData,
-                        pinData: filteredCollections,
-                        pinList,
-                        bounds: {
-                          ne: [topLeft.lon, topLeft.lat],
-                          sw: [bottomRight.lon, bottomRight.lat],
-                        },
-                      })
-                      .then(data => {
-                        setTimeout(() => {
-                          this.setState({mapDownloadInProgress: false});
-                        }, 1500);
-                      });
                   }
-                },
-                (offlineRegion, err) => {
-                  console.log('err download => ', offlineRegion, err);
+                  if (offlineRegionStatus.state == 3) {
+                    if (this.mounted) {
+                      this.setState({ mapDownloadInProgress: false, canGoBack: false })
+                    }
+                    alert('Map downloaded');
+                  }
                 },
               );
             } else {
@@ -499,9 +500,7 @@ class MapList extends React.Component {
               <View
                 style={[styles.mapDetaileChild, styles.mapDetaileChildLeft]}>
                 <Text style={[styles.mapDetaileTitle]}>Travel Type</Text>
-                <Text style={[styles.mapDetaileValue]}>
-                  {travelType}
-                </Text>
+                <Text style={[styles.mapDetaileValue]}>{travelType}</Text>
               </View>
               <View
                 style={[styles.mapDetaileChild, styles.mapDetaileChildRight]}>
@@ -540,7 +539,7 @@ class MapList extends React.Component {
                 style={[
                   styles.button,
                   styles.buttonReview,
-                  styles.buttonPrimary
+                  styles.buttonPrimary,
                 ]}
                 onPress={() => {
                   if (this.props.userData && this.props.userData.id) {
@@ -610,9 +609,9 @@ class MapList extends React.Component {
     this.props.mapAction
       .fetchMapList(apiData)
       .then(data => {
-        this.setState({ fetchingMaps: false }, () => {
+        this.setState({fetchingMaps: false}, () => {
           if (this.pageNo == 1) {
-            this.carousel.snapToItem(0,false)
+            this.carousel.snapToItem(0, false);
           }
         });
       })
@@ -800,10 +799,13 @@ class MapList extends React.Component {
           <TouchableOpacity
             style={{marginBottom: 10, padding: 5}}
             onPress={() =>
-              this.setState({ searchTerm: item.description, showPlaces: false }, () => {
-                this.pageNo = 1;
-                this.fetchMapList()
-              })
+              this.setState(
+                {searchTerm: item.description, showPlaces: false},
+                () => {
+                  this.pageNo = 1;
+                  this.fetchMapList();
+                },
+              )
             }>
             <Text style={{fontFamily: 'Montserrat-Medium', fontSize: 16}}>
               {item.description}
@@ -871,6 +873,11 @@ class MapList extends React.Component {
           visible={this.state.mapDownloadInProgress}
           textContent={this.state.downloadSpinnerMsg}
           textStyle={{color: '#fff'}}
+          canGoBack={this.state.canGoBack}
+          backButtonText={'Download in background'}
+          onGoBack={() =>
+            this.setState({mapDownloadInProgress: false, canGoBack: false})
+          }
         />
         <Header
           showBack={true}
@@ -977,7 +984,7 @@ class MapList extends React.Component {
           </View>
           <View style={styles.shareMapContant}>
             <Carousel
-              ref={(c) => this.carousel = c}  
+              ref={c => (this.carousel = c)}
               data={this.props.mapList}
               sliderWidth={width}
               itemWidth={310}
@@ -1698,7 +1705,7 @@ function mapStateToProps(state) {
     tripList: state.maps.tripList,
     mapListLoaded: state.maps.mapListLoaded,
     allUserNames: state.maps.allUserNames,
-    travelTypes:state.maps.travelTypes
+    travelTypes: state.maps.travelTypes,
   };
 }
 function mapDispatchToProps(dispatch) {

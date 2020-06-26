@@ -10,6 +10,9 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import _ from 'underscore';
 import RNFetchBlob from 'rn-fetch-blob';
 import MapboxGL from '@react-native-mapbox-gl/maps';
+import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
+import fontelloConfig from './../../selection.json';
+const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 //REDUX
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -26,13 +29,46 @@ class OfflineMaps extends React.Component {
       searchTerm: '',
       fetchingMaps: true,
       offlineMaps: props.offlineMaps,
-      selectedMapCategories: {map_id: null, categories: []},
+      selectedMapCategories: { map_id: null, categories: [] },
+      carouselCateItems: [
+        {
+          title: 'Sights',
+          icon: 'sights',
+        },
+        {
+          title: 'Activities',
+          icon: 'activities',
+        },
+        {
+          title: 'Restaurants',
+          icon: 'restaurants',
+        },
+        {
+          title: 'Nightlife',
+          icon: 'nightlife',
+        },
+        {
+          title: 'Transportations',
+          icon: 'transportations',
+        },
+        {
+          title: 'Shopping',
+          icon: 'shopping',
+        },
+        {
+          title: 'Other',
+          icon: 'other',
+        },
+      ],
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.offlineMaps && nextProps.offlineMaps.length != this.state.offlineMaps) {
-      this.setState({offlineMaps:nextProps.offlineMaps})
+    if (
+      nextProps.offlineMaps &&
+      nextProps.offlineMaps.length != this.state.offlineMaps
+    ) {
+      this.setState({offlineMaps: nextProps.offlineMaps});
     }
   }
 
@@ -99,6 +135,7 @@ class OfflineMaps extends React.Component {
       );
       travelType = (currentTravelType && currentTravelType.name) || '-';
     }
+    let {selectedMapCategories} = this.state;
     return (
       <View style={[styles.mapSlideCard]}>
         <TouchableOpacity
@@ -173,9 +210,11 @@ class OfflineMaps extends React.Component {
           <View style={styles.mapPins}>
             {item.categories &&
               item.categories.map(category => {
-                let categoryIcon = this.state.carouselCateItems.find(
-                  c => c.title == category.name,
-                );
+                let categoryIcon =
+                  this.state.carouselCateItems &&
+                  this.state.carouselCateItems.find(
+                    c => c.title == category.name,
+                  );
                 let isCategoryActive = category.disabled == '0';
                 let isCategorySelected = false;
                 if (

@@ -276,7 +276,10 @@ class MyTravel extends React.Component {
                         '% map downloaded',
                     });
                   }
-                  if (offlineRegionStatus.percentage == 100) {
+                  if (offlineRegionStatus.state == 3) {
+                    if (this.mounted) {
+                      this.setState({ mapDownloadInProgress: false, canGoBack: false })
+                    }
                     alert("Map downloaded")
                   }
                 },

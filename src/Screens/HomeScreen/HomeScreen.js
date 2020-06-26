@@ -22,7 +22,7 @@ const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 import ImageBlurLoading from './../../components/ImageLoader';
 import {askForPermissions} from '../../config/permission';
 import RNLocation from 'react-native-location';
-
+import MapboxGL from '@react-native-mapbox-gl/maps';
 //REDUX
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -214,6 +214,15 @@ class HomeScreen extends React.Component {
   }
 
   async componentDidMount() {
+    let packs = await MapboxGL.offlineManager.getPacks();
+    if (packs && packs.length > 0) {
+      packs.map(async pack => {
+        let status = await pack.status();
+        if (status.state == 2) {
+          pack.resume()
+        }
+      })
+    }
     if (Platform.OS == 'android') {
       await askForPermissions();
     }
