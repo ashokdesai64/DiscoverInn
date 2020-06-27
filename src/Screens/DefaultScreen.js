@@ -12,7 +12,7 @@ class DefaultScreen extends Component {
 
   redirectToApp(props) {
     // if (props && props.userData && props.userData.userId) {
-      this.resetAction('App');
+      this.resetAction('App'); //WalkThrough
     // } else {
     //   this.resetAction('Auth');
     // }
@@ -23,7 +23,6 @@ class DefaultScreen extends Component {
   }
 
   componentDidMount() {
-    
     this.fetchInitialData();
     this.redirectToApp(this.props);
   }

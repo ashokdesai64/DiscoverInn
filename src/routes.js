@@ -1,6 +1,6 @@
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
-import { createDrawerNavigator } from 'react-navigation-drawer';
+import {createAppContainer, createSwitchNavigator} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
+import {createDrawerNavigator} from 'react-navigation-drawer';
 import HomeScreen from './Screens/HomeScreen/HomeScreen';
 import EditCategories from './Screens/EditCategories/EditCategories';
 import EditProfile from './Screens/AuthScreens/EditProfile/EditProfile';
@@ -35,8 +35,9 @@ import MapPins from './Screens/MapPins/MapPins';
 import OfflineMaps from './Screens/OfflineMaps/OfflineMaps';
 import OfflineMapView from './Screens/OfflineMaps/OfflineMapView';
 import SideMenu from './components/SideMenu/SideMenu';
-import Test from './Test'
+import Test from './Test';
 import DefaultScreen from './Screens/DefaultScreen';
+import WalkThrough from './Screens/WalkThrough';
 
 const userStack = createStackNavigator(
   {
@@ -44,7 +45,7 @@ const userStack = createStackNavigator(
       screen: HomeScreen,
     },
     MapPins: {
-      screen: MapPins
+      screen: MapPins,
     },
     ChangePassword: {
       screen: ChangePassword,
@@ -125,11 +126,11 @@ const userStack = createStackNavigator(
       screen: DefaultScreen,
     },
     OfflineMaps: {
-      screen:OfflineMaps
+      screen: OfflineMaps,
     },
     OfflineMapView: {
-      screen:OfflineMapView
-    }
+      screen: OfflineMapView,
+    },
   },
   {
     headerMode: 'none',
@@ -160,7 +161,7 @@ const AuthStack = createStackNavigator(
 
 const DrawerStack = createDrawerNavigator(
   {
-    userStack: { screen: userStack },
+    userStack: {screen: userStack},
   },
   {
     gesturesEnabled: false,
@@ -175,13 +176,16 @@ const App = createSwitchNavigator(
       screen: DefaultScreen,
     },
     Test: {
-      screen:Test
+      screen: Test,
     },
     App: {
       screen: DrawerStack,
     },
     Auth: {
       screen: AuthStack,
+    },
+    WalkThrough: {
+      screen: WalkThrough,
     },
   },
   {
