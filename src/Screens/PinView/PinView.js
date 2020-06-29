@@ -16,19 +16,19 @@ import Feather from 'react-native-vector-icons/Feather';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
-import fontelloConfig from './../../selection.json';
+import fontelloConfig from '../../selection.json';
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
-import ImageBlurLoading from './../../components/ImageLoader';
+import ImageBlurLoading from '../../components/ImageLoader';
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const DEVICE_WIDTH = Dimensions.get('window').width;
-import Spinner from './../../components/Loader';
-import GestureRecognizer from './../../components/GestureRecognizer';
+import Spinner from '../../components/Loader';
+import GestureRecognizer from '../../components/GestureRecognizer';
 //REDUX
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
-import * as mapActions from './../../actions/mapActions';
+import * as mapActions from '../../actions/mapActions';
 
 class PinView extends React.Component {
   constructor(props) {
@@ -49,6 +49,8 @@ class PinView extends React.Component {
       loaderMsg: '',
       isOffline: params.isOffline,
       offlinePath: params.offlinePath,
+      mapPins: [],
+      firstItem:0
     };
   }
 
@@ -91,26 +93,28 @@ class PinView extends React.Component {
   }
 
   fetchSinglePinData() {
-    const { params } = this.props.navigation.state;
-    console.log("params => ",params)
+    const {params} = this.props.navigation.state;
+    console.log('params => ', params);
     let pinID = params.pinID;
     let mapID = params.mapID;
     let fromFav = params.fromFav;
-    const setPinData = (pins, index) => {
-      console.log("fromFav => ",pins, index)
 
+    const setPinData = (pins, index) => {
       this.setState({
         mapPins: pins,
         currentPinData: pins[index],
         pinTitle: pins[index].name,
         pinDescription: pins[index].description,
         selectedCategory: pins[index].categories,
-        webImages: pins[index].images || pins[index].pin_images || this.state.carouselItems,
+        webImages:
+          pins[index].images ||
+          pins[index].pin_images ||
+          this.state.carouselItems,
         loaderMsg: '',
         pinLoader: false,
         addedFrom: pins[index].added_from,
         isSaved: pins[index].save_triplist,
-        currentPinIndex: index,
+        firstItem:index
       });
     };
 
@@ -124,11 +128,12 @@ class PinView extends React.Component {
         this.props.mapAction
           .fetchMapPinList({
             user_id: this.props.userData && this.props.userData.id,
-            map_id: mapID
+            map_id: mapID,
           })
           .then(data => {
             let pinData = (data && data.mapID && data.mapID.pin_list) || [];
             let pinIndex = pinData.findIndex(p => p.id == pinID);
+            console.log({pinData,pinIndex})
             setPinData(pinData, pinIndex);
           })
           .catch(err => {
@@ -251,51 +256,120 @@ class PinView extends React.Component {
     }
   }
 
-  onPinSwipe(direction, state) {
-    let allPins = [...this.state.mapPins],
-      indexToSwipe = -1,
-      currentPinIndex = this.state.currentPinIndex;
+  renderImages(pinData) {
+    let sliderData =
+      pinData.images || pinData.pin_images || this.state.carouselItems;
+    return (
+      <>
+        {this.state.isOffline ? (
+          <ImageBlurLoading
+            withIndicator
+            style={styles.cateSlideCardIcon}
+            source={{uri: this.state.offlinePath}}
+            thumbnailSource={{
+              uri: this.state.offlinePath,
+            }}
+          />
+        ) : (
+          <>
+            <Carousel
+              data={sliderData}
+              sliderWidth={DEVICE_WIDTH}
+              itemWidth={DEVICE_WIDTH}
+              inactiveSlideOpacity={1}
+              inactiveSlideScale={1}
+              containerCustomStyle={{
+                height: 400,
+                width: DEVICE_WIDTH,
+                top: 0,
+                position: 'absolute',
+              }}
+              firstItem={0}
+              renderItem={this._renderItemCate}
+              onSnapToItem={index => this.setState({activeSlide: index})}
+            />
+          </>
+        )}
+      </>
+    );
+  }
 
-    if (direction == 'NEXT') {
-      if (currentPinIndex == allPins.length - 1) {
-        alert('There is no more pin to swipe');
-      } else {
-        indexToSwipe = currentPinIndex + 1;
-      }
-    } else if (direction == 'PREV') {
-      if (currentPinIndex == 0) {
-        alert('There is no previous pin');
-      } else {
-        indexToSwipe = currentPinIndex - 1;
-      }
-    }
-    if (indexToSwipe != -1 && indexToSwipe != currentPinIndex) {
-      let pinData = allPins[indexToSwipe];
-      this.setState({
-        pinTitle: pinData.name,
-        currentPinData: {...pinData},
-        pinDescription: pinData.description,
-        selectedCategory: pinData.categories,
-        webImages: pinData.images || pinData.pin_images || this.state.carouselItems,
-        addedFrom: pinData.added_from,
-        isSaved: pinData.save_triplist,
-        currentPinIndex: indexToSwipe,
-      });
-    }
+  renderPagination(pinData) {
+    let sliderData =
+      pinData.images || pinData.pin_images || this.state.carouselItems;
+    return (
+      <Pagination
+        dotsLength={sliderData.length}
+        activeDotIndex={this.state.activeSlide}
+        containerStyle={{
+          position: 'absolute',
+          top: 300,
+          left: -5,
+          zIndex: 999999,
+        }}
+        dotStyle={{
+          width: 15,
+          height: 3,
+          backgroundColor: '#2F80ED',
+          margin: 0,
+        }}
+        inactiveDotOpacity={1}
+        inactiveDotStyle={{
+          width: 12,
+          height: 3,
+          backgroundColor: 'white',
+          margin: 0,
+        }}
+        inactiveDotScale={1}
+      />
+    );
+  }
+
+  renderPinContent(pinData) {
+    let {categories} = this.props;
+    
+    let selectedCategory = categories && categories.find(c => c.id == pinData.categories);
+    let categoryName = (selectedCategory && selectedCategory.name) || '';
+    return (
+      <ScrollView style={styles.pinScrollView}>
+        <Text style={styles.pinViewTitle}>{pinData.name}</Text>
+        <View style={styles.pinViewCate}>
+          <IconMoon
+            name={categoryName.toLowerCase()}
+            style={styles.pinViewCateIcon}
+          />
+          <Text style={styles.pinViewCateText}> {categoryName}</Text>
+        </View>
+        {pinData.name && pinData.added_from && (
+          <Text style={[styles.pinViewCateText, {marginBottom: 15}]}>
+            {' '}
+            Added From: {pinData.added_from || ''}
+          </Text>
+        )}
+        <Text style={styles.pinViewContent}>{pinData.description}</Text>
+      </ScrollView>
+    );
+  }
+
+  renderPin(pinData) {
+    return (
+      <>
+        {this.renderImages(pinData)}
+        {this.renderPagination(pinData)}
+        {this.renderPinContent(pinData)}
+      </>
+    );
+  }
+
+  setIsSaved(index){
+    let allMapPins = [...this.state.mapPins];
+    let currentPin = allMapPins[index];
+    this.setState({isSaved:currentPin.save_triplist,currentPin})
   }
 
   render() {
-    let {categories} = this.props;
-    let selectedCategory =
-      categories && categories.find(c => c.id == this.state.selectedCategory);
-    let categoryName = (selectedCategory && selectedCategory.name) || '';
-
-    let isWebImages = this.state.webImages && this.state.webImages.length > 0;
-    let sliderData = isWebImages
-      ? this.state.webImages
-      : this.state.carouselItems;
     return (
-      <View>
+      <>
         <View style={[styles.pinHeader]}>
           <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
             <Feather name={'arrow-left'} size={24} color={'white'} />
@@ -318,85 +392,19 @@ class PinView extends React.Component {
           textStyle={{color: '#fff'}}
         />
 
-        {this.state.isOffline ? (
-          <ImageBlurLoading
-            withIndicator
-            style={styles.cateSlideCardIcon}
-            source={{uri: this.state.offlinePath}}
-            thumbnailSource={{
-              uri: this.state.offlinePath,
-            }}
-          />
-        ) : (
+        {this.state.mapPins.length > 0 && (
           <Carousel
-            data={sliderData}
+            data={this.state.mapPins}
             sliderWidth={DEVICE_WIDTH}
             itemWidth={DEVICE_WIDTH}
             inactiveSlideOpacity={1}
             inactiveSlideScale={1}
-            containerCustomStyle={{
-              height: 400,
-              width: DEVICE_WIDTH,
-              top: 0,
-              position: 'absolute',
-            }}
-            firstItem={0}
-            renderItem={this._renderItemCate}
-            onSnapToItem={index => this.setState({activeSlide: index})}
+            firstItem={this.state.firstItem}
+            renderItem={({item, index}) => this.renderPin(item)}
+            onSnapToItem={(index)=> this.setIsSaved(index)}
+            useScrollView
           />
         )}
-
-        <Pagination
-          dotsLength={this.state.webImages && this.state.webImages.length}
-          activeDotIndex={this.state.activeSlide}
-          containerStyle={{
-            position: 'absolute',
-            top: 250,
-            left: -5,
-            zIndex: 999999,
-          }}
-          dotStyle={{
-            width: 15,
-            height: 3,
-            backgroundColor: '#2F80ED',
-            margin: 0,
-          }}
-          inactiveDotOpacity={1}
-          inactiveDotStyle={{
-            width: 12,
-            height: 3,
-            backgroundColor: 'white',
-            margin: 0,
-          }}
-          inactiveDotScale={1}
-        />
-
-        <ScrollView style={styles.pinScrollView}>
-          <GestureRecognizer
-            // onSwipe={(direction, state) => this.onPinSwipe(direction, state)}
-            onSwipeLeft={state => this.onPinSwipe('NEXT', state)}
-            onSwipeRight={state => this.onPinSwipe('PREV', state)}
-            config={{velocityThreshold: 0.3, directionalOffsetThreshold: 80}}
-            style={{flex: 1}}>
-            <Text style={styles.pinViewTitle}>{this.state.pinTitle}</Text>
-            <View style={styles.pinViewCate}>
-              <IconMoon
-                name={categoryName.toLowerCase()}
-                style={styles.pinViewCateIcon}
-              />
-              <Text style={styles.pinViewCateText}> {categoryName}</Text>
-            </View>
-            {this.state.pinTitle && this.state.addedFrom && (
-              <Text style={[styles.pinViewCateText, {marginBottom: 15}]}>
-                {' '}
-                Added From: {this.state.addedFrom || ''}
-              </Text>
-            )}
-            <Text style={styles.pinViewContent}>
-              {this.state.pinDescription}
-            </Text>
-          </GestureRecognizer>
-        </ScrollView>
 
         <Dialog
           rounded={false}
@@ -533,7 +541,7 @@ class PinView extends React.Component {
             )}
           </DialogContent>
         </Dialog>
-      </View>
+      </>
     );
   }
 }
@@ -550,11 +558,11 @@ const styles = StyleSheet.create({
   pinScrollView: {
     padding: 20,
     height: 'auto',
-    width: '100%',
+    width: DEVICE_WIDTH,
     borderRadius: 20,
     backgroundColor: 'white',
     position: 'absolute',
-    top: 400,
+    top: 450,
     marginTop: -100,
     minHeight: 200,
   },
@@ -584,7 +592,7 @@ const styles = StyleSheet.create({
     color: '#4F4F4F',
   },
   pinHeader: {
-    top: 20,
+    // top: 20,
     zIndex: 9999,
     position: 'absolute',
     flexDirection: 'row',
@@ -592,6 +600,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: DEVICE_WIDTH,
     padding: 15,
+    paddingTop: 40,
+    backgroundColor: 'rgba(0,0,0,0.45)',
   },
   cateSlideCard: {
     height: 375,
