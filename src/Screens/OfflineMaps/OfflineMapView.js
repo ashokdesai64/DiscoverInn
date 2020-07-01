@@ -33,7 +33,7 @@ import * as mapActions from './../../actions/mapActions';
 class OfflineMapView extends React.Component {
   constructor(props) {
     super(props);
-    const { params } = props.navigation.state;
+    const {params} = props.navigation.state;
     let pinList = params.mapData.pinList || [];
     if (
       params &&
@@ -67,6 +67,8 @@ class OfflineMapView extends React.Component {
   render() {
     let {params} = this.props.navigation.state;
     params = params || {};
+    console.log('params => ', params);
+
     let {filteredCollections, mapData, pinList} = this.state;
     return (
       <View style={styles.page}>
@@ -102,8 +104,7 @@ class OfflineMapView extends React.Component {
               if (!this.state.followUserLocation) {
                 this.setState({followUserLocation: false});
               }
-            }}
-          >
+            }}>
             {mapData.bounds && (
               <MapboxGL.Camera
                 bounds={mapData.bounds}
@@ -141,7 +142,9 @@ class OfflineMapView extends React.Component {
                           this.props.navigation.navigate('PinView', {
                             pinID: payload.id,
                             mapID: payload.properties.mapID,
-                            mapName: params.mapName,
+                            mapName: params.mapData.name,
+                            isOffline: true,
+                            allPins: params.mapData.pinList,
                           });
                         }
                       }}>
@@ -208,11 +211,21 @@ class OfflineMapView extends React.Component {
               null
           } */}
           <TouchableOpacity
-            onPress={()=> this.setState({followUserLocation:true})}
-            style={{ position: 'absolute', bottom: 140, right: 15, height: 50, width: 50, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', borderRadius: 50 }}>
+            onPress={() => this.setState({followUserLocation: true})}
+            style={{
+              position: 'absolute',
+              bottom: 140,
+              right: 15,
+              height: 50,
+              width: 50,
+              backgroundColor: 'white',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: 50,
+            }}>
             <MaterialIcons
               name={'my-location'}
-              style={{color:"#2F80ED"}}
+              style={{color: '#2F80ED'}}
               size={25}
             />
           </TouchableOpacity>
@@ -235,11 +248,12 @@ class OfflineMapView extends React.Component {
                 if (typeof pin.images == 'string') {
                   imagePath = pin.images;
                 } else if (Array.isArray(pin.images) && pin.images.length > 0) {
-                  imagePath = pin.images[0].thumb_image || pin.images[0].image
+                  imagePath = pin.images[0].thumb_image || pin.images[0].image;
                 }
 
                 let fileName = imagePath.split('/').pop();
-                let pathToDisplay = 'file://' + RNFetchBlob.fs.dirs.DocumentDir + fileName;
+                let pathToDisplay =
+                  'file://' + RNFetchBlob.fs.dirs.DocumentDir + fileName;
                 return (
                   <TouchableOpacity
                     activeOpacity={0.9}
@@ -249,21 +263,21 @@ class OfflineMapView extends React.Component {
                       // return
                       this.props.navigation.navigate('PinView', {
                         pinID: pin.id,
-                        mapID: params.mapID,
-                        mapName: params.mapName,
+                        mapID: params.mapData.id,
+                        mapName: params.mapData.name,
                         isOffline: true,
                         offlinePath: pathToDisplay,
-                        pinData:pin
+                        allPins: params.mapData.pinList,
                       })
                     }>
                     <ImageBlurLoading
                       withIndicator
                       style={styles.mapViewCardImg}
                       source={{
-                        uri:pathToDisplay
+                        uri: pathToDisplay,
                       }}
                       thumbnailSource={{
-                        uri:pathToDisplay
+                        uri: pathToDisplay,
                       }}
                     />
                     <View style={styles.mapViewCardContent}>

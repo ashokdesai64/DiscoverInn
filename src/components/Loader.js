@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {StyleSheet, View, Text, Modal, ActivityIndicator} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {StyleSheet, View, Text, Modal, ActivityIndicator,TouchableOpacity} from 'react-native';
 
 const transparent = 'transparent';
 const styles = StyleSheet.create({
@@ -91,7 +90,6 @@ export default class Spinner extends React.PureComponent {
   }
 
     _renderDefaultContent() {
-      console.log(this.props)
     return (
       <View style={styles.background}>
         {this.props.customIndicator ? (
@@ -111,7 +109,6 @@ export default class Spinner extends React.PureComponent {
         {!!this.props.canGoBack && (
           <TouchableOpacity
             style={{
-              //   width: '100%',s
               backgroundColor: '#2F80ED',
               marginBottom: 20,
               paddingHorizontal: 20,

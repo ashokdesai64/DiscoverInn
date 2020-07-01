@@ -411,6 +411,7 @@ class MapView extends React.Component {
                           pinID: pin.id,
                           mapID: params.mapID,
                           mapName: params.mapName,
+                          allPins: this.state.allPins
                         })
                       // this.setState({followUserLocation: true})
                     }>

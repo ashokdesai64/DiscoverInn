@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import RNFetchBlob from 'rn-fetch-blob';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
 import fontelloConfig from '../../selection.json';
@@ -48,9 +48,8 @@ class PinView extends React.Component {
       pinLoader: false,
       loaderMsg: '',
       isOffline: params.isOffline,
-      offlinePath: params.offlinePath,
       mapPins: [],
-      firstItem:0
+      firstItem: 0,
     };
   }
 
@@ -66,14 +65,9 @@ class PinView extends React.Component {
 
     if (this.state.isOffline) {
       const {params} = this.props.navigation.state;
-      let pinData = params.pinData || {};
-      this.setState({
-        pinTitle: pinData.name,
-        pinDescription: pinData.description,
-        selectedCategory: pinData.categories,
-        addedFrom: pinData.added_from,
-        isSaved: pinData.save_triplist,
-      });
+      let allPins = params.allPins || [];
+      let pinIndex = allPins.findIndex(p => p.id == params.pinID);
+      this.setPinData(allPins, pinIndex);
     } else {
       this.fetchSinglePinData();
     }
@@ -92,6 +86,21 @@ class PinView extends React.Component {
     this.setState({keyboardOpened: false});
   }
 
+  setPinData(pins, index) {
+    this.setState({
+      mapPins: pins,
+      currentPinData: pins[index],
+      pinTitle: pins[index].name,
+      pinDescription: pins[index].description,
+      selectedCategory: pins[index].categories,
+      loaderMsg: '',
+      pinLoader: false,
+      addedFrom: pins[index].added_from,
+      isSaved: pins[index].save_triplist,
+      firstItem: index,
+    });
+  }
+
   fetchSinglePinData() {
     const {params} = this.props.navigation.state;
     console.log('params => ', params);
@@ -99,30 +108,11 @@ class PinView extends React.Component {
     let mapID = params.mapID;
     let fromFav = params.fromFav;
 
-    const setPinData = (pins, index) => {
-      this.setState({
-        mapPins: pins,
-        currentPinData: pins[index],
-        pinTitle: pins[index].name,
-        pinDescription: pins[index].description,
-        selectedCategory: pins[index].categories,
-        webImages:
-          pins[index].images ||
-          pins[index].pin_images ||
-          this.state.carouselItems,
-        loaderMsg: '',
-        pinLoader: false,
-        addedFrom: pins[index].added_from,
-        isSaved: pins[index].save_triplist,
-        firstItem:index
-      });
-    };
-
     if (pinID && mapID) {
       if (fromFav) {
         let pinData = params.pinList || [];
         let pinIndex = pinData.findIndex(p => p.id == pinID);
-        setPinData(pinData, pinIndex);
+        this.setPinData(pinData, pinIndex);
       } else {
         this.setState({loaderMsg: 'Fetching Pin Data', pinLoader: true});
         this.props.mapAction
@@ -133,8 +123,8 @@ class PinView extends React.Component {
           .then(data => {
             let pinData = (data && data.mapID && data.mapID.pin_list) || [];
             let pinIndex = pinData.findIndex(p => p.id == pinID);
-            console.log({pinData,pinIndex})
-            setPinData(pinData, pinIndex);
+            console.log({pinData, pinIndex});
+            this.setPinData(pinData, pinIndex);
           })
           .catch(err => {
             this.setState({loaderMsg: '', pinLoader: false});
@@ -259,15 +249,29 @@ class PinView extends React.Component {
   renderImages(pinData) {
     let sliderData =
       pinData.images || pinData.pin_images || this.state.carouselItems;
+    let pathToDisplay = '';
+
+    if (this.state.isOffline) {
+      let imagePath = '';
+      if (typeof pinData.images == 'string') {
+        imagePath = pinData.images;
+      } else if (Array.isArray(pinData.images) && pinData.images.length > 0) {
+        imagePath = pinData.images[0].thumb_image || pinData.images[0].image;
+      }
+
+      let fileName = imagePath.split('/').pop();
+      pathToDisplay = 'file://' + RNFetchBlob.fs.dirs.DocumentDir + fileName;
+    }
+
     return (
       <>
         {this.state.isOffline ? (
           <ImageBlurLoading
             withIndicator
             style={styles.cateSlideCardIcon}
-            source={{uri: this.state.offlinePath}}
+            source={{uri: pathToDisplay}}
             thumbnailSource={{
-              uri: this.state.offlinePath,
+              uri: pathToDisplay,
             }}
           />
         ) : (
@@ -327,8 +331,9 @@ class PinView extends React.Component {
 
   renderPinContent(pinData) {
     let {categories} = this.props;
-    
-    let selectedCategory = categories && categories.find(c => c.id == pinData.categories);
+
+    let selectedCategory =
+      categories && categories.find(c => c.id == pinData.categories);
     let categoryName = (selectedCategory && selectedCategory.name) || '';
     return (
       <ScrollView style={styles.pinScrollView}>
@@ -361,21 +366,21 @@ class PinView extends React.Component {
     );
   }
 
-  setIsSaved(index){
+  setIsSaved(index) {
     let allMapPins = [...this.state.mapPins];
     let currentPin = allMapPins[index];
-    this.setState({isSaved:currentPin.save_triplist,currentPin})
+    this.setState({isSaved: currentPin.save_triplist, currentPin});
   }
 
   render() {
     return (
       <>
-        <View style={[styles.pinHeader]}>
+        <SafeAreaView style={[styles.pinHeader]}>
           <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
             <Feather name={'arrow-left'} size={24} color={'white'} />
           </TouchableOpacity>
 
-          {this.state.isSaved ? (
+          {!this.state.isOffline && (this.state.isSaved ? (
             <TouchableOpacity
               onPress={() => this.removeFromTrip(this.state.isSaved)}>
               <AntDesign name={'heart'} size={24} color={'white'} />
@@ -384,8 +389,8 @@ class PinView extends React.Component {
             <TouchableOpacity onPress={() => this.openSaveToListModal()}>
               <AntDesign name={'hearto'} size={24} color={'white'} />
             </TouchableOpacity>
-          )}
-        </View>
+          ))}
+        </SafeAreaView>
         <Spinner
           visible={this.state.pinLoader}
           textContent={this.state.loaderMsg}
@@ -401,7 +406,7 @@ class PinView extends React.Component {
             inactiveSlideScale={1}
             firstItem={this.state.firstItem}
             renderItem={({item, index}) => this.renderPin(item)}
-            onSnapToItem={(index)=> this.setIsSaved(index)}
+            onSnapToItem={index => this.setIsSaved(index)}
             useScrollView
           />
         )}
@@ -600,7 +605,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: DEVICE_WIDTH,
     padding: 15,
-    paddingTop: 40,
+    // paddingTop: 40,
     backgroundColor: 'rgba(0,0,0,0.45)',
   },
   cateSlideCard: {

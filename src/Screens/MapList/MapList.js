@@ -183,6 +183,7 @@ class MapList extends React.Component {
   }
 
   async downloadMap(mapData) {
+    
     if (!this.props.userData || !this.props.userData.id) {
       return alert('You need to login to access this feature');
     }
@@ -335,7 +336,8 @@ class MapList extends React.Component {
                         '% map downloaded',
                     });
                   }
-                  if (offlineRegionStatus.state == 3) {
+                  let areAllResourcesDownloaded = offlineRegionStatus.requiredResourceCount == offlineRegionStatus.completedResourceCount;
+                  if (offlineRegionStatus.state == 3 || areAllResourcesDownloaded) {
                     if (this.mounted) {
                       this.setState({ mapDownloadInProgress: false, canGoBack: false })
                     }
