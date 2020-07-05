@@ -403,6 +403,7 @@ class MapView extends React.Component {
                   : require('./../../Images/login-bg.jpg');
                 return (
                   <TouchableOpacity
+                    key={pin.id}
                     activeOpacity={0.9}
                     style={styles.mapViewCard}
                     onPress={

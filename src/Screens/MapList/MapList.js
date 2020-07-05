@@ -183,7 +183,14 @@ class MapList extends React.Component {
   }
 
   async downloadMap(mapData) {
-    
+    this.setState({
+      mapDownloadInProgress: true,
+      downloadSpinnerMsg: `Preparing to download map.`,
+      downloadSpinnerMsg: 'Downloading map...',
+      canGoBack: true,
+    });
+    return
+
     if (!this.props.userData || !this.props.userData.id) {
       return alert('You need to login to access this feature');
     }
@@ -336,12 +343,20 @@ class MapList extends React.Component {
                         '% map downloaded',
                     });
                   }
-                  let areAllResourcesDownloaded = offlineRegionStatus.requiredResourceCount == offlineRegionStatus.completedResourceCount;
-                  if (offlineRegionStatus.state == 3 || areAllResourcesDownloaded) {
+                  let areAllResourcesDownloaded =
+                    offlineRegionStatus.requiredResourceCount ==
+                    offlineRegionStatus.completedResourceCount;
+                  if (
+                    offlineRegionStatus.state == 3 ||
+                    areAllResourcesDownloaded
+                  ) {
+                    alert('Map downloaded Successfully.');
                     if (this.mounted) {
-                      this.setState({ mapDownloadInProgress: false, canGoBack: false })
+                      this.setState({
+                        mapDownloadInProgress: false,
+                        canGoBack: false,
+                      });
                     }
-                    alert('Map downloaded');
                   }
                 },
               );

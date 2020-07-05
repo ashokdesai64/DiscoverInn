@@ -110,12 +110,16 @@ export default class Spinner extends React.PureComponent {
           <TouchableOpacity
             style={{
               backgroundColor: '#2F80ED',
-              marginBottom: 20,
+              marginBottom: 15,
               paddingHorizontal: 20,
               paddingVertical: 10,
+              width:'80%',
+              justifyContent:'center',
+              alignItems:'center',
+              height:55
             }}
             onPress={() => this.props.onGoBack()}>
-            <Text style={{fontFamily: 'Montserrat-Medium', color: 'white'}}>
+            <Text style={{fontFamily: 'Montserrat-Medium', color: 'white',textAlign:'center',fontSize:17}}>
               {this.props.backButtonText}
             </Text>
           </TouchableOpacity>

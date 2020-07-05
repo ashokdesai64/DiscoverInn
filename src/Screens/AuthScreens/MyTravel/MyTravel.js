@@ -276,11 +276,12 @@ class MyTravel extends React.Component {
                         '% map downloaded',
                     });
                   }
-                  if (offlineRegionStatus.state == 3) {
+                  let areAllResourcesDownloaded = offlineRegionStatus.requiredResourceCount == offlineRegionStatus.completedResourceCount;
+                  if (offlineRegionStatus.state == 3 || areAllResourcesDownloaded) {
+                    alert("Map downloaded Successfully.")
                     if (this.mounted) {
                       this.setState({ mapDownloadInProgress: false, canGoBack: false })
                     }
-                    alert("Map downloaded")
                   }
                 },
               );
@@ -376,11 +377,14 @@ class MyTravel extends React.Component {
   }
 
   fetchFirstMaps() {
+    if(!this.props.myMaps || this.props.myMaps.length == 0){
+      this.setState({fetchingMaps:true})
+    }
     this.props.mapAction.fetchMyFirstMaps({
       user_id: this.props.userData.id,
       search: this.state.search,
       page: 1,
-    });
+    }).then(d => this.setState({fetchingMaps:false}));
   }
 
   fetchMaps(showLoader = false) {
@@ -500,7 +504,7 @@ class MyTravel extends React.Component {
                       alignSelf: 'center',
                     },
                   ]}>
-                  No Maps Found.
+                  {this.state.fetchingMaps ? 'Fetching maps...' : 'No Maps Found.'}
                 </Text>
               )}
             </ScrollView>
@@ -515,61 +519,6 @@ class MyTravel extends React.Component {
             </TouchableOpacity>
           </View>
         </View>
-
-        {/* <Dialog
-          rounded={false}
-          visible={this.state.uploadCoverModal}
-          hasOverlay={true}
-          animationDuration={1}
-          onTouchOutside={() => {
-            this.setState({ uploadCoverModal: false });
-          }}
-          dialogAnimation={
-            new FadeAnimation({
-              initialValue: 0, // optional
-              animationDuration: 200, // optional
-              useNativeDriver: true, // optional
-            })
-          }
-          onHardwareBackPress={() => {
-            this.setState({ uploadCoverModal: false });
-            return true;
-          }}
-          dialogStyle={styles.customPopup}>
-          <DialogContent style={styles.customPopupContent}>
-            <View style={styles.customPopupHeader}>
-              <Text style={styles.customPopupHeaderTitle}>
-                Upload Map Cover Image
-              </Text>
-              <TouchableOpacity
-                style={styles.buttonClose}
-                onPress={() => this.setState({ uploadCoverModal: false })}>
-                <Feather name={'x'} style={styles.buttonCloseIcon} />
-              </TouchableOpacity>
-            </View>
-
-            <View style={[styles.coverImageCard]}>
-              <Image
-                style={[styles.coverImageCardBox]}
-                source={{ uri: this.state.currentMap.cover_image }}
-              />
-              <View style={[styles.addPlusIcon]}>
-                <AntDesign name={'pluscircleo'} size={36} color={'#fff'} />
-                <Text style={[styles.addPlusText]}>Add Cover Image</Text>
-              </View>
-            </View>
-            <TouchableOpacity
-              style={[
-                styles.button,
-                styles.buttonPrimary,
-                styles.buttonLg,
-                { marginTop: 25 },
-              ]}
-              onPress={() => this.setState({ saveToListModal: false })}>
-              <Text style={styles.buttonText}>Upload Image</Text>
-            </TouchableOpacity>
-          </DialogContent>
-        </Dialog> */}
 
         <Dialog
           rounded={false}

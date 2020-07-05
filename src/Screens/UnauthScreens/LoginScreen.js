@@ -19,13 +19,14 @@ const DEVICE_HEIGHT = Dimensions.get('window').height;
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as authActions from './../../actions/authActions';
+import * as mapActions from './../../actions/mapActions';
 
 class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',//'ketanlathiya@gmail.com',
-      password: '',//'admin@1234',
+      email: '', //'ketanlathiya@gmail.com',
+      password: '', //'admin@1234',
       loggingIn: false,
     };
     this.checkLogin(props);
@@ -40,6 +41,10 @@ class LoginScreen extends React.Component {
       this.props.navigation.navigate('Home');
       return true;
     });
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress',()=>{})
   }
 
   checkLogin(props) {
@@ -59,10 +64,22 @@ class LoginScreen extends React.Component {
     if (!password) {
       return alert('Please enter password');
     }
-    this.props.authAction.userLogin(email, password).catch(e => {
-      alert(e);
-      this.setState({loggingIn: false});
-    });
+    this.props.authAction
+      .userLogin(email, password)
+      .then(d => {
+        this.props.mapAction.fetchTripList();
+        if (this.props && this.props.userData && this.props.userData.id) {
+          this.props.mapAction.fetchMyReviews({
+            user_id: this.props.userData.id,
+            page: 1,
+          });
+          this.props.mapAction.fetchVisitorReviews({user_id: this.props.userData.id, page: 1});
+        }
+      })
+      .catch(e => {
+        alert(e);
+        this.setState({loggingIn: false});
+      });
   }
 
   render() {
@@ -173,6 +190,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     authAction: bindActionCreators(authActions, dispatch),
+    mapAction: bindActionCreators(mapActions, dispatch),
   };
 }
 

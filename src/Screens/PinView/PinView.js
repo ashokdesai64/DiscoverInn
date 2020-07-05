@@ -103,7 +103,6 @@ class PinView extends React.Component {
 
   fetchSinglePinData() {
     const {params} = this.props.navigation.state;
-    console.log('params => ', params);
     let pinID = params.pinID;
     let mapID = params.mapID;
     let fromFav = params.fromFav;
@@ -123,7 +122,6 @@ class PinView extends React.Component {
           .then(data => {
             let pinData = (data && data.mapID && data.mapID.pin_list) || [];
             let pinIndex = pinData.findIndex(p => p.id == pinID);
-            console.log({pinData, pinIndex});
             this.setPinData(pinData, pinIndex);
           })
           .catch(err => {
@@ -166,6 +164,7 @@ class PinView extends React.Component {
         .then(data => {
           this.setState({saveToListModal: false}, () => {
             this.fetchSinglePinData();
+            this.props.mapAction.fetchTripList();
           });
         })
         .catch(err => {
@@ -186,8 +185,6 @@ class PinView extends React.Component {
         name: this.state.tripListName,
       })
       .then(data => {
-        console.log('data => ', data);
-
         let tripListID = data.id;
         this.props.mapAction
           .addRemoveToTrip({
@@ -368,8 +365,8 @@ class PinView extends React.Component {
 
   setIsSaved(index) {
     let allMapPins = [...this.state.mapPins];
-    let currentPin = allMapPins[index];
-    this.setState({isSaved: currentPin.save_triplist, currentPin});
+    let currentPinData = allMapPins[index];
+    this.setState({isSaved: currentPinData.save_triplist, currentPinData});
   }
 
   render() {
@@ -380,16 +377,17 @@ class PinView extends React.Component {
             <Feather name={'arrow-left'} size={24} color={'white'} />
           </TouchableOpacity>
 
-          {!this.state.isOffline && (this.state.isSaved ? (
-            <TouchableOpacity
-              onPress={() => this.removeFromTrip(this.state.isSaved)}>
-              <AntDesign name={'heart'} size={24} color={'white'} />
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity onPress={() => this.openSaveToListModal()}>
-              <AntDesign name={'hearto'} size={24} color={'white'} />
-            </TouchableOpacity>
-          ))}
+          {!this.state.isOffline &&
+            (this.state.isSaved ? (
+              <TouchableOpacity
+                onPress={() => this.removeFromTrip(this.state.isSaved)}>
+                <AntDesign name={'heart'} size={24} color={'white'} />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={() => this.openSaveToListModal()}>
+                <AntDesign name={'hearto'} size={24} color={'white'} />
+              </TouchableOpacity>
+            ))}
         </SafeAreaView>
         <Spinner
           visible={this.state.pinLoader}
@@ -494,7 +492,8 @@ class PinView extends React.Component {
                       return (
                         <TouchableOpacity
                           style={styles.MVTripListItem}
-                          onPress={() => this.addToTrip(trip.id)}>
+                          onPress={() => this.addToTrip(trip.id)}
+                          key={trip.id}>
                           <Text style={styles.MVTripListItemTitle}>
                             {trip.name}
                           </Text>
