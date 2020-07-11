@@ -35,9 +35,9 @@ import MapPins from './Screens/MapPins/MapPins';
 import OfflineMaps from './Screens/OfflineMaps/OfflineMaps';
 import OfflineMapView from './Screens/OfflineMaps/OfflineMapView';
 import SideMenu from './components/SideMenu/SideMenu';
-import Test from './Test';
 import DefaultScreen from './Screens/DefaultScreen';
 import WalkThrough from './Screens/WalkThrough';
+import GetStarted from './Screens/WalkThrough/GetStarted';
 
 const userStack = createStackNavigator(
   {
@@ -175,21 +175,21 @@ const App = createSwitchNavigator(
     AuthLoading: {
       screen: DefaultScreen,
     },
-    Test: {
-      screen: Test,
-    },
     App: {
       screen: DrawerStack,
     },
     Auth: {
       screen: AuthStack,
     },
-    WalkThrough: {
-      screen: WalkThrough,
+    GetStarted: {
+      screen: GetStarted,
     },
+    WalkThrough:{
+      screen:WalkThrough
+    }
   },
   {
-    initialRouteName: 'AuthLoading',
+    initialRouteName: 'GetStarted',
   },
 );
 

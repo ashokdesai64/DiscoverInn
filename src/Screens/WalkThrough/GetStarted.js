@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   SafeAreaView,
   View,
@@ -8,12 +8,26 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
+import {useSelector} from 'react-redux';
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
-const DEVICE_HEIGHT = Dimensions.get('window').height;
 
-const FirstScreen = () => {
+const FirstScreen = props => {
+
+  const isIntroCompleted = useSelector(state => state.user.introCompleted);
+  
+  useEffect(()=>{
+    if(isIntroCompleted){
+      props.navigation.navigate('AuthLoading')
+    }
+  },[isIntroCompleted])
+
+  const startWalkthrough = () => {
+    props.navigation.navigate('WalkThrough');
+  };
+
   return (
+    !isIntroCompleted ?
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Image
@@ -32,12 +46,14 @@ const FirstScreen = () => {
             Welcome to Discover-inn
           </Text>
           <Text style={styles.infoText}>
-            All your travel information in one place, Adapted to your needs.
+            All your travel informations in one place, Adapted to your needs.
           </Text>
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={[styles.button, styles.rightBorder]}
+          onPress={startWalkthrough}>
           <Text style={styles.buttonText}>GET STARTED</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}>
@@ -45,6 +61,8 @@ const FirstScreen = () => {
         </TouchableOpacity>
       </View>
     </SafeAreaView>
+    :
+    null
   );
 };
 
@@ -53,7 +71,7 @@ export default FirstScreen;
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
-    flex:1
+    flex: 1,
   },
   logo: {
     width: 50,
@@ -61,8 +79,8 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   pageLogo: {
-    width: DEVICE_WIDTH - 30,
-    height: DEVICE_WIDTH - 30,
+    width: DEVICE_WIDTH - 100,
+    height: DEVICE_WIDTH - 100,
   },
   header: {
     padding: 15,
@@ -70,6 +88,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     marginBottom: 20,
+  },
+  rightBorder: {
+    borderRightWidth: 1,
+    borderRightColor: 'white',
   },
   headerTitle: {
     fontFamily: 'Montserrat-Medium',
@@ -100,13 +122,13 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#2F80ED',
-    flex:1,
-    padding:20,
+    flex: 1,
+    padding: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  buttonText:{
-      color:'white',
-      fontFamily: 'Montserrat-Medium'
-  }
+  buttonText: {
+    color: 'white',
+    fontFamily: 'Montserrat-Medium',
+  },
 });

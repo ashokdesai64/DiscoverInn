@@ -235,7 +235,7 @@ class SideMenu extends Component {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() =>
-                this.props.navigation.navigate('HowItWorksScreen')
+                this.props.navigation.navigate('WalkThrough')
               }>
               <Text style={styles.staticMenu_Link}>How It Works</Text>
             </TouchableOpacity>

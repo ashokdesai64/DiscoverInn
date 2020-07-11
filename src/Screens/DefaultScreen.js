@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, BackHandler,Alert} from 'react-native';
+import {View, BackHandler, Alert} from 'react-native';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as userActions from './../actions/authActions';
@@ -11,8 +11,14 @@ class DefaultScreen extends Component {
   }
 
   redirectToApp(props) {
+    let {params} = props.navigation.state;
+    console.log("params => ",params)
     // if (props && props.userData && props.userData.userId) {
+    if (params && params.signInFromIntro) {
+      this.resetAction('Auth');
+    } else {
       this.resetAction('App'); //WalkThrough
+    }
     // } else {
     //   this.resetAction('Auth');
     // }
@@ -91,4 +97,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DefaultScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(DefaultScreen);

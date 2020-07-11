@@ -280,7 +280,16 @@ class Header extends Component {
                 )}
 
                 <TouchableOpacity
-                  onPress={() => console.log('how it works')}
+                  onPress={() => {
+                    this.setState({
+                      authModal: false
+                    },()=>{
+                      setTimeout(() => {
+                        
+                        this.props.navigation.navigate('WalkThrough')
+                      }, 500);
+                    })
+                  }}
                   style={[styles.loginDialogLink, styles.loginDialogLinkLast]}>
                   <AntDesign
                     name={'customerservice'}

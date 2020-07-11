@@ -1,4 +1,6 @@
-const initialState = {};
+const initialState = {
+  introCompleted:false
+};
 
 export default function user(state = initialState, action = {}) {
   switch (action.type) {
@@ -23,6 +25,12 @@ export default function user(state = initialState, action = {}) {
         userData: {},
         tripList:[]
       };
+    }
+    case 'introCompleted':{
+      return {
+        ...state,
+        introCompleted:action.value
+      }
     }
     default:
       return state;
