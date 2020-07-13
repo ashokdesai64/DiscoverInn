@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef,useCallback  } from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {View, BackHandler, StyleSheet, Dimensions} from 'react-native';
 import InfoScreen from './InfoScreen';
 import Carousel from 'react-native-snap-carousel';
@@ -123,52 +123,60 @@ const WalkThrough = props => {
     props.navigation.navigate('AuthLoading', {signInFromIntro: true});
   };
 
-  const onVideoEnd = useCallback(() => {
-    if (currentIndex == data.length - 1) {
+  const onVideoEnd = () => {
+    if (sliderRef.current.currentIndex == data.length - 1) {
       props.navigation.navigate('AuthLoading');
     } else {
-      sliderRef.current.snapToNext()
+      sliderRef.current.snapToNext();
     }
-  },[])
+  };
 
   const renderComp = ({item, index}) => {
     return item.type == 'video' ? (
       <VideoComponent
         uri={item.uri}
         paused={index != currentIndex}
+        currentIndex={currentIndex}
         onVideoEnd={onVideoEnd}
       />
     ) : (
-      <InfoScreen
-        values={{...item}}
-        onSkip={onSkip}
-        onSignIn={onSignIn}
-      />
+      <InfoScreen values={{...item}} onSkip={onSkip} onSignIn={onSignIn} />
     );
   };
 
   return (
-    <Carousel
-      ref={sliderRef}
-      data={data}
-      sliderWidth={DEVICE_WIDTH}
-      itemWidth={DEVICE_WIDTH}
-      inactiveSlideOpacity={1}
-      inactiveSlideScale={1}
-      renderItem={renderComp}
-      onSnapToItem={setCurrentIndex}
-      removeClippedSubviews={true}
-    />
+    <View style={{backgroundColor:'white',flexGrow:1}}>
+      <Carousel
+        ref={sliderRef}
+        data={data}
+        sliderWidth={DEVICE_WIDTH}
+        itemWidth={DEVICE_WIDTH}
+        inactiveSlideOpacity={1}
+        inactiveSlideScale={1}
+        renderItem={renderComp}
+        onSnapToItem={setCurrentIndex}
+        removeClippedSubviews={true}
+      />
+    </View>
   );
 };
 
-const VideoComponent = React.memo(({uri, paused, onVideoEnd}) => {
-  
-  const f = useCallback(debounce(({currentTime,playableDuration})=>{
-    if(Math.ceil(currentTime) == Math.ceil(playableDuration)){
+const VideoComponent = React.memo(({uri, paused, onVideoEnd,currentIndex}) => {
+
+  const videoRef = useRef(null);
+  useEffect(()=>{
+    videoRef && videoRef.current.seek(0);
+  },[currentIndex])
+
+  const f = useCallback(
+    debounce(({currentTime, playableDuration}) => {
+      console.log({currentTime, playableDuration});
+      if (Math.ceil(currentTime) == Math.ceil(playableDuration)) {
         onVideoEnd();
-    }
-  },1000),[])
+      }
+    }, 1000),
+    [],
+  );
 
   return (
     <View style={styles.slide2}>
@@ -178,6 +186,7 @@ const VideoComponent = React.memo(({uri, paused, onVideoEnd}) => {
         key={uri}
         paused={paused}
         style={styles.backgroundVideo}
+        ref={videoRef}
         controls
         onProgress={f}
       />

@@ -253,6 +253,7 @@ class HomeScreen extends React.Component {
         );
         return true;
       }
+      return false;
       // else {
       //   console.log(this.props.navigation)
       //   this.props.navigation.navigate('Home')

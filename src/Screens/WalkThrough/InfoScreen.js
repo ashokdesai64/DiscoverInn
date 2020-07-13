@@ -18,9 +18,9 @@ const InfoScreen = ({values, onSkip, onSignIn}) => {
         <Text style={styles.headerTitle}>{values.title}</Text>
         <Text style={styles.infoText}>{values.info}</Text>
       </View>
-      <View style={styles.body}>
+      {/* <View style={styles.body}>
         <Image source={{uri: values.cover}} style={styles.pageLogo} />
-      </View>
+      </View> */}
       <Image source={require('./../../Images/final.gif')} style={styles.gif} />
       <View style={styles.buttonContainer}>
         <TouchableOpacity
@@ -40,10 +40,8 @@ export default InfoScreen;
 
 const styles = StyleSheet.create({
   container: {
-    position: 'relative',
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent:'center'
   },
   gif: {
     width: DEVICE_WIDTH,
@@ -56,6 +54,7 @@ const styles = StyleSheet.create({
   header: {
     justifyContent: 'center',
     alignItems: 'center',
+    marginVertical:50
   },
   rightBorder: {
     borderRightWidth: 1,

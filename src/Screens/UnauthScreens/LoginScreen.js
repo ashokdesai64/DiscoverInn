@@ -38,13 +38,16 @@ class LoginScreen extends React.Component {
 
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', () => {
-      this.props.navigation.navigate('Home');
-      return true;
+      if (this.props.navigation.isFocused()) {
+        this.props.navigation.navigate('Home');
+        return true;
+      }
+      return false;
     });
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress',()=>{})
+    BackHandler.removeEventListener('hardwareBackPress', () => {});
   }
 
   checkLogin(props) {
@@ -73,7 +76,10 @@ class LoginScreen extends React.Component {
             user_id: this.props.userData.id,
             page: 1,
           });
-          this.props.mapAction.fetchVisitorReviews({user_id: this.props.userData.id, page: 1});
+          this.props.mapAction.fetchVisitorReviews({
+            user_id: this.props.userData.id,
+            page: 1,
+          });
         }
       })
       .catch(e => {

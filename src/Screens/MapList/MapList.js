@@ -189,7 +189,6 @@ class MapList extends React.Component {
       downloadSpinnerMsg: 'Downloading map...',
       canGoBack: true,
     });
-    return
 
     if (!this.props.userData || !this.props.userData.id) {
       return alert('You need to login to access this feature');

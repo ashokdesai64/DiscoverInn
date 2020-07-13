@@ -23,7 +23,6 @@ import ImageBlurLoading from '../../components/ImageLoader';
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const DEVICE_WIDTH = Dimensions.get('window').width;
 import Spinner from '../../components/Loader';
-import GestureRecognizer from '../../components/GestureRecognizer';
 //REDUX
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -194,6 +193,7 @@ class PinView extends React.Component {
             user_id: this.props.userData.id,
           })
           .then(data => {
+            this.props.mapAction.fetchTripList();
             this.setState(
               {saveToListModal: false, creatingTripList: false},
               () => {
