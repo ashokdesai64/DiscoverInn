@@ -56,6 +56,9 @@ class MapPins extends React.Component {
               pin.name.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0,
           );
         }
+        if(allPins && allPins.length > 0){
+          filteredPinList = allPins.filter(p => !p.save_triplist || (p.save_triplist && p.save_triplist == '0'))
+        }
         this.setState({
           pinList: data.pin_list,
           filteredPinList,

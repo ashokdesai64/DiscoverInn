@@ -560,15 +560,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   pinScrollView: {
-    padding: 20,
-    height: 'auto',
+    paddingHorizontal: 20,
+    paddingTop:10,
     width: DEVICE_WIDTH,
     borderRadius: 20,
     backgroundColor: 'white',
     position: 'absolute',
     top: 450,
     marginTop: -100,
-    minHeight: 200,
+    maxHeight: DEVICE_HEIGHT-400,
   },
   pinViewTitle: {
     fontFamily: 'Montserrat-Medium',

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {
   SafeAreaView,
   View,
@@ -8,26 +8,31 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import {useSelector} from 'react-redux';
+import {useSelector,useDispatch} from 'react-redux';
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
 
 const FirstScreen = props => {
+  const dispatch = useDispatch();
 
   const isIntroCompleted = useSelector(state => state.user.introCompleted);
-  
-  useEffect(()=>{
-    if(isIntroCompleted){
-      props.navigation.navigate('AuthLoading')
+
+  useEffect(() => {
+    if (isIntroCompleted) {
+      props.navigation.navigate('AuthLoading');
     }
-  },[isIntroCompleted])
+  }, [isIntroCompleted]);
 
   const startWalkthrough = () => {
     props.navigation.navigate('WalkThrough');
   };
 
-  return (
-    !isIntroCompleted ?
+  const onSignIn = () => {
+    dispatch({type: 'introCompleted', value: true});
+    props.navigation.navigate('AuthLoading', {signInFromIntro: true});
+  };
+
+  return !isIntroCompleted ? (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Image
@@ -46,7 +51,7 @@ const FirstScreen = props => {
             Welcome to Discover-inn
           </Text>
           <Text style={styles.infoText}>
-            All your travel informations in one place, Adapted to your needs.
+            All your travel informations in one place, adapted to your needs.
           </Text>
         </View>
       </View>
@@ -56,14 +61,12 @@ const FirstScreen = props => {
           onPress={startWalkthrough}>
           <Text style={styles.buttonText}>GET STARTED</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity onPress={onSignIn} style={styles.button}>
           <Text style={styles.buttonText}>SIGN IN</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
-    :
-    null
-  );
+  ) : null;
 };
 
 export default FirstScreen;

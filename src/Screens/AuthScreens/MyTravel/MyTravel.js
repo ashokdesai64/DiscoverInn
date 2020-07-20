@@ -124,6 +124,7 @@ class MyTravel extends React.Component {
   }
 
   async downloadMap(mapData) {
+    console.log("mapData => ",mapData)
     if (!this.props.userData || !this.props.userData.id) {
       return alert('You need to login to access this feature');
     }
@@ -146,7 +147,6 @@ class MyTravel extends React.Component {
           })
           .then(async data => {
             let pinList = data.mapID.pin_list || [];
-
             let featureCollections = [],
               pinLatLongs = [],
               topLeft = null,

@@ -46,6 +46,8 @@ const styles = StyleSheet.create({
   gif: {
     width: DEVICE_WIDTH,
     height: 200,
+    marginVertical:50,
+    paddingVertical:50
   },
   pageLogo: {
     width: DEVICE_WIDTH,

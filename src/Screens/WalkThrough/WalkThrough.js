@@ -50,7 +50,7 @@ let data = [
     type: 'info',
     title: 'Start exploring',
     info:
-      'Navigate through well known travel guide, bloggers suggestions or your friends last trip.',
+      `Navigate through well known travel guides, bloggers' suggestions or your friends' last trip.`,
     cover:
       'https://discover-inn.s3.ca-central-1.amazonaws.com/cover_249_thumb2_image-922.jpg',
   },
@@ -76,7 +76,7 @@ let data = [
     type: 'info',
     title: 'Create Souvenirs',
     info:
-      'Do your own map based on your experiences and photos. On Website, you can also import from Google MyMaps.',
+      `Do your own map based on your experiences and photos or import from Google MyMaps on Discover-inn.com`,
     cover:
       'https://discover-inn.s3.ca-central-1.amazonaws.com/cover_251_thumb4_image-408.jpg',
   },
@@ -187,7 +187,7 @@ const VideoComponent = React.memo(({uri, paused, onVideoEnd,currentIndex}) => {
         paused={paused}
         style={styles.backgroundVideo}
         ref={videoRef}
-        controls
+        // controls
         onProgress={f}
       />
     </View>
