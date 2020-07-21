@@ -37,7 +37,7 @@ import OfflineMapView from './Screens/OfflineMaps/OfflineMapView';
 import SideMenu from './components/SideMenu/SideMenu';
 import DefaultScreen from './Screens/DefaultScreen';
 import WalkThrough from './Screens/WalkThrough';
-import GetStarted from './Screens/WalkThrough/GetStarted';
+import GetStarted from './Screens/WalkThrough/GetStarted'
 
 const userStack = createStackNavigator(
   {
