@@ -372,7 +372,7 @@ class PinView extends React.Component {
   render() {
     return (
       <>
-        <SafeAreaView style={[styles.pinHeader]}>
+        <View style={[styles.pinHeader]}>
           <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
             <Feather name={'arrow-left'} size={24} color={'white'} />
           </TouchableOpacity>
@@ -388,7 +388,7 @@ class PinView extends React.Component {
                 <AntDesign name={'hearto'} size={24} color={'white'} />
               </TouchableOpacity>
             ))}
-        </SafeAreaView>
+        </View>
         <Spinner
           visible={this.state.pinLoader}
           textContent={this.state.loaderMsg}
@@ -602,10 +602,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    width: DEVICE_WIDTH,
-    padding: 15,
-    // paddingTop: 40,
     backgroundColor: 'rgba(0,0,0,0.45)',
+    // flex:1,
+    height:80,
+    paddingTop:30,
+    paddingHorizontal:20,
+    width:'100%'
   },
   cateSlideCard: {
     height: 375,

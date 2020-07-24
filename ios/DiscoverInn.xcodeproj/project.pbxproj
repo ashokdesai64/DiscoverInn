@@ -430,7 +430,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = UVYKZ44TSP;
+						DevelopmentTeam = QLUM84Q5PG;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -908,17 +908,18 @@
 			baseConfigurationReference = 3BB499C5A18CB996F73FD006 /* Pods-DiscoverInn.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 1.0.1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = UVYKZ44TSP;
+				DEVELOPMENT_TEAM = QLUM84Q5PG;
 				INFOPLIST_FILE = DiscoverInn/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.discoverinn;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.discover-inn.Discover-inn";
 				PRODUCT_NAME = DiscoverInn;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -929,16 +930,17 @@
 			baseConfigurationReference = 0FEDD7034C4EFC124560A603 /* Pods-DiscoverInn.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UVYKZ44TSP;
+				CURRENT_PROJECT_VERSION = 1.0.1;
+				DEVELOPMENT_TEAM = QLUM84Q5PG;
 				INFOPLIST_FILE = DiscoverInn/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.discoverinn;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.discover-inn.Discover-inn";
 				PRODUCT_NAME = DiscoverInn;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
