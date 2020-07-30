@@ -8,9 +8,11 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
-  SafeAreaView,
+  Platform,
   ActivityIndicator,
+  StatusBar,
 } from 'react-native';
+import {getStatusBarHeight} from './../../config/statusbar';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import RNFetchBlob from 'rn-fetch-blob';
@@ -280,7 +282,7 @@ class PinView extends React.Component {
               inactiveSlideOpacity={1}
               inactiveSlideScale={1}
               containerCustomStyle={{
-                height: 400,
+                height: 450,
                 width: DEVICE_WIDTH,
                 top: 0,
                 position: 'absolute',
@@ -304,7 +306,7 @@ class PinView extends React.Component {
         activeDotIndex={this.state.activeSlide}
         containerStyle={{
           position: 'absolute',
-          top: 300,
+          top: 280,
           left: -5,
           zIndex: 999999,
         }}
@@ -333,7 +335,15 @@ class PinView extends React.Component {
       categories && categories.find(c => c.id == pinData.categories);
     let categoryName = (selectedCategory && selectedCategory.name) || '';
     return (
-      <ScrollView style={styles.pinScrollView}>
+      <ScrollView
+        style={styles.pinScrollView}
+        contentContainerStyle={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          alignSelf: 'center',
+          borderRadius: 100,
+        }}
+        nestedScrollEnabled={true}>
         <Text style={styles.pinViewTitle}>{pinData.name}</Text>
         <View style={styles.pinViewCate}>
           <IconMoon
@@ -348,7 +358,9 @@ class PinView extends React.Component {
             Added From: {pinData.added_from || ''}
           </Text>
         )}
-        <Text style={styles.pinViewContent}>{pinData.description}</Text>
+        <Text style={styles.pinViewContent}>
+          {pinData.description}
+        </Text>
       </ScrollView>
     );
   }
@@ -370,9 +382,18 @@ class PinView extends React.Component {
   }
 
   render() {
+    let paddingTop = 0;
+    if (Platform.OS === 'ios') {
+      paddingTop = getStatusBarHeight();
+    } else {
+      const hasNotch = StatusBar.currentHeight > 24;
+      if (hasNotch) {
+        paddingTop = StatusBar.currentHeight;
+      }
+    }
     return (
       <>
-        <View style={[styles.pinHeader]}>
+        <View style={[styles.pinHeader, {paddingTop}]}>
           <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
             <Feather name={'arrow-left'} size={24} color={'white'} />
           </TouchableOpacity>
@@ -396,17 +417,20 @@ class PinView extends React.Component {
         />
 
         {this.state.mapPins.length > 0 && (
-          <Carousel
-            data={this.state.mapPins}
-            sliderWidth={DEVICE_WIDTH}
-            itemWidth={DEVICE_WIDTH}
-            inactiveSlideOpacity={1}
-            inactiveSlideScale={1}
-            firstItem={this.state.firstItem}
-            renderItem={({item, index}) => this.renderPin(item)}
-            onSnapToItem={index => this.setIsSaved(index)}
-            useScrollView
-          />
+          <View style={{position: 'relative'}}>
+            <Carousel
+              data={this.state.mapPins}
+              sliderWidth={DEVICE_WIDTH}
+              itemWidth={DEVICE_WIDTH}
+              inactiveSlideOpacity={1}
+              inactiveSlideScale={1}
+              firstItem={this.state.firstItem}
+              renderItem={({item, index}) => this.renderPin(item)}
+              onSnapToItem={index => this.setIsSaved(index)}
+              useScrollView
+              nestedScrollEnabled={true}
+            />
+          </View>
         )}
 
         <Dialog
@@ -560,26 +584,29 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   pinScrollView: {
-    paddingHorizontal: 20,
-    paddingTop:10,
+    paddingTop: 0,
+    height: DEVICE_HEIGHT - 320,
     width: DEVICE_WIDTH,
-    borderRadius: 20,
     backgroundColor: 'white',
-    position: 'absolute',
-    top: 450,
-    marginTop: -100,
-    maxHeight: DEVICE_HEIGHT-400,
+    borderRadius: 20,
+    marginBottom: 20,
+    marginTop: 340,
   },
   pinViewTitle: {
     fontFamily: 'Montserrat-Medium',
     fontSize: 24,
     marginBottom: 5,
+    paddingLeft: 15,
+    alignSelf: 'flex-start',
+    marginTop: 10,
   },
   pinViewCate: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginBottom: 5,
+    marginBottom: 10,
+    alignSelf: 'flex-start',
+    paddingLeft: 15,
   },
   pinViewCateIcon: {
     color: '#2F80ED',
@@ -594,6 +621,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Montserrat-Medium',
     color: '#4F4F4F',
+    paddingHorizontal: 15,
   },
   pinHeader: {
     // top: 20,
@@ -604,10 +632,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(0,0,0,0.45)',
     // flex:1,
-    height:80,
-    paddingTop:30,
-    paddingHorizontal:20,
-    width:'100%'
+    height: 80,
+    paddingHorizontal: 20,
+    width: '100%',
   },
   cateSlideCard: {
     height: 375,

@@ -152,7 +152,7 @@ class AddMapDetail extends React.Component {
       });
     }
   }
-
+  
   async getLocationFromSelectedImages() {
     if (!this.state.isLocationSelected && this.state.locationAccepted) {
       let imageLocation = false;

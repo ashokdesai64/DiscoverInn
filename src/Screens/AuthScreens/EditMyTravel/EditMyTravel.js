@@ -62,6 +62,11 @@ class EditMyTravel extends React.Component {
           title: mapName,
         })
         .then(data => {
+          this.props.mapAction.fetchMyFirstMaps({
+            user_id: this.props.userData.id,
+            search: '',
+            page: 1,
+          })
           this.setState({showNameInput: false});
         })
         .catch(err => {
@@ -71,6 +76,11 @@ class EditMyTravel extends React.Component {
       this.props.mapAction
         .addMyMap({user_id: this.props.userData.id, title: mapName})
         .then(data => {
+          this.props.mapAction.fetchMyFirstMaps({
+            user_id: this.props.userData.id,
+            search: '',
+            page: 1,
+          })
           this.setState({
             showNameInput: false,
             mapData: {id: data.mapID, name: mapName},
