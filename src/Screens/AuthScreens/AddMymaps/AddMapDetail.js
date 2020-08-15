@@ -318,7 +318,7 @@ class AddMapDetail extends React.Component {
           <View style={styles.container}>
             <View style={styles.pageContent}>
               <ScrollView
-                keyboardShouldPersistTaps={'always'}
+                keyboardShouldPersistTaps={'handled'}
                 showsVerticalScrollIndicator={false}
                 ref={'_scrollView'}
               >

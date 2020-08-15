@@ -216,16 +216,9 @@ class EditMymaps extends React.Component {
           style={styles.bgTransfrent}
         />
         <ScrollView
-          style={styles.scrollView}
+          // style={styles.scrollView}
           showsHorizontalScrollIndicator={false}
-          keyboardShouldPersistTaps={'always'}
-          // onScroll={({ nativeEvent }) => {
-          //   if (isCloseToBottom(nativeEvent)) {
-          //     this.pageNo += 1;
-          //     this.fetchMaps();
-          //   }
-          // }}
-          scrollEventThrottle={400}
+          keyboardShouldPersistTaps={'handled'}
         >
           <View style={styles.container}>
             <View style={styles.pageContent}>

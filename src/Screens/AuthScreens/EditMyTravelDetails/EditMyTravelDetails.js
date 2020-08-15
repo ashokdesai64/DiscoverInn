@@ -157,7 +157,7 @@ class EditMyTravelDetails extends React.Component {
               <ScrollView
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
-                keyboardShouldPersistTaps={'always'}
+                keyboardShouldPersistTaps={'handled'}
                 // contentContainerStyle={{ height: '100%' }}
               >
                 <View style={styles.formGroup}>

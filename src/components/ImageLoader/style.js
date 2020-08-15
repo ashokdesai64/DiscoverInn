@@ -5,6 +5,7 @@ import {
 export default StyleSheet.create({
     container: {
         backgroundColor: '#ecf0f1',
+        // flex:1
     },
     imageOverlay: {
         position: 'absolute',

@@ -436,7 +436,7 @@ class MyTravel extends React.Component {
             <ScrollView
               style={styles.scrollView}
               showsHorizontalScrollIndicator={false}
-              keyboardShouldPersistTaps={'always'}
+              keyboardShouldPersistTaps={'handled'}
               showsVerticalScrollIndicator={false}
               onScroll={({nativeEvent}) => {
                 if (isCloseToBottom(nativeEvent) && !this.state.fetchingMaps) {

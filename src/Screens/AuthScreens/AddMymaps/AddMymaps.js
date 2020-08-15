@@ -136,7 +136,7 @@ class AddMymaps extends React.Component {
                 style={styles.scrollView}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
-                keyboardShouldPersistTaps={'always'}>
+                keyboardShouldPersistTaps={'handled'}>
                 <View style={styles.formGroup}>
                   <Text style={styles.formLabel}>Add Map Title</Text>
                   <KeyboardAvoidingView behavior="padding" enabled>

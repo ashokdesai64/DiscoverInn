@@ -9,6 +9,7 @@ import {
   TextInput,
   ActivityIndicator,
   FlatList,
+  Platform
 } from 'react-native';
 import Share from 'react-native-share';
 import {checkIfHasPermission} from './../../config/permission';

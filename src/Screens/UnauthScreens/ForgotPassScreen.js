@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   ActivityIndicator,
+  Platform
 } from 'react-native';
 import styles from './Unauthscreens.style';
 

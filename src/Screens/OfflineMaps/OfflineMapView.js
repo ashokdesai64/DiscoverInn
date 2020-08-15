@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, ScrollView, TouchableOpacity} from 'react-native';
+import {View, Text, ScrollView, TouchableOpacity,Platform} from 'react-native';
 import ImageBlurLoading from './../../components/ImageLoader';
 import RNFetchBlob from 'rn-fetch-blob';
 
@@ -252,8 +252,8 @@ class OfflineMapView extends React.Component {
                 }
 
                 let fileName = imagePath.split('/').pop();
-                let pathToDisplay =
-                  'file://' + RNFetchBlob.fs.dirs.DocumentDir + fileName;
+                let endPath = RNFetchBlob.fs.dirs.DocumentDir + fileName;
+                let pathToDisplay =Platform.OS === 'android' ? 'file://' + endPath : endPath;
                 return (
                   <TouchableOpacity
                     activeOpacity={0.9}

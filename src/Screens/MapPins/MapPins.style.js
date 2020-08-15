@@ -7,14 +7,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   pageContent: {
-    paddingHorizontal: 15,
-    paddingVertical: 10,
+    padding: 10,
     flex: 1,
     height: DEVICE_HEIGHT - 80,
+    backgroundColor:'#F3F4F6'
   },
   scrollView: {
     flex: 1,
-    backgroundColor: '#F3F4F6',
   },
   headingText: {
     fontSize: 16,

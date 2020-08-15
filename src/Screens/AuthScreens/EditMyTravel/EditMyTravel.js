@@ -173,7 +173,7 @@ class EditMyTravel extends React.Component {
             <ScrollView
               style={styles.scrollView}
               showsHorizontalScrollIndicator={false}
-              keyboardShouldPersistTaps={'always'}
+              keyboardShouldPersistTaps={'handled'}
               showsVerticalScrollIndicator={false}
               scrollEventThrottle={400}>
               <View style={styles.myTravelName}>

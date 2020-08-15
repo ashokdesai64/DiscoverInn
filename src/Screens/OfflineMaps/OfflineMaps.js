@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, ScrollView, Image, Dimensions} from 'react-native';
+import {View, Text, ScrollView, Platform, Dimensions} from 'react-native';
 import {Item, Input, Button} from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import styles from './OfflineMaps.style';
@@ -24,12 +24,13 @@ import moment from 'moment';
 class OfflineMaps extends React.Component {
   constructor(props) {
     super(props);
+    this.carousel = null;
     this.state = {
       allMaps: [],
       searchTerm: '',
       fetchingMaps: true,
       offlineMaps: props.offlineMaps,
-      selectedMapCategories: { map_id: null, categories: [] },
+      selectedMapCategories: {map_id: null, categories: []},
       carouselCateItems: [
         {
           title: 'Sights',
@@ -127,6 +128,8 @@ class OfflineMaps extends React.Component {
     let avgReview = item.avrage_review || 0;
     let imagePath = item.thumb_cover_image || item.cover_image || '';
     let fileName = imagePath && imagePath.split('/').pop();
+    let endPath = RNFetchBlob.fs.dirs.DocumentDir + fileName;
+    let displayPath = Platform.OS === 'android' ? 'file://' + endPath : endPath;
 
     let travelType = item.travel_type == '0' ? '-' : item.travel_type;
     if (this.props.travelTypes) {
@@ -142,19 +145,15 @@ class OfflineMaps extends React.Component {
           style={styles.mapSlideCardHeader}
           activeOpacity={0.5}
           onPress={() => this.navigateToOfflineMap(item, item.id)}>
-          {/* <Image
-            style={styles.mapSlideCardImg}
-            source={{uri: item.cover_image}}
-          /> */}
-
+       
           <ImageBlurLoading
             withIndicator
             style={styles.mapSlideCardImg}
             source={{
-              uri: 'file://' + RNFetchBlob.fs.dirs.DocumentDir + fileName,
+              uri: displayPath,
             }}
             thumbnailSource={{
-              uri: 'file://' + RNFetchBlob.fs.dirs.DocumentDir + fileName,
+              uri: displayPath,
             }}
           />
 
@@ -343,6 +342,7 @@ class OfflineMaps extends React.Component {
           <View style={{paddingTop: 20}}>
             {maps && maps.length > 0 ? (
               <Carousel
+                ref={c => (this.carousel = c)}
                 data={maps}
                 sliderWidth={width}
                 itemWidth={310}
@@ -350,6 +350,7 @@ class OfflineMaps extends React.Component {
                 inactiveSlideOpacity={1}
                 inactiveSlideScale={1}
                 renderItem={this._renderItem.bind(this)}
+                useScrollView={true}
               />
             ) : (
               <View style={styles.container}>

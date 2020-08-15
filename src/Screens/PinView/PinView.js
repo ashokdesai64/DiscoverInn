@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useRef} from 'react';
 import {
   View,
   Dimensions,
@@ -10,7 +10,7 @@ import {
   TextInput,
   Platform,
   ActivityIndicator,
-  StatusBar,
+  Image,
 } from 'react-native';
 import {getStatusBarHeight} from './../../config/statusbar';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -25,6 +25,7 @@ import ImageBlurLoading from '../../components/ImageLoader';
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const DEVICE_WIDTH = Dimensions.get('window').width;
 import Spinner from '../../components/Loader';
+import styles from './PinView.styles';
 //REDUX
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -259,7 +260,8 @@ class PinView extends React.Component {
       }
 
       let fileName = imagePath.split('/').pop();
-      pathToDisplay = 'file://' + RNFetchBlob.fs.dirs.DocumentDir + fileName;
+      let endPath = RNFetchBlob.fs.dirs.DocumentDir + fileName;
+      pathToDisplay = Platform.OS === 'android' ? 'file://' + endPath : endPath;
     }
 
     return (
@@ -274,24 +276,11 @@ class PinView extends React.Component {
             }}
           />
         ) : (
-          <>
-            <Carousel
-              data={sliderData}
-              sliderWidth={DEVICE_WIDTH}
-              itemWidth={DEVICE_WIDTH}
-              inactiveSlideOpacity={1}
-              inactiveSlideScale={1}
-              containerCustomStyle={{
-                height: 450,
-                width: DEVICE_WIDTH,
-                top: 0,
-                position: 'absolute',
-              }}
-              firstItem={0}
-              renderItem={this._renderItemCate}
-              onSnapToItem={index => this.setState({activeSlide: index})}
-            />
-          </>
+          <PinImages
+            data={sliderData}
+            renderItem={this._renderItemCate}
+            onSnapToItem={index => this.setState({activeSlide: index})}
+          />
         )}
       </>
     );
@@ -339,8 +328,8 @@ class PinView extends React.Component {
         style={styles.pinScrollView}
         contentContainerStyle={{
           justifyContent: 'center',
-          alignItems: 'center',
-          alignSelf: 'center',
+          // alignItems: 'center',
+          // alignSelf: 'center',
           borderRadius: 100,
         }}
         nestedScrollEnabled={true}>
@@ -353,14 +342,16 @@ class PinView extends React.Component {
           <Text style={styles.pinViewCateText}> {categoryName}</Text>
         </View>
         {pinData.name && pinData.added_from && (
-          <Text style={[styles.pinViewCateText, {marginBottom: 15}]}>
+          <Text
+            style={[
+              styles.pinViewCateText,
+              {marginBottom: 15, paddingLeft: 15},
+            ]}>
             {' '}
             Added From: {pinData.added_from || ''}
           </Text>
         )}
-        <Text style={styles.pinViewContent}>
-          {pinData.description}
-        </Text>
+        <Text style={styles.pinViewContent}>{pinData.description}</Text>
       </ScrollView>
     );
   }
@@ -369,7 +360,7 @@ class PinView extends React.Component {
     return (
       <>
         {this.renderImages(pinData)}
-        {this.renderPagination(pinData)}
+        {!this.state.isOffline && this.renderPagination(pinData)}
         {this.renderPinContent(pinData)}
       </>
     );
@@ -382,18 +373,15 @@ class PinView extends React.Component {
   }
 
   render() {
-    let paddingTop = 0;
+    let paddingTop = 0,
+      height = 60;
     if (Platform.OS === 'ios') {
       paddingTop = getStatusBarHeight();
-    } else {
-      const hasNotch = StatusBar.currentHeight > 24;
-      if (hasNotch) {
-        paddingTop = StatusBar.currentHeight;
-      }
+      height = 80;
     }
     return (
       <>
-        <View style={[styles.pinHeader, {paddingTop}]}>
+        <View style={[styles.pinHeader, {paddingTop, height}]}>
           <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
             <Feather name={'arrow-left'} size={24} color={'white'} />
           </TouchableOpacity>
@@ -574,291 +562,6 @@ class PinView extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
-  page: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 25,
-  },
-  map: {
-    flex: 1,
-  },
-  pinScrollView: {
-    paddingTop: 0,
-    height: DEVICE_HEIGHT - 320,
-    width: DEVICE_WIDTH,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    marginBottom: 20,
-    marginTop: 340,
-  },
-  pinViewTitle: {
-    fontFamily: 'Montserrat-Medium',
-    fontSize: 24,
-    marginBottom: 5,
-    paddingLeft: 15,
-    alignSelf: 'flex-start',
-    marginTop: 10,
-  },
-  pinViewCate: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    marginBottom: 10,
-    alignSelf: 'flex-start',
-    paddingLeft: 15,
-  },
-  pinViewCateIcon: {
-    color: '#2F80ED',
-    fontSize: 13,
-  },
-  pinViewCateText: {
-    fontSize: 12,
-    color: '#828282',
-    fontFamily: 'Montserrat-Regular',
-  },
-  pinViewContent: {
-    fontSize: 12,
-    fontFamily: 'Montserrat-Medium',
-    color: '#4F4F4F',
-    paddingHorizontal: 15,
-  },
-  pinHeader: {
-    // top: 20,
-    zIndex: 9999,
-    position: 'absolute',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.45)',
-    // flex:1,
-    height: 80,
-    paddingHorizontal: 20,
-    width: '100%',
-  },
-  cateSlideCard: {
-    height: 375,
-    marginBottom: 10,
-    shadowOffset: {width: 0, height: 5},
-    shadowColor: 'rgba(6, 18, 42, 0.08);',
-    shadowOpacity: 1.0,
-    backgroundColor: '#fff',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    textAlign: 'center',
-    borderRadius: 5,
-  },
-  cateSlideCardIcon: {
-    height: 375,
-    width: DEVICE_WIDTH,
-    alignSelf: 'center',
-  },
-  cateSlideCardTitle: {
-    fontFamily: 'Montserrat-Medium',
-    fontSize: 10,
-    lineHeight: 12,
-    marginTop: 10,
-    color: '#333333',
-    textAlign: 'center',
-  },
-  orDivider: {
-    textAlign: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative',
-    flex: 1,
-    marginVertical: 20,
-    marginHorizontal: 15,
-  },
-  orDividerText: {
-    fontSize: 14,
-    fontFamily: 'Montserrat-Regular',
-    color: '#333333',
-    paddingHorizontal: 10,
-    zIndex: 7,
-    backgroundColor: '#ffffff',
-  },
-  orDividerBorder: {
-    position: 'absolute',
-    width: '100%',
-    height: 1,
-    zIndex: 6,
-    backgroundColor: '#C4C4C4',
-  },
-  button: {
-    paddingVertical: 5,
-    paddingHorizontal: 30,
-    height: 40,
-    alignSelf: 'center',
-    borderRadius: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonPrimary: {
-    backgroundColor: '#2F80ED',
-  },
-  buttonReview: {
-    marginTop: 15,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 12,
-    fontFamily: 'Montserrat-Medium',
-  },
-  customPopup: {
-    width: DEVICE_WIDTH,
-    padding: 0,
-    position: 'absolute',
-    bottom: 0,
-    elevation: 5,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowOffset: {width: 0, height: -2},
-    shadowRadius: 10,
-    maxHeight: DEVICE_HEIGHT - 100,
-    overflow: 'scroll',
-  },
-  customPopupContent: {
-    paddingVertical: 20,
-    paddingHorizontal: 5,
-  },
-  customPopupHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
-  customPopupHeaderTitle: {
-    fontSize: 16,
-    fontFamily: 'Montserrat-SemiBold',
-    color: '#333333',
-  },
-  buttonClose: {
-    width: 24,
-    height: 24,
-  },
-  buttonCloseIcon: {
-    color: '#BDBDBD',
-    fontSize: 24,
-  },
-  formGroup: {
-    marginBottom: 15,
-  },
-  formLabel: {
-    color: '#4F4F4F',
-    fontSize: 14,
-    fontFamily: 'Montserrat-Medium',
-    marginBottom: 5,
-    paddingLeft: 7,
-  },
-  formControl: {
-    borderWidth: 1,
-    borderColor: '#BDBDBD',
-    borderRadius: 5,
-    height: 48,
-    paddingLeft: 25,
-    paddingRight: 25,
-    fontFamily: 'Montserrat-Medium',
-    color: '#4F4F4F',
-    fontSize: 14,
-  },
-  buttonCTGroup: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  buttonCT: {
-    flex: 1,
-  },
-  buttonCTCancel: {
-    marginRight: 10,
-  },
-  buttonCTSubmit: {
-    marginLeft: 10,
-  },
-  buttonOutline: {
-    borderColor: '#BDBDBD',
-    borderWidth: 1,
-    color: '#fff',
-  },
-  buttonTextDark: {
-    color: '#333333',
-  },
-  mapViewCard: {
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    width: DEVICE_WIDTH - 40,
-    flexDirection: 'row',
-    elevation: 3,
-    overflow: 'hidden',
-    borderRadius: 10,
-    backgroundColor: 'rgba(242, 242, 242, 0.5)',
-  },
-  mapViewCardImg: {
-    width: 120,
-    height: 95,
-  },
-  mapViewCardContent: {
-    width: DEVICE_WIDTH - 120,
-    padding: 10,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    borderTopRightRadius: 10,
-    borderBottomRightRadius: 10,
-  },
-  mapViewTitle: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: DEVICE_WIDTH - 20,
-  },
-  mapViewTitleText: {
-    fontFamily: 'Montserrat-Regular',
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  mapViewCate: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 5,
-  },
-  mapViewCateIcon: {
-    color: '#2F80ED',
-    fontSize: 13,
-  },
-  mapViewCateText: {
-    fontSize: 12,
-    color: '#828282',
-    fontFamily: 'Montserrat-Regular',
-  },
-  mapViewContentText: {
-    fontSize: 12,
-    fontFamily: 'Montserrat-Regular',
-    color: '#828282',
-  },
-  MVTripList: {
-    marginBottom: 20,
-    maxHeight: 100,
-  },
-  MVTripListItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderBottomColor: '#F2F2F2',
-    borderBottomWidth: 1,
-  },
-  MVTripListItemTitle: {
-    color: '#BDBDBD',
-    fontSize: 14,
-    fontFamily: 'Montserrat-Medium',
-  },
-});
-
 function mapStateToProps(state) {
   return {
     userData: state.user.userData,
@@ -875,3 +578,66 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(PinView);
+
+const PinImages = props => {
+  const carRef = useRef(null);
+  console.log(props.data)
+  return (
+    <View style={{position: 'relative'}}>
+      <Carousel
+        sliderWidth={DEVICE_WIDTH}
+        itemWidth={DEVICE_WIDTH}
+        inactiveSlideOpacity={1}
+        inactiveSlideScale={1}
+        containerCustomStyle={{
+          height: 450,
+          width: DEVICE_WIDTH,
+          top: 0,
+          position: 'absolute',
+        }}
+        useScrollView={true}
+        nestedScrollEnabled={true}
+        firstItem={0}
+        ref={carRef}
+        {...props}
+      />
+      {props.data && props.data.length > 1 && (
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            width: DEVICE_WIDTH,
+            height: 350,
+            alignItems: 'center',
+            position: 'absolute',
+            paddingHorizontal: 15,
+          }}>
+          <TouchableOpacity
+            onPress={() => carRef.current.snapToPrev(false)}
+            style={{
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              height: 40,
+              width: 40,
+              borderRadius: 20,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <AntDesign size={18} color={'white'} name={'left'} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => carRef.current.snapToNext(false)}
+            style={{
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              height: 40,
+              width: 40,
+              borderRadius: 20,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <AntDesign size={18} color={'white'} name={'right'} />
+          </TouchableOpacity>
+        </View>
+      )}
+    </View>
+  );
+};
