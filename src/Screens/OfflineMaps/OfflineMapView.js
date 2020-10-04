@@ -252,7 +252,7 @@ class OfflineMapView extends React.Component {
                 }
 
                 let fileName = imagePath.split('/').pop();
-                let endPath = RNFetchBlob.fs.dirs.DocumentDir + fileName;
+                let endPath = RNFetchBlob.fs.dirs.CacheDir + '/discover/' + fileName;
                 let pathToDisplay =Platform.OS === 'android' ? 'file://' + endPath : endPath;
                 return (
                   <TouchableOpacity

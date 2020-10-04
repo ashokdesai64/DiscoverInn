@@ -260,7 +260,7 @@ class PinView extends React.Component {
       }
 
       let fileName = imagePath.split('/').pop();
-      let endPath = RNFetchBlob.fs.dirs.DocumentDir + fileName;
+      let endPath = RNFetchBlob.fs.dirs.CacheDir + '/discover/' + fileName;
       pathToDisplay = Platform.OS === 'android' ? 'file://' + endPath : endPath;
     }
 

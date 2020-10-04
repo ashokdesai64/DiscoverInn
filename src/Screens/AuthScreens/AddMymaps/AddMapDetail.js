@@ -9,6 +9,7 @@ import {
   ImageBackground,
   TouchableOpacity,
   Image,
+  Platform,
 } from 'react-native';
 import {ListItem, CheckBox, Picker, Textarea, Form} from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -25,6 +26,7 @@ import AutoCompleteLocation from '../../../components/AutoCompleteLocation';
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 const DEVICE_WIDTH = Dimensions.get('window').width;
 import axios from 'axios';
+import RNLocation from 'react-native-location'
 //REDUX
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -81,7 +83,23 @@ class AddMapDetail extends React.Component {
       addingPin: false,
       locationFromImage: true,
       selectedCategory: 7,
+      currentLocation:false,
+      hasCameraImage:false
     };
+  }
+
+  async componentDidMount(){
+    let location = await RNLocation.getLatestLocation({ timeout: 60000 });
+    if(location && location.latitude && location.longitude){
+      if(!this.state.selectedLocation || !this.state.selectedLocation.lat){
+        this.setState({
+          currentLocation:{
+            lat:location.latitude,
+            lng:location.longitude
+          },
+        });
+      }
+    }
   }
 
   handleCheckBox = () => {
@@ -145,75 +163,142 @@ class AddMapDetail extends React.Component {
             type: item.mime,
             exif: item.exif,
           };
-          this.setState({pinImages: [...this.state.pinImages, image]}, () => {
+          this.setState({pinImages: [...this.state.pinImages, image],hasCameraImage:true}, () => {
             this.getLocationFromSelectedImages();
           });
         }
       });
     }
   }
-  
+
+  convertGPSToIOS = (lat, latitudeDirection, lng, longitudeDirection) => {
+    if (Platform.OS == 'ios') {
+      if (latitudeDirection && latitudeDirection == 'S') {
+        lat = -lat;
+      }
+      if (longitudeDirection && longitudeDirection == 'W') {
+        lng = -lng;
+      }
+    }
+    return {lat, lng};
+  };
+
   async getLocationFromSelectedImages() {
     if (!this.state.isLocationSelected && this.state.locationAccepted) {
       let imageLocation = false;
-      
+
       for (var i = 0; i < this.state.pinImages.length; i++) {
         let item = this.state.pinImages[i];
-        
-        if (item.exif && item.exif.GPSLongitude && item.exif.GPSLatitude) {
-          let latitude = item.exif.GPSLatitude;
-          let longitude = item.exif.GPSLongitude;
 
-          if (latitude.includes('/') || latitude.includes(',')) {
-            let splittedLatitude = latitude.split(',').map(d => eval(d));
-            let splittedLongitude = longitude.split(',').map(d => eval(d));
+        if (item.exif) {
+          
+          let latitudeDirection =
+            item.exif['{GPS}'] && item.exif['{GPS}'].LatitudeRef;
+          let latitude =
+            item.exif.GPSLatitude ||
+            (item.exif['{GPS}'] && item.exif['{GPS}'].Latitude);
+          let longitudeDirection =
+            item.exif['{GPS}'] && item.exif['{GPS}'].LongitudeRef;
+          let longitude =
+            item.exif.GPSLongitude ||
+            (item.exif['{GPS}'] && item.exif['{GPS}'].Longitude);
 
+          if (latitude && longitude) {
             if (
-              splittedLatitude &&
-              splittedLatitude.length &&
-              splittedLongitude &&
-              splittedLongitude.length
+              latitude.toString().includes('/') ||
+              latitude.toString().includes(',')
             ) {
-              let finalLatitude = convertDMSToDD(
-                ...splittedLatitude,
-                item.exif.GPSLatitudeRef,
-              );
-              let finalLongitude = convertDMSToDD(
-                ...splittedLongitude,
-                item.exif.GPSLongitudeRef,
-              );
-              if (finalLatitude && finalLongitude) {
-                let selectedLocation = {
-                  lat: finalLatitude,
-                  lng: finalLongitude,
-                };
-                imageLocation = selectedLocation;
-                this.setState({selectedLocation, locationFromImage: true});
-                break;
+              let splittedLatitude = latitude.split(',').map(d => eval(d));
+              let splittedLongitude = longitude.split(',').map(d => eval(d));
+
+              if (
+                splittedLatitude &&
+                splittedLatitude.length &&
+                splittedLongitude &&
+                splittedLongitude.length
+              ) {
+                let finalLatitude = convertDMSToDD(
+                  ...splittedLatitude,
+                  item.exif.GPSLatitudeRef,
+                );
+                let finalLongitude = convertDMSToDD(
+                  ...splittedLongitude,
+                  item.exif.GPSLongitudeRef,
+                );
+                if (finalLatitude && finalLongitude) {
+                  let selectedLocation = this.convertGPSToIOS(
+                    finalLatitude,
+                    latitudeDirection,
+                    finalLongitude,
+                    longitudeDirection,
+                  );
+                  imageLocation = selectedLocation;
+                  this.setState({selectedLocation, locationFromImage: true});
+                  break;
+                }
               }
+            } else {
+              imageLocation = this.convertGPSToIOS(
+                latitude,
+                latitudeDirection,
+                longitude,
+                longitudeDirection,
+              );
+
+              this.setState({
+                selectedLocation:imageLocation,
+                locationFromImage: true,
+              });
             }
           }
         }
       }
       if (imageLocation && imageLocation.lat && imageLocation.lng) {
-        let latlng = `${imageLocation.lat},${imageLocation.lng}`;
-        try {
-          let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlng}&key=AIzaSyDVk4w7Wo8sefykoGcdjxk7aot3vPsRNxU`;
-          let result = await axios.get(url);
-          let results = result.data.results || [];
-          let addressRes = results.find((r) => r.types && (r.types.includes('locality') || r.types.includes('administrative_area_level_2') || r.types.includes('administrative_area_level_1')));
-          let placeName = (result.data.plus_code && result.data.plus_code.compound_code) || '';
-          if (addressRes && addressRes.formatted_address) {
-            placeName =addressRes.formatted_address
+        this.getPlaceNameFromLocation({latitude:imageLocation.lat,longitude:imageLocation.lng})
+      } else if(!!this.state.hasCameraImage){
+        if(Platform.OS == 'ios'){
+          if(!this.state.selectedLocation || !this.state.selectedLocation.latitude){
+            if(this.state.currentLocation && this.state.currentLocation.lat){
+              this.setState({
+                selectedLocation:{...this.state.currentLocation}
+              })
+              this.getPlaceNameFromLocation({
+                latitude:this.state.currentLocation.lat,
+                longitude:this.state.currentLocation.lng
+              })
+            }
           }
-          this.setState({locationName: placeName});
-        } catch (err) {
-          this.setState({locationName: ''});
-          console.log('err => ', err);
         }
+        
       } else {
-        this.setState({locationFromImage:false})
+        this.setState({locationFromImage: false,locationName: '',gotTrueLocation: false});
       }
+    }
+  }
+
+  async getPlaceNameFromLocation({latitude,longitude}){
+    let latlng = `${latitude},${longitude}`;
+    try {
+      let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlng}&key=AIzaSyDVk4w7Wo8sefykoGcdjxk7aot3vPsRNxU`;
+      let result = await axios.get(url);
+      let results = result.data.results || [];
+      let addressRes = results.find(
+        r =>
+          r.types &&
+          (r.types.includes('locality') ||
+            r.types.includes('administrative_area_level_2') ||
+            r.types.includes('administrative_area_level_1')),
+      );
+      let placeName =
+        (result.data.plus_code && result.data.plus_code.compound_code) ||
+        '';
+      if (addressRes && addressRes.formatted_address) {
+        placeName = addressRes.formatted_address;
+      }
+      this.setState({locationName: placeName});
+    } catch (err) {
+      this.setState({locationName: ''});
+      console.log('err => ', err);
     }
   }
 
@@ -232,6 +317,7 @@ class AddMapDetail extends React.Component {
       pinTitle,
       pinDescription,
     } = this.state;
+    console.log(this.state);
     const {params} = this.props.navigation.state;
 
     // if (!pinDescription) return alert('Pin description is required');
@@ -310,9 +396,9 @@ class AddMapDetail extends React.Component {
           <Spinner
             visible={this.state.addingPin}
             textContent={'Adding Pin...'}
-            textStyle={{ color: '#fff' }}
+            textStyle={{color: '#fff'}}
             onClose={() => {
-              this.setState({addingPin:false})
+              this.setState({addingPin: false});
             }}
           />
           <View style={styles.container}>
@@ -320,8 +406,7 @@ class AddMapDetail extends React.Component {
               <ScrollView
                 keyboardShouldPersistTaps={'handled'}
                 showsVerticalScrollIndicator={false}
-                ref={'_scrollView'}
-              >
+                ref={'_scrollView'}>
                 {pinImages && pinImages.length ? (
                   <View
                     style={{
@@ -408,7 +493,7 @@ class AddMapDetail extends React.Component {
                     text="Use photo location"
                   />
                 </View>
-                <View style={styles.ckaiush}></View>
+                <View style={styles.ckaiush} />
                 <View style={styles.formGroup}>
                   <Text style={styles.formLabel}>
                     Location Name{' '}
@@ -433,7 +518,13 @@ class AddMapDetail extends React.Component {
                       this.state.locationAccepted
                     }
                     value={this.state.locationName}
-                    scroll={() =>this.refs._scrollView.scrollTo({x: 0, y: 200, animated: true})}
+                    scroll={() =>
+                      this.refs._scrollView.scrollTo({
+                        x: 0,
+                        y: 200,
+                        animated: true,
+                      })
+                    }
                   />
                 </View>
 
@@ -581,4 +672,7 @@ function mapDispatchToProps(dispatch) {
     mapAction: bindActionCreators(mapActions, dispatch),
   };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(AddMapDetail);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AddMapDetail);

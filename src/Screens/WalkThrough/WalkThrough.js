@@ -170,7 +170,6 @@ const VideoComponent = React.memo(({uri, paused, onVideoEnd,currentIndex}) => {
 
   const f = useCallback(
     debounce(({currentTime, playableDuration}) => {
-      console.log({currentTime, playableDuration});
       if (Math.ceil(currentTime) == Math.ceil(playableDuration)) {
         onVideoEnd();
       }

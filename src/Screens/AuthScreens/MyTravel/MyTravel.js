@@ -115,7 +115,7 @@ class MyTravel extends React.Component {
         downloadPromises.push(
           RNFetchBlob.config({
             fileCache: true,
-            path: RNFetchBlob.fs.dirs.DocumentDir + fileName,
+            path: RNFetchBlob.fs.dirs.CacheDir + '/discover/' + fileName,
           }).fetch('GET', pinURL),
         );
       }

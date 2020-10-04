@@ -128,7 +128,7 @@ class OfflineMaps extends React.Component {
     let avgReview = item.avrage_review || 0;
     let imagePath = item.thumb_cover_image || item.cover_image || '';
     let fileName = imagePath && imagePath.split('/').pop();
-    let endPath = RNFetchBlob.fs.dirs.DocumentDir + fileName;
+    let endPath = RNFetchBlob.fs.dirs.CacheDir + '/discover/' + fileName;
     let displayPath = Platform.OS === 'android' ? 'file://' + endPath : endPath;
 
     let travelType = item.travel_type == '0' ? '-' : item.travel_type;
