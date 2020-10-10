@@ -267,6 +267,12 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     fontWeight: '600',
   },
+  mapSlideCardAuthor: {
+    fontSize: 12,
+    color: '#aaa',
+    fontFamily: 'Montserrat-Medium',
+    marginBottom: 5,
+  },
   mapPins: {
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -301,7 +307,7 @@ const styles = StyleSheet.create({
   },
   rateList: {
     flexDirection: 'row',
-    marginBottom: 15,
+    marginBottom: 20,
   },
   starIcon: {
     paddingRight: 3,

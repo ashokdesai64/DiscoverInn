@@ -52,6 +52,7 @@ class PinView extends React.Component {
       isOffline: params.isOffline,
       mapPins: [],
       firstItem: 0,
+      keyboardHeight:0
     };
   }
 
@@ -80,8 +81,8 @@ class PinView extends React.Component {
     this.keyboardDidHideListener.remove();
   }
 
-  _keyboardDidShow() {
-    this.setState({keyboardOpened: true});
+  _keyboardDidShow(e) {
+    this.setState({keyboardOpened: true,keyboardHeight: e.endCoordinates.height});
   }
 
   _keyboardDidHide() {
@@ -164,7 +165,7 @@ class PinView extends React.Component {
           user_id: this.props.userData.id,
         })
         .then(data => {
-          this.setState({saveToListModal: false}, () => {
+          this.setState({saveToListModal: false,tripInputFocus:false}, () => {
             this.fetchSinglePinData();
             this.props.mapAction.fetchTripList();
           });
@@ -198,7 +199,7 @@ class PinView extends React.Component {
           .then(data => {
             this.props.mapAction.fetchTripList();
             this.setState(
-              {saveToListModal: false, creatingTripList: false},
+              {saveToListModal: false, creatingTripList: false,tripInputFocus:false},
               () => {
                 this.fetchSinglePinData();
               },
@@ -206,12 +207,12 @@ class PinView extends React.Component {
           })
           .catch(err => {
             alert(err);
-            this.setState({saveToListModal: false, creatingTripList: false});
+            this.setState({saveToListModal: false,tripInputFocus:false, creatingTripList: false});
           });
       })
       .catch(err => {
         alert(err);
-        this.setState({saveToListModal: false, creatingTripList: false});
+        this.setState({saveToListModal: false, tripInputFocus:false,creatingTripList: false});
       });
   }
 
@@ -427,7 +428,7 @@ class PinView extends React.Component {
           hasOverlay={true}
           animationDuration={1}
           onTouchOutside={() => {
-            this.setState({saveToListModal: false});
+            this.setState({saveToListModal: false,tripInputFocus:false});
           }}
           dialogAnimation={
             new FadeAnimation({
@@ -437,65 +438,23 @@ class PinView extends React.Component {
             })
           }
           onHardwareBackPress={() => {
-            this.setState({saveToListModal: false});
+            this.setState({saveToListModal: false,tripInputFocus:false});
             return true;
           }}
-          dialogStyle={styles.customPopup}>
+          dialogStyle={[styles.customPopup,{bottom:this.state.tripInputFocus ? this.state.keyboardHeight:0}]}>
           <DialogContent style={styles.customPopupContent}>
             <View style={styles.customPopupHeader}>
               <Text style={styles.customPopupHeaderTitle}>Save to list</Text>
               <TouchableOpacity
                 style={styles.buttonClose}
-                onPress={() => this.setState({saveToListModal: false})}>
+                onPress={() => this.setState({saveToListModal: false,tripInputFocus:false})}>
                 <Feather style={styles.buttonCloseIcon} name={'x'} />
               </TouchableOpacity>
             </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Name</Text>
-              <TextInput
-                style={styles.formControl}
-                placeholder={'Enter trip list name'}
-                placeholderTextColor={'#828894'}
-                onChangeText={tripListName => this.setState({tripListName})}
-              />
-            </View>
-            <View style={styles.buttonCTGroup}>
-              <TouchableOpacity
-                style={[
-                  styles.button,
-                  styles.buttonCT,
-                  styles.buttonCTCancel,
-                  styles.buttonOutline,
-                ]}
-                onPress={() => this.setState({saveToListModal: false})}>
-                <Text style={[styles.buttonText, styles.buttonTextDark]}>
-                  Cancel
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.button,
-                  styles.buttonCT,
-                  styles.buttonCTSubmit,
-                  styles.buttonPrimary,
-                ]}
-                onPress={() => this.saveToNewTripList()}>
-                {this.state.creatingTripList ? (
-                  <ActivityIndicator color={'white'} size={'small'} />
-                ) : (
-                  <Text style={styles.buttonText}>Submit</Text>
-                )}
-              </TouchableOpacity>
-            </View>
-
             {!this.state.keyboardOpened &&
               this.props.tripList &&
               this.props.tripList.length > 0 && (
                 <>
-                  <View style={styles.orDivider}>
-                    <Text style={styles.orDividerBorder} />
-                    <Text style={styles.orDividerText}>OR</Text>
-                  </View>
                   <ScrollView
                     style={styles.MVTripList}
                     contentContainerStyle={{maxHeight: 200, flexGrow: 0}}
@@ -528,33 +487,57 @@ class PinView extends React.Component {
                       );
                     })}
                   </ScrollView>
+                  <View style={styles.orDivider}>
+                    <Text style={styles.orDividerBorder} />
+                    <Text style={styles.orDividerText}>OR</Text>
+                  </View>
                 </>
               )}
-
-            {!this.state.keyboardOpened && (
-              <TouchableOpacity
-                style={{
-                  paddingVertical: 10,
-                  paddingHorizontal: 30,
-                  marginTop: 15,
-                  backgroundColor: '#2F80ED',
-                  width: 140,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  alignSelf: 'center',
-                  borderRadius: 5,
+            <View style={styles.formGroup}>
+              <Text style={styles.formLabel}>Name</Text>
+              <TextInput
+                style={styles.formControl}
+                placeholder={'Enter trip list name'}
+                placeholderTextColor={'#828894'}
+                onChangeText={tripListName => this.setState({tripListName})}
+                onFocus={() => {
+                  this.setState({tripInputFocus: true});
                 }}
-                onPress={() => this.setState({saveToListModal: false})}>
-                <Text
-                  style={{
-                    fontFamily: 'Montserrat-Regular',
-                    fontSize: 12,
-                    color: 'white',
-                  }}>
-                  Done
+                onBlur={() => {
+                  this.setState({tripInputFocus: false});
+                }}
+              />
+            </View>
+            
+            <View style={styles.buttonCTGroup}>
+              <TouchableOpacity
+                style={[
+                  styles.button,
+                  styles.buttonCT,
+                  styles.buttonCTCancel,
+                  styles.buttonOutline,
+                ]}
+                onPress={() => this.setState({saveToListModal: false,tripInputFocus:false})}>
+                <Text style={[styles.buttonText, styles.buttonTextDark]}>
+                  Cancel
                 </Text>
               </TouchableOpacity>
-            )}
+              <TouchableOpacity
+                style={[
+                  styles.button,
+                  styles.buttonCT,
+                  styles.buttonCTSubmit,
+                  styles.buttonPrimary,
+                ]}
+                onPress={() => this.saveToNewTripList()}>
+                {this.state.creatingTripList ? (
+                  <ActivityIndicator color={'white'} size={'small'} />
+                ) : (
+                  <Text style={styles.buttonText}>Submit</Text>
+                )}
+              </TouchableOpacity>
+            </View  >
+
           </DialogContent>
         </Dialog>
       </>
@@ -581,7 +564,7 @@ export default connect(
 
 const PinImages = props => {
   const carRef = useRef(null);
-  console.log(props.data)
+  console.log(props.data);
   return (
     <View style={{position: 'relative'}}>
       <Carousel

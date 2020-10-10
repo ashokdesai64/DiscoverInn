@@ -154,9 +154,15 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Medium',
     marginBottom: 5,
   },
+  mapSlideCardAuthor: {
+    fontSize: 14,
+    color: '#aaa',
+    fontFamily: 'Montserrat-Medium',
+    marginBottom: 5,
+  },
   rateList: {
     flexDirection: 'row',
-    marginBottom: 10,
+    marginBottom: 20,
   },
   starIcon: {
     paddingRight: 3,

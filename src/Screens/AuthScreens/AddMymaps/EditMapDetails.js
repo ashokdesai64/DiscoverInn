@@ -3,7 +3,8 @@ import {
   View,
   Text,
   Dimensions,
-  ActivityIndicator,
+  Keyboard,
+  KeyboardAvoidingView,
   TextInput,
   ScrollView,
   ImageBackground,
@@ -503,7 +504,7 @@ class EditMapDetails extends React.Component {
             textContent={'Updating Pin Details...'}
             textStyle={{color: '#fff'}}
           />
-          <View style={styles.container}>
+          <KeyboardAvoidingView behavior='padding' style={styles.container}>
             <View style={styles.pageContent}>
               <ScrollView
                 keyboardShouldPersistTaps={'handled'}
@@ -670,55 +671,6 @@ class EditMapDetails extends React.Component {
                   />
                 </View>
 
-                {/* {this.state.isLocationSelected ? (
-                  <View
-                    style={{
-                      marginBottom: 15,
-                      backgroundColor: 'white',
-                      height: 100,
-                      justifyContent: 'center',
-                    }}>
-                    <Text style={styles.useLoactionText}>
-                      Location imported from Google MyMaps{' '}
-                    </Text>
-                  </View>
-                ) : (
-                  <>
-                    <View>
-                      <LocationCheckbox
-                        selected={this.state.locationAccepted}
-                        onPress={this.handleCheckBox}
-                        text="Use photo location"
-                      />
-                    </View>
-                    <View style={styles.ckaiush}></View>
-                    <View style={styles.formGroup}>
-                      <Text style={styles.formLabel}>
-                        Location Name{' '}
-                        {this.state.locationAccepted
-                          ? !this.state.locationFromImage && (
-                              <Feather
-                                size={14}
-                                name="alert-triangle"
-                                color={'#F2994A'}
-                              />
-                            )
-                          : null}
-                      </Text>
-                      <AutoCompleteLocation
-                          onValueSelected={(placeID,description) =>
-                            this.getGeocodeFromPlace(placeID,description)
-                          }
-                          onValueChange={(name) =>
-                            this.setState({locationName:name})
-                          }
-                          locationFromImage={this.state.locationFromImage && this.state.locationAccepted}
-                          value={this.state.locationName}
-                      />
-                    </View>
-                  </>
-                )} */}
-
                 <View style={styles.mapPins}>
                   {this.props.categories &&
                     this.props.categories.map(category => {
@@ -754,6 +706,7 @@ class EditMapDetails extends React.Component {
                     placeholderTextColor={'#828894'}
                     onChangeText={pinTitle => this.setState({pinTitle})}
                     value={this.state.pinTitle}
+                    returnKeyType='done'
                   />
                 </View>
 
@@ -768,6 +721,15 @@ class EditMapDetails extends React.Component {
                       this.setState({pinDescription})
                     }
                     value={this.state.pinDescription}
+                    onFocus={()=>{
+                      this.refs._scrollView.scrollTo({
+                        x: 0,
+                        y: 500,
+                        animated: true,
+                      })
+                    }}
+                    onSubmitEditing={()=> Keyboard.dismiss()}
+                    returnKeyType='done'
                   />
                 </View>
               </ScrollView>
@@ -787,7 +749,7 @@ class EditMapDetails extends React.Component {
                 } */}
               </TouchableOpacity>
             </View>
-          </View>
+          </KeyboardAvoidingView>
 
           {/* image picker modal */}
           <Dialog

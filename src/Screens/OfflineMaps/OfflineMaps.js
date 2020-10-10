@@ -176,7 +176,10 @@ class OfflineMaps extends React.Component {
               </Text>
             </View>
           </View> */}
-          <Text style={styles.mapSlideCardTitle}>{item.name}</Text>
+          <Text style={styles.mapSlideCardTitle} numberOfLines={1} ellipsizeMode={'tail'}>{item.name}</Text>
+          <Text style={styles.mapSlideCardAuthor} numberOfLines={1}>
+            {item.username}
+          </Text>
           <View style={styles.rateList}>
             {Array(avgReview)
               .fill(1)

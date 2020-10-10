@@ -10,6 +10,8 @@ import {
   ActivityIndicator,
   FlatList,
   Platform,
+  KeyboardAvoidingView,
+  Keyboard,
 } from 'react-native';
 import Share from 'react-native-share';
 import {checkIfHasPermission} from './../../config/permission';
@@ -58,6 +60,7 @@ class MapList extends React.Component {
       shareModal: false,
       searchTerm: (params && params.searchTerm) || '',
       query: '',
+      keyboardHeight:250,
       carouselCateItems: [
         {
           title: 'Sights',
@@ -137,6 +140,15 @@ class MapList extends React.Component {
           alert(err);
         });
     }
+    this.keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      e => this._keyboardDidShow(e),
+    );
+  }
+  _keyboardDidShow(e) {
+    this.setState({
+      keyboardHeight: e.endCoordinates.height
+    });
   }
 
   componentDidMount() {
@@ -145,6 +157,7 @@ class MapList extends React.Component {
 
   componentWillUnmount() {
     this.mounted = false;
+    this.keyboardDidShowListener.remove()
   }
 
   pinToggle(categoryID, mapID, mapName) {
@@ -430,8 +443,14 @@ class MapList extends React.Component {
               </Text>
             </View>
           </View>
-          <Text style={styles.mapSlideCardTitle} numberOfLines={1}>
+          <Text
+            style={styles.mapSlideCardTitle}
+            numberOfLines={1}
+            ellipsizeMode={'tail'}>
             {item.name}
+          </Text>
+          <Text style={styles.mapSlideCardAuthor} numberOfLines={1}>
+            {item.username}
           </Text>
           <TouchableOpacity
             style={styles.rateList}
@@ -674,7 +693,11 @@ class MapList extends React.Component {
         review: reviewText.trim(),
       })
       .then(data => {
-        this.setState({addingReview: false, showAddReviewModal: false});
+        this.setState({
+          addingReview: false,
+          showAddReviewModal: false,
+          reviewFocus: false,
+        });
       })
       .catch(err => {
         console.log('err => ', err);
@@ -1242,7 +1265,7 @@ class MapList extends React.Component {
           hasOverlay={true}
           animationDuration={1}
           onTouchOutside={() => {
-            this.setState({showAddReviewModal: false});
+            this.setState({showAddReviewModal: false, reviewFocus: false});
           }}
           dialogAnimation={
             new FadeAnimation({
@@ -1252,58 +1275,76 @@ class MapList extends React.Component {
             })
           }
           onHardwareBackPress={() => {
-            this.setState({showAddReviewModal: false});
+            this.setState({showAddReviewModal: false, reviewFocus: false});
             return true;
           }}
-          dialogStyle={[styles.customPopup]}>
+          dialogStyle={[
+            styles.customPopup,
+            {bottom: this.state.reviewFocus ? this.state.keyboardHeight : 0},
+          ]}>
           <DialogContent style={styles.customPopupContent}>
-            <View style={styles.customPopupHeader}>
-              <Text style={styles.customPopupHeaderTitle}>Add Review</Text>
-              <TouchableOpacity
-                style={styles.buttonClose}
-                onPress={() => this.setState({showAddReviewModal: false})}>
-                <Feather name={'x'} style={styles.buttonCloseIcon} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.formLabel}>Rating</Text>
-              <View style={{flexDirection: 'row'}}>
-                {Array(5)
-                  .fill(1)
-                  .map((d, i) => {
-                    return (
-                      <MaterialCommunityIcons
-                        onPress={() => this.setState({addReviewValue: i + 1})}
-                        style={styles.starIcon}
-                        name={addReviewValue >= i + 1 ? 'star' : 'star-outline'}
-                        size={22}
-                        color="#FFAF2C"
-                      />
-                    );
-                  })}
+            <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
+              <View style={styles.customPopupHeader}>
+                <Text style={styles.customPopupHeaderTitle}>Add Review</Text>
+                <TouchableOpacity
+                  style={styles.buttonClose}
+                  onPress={() =>
+                    this.setState({
+                      showAddReviewModal: false,
+                      reviewFocus: false,
+                    })
+                  }>
+                  <Feather name={'x'} style={styles.buttonCloseIcon} />
+                </TouchableOpacity>
               </View>
-            </View>
-            <View>
-              <Text style={styles.formLabel}>Review:</Text>
-              <Textarea
-                placeholder={'Type your review'}
-                placeholderTextColor={'#828894'}
-                rowSpan={5}
-                style={styles.formControlTextarea}
-                onChangeText={reviewText => this.setState({reviewText})}
-              />
-            </View>
-            <View style={styles.customPopupFooter}>
-              <TouchableOpacity
-                style={[styles.button, styles.buttonPrimary]}
-                onPress={() => this.addReview()}>
-                {this.state.addingReview ? (
-                  <ActivityIndicator size="small" color="#fff" />
-                ) : (
-                  <Text style={styles.buttonText}>Submit</Text>
-                )}
-              </TouchableOpacity>
-            </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Rating</Text>
+                <View style={{flexDirection: 'row'}}>
+                  {Array(5)
+                    .fill(1)
+                    .map((d, i) => {
+                      return (
+                        <MaterialCommunityIcons
+                          onPress={() => this.setState({addReviewValue: i + 1})}
+                          style={styles.starIcon}
+                          name={
+                            addReviewValue >= i + 1 ? 'star' : 'star-outline'
+                          }
+                          size={22}
+                          color="#FFAF2C"
+                        />
+                      );
+                    })}
+                </View>
+              </View>
+              <View>
+                <Text style={styles.formLabel}>Review:</Text>
+                <Textarea
+                  placeholder={'Type your review'}
+                  placeholderTextColor={'#828894'}
+                  rowSpan={5}
+                  onFocus={() => {
+                    this.setState({reviewFocus: true});
+                  }}
+                  onBlur={() => {
+                    this.setState({reviewFocus: false});
+                  }}
+                  style={styles.formControlTextarea}
+                  onChangeText={reviewText => this.setState({reviewText})}
+                />
+              </View>
+              <View style={styles.customPopupFooter}>
+                <TouchableOpacity
+                  style={[styles.button, styles.buttonPrimary]}
+                  onPress={() => this.addReview()}>
+                  {this.state.addingReview ? (
+                    <ActivityIndicator size="small" color="#fff" />
+                  ) : (
+                    <Text style={styles.buttonText}>Submit</Text>
+                  )}
+                </TouchableOpacity>
+              </View>
+            </KeyboardAvoidingView>
           </DialogContent>
         </Dialog>
 

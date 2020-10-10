@@ -5,6 +5,7 @@ export function loadPopularAndRated() {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
       let response = await callAPI(apiUrls.popularAndRated, {}, 'GET');
+      console.log("top rated => ",response)
       if (response.status) {
         dispatch({
           type: 'popularMaps',
@@ -324,9 +325,24 @@ export function addReview(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
       let response = await callAPI(apiUrls.addReview, apiData);
-
       if (response.status) {
         resolve({mapID: response.data});
+        const currentMaps = [...getState().maps.mapList]
+        currentMaps.map(map => {
+          if(map.id == apiData.map_id){
+            let oldReviewCount = map['total_review']
+            let oldAvg = map['avrage_review']|0
+            map['total_review'] = oldReviewCount+1;
+            map['avrage_review'] = Math.round(
+              ((oldAvg*oldReviewCount)+apiData.ratings) / map['total_review']
+            )
+          }
+          return map
+        })
+        dispatch({
+          type: 'mapList',
+          mapList: currentMaps,
+        });
       } else {
         reject(response.message);
       }

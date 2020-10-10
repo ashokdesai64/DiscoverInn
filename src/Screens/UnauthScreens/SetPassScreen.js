@@ -71,6 +71,7 @@ class SetPassScreen extends React.Component {
                     onChangeText={password =>
                       this.setState({password: password.trim()})
                     }
+                    autoCapitalize={'none'}
                   />
                 </View>
                 <View style={styles.formGroup}>
@@ -80,6 +81,7 @@ class SetPassScreen extends React.Component {
                     onChangeText={confirmPassword =>
                       this.setState({confirmPassword: confirmPassword.trim()})
                     }
+                    autoCapitalize={'none'}
                     secureTextEntry={true}
                     onSubmitEditing={() => this.signUp()}
                   />

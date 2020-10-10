@@ -144,6 +144,7 @@ class HomeScreen extends React.Component {
   }
 
   _renderItemTop({item, index}) {
+    let avgReview = parseInt(item.avrage_review) || 0;
     let coverImage = item.cover_image
       ? {uri: item.cover_image}
       : require('./../../Images/login-bg.jpg');
@@ -175,37 +176,33 @@ class HomeScreen extends React.Component {
             </View>
             <Text style={styles.mapSlideCardTitle}>{item.name}</Text>
             <View style={styles.rateList}>
-              <Feather
-                style={styles.starIcon}
-                name="star"
-                size={15}
-                color="#FFAF2C"
-              />
-              <Feather
-                style={styles.starIcon}
-                name="star"
-                size={15}
-                color="#FFAF2C"
-              />
-              <Feather
-                style={styles.starIcon}
-                name="star"
-                size={15}
-                color="#FFAF2C"
-              />
-              <Feather
-                style={styles.starIcon}
-                name="star"
-                size={15}
-                color="#FFAF2C"
-              />
-              <Feather
-                style={styles.starIcon}
-                name="star"
-                size={15}
-                color="#FFAF2C"
-              />
-              <Text style={styles.rateListCount}>(2 Reviews)</Text>
+              {Array(avgReview)
+                .fill(1)
+                .map((d, i) => {
+                  return (
+                    <MaterialCommunityIcons
+                      style={styles.starIcon}
+                      name="star"
+                      size={15}
+                      color="#FFAF2C"
+                      key={item.id + '_' + i}
+                    />
+                  );
+                })}
+              {Array(5 - avgReview)
+                .fill(1)
+                .map((d, i) => {
+                  return (
+                    <MaterialCommunityIcons
+                      style={styles.starIcon}
+                      name="star-outline"
+                      size={15}
+                      color="#FFAF2C"
+                      key={'outline' + item.id + '_' + i}
+                    />
+                  );
+                })}
+              <Text style={styles.rateListCount}>({item.total_review} Reviews)</Text>
             </View>
           </View>
         </View>
@@ -219,9 +216,9 @@ class HomeScreen extends React.Component {
       packs.map(async pack => {
         let status = await pack.status();
         if (status.state == 2) {
-          pack.resume()
+          pack.resume();
         }
-      })
+      });
     }
     if (Platform.OS == 'android') {
       await askForPermissions();
@@ -274,7 +271,7 @@ class HomeScreen extends React.Component {
 
   componentWillUnmount() {
     Linking.removeEventListener('url', this._handleOpenURL);
-    BackHandler.removeEventListener('hardwareBackPress',()=>{})
+    BackHandler.removeEventListener('hardwareBackPress', () => {});
   }
   _handleOpenURL(event) {
     console.log(event.url);

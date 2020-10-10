@@ -3,13 +3,14 @@ import {
   View,
   Text,
   Dimensions,
-  ActivityIndicator,
+  KeyboardAvoidingView,
   TextInput,
   ScrollView,
   ImageBackground,
   TouchableOpacity,
   Image,
   Platform,
+  Keyboard,
 } from 'react-native';
 import {ListItem, CheckBox, Picker, Textarea, Form} from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -401,7 +402,7 @@ class AddMapDetail extends React.Component {
               this.setState({addingPin: false});
             }}
           />
-          <View style={styles.container}>
+          <KeyboardAvoidingView behavior='padding' style={styles.container}>
             <View style={styles.pageContent}>
               <ScrollView
                 keyboardShouldPersistTaps={'handled'}
@@ -562,6 +563,7 @@ class AddMapDetail extends React.Component {
                     style={styles.formControl}
                     placeholderTextColor={'#828894'}
                     onChangeText={pinTitle => this.setState({pinTitle})}
+                    returnKeyType='done'
                   />
                 </View>
 
@@ -575,6 +577,15 @@ class AddMapDetail extends React.Component {
                     onChangeText={pinDescription =>
                       this.setState({pinDescription})
                     }
+                    onFocus={()=>{
+                      this.refs._scrollView.scrollTo({
+                        x: 0,
+                        y: 500,
+                        animated: true,
+                      })
+                    }}
+                    onSubmitEditing={()=> Keyboard.dismiss()}
+                    returnKeyType='done'
                   />
                 </View>
               </ScrollView>
@@ -594,7 +605,7 @@ class AddMapDetail extends React.Component {
                 } */}
               </TouchableOpacity>
             </View>
-          </View>
+          </KeyboardAvoidingView>
 
           {/* image picker modal */}
           <Dialog
