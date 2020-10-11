@@ -36,6 +36,7 @@ class TripPinList extends React.Component {
 
   changeTripName(tripName) {
     const {params} = this.props.navigation.state;
+    console.log(params)
     this.props.mapAction
       .updateFavouriteList({
         user_id: this.props.userData.id,

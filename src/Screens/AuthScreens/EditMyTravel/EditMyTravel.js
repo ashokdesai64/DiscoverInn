@@ -66,7 +66,7 @@ class EditMyTravel extends React.Component {
             user_id: this.props.userData.id,
             search: '',
             page: 1,
-          })
+          });
           this.setState({showNameInput: false});
         })
         .catch(err => {
@@ -80,7 +80,7 @@ class EditMyTravel extends React.Component {
             user_id: this.props.userData.id,
             search: '',
             page: 1,
-          })
+          });
           this.setState({
             showNameInput: false,
             mapData: {id: data.mapID, name: mapName},
@@ -134,6 +134,23 @@ class EditMyTravel extends React.Component {
             console.log('err => ', err);
           });
       }
+    });
+  }
+
+  navigateToMapDetails() {
+    const {params} = this.props.navigation.state;
+    if (!this.state.mapData.id) {
+      return alert('Please enter map name first.');
+    }
+    this.props.navigation.navigate('EditMyTravelDetails', {
+      mapData: {
+        ...this.state.mapData,
+        name: this.state.mapName,
+      },
+      type: params.type,
+      setMapData: mapData => {
+        this.setState({mapData});
+      },
     });
   }
 
@@ -225,6 +242,8 @@ class EditMyTravel extends React.Component {
                       onChangeText={mapName => this.setState({mapName})}
                       value={this.state.mapName}
                       placeholder={'Add Map Name'}
+                      returnKeyType={'done'}
+                      onSubmitEditing={()=>this.updateMapName()}
                     />
                     <TouchableOpacity onPress={() => this.updateMapName()}>
                       <Feather name="check" style={styles.myTravelNameIcon} />
@@ -258,7 +277,7 @@ class EditMyTravel extends React.Component {
                   </TouchableOpacity>
                 )}
               </View>
-              <View style={styles.myTravelCard}>
+              <TouchableOpacity onPress={()=>this.navigateToMapDetails()} style={styles.myTravelCard}>
                 <View style={styles.myTravelItem}>
                   <Text style={styles.myTravelItemTitle}>Travel Type</Text>
                   <Text style={styles.myTravelItemValue}>
@@ -283,7 +302,7 @@ class EditMyTravel extends React.Component {
                     {age_at_travel || '-'}
                   </Text>
                 </View>
-              </View>
+              </TouchableOpacity>
               <View style={styles.footerButton}>
                 <Button
                   style={[
@@ -291,21 +310,7 @@ class EditMyTravel extends React.Component {
                     styles.buttonOutline,
                     styles.buttonEditMapDetail,
                   ]}
-                  onPress={() => {
-                    if (!this.state.mapData.id) {
-                      return alert('Please enter map name first.');
-                    }
-                    this.props.navigation.navigate('EditMyTravelDetails', {
-                      mapData: {
-                        ...this.state.mapData,
-                        name: this.state.mapName,
-                      },
-                      type: params.type,
-                      setMapData: mapData => {
-                        this.setState({mapData});
-                      },
-                    });
-                  }}>
+                  onPress={()=>this.navigateToMapDetails()}>
                   <Text style={styles.buttonTextGray}>Edit Map Details</Text>
                 </Button>
                 <Button
@@ -331,7 +336,7 @@ class EditMyTravel extends React.Component {
                   onPress={() => {
                     this.props.navigation.navigate('MapView', {
                       mapID,
-                      mapName: this.state.mapName
+                      mapName: this.state.mapName,
                     });
                   }}
                   style={{

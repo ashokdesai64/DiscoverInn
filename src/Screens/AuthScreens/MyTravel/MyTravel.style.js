@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     flexWrap: 'nowrap',
+    // paddingRight:10
   },
   myTravelItemSwitch: {
     borderColor: '#DADBDF',
@@ -138,7 +139,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   myTravelItemTitle: {
-    color: '#BDBDBD',
+    color: '#333',
     fontSize: 14,
     fontFamily: 'Montserrat-Medium',
   },

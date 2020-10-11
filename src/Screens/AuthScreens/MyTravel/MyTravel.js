@@ -11,7 +11,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import RNFetchBlob from 'rn-fetch-blob';
 import {checkIfHasPermission} from './../../../config/permission';
 
-import Switch from './../../../components/Switch';
+import {Switch} from './../../../components/RNSwitch';
 import styles from './MyTravel.style';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Header from '../../../components/header/header';
@@ -124,7 +124,7 @@ class MyTravel extends React.Component {
   }
 
   async downloadMap(mapData) {
-    console.log("mapData => ",mapData)
+    console.log('mapData => ', mapData);
     if (!this.props.userData || !this.props.userData.id) {
       return alert('You need to login to access this feature');
     }
@@ -134,7 +134,7 @@ class MyTravel extends React.Component {
     let isDownloaded = packs.find(
       pack => pack.name == `${mapData.id}${mapData.name}`,
     );
-    
+
     if (isDownloaded) {
       alert('This map is already downloaded');
     } else {
@@ -237,15 +237,15 @@ class MyTravel extends React.Component {
               await this.downloadAssets(pinImages);
 
               await this.props.mapAction.storeOfflineMapData({
-                        mapData,
-                        pinData: filteredCollections,
-                        pinList,
-                        bounds: {
-                          ne: [topLeft.lon, topLeft.lat],
-                          sw: [bottomRight.lon, bottomRight.lat],
-                        },
-                      })
-              
+                mapData,
+                pinData: filteredCollections,
+                pinList,
+                bounds: {
+                  ne: [topLeft.lon, topLeft.lat],
+                  sw: [bottomRight.lon, bottomRight.lat],
+                },
+              });
+
               const options = {
                 name: `${mapData.id}${mapData.name}`,
                 styleURL: MapboxGL.StyleURL.Dark,
@@ -259,8 +259,8 @@ class MyTravel extends React.Component {
 
               this.setState({
                 downloadSpinnerMsg: 'Downloading map...',
-                canGoBack:true
-              })
+                canGoBack: true,
+              });
 
               MapboxGL.offlineManager.createPack(
                 options,
@@ -276,11 +276,19 @@ class MyTravel extends React.Component {
                         '% map downloaded',
                     });
                   }
-                  let areAllResourcesDownloaded = offlineRegionStatus.requiredResourceCount == offlineRegionStatus.completedResourceCount;
-                  if (offlineRegionStatus.state == 3 || areAllResourcesDownloaded) {
-                    alert("Map downloaded Successfully.")
+                  let areAllResourcesDownloaded =
+                    offlineRegionStatus.requiredResourceCount ==
+                    offlineRegionStatus.completedResourceCount;
+                  if (
+                    offlineRegionStatus.state == 3 ||
+                    areAllResourcesDownloaded
+                  ) {
+                    alert('Map downloaded Successfully.');
                     if (this.mounted) {
-                      this.setState({ mapDownloadInProgress: false, canGoBack: false })
+                      this.setState({
+                        mapDownloadInProgress: false,
+                        canGoBack: false,
+                      });
                     }
                   }
                 },
@@ -305,13 +313,17 @@ class MyTravel extends React.Component {
       <View style={styles.accordionCardBody}>
         <View style={styles.myTravelCard}>
           <View style={styles.myTravelItem}>
-            <Text style={styles.myTravelItemTitle}>Public</Text>
+            <Text style={styles.myTravelItemTitle}>Publish</Text>
             <Switch
-              styles={styles.myTravelItemSwitch}
-              changeMapStatus={() => {
-                this.changeMapStatus(item.id);
-              }}
-              value={item.status == '1'}
+              value={item.status != '1'}
+              onValueChange={val => this.changeMapStatus(item.id)}
+              changeValueImmediately={false}
+              disabled={false}
+              activeText={'On'}
+              inActiveText={'Off'}
+              circleSize={30}
+              backgroundActive={'#27ca97'}
+              backgroundInactive={'#ff644d'}
             />
           </View>
         </View>
@@ -377,14 +389,16 @@ class MyTravel extends React.Component {
   }
 
   fetchFirstMaps() {
-    if(!this.props.myMaps || this.props.myMaps.length == 0){
-      this.setState({fetchingMaps:true})
+    if (!this.props.myMaps || this.props.myMaps.length == 0) {
+      this.setState({fetchingMaps: true});
     }
-    this.props.mapAction.fetchMyFirstMaps({
-      user_id: this.props.userData.id,
-      search: this.state.search,
-      page: 1,
-    }).then(d => this.setState({fetchingMaps:false}));
+    this.props.mapAction
+      .fetchMyFirstMaps({
+        user_id: this.props.userData.id,
+        search: this.state.search,
+        page: 1,
+      })
+      .then(d => this.setState({fetchingMaps: false}));
   }
 
   fetchMaps(showLoader = false) {
@@ -454,10 +468,15 @@ class MyTravel extends React.Component {
               <Spinner
                 visible={this.state.mapDownloadInProgress}
                 textContent={this.state.downloadSpinnerMsg}
-                textStyle={{ color: '#fff' }}
+                textStyle={{color: '#fff'}}
                 canGoBack={this.state.canGoBack}
                 backButtonText={'Download in background'}
-                onGoBack={()=> this.setState({mapDownloadInProgress:false,canGoBack:false})}
+                onGoBack={() =>
+                  this.setState({
+                    mapDownloadInProgress: false,
+                    canGoBack: false,
+                  })
+                }
               />
               <View searchBar style={styles.searchbarCard}>
                 <Item style={styles.searchbarInputBox}>
@@ -504,7 +523,9 @@ class MyTravel extends React.Component {
                       alignSelf: 'center',
                     },
                   ]}>
-                  {this.state.fetchingMaps ? 'Fetching maps...' : 'No Maps Found.'}
+                  {this.state.fetchingMaps
+                    ? 'Fetching maps...'
+                    : 'No Maps Found.'}
                 </Text>
               )}
             </ScrollView>

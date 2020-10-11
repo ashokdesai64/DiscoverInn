@@ -13,6 +13,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as mapActions from '../../../actions/mapActions';
+const currentYear = new Date().getFullYear()
+const year = Array(currentYear-2000).fill('').map((v,i)=> (i+2000).toString())
 class EditMyTravelDetails extends React.Component {
 
   constructor(props) {
@@ -33,7 +35,7 @@ class EditMyTravelDetails extends React.Component {
         travelYear = momentYear.toString();
       }
     }
-
+    console.log("travelYear => ",travelYear)
     this.state = {
       mapTitle: '',
       mapDescription: params.type == 'edit' ? params.mapData.description : '',
@@ -41,7 +43,7 @@ class EditMyTravelDetails extends React.Component {
       selectedBudget: params.type == 'edit' ? params.mapData.budget_limit : '',
       selectedAge: params.type == 'edit' ? params.mapData.age_at_travel : '',
       month: travelMonth,
-      year: travelYear,
+      year: `${travelYear}`,
       addMapInProgress: false,
     };
 
@@ -135,6 +137,7 @@ class EditMyTravelDetails extends React.Component {
 
   render() {
     const { params } = this.props.navigation.state;
+    console.log(params)
     return (
       <Fragment>
         <ImageBackground
@@ -317,10 +320,11 @@ class EditMyTravelDetails extends React.Component {
                         />
                       }>
                       <Picker.Item label="Year" value="" />
-                      <Picker.Item label="2017" value="2017" />
-                      <Picker.Item label="2018" value="2018" />
-                      <Picker.Item label="2019" value="2019" />
-                      <Picker.Item label="2020" value="2020" />
+                      {
+                        year.map(y => (
+                          <Picker.Item key={y} label={y} value={y} />
+                        ))
+                      }
                     </Picker>
                   </View>
                   
