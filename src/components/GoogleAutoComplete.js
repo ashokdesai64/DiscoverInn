@@ -163,7 +163,11 @@ export default class GoogleAutoComplete extends Component {
   searchPlaces = _.debounce(() => {
     let searchTerm = this.state.searchTerm;
     if (searchTerm.trim() != '') {
-      this.fetchPlaces(searchTerm.trim());
+      if(searchTerm[0] == '@'){
+
+      } else {
+        this.fetchPlaces(searchTerm.trim());
+      }
     } else {
       this.setState({ hideResults: true });
     }
@@ -188,7 +192,7 @@ export default class GoogleAutoComplete extends Component {
             <Feather style={styles.searchbarIcon} name="search" />
             <Input
               style={styles.searchbarInput}
-              placeholder="Type in the Location name!"
+              placeholder="Type in Location or User name!"
               value={this.state.searchTerm}
               onChangeText={searchTerm =>
                 this.setState({ searchTerm }, () => {

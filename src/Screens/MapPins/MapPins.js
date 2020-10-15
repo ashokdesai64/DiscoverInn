@@ -45,13 +45,14 @@ class MapPins extends React.Component {
         map_id: params.mapID,
       })
       .then(data => {
-        let mapData = {...data};
+        console.log("data => ",data)
+        let mapData = {...data.data};
         delete mapData.pin_list;
         let tripList = mapData.trip_list || '';
         tripList = tripList == '0' ? '' : tripList;
-        let allPins = data.pin_list || [],
+        let allPins = data.data.pin_list || [],
           searchTerm = this.state.searchTerm,
-          filteredPinList = data.pin_list || [];
+          filteredPinList = data.data.pin_list || [];
         if (allPins && allPins.length > 0 && searchTerm.trim() != '') {
           filteredPinList = allPins.filter(
             pin =>
@@ -65,11 +66,12 @@ class MapPins extends React.Component {
           );
         }
         this.setState({
-          pinList: data.pin_list,
+          pinList: data.data.pin_list,
           filteredPinList,
           mapData,
           selectedTripID: tripList,
           fetchingPins: false,
+          total_pins: data.pin_count || 0,
         });
       })
       .catch(err => {
@@ -138,12 +140,17 @@ class MapPins extends React.Component {
     return (
       <>
         <NavigationEvents onWillFocus={payload => this.fetchMapPins()} />
-        <Header style={{backgroundColor:'#F3F4F6'}} showBack={true} title={params.mapName || ''} {...this.props} />
+        <Header
+          style={{backgroundColor: '#F3F4F6'}}
+          showBack={true}
+          title={params.mapName || ''}
+          {...this.props}
+        />
         <View style={styles.pageContent}>
           {this.props.tripList && this.props.tripList.length > 0 ? (
             <>
               <Text style={styles.headingText}>Add from My Trip List</Text>
-              <View style={[styles.formGroup, styles.picker]}>
+              <View style={[styles.picker]}>
                 <Picker
                   style={styles.formDropdown}
                   placeholderStyle={{color: '#2874F0'}}
@@ -170,6 +177,7 @@ class MapPins extends React.Component {
                   })}
                 </Picker>
               </View>
+              <Text style={styles.pinAddedText}>{this.state.total_pins} Pins added</Text>
             </>
           ) : null}
 

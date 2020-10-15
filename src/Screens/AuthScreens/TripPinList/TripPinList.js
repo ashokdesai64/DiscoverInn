@@ -8,6 +8,7 @@ import {
   Image,
   ActivityIndicator,
 } from 'react-native';
+import {NavigationEvents} from 'react-navigation';
 import styles from './TripPinList.style';
 import Header from './../../../components/header/header';
 import Feather from 'react-native-vector-icons/Feather';
@@ -36,7 +37,7 @@ class TripPinList extends React.Component {
 
   changeTripName(tripName) {
     const {params} = this.props.navigation.state;
-    console.log(params)
+    console.log(params);
     this.props.mapAction
       .updateFavouriteList({
         user_id: this.props.userData.id,
@@ -189,7 +190,12 @@ class TripPinList extends React.Component {
                 let imageSource = require('./../../../Images/map.png');
                 if (pin.images && pin.images.length > 0) {
                   let currentPinImages = pin.images[0];
-                  imageSource = {uri: currentPinImages.thumb_image || currentPinImages.image || 'https://discover-inn.com/upload/cover/map-image.jpeg'};
+                  imageSource = {
+                    uri:
+                      currentPinImages.thumb_image ||
+                      currentPinImages.image ||
+                      'https://discover-inn.com/upload/cover/map-image.jpeg',
+                  };
                 }
 
                 return (

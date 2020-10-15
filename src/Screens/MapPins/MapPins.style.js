@@ -248,6 +248,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Medium',
     marginRight: 0,
   },
+  pinAddedText:{
+    marginTop:5,
+    marginBottom:20,
+    fontSize:16,
+    color:'green'
+  }
 });
 
 export default styles;

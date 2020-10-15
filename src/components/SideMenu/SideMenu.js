@@ -10,23 +10,22 @@ import {
 import Icon from 'react-native-vector-icons/Feather';
 import styles from './SideMenu.style';
 import colors from './../../config/colors';
-import ImageBlurLoading from './../ImageLoader'
+import ImageBlurLoading from './../ImageLoader';
 //REDUX
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as authActions from './../../actions/authActions';
 
 class SideMenu extends Component {
-
   constructor(props) {
     super(props);
   }
 
   navigateTo(route) {
     if (!this.props.userData || !this.props.userData.id) {
-      this.props.navigation.navigate('Auth')
+      this.props.navigation.navigate('Auth');
     } else {
-      this.props.navigation.navigate(route)
+      this.props.navigation.navigate(route);
     }
   }
 
@@ -39,14 +38,13 @@ class SideMenu extends Component {
             <View style={styles.profileHeader_img}>
               {userData && userData.image ? (
                 <ImageBlurLoading
-                    withIndicator
-                    style={styles.profileAvatar}
-                    source={{uri: userData.image}}
-                    thumbnailSource={{
-                      uri:
-                        'https://discover-inn.com/upload/cover/map-image.jpeg',
-                    }}
-                  />
+                  withIndicator
+                  style={styles.profileAvatar}
+                  source={{uri: userData.image}}
+                  thumbnailSource={{
+                    uri: 'https://discover-inn.com/upload/cover/map-image.jpeg',
+                  }}
+                />
               ) : (
                 <View style={styles.guestAvatar}>
                   <Icon name={'user'} size={30} color={'white'} />
@@ -150,9 +148,7 @@ class SideMenu extends Component {
                 size={12}
                 paddingRight={0}
                 backgroundColor="#ffffff"
-                onPress={() =>
-                  this.navigateTo('MyMapShareList')
-                }>
+                onPress={() => this.navigateTo('MyMapShareList')}>
                 <Text style={styles.menuList_LinkText}>Shared Maps</Text>
               </Icon.Button>
             </View>
@@ -234,9 +230,7 @@ class SideMenu extends Component {
               <Text style={styles.staticMenu_Link}>Privacy Policy</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() =>
-                this.props.navigation.navigate('WalkThrough')
-              }>
+              onPress={() => this.props.navigation.navigate('WalkThrough')}>
               <Text style={styles.staticMenu_Link}>How It Works</Text>
             </TouchableOpacity>
           </View>
@@ -257,4 +251,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SideMenu);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SideMenu);

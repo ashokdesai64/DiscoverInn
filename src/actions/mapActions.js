@@ -170,7 +170,7 @@ export function fetchTripList() {
             type: 'tripList',
             tripList: response.data,
           });
-          resolve(response.data);
+          resolve({data:response.data,total_pins:response.total_pins});
         } else {
           dispatch({
             type: 'tripList',
@@ -461,7 +461,7 @@ export function getMapPinsList(apiData) {
     return new Promise(async (resolve, reject) => {
       let response = await callAPI(apiUrls.getMapPins, apiData);
       if (response.status) {
-        resolve(response.data);
+        resolve({data:response.data,pin_count:response.total_pins});
       } else {
         reject(response.message);
       }

@@ -202,7 +202,9 @@ class HomeScreen extends React.Component {
                     />
                   );
                 })}
-              <Text style={styles.rateListCount}>({item.total_review} Reviews)</Text>
+              <Text style={styles.rateListCount}>
+                ({item.total_review} Reviews)
+              </Text>
             </View>
           </View>
         </View>
@@ -357,14 +359,16 @@ class HomeScreen extends React.Component {
               autoCapitalize="none"
               autoCorrect={false}
               defaultValue={query}
-              onChangeText={text => this.setState({query: text})}
+              onChangeText={text => {
+                this.setState({query: text});
+              }}
               placeholder="Type in the Location name!"
               fetchSearchedMaps={() => this.fetchSearchedMaps()}
-              onValueChange={searchTerm =>
+              onValueChange={searchTerm => {
                 this.setState({searchTerm}, () => {
                   this.fetchSearchedMaps();
-                })
-              }
+                });
+              }}
               showSorting={() => {
                 this.setState({showSorting: !this.state.showSorting});
               }}

@@ -14,7 +14,7 @@ import Header from './../../../components/header/header';
 import Feather from 'react-native-vector-icons/Feather';
 import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
 import Spinner from './../../../components/Loader';
-
+import {NavigationEvents} from 'react-navigation';
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const DEVICE_WIDTH = Dimensions.get('window').width;
 
@@ -34,14 +34,18 @@ class MyTripList extends React.Component {
     };
   }
 
+  fetchTripList(){
+    this.props.mapAction
+    .fetchTripList()
+    .then(d => this.setState({fetchingTripList: false}))
+    .catch(d => this.setState({fetchingTripList: false}));
+  }
+
   componentDidMount() {
     if (!this.props.tripList || this.props.tripList.length == 0) {
       this.setState({fetchingTripList: true});
     }
-    this.props.mapAction
-      .fetchTripList()
-      .then(d => this.setState({fetchingTripList: false}))
-      .catch(d => this.setState({fetchingTripList: false}));
+    this.fetchTripList()
   }
 
   deleteFavouriteList(tripID) {
@@ -83,6 +87,11 @@ class MyTripList extends React.Component {
   render() {
     return (
       <Fragment style={styles.homePage}>
+        <NavigationEvents
+          onWillFocus={() => {
+            this.fetchTripList();
+          }}
+        />
         <Header
           showBack={true}
           title={'Trip List'}

@@ -62,7 +62,7 @@ class DefaultScreen extends Component {
         user_id: this.props.userData.id,
         page: 1,
       });
-      this.props.mapAction.fetchVisitorReviews({user_id: 1, page: 1});
+      this.props.mapAction.fetchVisitorReviews({user_id: this.props.userData.id, page: 1});
     }
 
     if (this.props && !this.props.allUserNames) {

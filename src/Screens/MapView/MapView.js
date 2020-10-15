@@ -42,7 +42,7 @@ class MapView extends React.Component {
       showTripList: false,
       pinList: [],
       mapPinsInProgress: false,
-      followUserLocation: false,
+      followUserLocation: true,
       filteredCollections: [],
       mapHasLoaded: false,
       allPins: [],
@@ -217,21 +217,22 @@ class MapView extends React.Component {
             absoluteHeader={true}
           />
 
-            <MapboxGL.MapView
-              style={styles.map}
-              styleURL={MapboxGL.StyleURL.Street}
-              logoEnabled={false}
-              attributionEnabled={false}
-              rotateEnabled={false}
-              onDidFinishRenderingMapFully={r => {
-                this.setState({followUserLocation: false, mapHasLoaded: true});
-              }}
-              onRegionDidChange={() => {
-                if (!this.state.followUserLocation) {
-                  this.setState({followUserLocation: false});
-                }
-              }}>
-              {topLeft && bottomRight && hasCollection && mapHasLoaded && (
+          <MapboxGL.MapView
+            style={styles.map}
+            styleURL={MapboxGL.StyleURL.Street}
+            logoEnabled={false}
+            attributionEnabled={false}
+            rotateEnabled={false}
+            onDidFinishRenderingMapFully={r => {
+              this.setState({followUserLocation: false, mapHasLoaded: true});
+            }}
+            onRegionDidChange={() => {
+              if (!this.state.followUserLocation) {
+                this.setState({followUserLocation: false});
+              }
+            }}>
+            {mapHasLoaded ? (
+              topLeft && bottomRight && hasCollection && mapHasLoaded ? (
                 <MapboxGL.Camera
                   bounds={{
                     ne: [topLeft.lon, topLeft.lat],
@@ -240,103 +241,109 @@ class MapView extends React.Component {
                   followUserMode={'normal'}
                   followUserLocation={this.state.followUserLocation}
                 />
-              )}
+              ) : (
+                <MapboxGL.Camera
+                  followUserMode={'compass'}
+                  followUserLocation={this.state.followUserLocation}
+                />
+              )
+            ) : null}
 
-              <MapboxGL.Images
-                images={{
-                  '1': this.categoryImages['1'],
-                  '2': this.categoryImages['2'],
-                  '3': this.categoryImages['3'],
-                  '4': this.categoryImages['4'],
-                  '5': this.categoryImages['5'],
-                  '6': this.categoryImages['6'],
-                  '7': this.categoryImages['7'],
-                }}
-              />
+            <MapboxGL.Images
+              images={{
+                '1': this.categoryImages['1'],
+                '2': this.categoryImages['2'],
+                '3': this.categoryImages['3'],
+                '4': this.categoryImages['4'],
+                '5': this.categoryImages['5'],
+                '6': this.categoryImages['6'],
+                '7': this.categoryImages['7'],
+              }}
+            />
 
-              {hasCollection
-                ? filteredCollections.map(collection => {
-                    let random = Math.floor(Math.random() * 90000) + 10000;
-                    return (
-                      <MapboxGL.ShapeSource
-                        key={collection.id}
-                        id={'symbolLocationSource' + random}
-                        hitbox={{width: 20, height: 20}}
-                        shape={collection}
-                        cluster
-                        clusterMaxZoomLevel={14}
-                        clusterRadius={40}
-                        onPress={e => {
-                          let payload = e.nativeEvent.payload;
-                          if (!payload.properties.cluster) {
-                            this.props.navigation.navigate('PinView', {
-                              pinID: payload.id,
-                              mapID: payload.properties.mapID,
-                              mapName: params.mapName,
-                              allPins: this.state.allPins
-                            });
-                          }
-                        }}>
-                        <MapboxGL.CircleLayer
-                          id={`singlePoint${Math.random()}`}
-                          filter={['has', 'point_count']}
-                          style={{
-                            circleColor: 'rgba(47,128,237,1)',
-                            circleRadius: 20,
-                            circleStrokeWidth: 2,
-                            circleStrokeColor: 'white',
-                          }}
-                        />
-                        <MapboxGL.SymbolLayer
-                          id={`pointCount${Math.random()}`}
-                          filter={['has', 'point_count']}
-                          style={{
-                            textField: '{point_count}',
-                            textSize: 14,
-                            textHaloColor: '#fff',
-                            textHaloWidth: 0.3,
-                            textColor: '#fff',
-                            iconAllowOverlap: false,
-                          }}
-                        />
-                        <MapboxGL.SymbolLayer
-                          id={`singlePointSelected${collection.id}`}
-                          filter={['!', ['has', 'point_count']]}
-                          style={{
-                            iconImage: ['get', 'category'],
-                            iconAllowOverlap: true,
-                            textAllowOverlap: true,
-                            iconSize: 0.4,
-                          }}
-                        />
+            {hasCollection
+              ? filteredCollections.map(collection => {
+                  let random = Math.floor(Math.random() * 90000) + 10000;
+                  return (
+                    <MapboxGL.ShapeSource
+                      key={collection.id}
+                      id={'symbolLocationSource' + random}
+                      hitbox={{width: 20, height: 20}}
+                      shape={collection}
+                      cluster
+                      clusterMaxZoomLevel={14}
+                      clusterRadius={40}
+                      onPress={e => {
+                        let payload = e.nativeEvent.payload;
+                        if (!payload.properties.cluster) {
+                          this.props.navigation.navigate('PinView', {
+                            pinID: payload.id,
+                            mapID: payload.properties.mapID,
+                            mapName: params.mapName,
+                            allPins: this.state.allPins,
+                          });
+                        }
+                      }}>
+                      <MapboxGL.CircleLayer
+                        id={`singlePoint${Math.random()}`}
+                        filter={['has', 'point_count']}
+                        style={{
+                          circleColor: 'rgba(47,128,237,1)',
+                          circleRadius: 20,
+                          circleStrokeWidth: 2,
+                          circleStrokeColor: 'white',
+                        }}
+                      />
+                      <MapboxGL.SymbolLayer
+                        id={`pointCount${Math.random()}`}
+                        filter={['has', 'point_count']}
+                        style={{
+                          textField: '{point_count}',
+                          textSize: 14,
+                          textHaloColor: '#fff',
+                          textHaloWidth: 0.3,
+                          textColor: '#fff',
+                          iconAllowOverlap: false,
+                        }}
+                      />
+                      <MapboxGL.SymbolLayer
+                        id={`singlePointSelected${collection.id}`}
+                        filter={['!', ['has', 'point_count']]}
+                        style={{
+                          iconImage: ['get', 'category'],
+                          iconAllowOverlap: true,
+                          textAllowOverlap: true,
+                          iconSize: 0.4,
+                        }}
+                      />
 
-                        <MapboxGL.SymbolLayer
-                          id={`singleNumberSelected${collection.id}`}
-                          filter={['==', 'hasNumber', true]}
-                          style={{
-                            textField: '{number}',
-                            textColor: 'white',
-                            textJustify: 'left',
-                            textAnchor: 'bottom-right',
-                            textOffset: [-0.5, -1],
-                            textHaloColor: 'rgba(47,128,237,1)',
-                            textHaloWidth: 5,
-                            textTranslate: [-0.5, -0.5],
-                            textPadding: 2,
-                          }}
-                        />
-                      </MapboxGL.ShapeSource>
-                    );
-                  })
-                : null}
+                      <MapboxGL.SymbolLayer
+                        id={`singleNumberSelected${collection.id}`}
+                        filter={['==', 'hasNumber', true]}
+                        style={{
+                          textField: '{number}',
+                          textColor: 'white',
+                          textJustify: 'left',
+                          textAnchor: 'bottom-right',
+                          textOffset: [-0.5, -1],
+                          textHaloColor: 'rgba(47,128,237,1)',
+                          textHaloWidth: 5,
+                          textTranslate: [-0.5, -0.5],
+                          textPadding: 2,
+                        }}
+                      />
+                    </MapboxGL.ShapeSource>
+                  );
+                })
+              : null}
 
-              <MapboxGL.UserLocation
-                visible={true}
-                animated
-                showsUserHeadingIndicator
-                androidRenderMode={'gps'}
-              />
-            </MapboxGL.MapView>
+            <MapboxGL.UserLocation
+              visible={true}
+              animated
+              showsUserHeadingIndicator
+              androidRenderMode={'gps'}
+            />
+          </MapboxGL.MapView>
           {params.fromMyTravel ? (
             <View style={[styles.mapControlButton]}>
               <TouchableOpacity
@@ -399,7 +406,8 @@ class MapView extends React.Component {
                   c => c.id == pin.categories,
                 );
                 let imageData = pin.images && pin.images[0] && pin.images[0];
-                let image = imageData ? {uri: imageData.thumb_image || imageData.image}
+                let image = imageData
+                  ? {uri: imageData.thumb_image || imageData.image}
                   : require('./../../Images/login-bg.jpg');
                 return (
                   <TouchableOpacity
@@ -412,7 +420,7 @@ class MapView extends React.Component {
                           pinID: pin.id,
                           mapID: params.mapID,
                           mapName: params.mapName,
-                          allPins: this.state.allPins
+                          allPins: this.state.allPins,
                         })
                       // this.setState({followUserLocation: true})
                     }>
