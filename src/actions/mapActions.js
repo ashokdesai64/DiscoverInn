@@ -221,6 +221,44 @@ export function fetchMapList(apiData) {
   };
 }
 
+export function fetchUserMapList(apiData) {
+  return function(dispatch, getState) {
+    dispatch({
+      type: 'mapListLoaded',
+      mapListLoaded: false,
+    });
+    return new Promise(async (resolve, reject) => {
+      let response = await callAPI(apiUrls.searchUserMaps, apiData);
+      dispatch({
+        type: 'mapListLoaded',
+        mapListLoaded: true,
+      });
+      if (response.status) {
+        console.log('response => ', response);
+        dispatch({
+          type: 'mapList',
+          mapList: response.data,
+        });
+        dispatch({
+          type: 'mapListCount',
+          mapListCount: response.data.length || 0,
+        });
+        resolve(response.data);
+      } else {
+        dispatch({
+          type: 'mapList',
+          mapList: [],
+        });
+        dispatch({
+          type: 'mapListCount',
+          mapListCount: '0',
+        });
+        reject(response.message);
+      }
+    });
+  };
+}
+
 export function fetchMyReviews(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
@@ -486,6 +524,7 @@ export function addPinFromTripList(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
       let response = await callAPI(apiUrls.addPinFromTripList, apiData);
+      console.log("response => ",response)
       if (response.status) {
         resolve(response.data);
       } else {

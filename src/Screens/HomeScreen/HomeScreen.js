@@ -313,13 +313,11 @@ class HomeScreen extends React.Component {
     });
   }
 
-  fetchSearchedMaps() {
-    let userID = this.props.userData && this.props.userData.id;
-    let {searchTerm} = this.state;
+  fetchSearchedMaps(searchTerm, userId) {
     let searchObj = {
       page: 1,
       sort_by: 'popularity',
-      // user_id: userID,
+      searchUserId: userId,
       search: searchTerm,
     };
 
@@ -360,13 +358,13 @@ class HomeScreen extends React.Component {
               autoCorrect={false}
               defaultValue={query}
               onChangeText={text => {
-                this.setState({query: text});
+                this.setState({searchTerm: text});
               }}
               placeholder="Type in the Location name!"
-              fetchSearchedMaps={() => this.fetchSearchedMaps()}
-              onValueChange={searchTerm => {
-                this.setState({searchTerm}, () => {
-                  this.fetchSearchedMaps();
+              fetchSearchedMaps={(searchTerm, userId) => this.fetchSearchedMaps(searchTerm, userId)}
+              onValueChange={(searchTerm, userId) => {
+                this.setState({searchTerm, userId}, () => {
+                  this.fetchSearchedMaps(searchTerm, userId);
                 });
               }}
               showSorting={() => {

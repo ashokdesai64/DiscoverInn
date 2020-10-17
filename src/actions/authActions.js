@@ -33,11 +33,13 @@ export function userSignup(postData) {
       );
 
       if (response.status) {
-        dispatch({
-          type: 'userLogin',
-          userData: response.data,
-          subtype: !!response && response.status ? 'success' : 'error',
-        });
+        // dispatch({
+        //   type: 'userLogin',
+        //   userData: response.data,
+        //   subtype: !!response && response.status ? 'success' : 'error',
+        // });
+        alert(response.message)
+        resolve(true)
       } else {
         reject(response.message)
       }

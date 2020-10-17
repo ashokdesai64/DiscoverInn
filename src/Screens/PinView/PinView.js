@@ -26,6 +26,7 @@ const DEVICE_HEIGHT = Dimensions.get('window').height;
 const DEVICE_WIDTH = Dimensions.get('window').width;
 import Spinner from '../../components/Loader';
 import styles from './PinView.styles';
+import KeyboardSpacer from './KeyboardSpacer'
 //REDUX
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -57,14 +58,6 @@ class PinView extends React.Component {
   }
 
   componentWillMount() {
-    this.keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      this._keyboardDidShow.bind(this),
-    );
-    this.keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      this._keyboardDidHide.bind(this),
-    );
 
     if (this.state.isOffline) {
       const {params} = this.props.navigation.state;
@@ -74,19 +67,6 @@ class PinView extends React.Component {
     } else {
       this.fetchSinglePinData();
     }
-  }
-
-  componentWillUnmount() {
-    this.keyboardDidShowListener.remove();
-    this.keyboardDidHideListener.remove();
-  }
-
-  _keyboardDidShow(e) {
-    this.setState({keyboardOpened: true,keyboardHeight: e.endCoordinates.height});
-  }
-
-  _keyboardDidHide() {
-    this.setState({keyboardOpened: false});
   }
 
   setPinData(pins, index) {
@@ -536,8 +516,8 @@ class PinView extends React.Component {
                   <Text style={styles.buttonText}>Submit</Text>
                 )}
               </TouchableOpacity>
-            </View  >
-
+            </View>
+            <KeyboardSpacer/>
           </DialogContent>
         </Dialog>
       </>

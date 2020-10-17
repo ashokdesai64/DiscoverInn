@@ -22,6 +22,7 @@ import SetPassScreen from './Screens/UnauthScreens/SetPassScreen';
 import MyMapShareList from './Screens/ShareList/MyMapShareList';
 import MapList from './Screens/MapList/MapList';
 import MapView from './Screens/MapView/MapView';
+import MapReviews from './Screens/MapView/MapReviews';
 import FavouritePinMap from './Screens/FavouritePinMap/FavouritePinMap';
 import PinView from './Screens/PinView/PinView';
 import UploadMap from './Screens/HomeScreen/UploadMap/UploadMap';
@@ -37,7 +38,7 @@ import OfflineMapView from './Screens/OfflineMaps/OfflineMapView';
 import SideMenu from './components/SideMenu/SideMenu';
 import DefaultScreen from './Screens/DefaultScreen';
 import WalkThrough from './Screens/WalkThrough';
-import GetStarted from './Screens/WalkThrough/GetStarted'
+import GetStarted from './Screens/WalkThrough/GetStarted';
 
 const userStack = createStackNavigator(
   {
@@ -131,6 +132,9 @@ const userStack = createStackNavigator(
     OfflineMapView: {
       screen: OfflineMapView,
     },
+    MapReviews: {
+      screen: MapReviews,
+    },
   },
   {
     headerMode: 'none',
@@ -184,9 +188,9 @@ const App = createSwitchNavigator(
     GetStarted: {
       screen: GetStarted,
     },
-    WalkThrough:{
-      screen:WalkThrough
-    }
+    WalkThrough: {
+      screen: WalkThrough,
+    },
   },
   {
     initialRouteName: 'GetStarted',

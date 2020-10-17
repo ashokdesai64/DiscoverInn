@@ -42,4 +42,6 @@ export const apiUrls = {
   //remaining
   sharedMapsList: 'https://discover-inn.com/api/v1/shared_maps_list',
   shareMap: 'https://discover-inn.com/api/v1/shared_your_map',
+  searchUsers: 'https://discover-inn.com/api/v1/search_users',
+  searchUserMaps: 'https://discover-inn.com/api/v1/search_users_maplist',
 };

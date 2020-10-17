@@ -35,6 +35,7 @@ const iosStyles = {
   list: {
     backgroundColor: 'white',
     borderTopWidth: 0,
+    width,
     // left: 0,
     // position: 'absolute',
     // right: 0,

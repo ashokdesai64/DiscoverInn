@@ -45,7 +45,7 @@ class MapPins extends React.Component {
         map_id: params.mapID,
       })
       .then(data => {
-        console.log("data => ",data)
+        console.log('data => ', data);
         let mapData = {...data.data};
         delete mapData.pin_list;
         let tripList = mapData.trip_list || '';
@@ -71,7 +71,6 @@ class MapPins extends React.Component {
           mapData,
           selectedTripID: tripList,
           fetchingPins: false,
-          total_pins: data.pin_count || 0,
         });
       })
       .catch(err => {
@@ -111,9 +110,13 @@ class MapPins extends React.Component {
         favorite_id: tripID || '0',
       })
       .then(data => {
-        this.setState({fetchingPins: true}, () => {
-          this.fetchMapPins();
-        });
+        let selected = this.props.tripList.find(t => t.id == tripID);
+        this.setState(
+          {fetchingPins: true, isPinAdded: true, total_pins: selected.pins},
+          () => {
+            this.fetchMapPins();
+          },
+        );
       })
       .catch(err => {
         console.log('err => ', err);
@@ -150,7 +153,7 @@ class MapPins extends React.Component {
           {this.props.tripList && this.props.tripList.length > 0 ? (
             <>
               <Text style={styles.headingText}>Add from My Trip List</Text>
-              <View style={[styles.picker]}>
+              <View style={[styles.picker,{marginBottom:this.state.isPinAdded ? 0 : 20}]}>
                 <Picker
                   style={styles.formDropdown}
                   placeholderStyle={{color: '#2874F0'}}
@@ -177,7 +180,11 @@ class MapPins extends React.Component {
                   })}
                 </Picker>
               </View>
-              <Text style={styles.pinAddedText}>{this.state.total_pins} Pins added</Text>
+              {this.state.isPinAdded && (
+                <Text style={styles.pinAddedText}>
+                  {this.state.total_pins} Pins added
+                </Text>
+              )}
             </>
           ) : null}
 
@@ -443,6 +450,7 @@ class MapPins extends React.Component {
 }
 
 function mapStateToProps(state) {
+  console.log(state.maps.tripList);
   return {
     userData: state.user.userData,
     tripList: state.maps.tripList,

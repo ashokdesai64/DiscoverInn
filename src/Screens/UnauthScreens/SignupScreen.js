@@ -75,7 +75,7 @@ class SignupScreen extends React.Component {
                 </View>
                 <View style={styles.formGroup}>
                   <Text style={styles.formLabel}>Email</Text>
-                  <TextInput style={styles.formControl} onChangeText={(email) => this.setState({ email: email.trim() })} />
+                  <TextInput autoCapitalize={'none'} style={styles.formControl} onChangeText={(email) => this.setState({ email: email.trim() })} />
                 </View>
                 <TouchableOpacity
                   style={[styles.button, styles.buttonPrimary]}

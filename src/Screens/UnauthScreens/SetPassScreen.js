@@ -46,6 +46,7 @@ class SetPassScreen extends React.Component {
     this.setState({signingUp: true});
     this.props.authAction
       .userSignup({email, password, firstname, lastname})
+      .then(d => this.props.navigation.navigate('LoginScreen'))
       .catch(e => {
         alert(JSON.stringify(e));
         this.setState({signingUp: false});

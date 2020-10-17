@@ -46,6 +46,8 @@ import {bindActionCreators} from 'redux';
 
 import * as authActions from './../../actions/authActions';
 import * as mapActions from './../../actions/mapActions';
+import {callAPI} from '../../Services/network';
+import {apiUrls} from '../../config/api';
 MapboxGL.offlineManager.setTileCountLimit(15000);
 
 class MapList extends React.Component {
@@ -55,12 +57,13 @@ class MapList extends React.Component {
     this.carousel = null;
     this.mounted = null;
     const {params} = props.navigation.state;
+    console.log('params => ', params);
     this.state = {
       showTripList: false,
       shareModal: false,
       searchTerm: (params && params.searchTerm) || '',
       query: '',
-      keyboardHeight:250,
+      keyboardHeight: 250,
       carouselCateItems: [
         {
           title: 'Sights',
@@ -128,26 +131,37 @@ class MapList extends React.Component {
   componentWillMount() {
     let {params} = this.props.navigation.state;
     if (params && params.searchObj) {
+      const {searchUserId} = params.searchObj;
       this.setState({fetchingMaps: true});
-
-      this.props.mapAction
-        .fetchMapList(params.searchObj)
-        .then(data => {
-          this.setState({fetchingMaps: false});
-        })
-        .catch(err => {
-          this.setState({fetchingMaps: false});
-          alert(err);
-        });
+      if (!!searchUserId) {
+        this.props.mapAction
+          .fetchUserMapList({userid: searchUserId})
+          .then(data => {
+            this.setState({fetchingMaps: false});
+          })
+          .catch(err => {
+            this.setState({fetchingMaps: false});
+            alert(err);
+          });
+      } else {
+        this.props.mapAction
+          .fetchMapList(params.searchObj)
+          .then(data => {
+            this.setState({fetchingMaps: false});
+          })
+          .catch(err => {
+            this.setState({fetchingMaps: false});
+            alert(err);
+          });
+      }
     }
-    this.keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      e => this._keyboardDidShow(e),
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', e =>
+      this._keyboardDidShow(e),
     );
   }
   _keyboardDidShow(e) {
     this.setState({
-      keyboardHeight: e.endCoordinates.height
+      keyboardHeight: e.endCoordinates.height,
     });
   }
 
@@ -157,7 +171,7 @@ class MapList extends React.Component {
 
   componentWillUnmount() {
     this.mounted = false;
-    this.keyboardDidShowListener.remove()
+    this.keyboardDidShowListener.remove();
   }
 
   pinToggle(categoryID, mapID, mapName) {
@@ -389,9 +403,8 @@ class MapList extends React.Component {
   }
 
   _renderItem(item, index) {
-    let avgReview = parseInt(item.avrage_review);
+    let avgReview = parseInt(item.avrage_review) || 0;
     let {selectedMapCategories} = this.state;
-
     let travelType = item.travel_type == '0' ? '-' : item.travel_type;
     return (
       <View style={[styles.mapSlideCard]}>
@@ -433,12 +446,13 @@ class MapList extends React.Component {
           <View style={styles.mapSlideBadgeGroup}>
             <View style={[styles.badgeRed, styles.badge]}>
               <Text style={[styles.badgeText, styles.badgeRedText]}>
-                {item.views} <Feather style={styles.badgeIcon} name="eye" />
+                {item.views || 0}{' '}
+                <Feather style={styles.badgeIcon} name="eye" />
               </Text>
             </View>
             <View style={[styles.badgeGreen, styles.badge]}>
               <Text style={[styles.badgeText, styles.badgeGreenText]}>
-                {item.avrage_review}{' '}
+                {item.avrage_review || 0}{' '}
                 <Feather style={styles.badgeIcon} name="star" />
               </Text>
             </View>
@@ -454,7 +468,12 @@ class MapList extends React.Component {
           </Text>
           <TouchableOpacity
             style={styles.rateList}
-            onPress={() => this.setState({showReviewModal: true})}>
+            onPress={() => {
+              // this.setState({showReviewModal: true})
+              if(item.ratings && item.ratings.length > 0){
+                this.props.navigation.navigate('MapReviews', {mapData: item});
+              }
+            }}>
             {Array(avgReview)
               .fill(1)
               .map(d => {
@@ -480,7 +499,7 @@ class MapList extends React.Component {
                 );
               })}
             <Text style={styles.rateListCount}>
-              ({item.total_review} Reviews)
+              ({item.total_review || 0} Reviews)
             </Text>
           </TouchableOpacity>
           <View style={styles.mapPins}>
@@ -649,6 +668,20 @@ class MapList extends React.Component {
           if (this.pageNo == 1) {
             this.carousel.snapToItem(0, false);
           }
+        });
+      })
+      .catch(err => {
+        this.setState({fetchingMaps: false});
+        alert(err);
+      });
+  }
+
+  fetchUsersMap(userid) {
+    this.props.mapAction
+      .fetchUserMapList({userid})
+      .then(data => {
+        this.setState({fetchingMaps: false}, () => {
+          this.carousel.snapToItem(0, false);
         });
       })
       .catch(err => {
@@ -863,10 +896,56 @@ class MapList extends React.Component {
     );
   }
 
-  searchPlaces = _.debounce(() => {
-    let searchTerm = this.state.searchTerm;
-    if (searchTerm.trim() != '') {
-      this.fetchPlaces(searchTerm.trim());
+  renderUsersList() {
+    const {placeList} = this.state;
+    return (
+      <FlatList
+        data={placeList}
+        keyboardShouldPersistTaps={'always'}
+        renderItem={({item, i}) => (
+          <TouchableOpacity
+            style={{marginBottom: 10, padding: 5}}
+            onPress={() =>
+              this.setState({searchTerm: item.name, showPlaces: false}, () => {
+                this.pageNo = 1;
+                this.fetchUsersMap(item.id);
+              })
+            }>
+            <Text style={{fontFamily: 'Montserrat-Medium', fontSize: 16}}>
+              {item.name}
+            </Text>
+          </TouchableOpacity>
+        )}
+        renderSeparator={null}
+        style={styles.list}
+        ListEmptyComponent={() => (
+          <Text style={{textAlign: 'center', color: '#bbb', fontSize: 14}}>
+            No Users Found
+          </Text>
+        )}
+      />
+    );
+  }
+
+  async fetchUsers(search_value) {
+    callAPI(apiUrls.searchUsers, {search_value}).then(result => {
+      this.setState({placeList: result.data, showPlaces: true});
+    });
+  }
+
+  searchPlaces = _.debounce(async () => {
+    let searchTerm = this.state.searchTerm && this.state.searchTerm.trim();
+
+    if (searchTerm != '') {
+      if (searchTerm[0] == '@') {
+        if (searchTerm == '@') {
+          this.fetchUsers('@');
+        } else {
+          this.fetchUsers(searchTerm.replace(/@/g, ''));
+        }
+      } else {
+        this.fetchPlaces(searchTerm.trim());
+      }
     } else {
       this.setState({showPlaces: false});
     }
@@ -936,7 +1015,7 @@ class MapList extends React.Component {
                 <Feather style={styles.searchbarIcon} name="search" />
                 <Input
                   style={styles.searchbarInput}
-                  placeholder="Type in the Location name!"
+                  placeholder="Type in the Location or user name!"
                   value={this.state.searchTerm}
                   onChangeText={searchTerm =>
                     this.setState({searchTerm}, () => {
@@ -947,6 +1026,7 @@ class MapList extends React.Component {
               </Item>
               <Button
                 style={styles.searchbarCardButton}
+                disabled={this.state.searchTerm[0] === '@'}
                 onPress={() => this.fetchMapList()}>
                 <Feather
                   style={styles.searchbarCardButtonIcon}
@@ -1000,7 +1080,9 @@ class MapList extends React.Component {
                 borderColor: '#ddd',
               }}
               keyboardShouldPersistTaps={'always'}>
-              {this.renderResultList()}
+              {this.state.searchTerm[0] == '@'
+                ? this.renderUsersList()
+                : this.renderResultList()}
             </ScrollView>
           )}
 
