@@ -315,7 +315,7 @@ class MyTravel extends React.Component {
           <View style={styles.myTravelItem}>
             <Text style={styles.myTravelItemTitle}>Publish</Text>
             <Switch
-              value={item.status != '1'}
+              value={item.status != '0'}
               onValueChange={val => this.changeMapStatus(item.id)}
               changeValueImmediately={false}
               disabled={false}

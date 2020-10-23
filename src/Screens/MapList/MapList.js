@@ -40,6 +40,7 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 MapboxGL.setAccessToken(
   'sk.eyJ1IjoicmF2aXNvaml0cmF3b3JrIiwiYSI6ImNrYTByeHVxZjBqbGszZXBtZjF3NmJleWgifQ.idSimILJ3_sk1gSWs2sMsQ',
 );
+
 //REDUX
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -48,6 +49,7 @@ import * as authActions from './../../actions/authActions';
 import * as mapActions from './../../actions/mapActions';
 import {callAPI} from '../../Services/network';
 import {apiUrls} from '../../config/api';
+import KeyboardSpacer from '../PinView/KeyboardSpacer';
 MapboxGL.offlineManager.setTileCountLimit(15000);
 
 class MapList extends React.Component {
@@ -58,10 +60,13 @@ class MapList extends React.Component {
     this.mounted = null;
     const {params} = props.navigation.state;
     console.log('params => ', params);
+    const searchTerm = (params && params.searchTerm) || '';
     this.state = {
       showTripList: false,
       shareModal: false,
-      searchTerm: (params && params.searchTerm) || '',
+      searchTerm:
+        (params.searchObj && params.searchObj.searchUserId ? '@' : '') +
+        searchTerm,
       query: '',
       keyboardHeight: 250,
       carouselCateItems: [
@@ -113,6 +118,7 @@ class MapList extends React.Component {
       sortBy:
         (params && params.searchObj && params.searchObj.sort_by) ||
         'popularity',
+      reviewText: '',
     };
   }
 
@@ -464,15 +470,13 @@ class MapList extends React.Component {
             {item.name}
           </Text>
           <Text style={styles.mapSlideCardAuthor} numberOfLines={1}>
-            {item.username}
+            {item.owner || item.username}
           </Text>
           <TouchableOpacity
             style={styles.rateList}
             onPress={() => {
               // this.setState({showReviewModal: true})
-              if(item.ratings && item.ratings.length > 0){
-                this.props.navigation.navigate('MapReviews', {mapData: item});
-              }
+              this.props.navigation.navigate('MapReviews', {mapData: item});
             }}>
             {Array(avgReview)
               .fill(1)
@@ -666,7 +670,7 @@ class MapList extends React.Component {
       .then(data => {
         this.setState({fetchingMaps: false}, () => {
           if (this.pageNo == 1) {
-            this.carousel.snapToItem(0, false);
+            this.carousel && this.carousel.snapToItem(0, false);
           }
         });
       })
@@ -677,11 +681,12 @@ class MapList extends React.Component {
   }
 
   fetchUsersMap(userid) {
+    this.setState({fetchingMaps: true});
     this.props.mapAction
       .fetchUserMapList({userid})
       .then(data => {
         this.setState({fetchingMaps: false}, () => {
-          this.carousel.snapToItem(0, false);
+          this.carousel && this.carousel.snapToItem(0, false);
         });
       })
       .catch(err => {
@@ -709,10 +714,6 @@ class MapList extends React.Component {
 
   addReview() {
     const {reviewText, addReviewValue, selectedMap} = this.state;
-    if (!reviewText || !reviewText.trim()) {
-      alert("Review can't be empty");
-      return;
-    }
     if (!addReviewValue) {
       alert('Please select review rate');
       return;
@@ -906,10 +907,13 @@ class MapList extends React.Component {
           <TouchableOpacity
             style={{marginBottom: 10, padding: 5}}
             onPress={() =>
-              this.setState({searchTerm: item.name, showPlaces: false}, () => {
-                this.pageNo = 1;
-                this.fetchUsersMap(item.id);
-              })
+              this.setState(
+                {searchTerm: '@' + item.name, showPlaces: false},
+                () => {
+                  this.pageNo = 1;
+                  this.fetchUsersMap(item.id);
+                },
+              )
             }>
             <Text style={{fontFamily: 'Montserrat-Medium', fontSize: 16}}>
               {item.name}
@@ -1008,14 +1012,15 @@ class MapList extends React.Component {
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          keyboardShouldPersistTaps={'always'}>
+          keyboardShouldPersistTaps={'always'}
+          contentContainerStyle={{flexGrow: 1}}>
           <View style={styles.searchSection}>
             <View searchBar style={styles.searchbarCard}>
               <Item style={styles.searchbarInputBox}>
                 <Feather style={styles.searchbarIcon} name="search" />
                 <Input
                   style={styles.searchbarInput}
-                  placeholder="Type in the Location or user name!"
+                  placeholder="Discover maps or search @user_name"
                   value={this.state.searchTerm}
                   onChangeText={searchTerm =>
                     this.setState({searchTerm}, () => {
@@ -1078,6 +1083,7 @@ class MapList extends React.Component {
                 marginHorizontal: 10,
                 borderWidth: 1,
                 borderColor: '#ddd',
+                width:width-20
               }}
               keyboardShouldPersistTaps={'always'}>
               {this.state.searchTerm[0] == '@'
@@ -1104,20 +1110,41 @@ class MapList extends React.Component {
               </TouchableOpacity>
             )}
           </View>
-          <View style={styles.shareMapContant}>
-            <Carousel
-              ref={c => (this.carousel = c)}
-              data={this.props.mapList}
-              sliderWidth={width}
-              itemWidth={310}
-              firstItem={0}
-              inactiveSlideOpacity={1}
-              inactiveSlideScale={1}
-              renderItem={({item, index}) => this._renderItem(item, index)}
-              onSnapToItem={index => {
-                this.loadMoreMaps(index);
-              }}
-            />
+          <View style={[styles.shareMapContant, {flex: 1}]}>
+            {this.props.mapList && this.props.mapList.length > 0 ? (
+              <Carousel
+                ref={c => (this.carousel = c)}
+                data={this.props.mapList}
+                sliderWidth={width}
+                itemWidth={310}
+                firstItem={0}
+                inactiveSlideOpacity={1}
+                inactiveSlideScale={1}
+                renderItem={({item, index}) => this._renderItem(item, index)}
+                onSnapToItem={index => {
+                  this.loadMoreMaps(index);
+                }}
+              />
+            ) : (
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  flexDirection: 'column',
+                  flex: 1,
+                  marginBottom: 50,
+                }}>
+                <Text
+                  style={{
+                    fontFamily: 'Montserrat-Medium',
+                    fontSize: 18,
+                    color: '#aaa',
+                    marginRight: 10,
+                  }}>
+                  No Maps Found
+                </Text>
+              </View>
+            )}
           </View>
         </ScrollView>
 
@@ -1360,10 +1387,7 @@ class MapList extends React.Component {
             this.setState({showAddReviewModal: false, reviewFocus: false});
             return true;
           }}
-          dialogStyle={[
-            styles.customPopup,
-            {bottom: this.state.reviewFocus ? this.state.keyboardHeight : 0},
-          ]}>
+          dialogStyle={[styles.customPopup, {bottom: 0}]}>
           <DialogContent style={styles.customPopupContent}>
             <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
               <View style={styles.customPopupHeader}>
@@ -1427,6 +1451,7 @@ class MapList extends React.Component {
                 </TouchableOpacity>
               </View>
             </KeyboardAvoidingView>
+            <KeyboardSpacer />
           </DialogContent>
         </Dialog>
 
@@ -1720,7 +1745,7 @@ class MapList extends React.Component {
                 <Text style={styles.mdPopupAuthorLabel}>Traveller: </Text>
                 <Text style={styles.mdPopupAuthorName}>
                   {' '}
-                  {selectedMap && selectedMap.username}
+                  {selectedMap && (selectedMap.owner || selectedMap.username)}
                 </Text>
               </View>
               <Text style={styles.mdPopupDis}>

@@ -65,12 +65,22 @@ class MapPins extends React.Component {
               !p.save_triplist || (p.save_triplist && p.save_triplist == '0'),
           );
         }
+        let isPinAdded = false,pinCount = 0
+        if(tripList){
+          const currentTrip = this.props.tripList.find(trip => trip.id == tripList)
+          if(currentTrip){
+            isPinAdded = true;
+            pinCount = currentTrip.pins
+          }
+        }
         this.setState({
           pinList: data.data.pin_list,
           filteredPinList,
           mapData,
           selectedTripID: tripList,
           fetchingPins: false,
+          isPinAdded,
+          total_pins:pinCount
         });
       })
       .catch(err => {

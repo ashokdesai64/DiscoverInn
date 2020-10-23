@@ -231,23 +231,21 @@ class MapView extends React.Component {
                 this.setState({followUserLocation: false});
               }
             }}>
-            {mapHasLoaded ? (
-              topLeft && bottomRight && hasCollection && mapHasLoaded ? (
-                <MapboxGL.Camera
-                  bounds={{
-                    ne: [topLeft.lon, topLeft.lat],
-                    sw: [bottomRight.lon, bottomRight.lat],
-                  }}
-                  followUserMode={'normal'}
-                  followUserLocation={this.state.followUserLocation}
-                />
-              ) : (
-                <MapboxGL.Camera
-                  followUserMode={'compass'}
-                  followUserLocation={this.state.followUserLocation}
-                />
-              )
-            ) : null}
+            {topLeft && bottomRight && hasCollection && mapHasLoaded ? (
+              <MapboxGL.Camera
+                bounds={{
+                  ne: [topLeft.lon, topLeft.lat],
+                  sw: [bottomRight.lon, bottomRight.lat],
+                }}
+                // followUserMode={'normal'}
+                followUserLocation={this.state.followUserLocation}
+              />
+            ) : (
+              <>
+                <MapboxGL.Camera followUserLocation />
+                <MapboxGL.UserLocation animated={false}/>
+              </>
+            )}
 
             <MapboxGL.Images
               images={{
@@ -337,12 +335,12 @@ class MapView extends React.Component {
                 })
               : null}
 
-            <MapboxGL.UserLocation
+            {/* <MapboxGL.UserLocation
               visible={true}
               animated
               showsUserHeadingIndicator
               androidRenderMode={'gps'}
-            />
+            /> */}
           </MapboxGL.MapView>
           {params.fromMyTravel ? (
             <View style={[styles.mapControlButton]}>

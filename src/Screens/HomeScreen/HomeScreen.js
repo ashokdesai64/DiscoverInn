@@ -171,7 +171,7 @@ class HomeScreen extends React.Component {
           <View style={styles.mapSlideCardContent}>
             <View style={[styles.badgeGreen, styles.badge]}>
               <Text style={[styles.badgeText]}>
-                {0} <Feather name="eye" />
+                {item.views} <Feather name="eye" />
               </Text>
             </View>
             <Text style={styles.mapSlideCardTitle}>{item.name}</Text>
@@ -360,7 +360,7 @@ class HomeScreen extends React.Component {
               onChangeText={text => {
                 this.setState({searchTerm: text});
               }}
-              placeholder="Type in the Location name!"
+              placeholder="Discover maps or search @user_name"
               fetchSearchedMaps={(searchTerm, userId) => this.fetchSearchedMaps(searchTerm, userId)}
               onValueChange={(searchTerm, userId) => {
                 this.setState({searchTerm, userId}, () => {

@@ -78,7 +78,7 @@ export default function maps(state = initialState, action = {}) {
         case 'mapListCount': {
             return {
                 ...state,
-                mapListCount: action.mapListCount || (state.mapListCount || 0),
+                mapListCount: action.mapListCount || 0,
             };
         }
         case 'mapListLoaded': {
