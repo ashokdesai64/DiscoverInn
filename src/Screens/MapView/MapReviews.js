@@ -6,10 +6,24 @@ import ImageBlurLoading from './../../components/ImageLoader';
 import moment from 'moment';
 import Header from './../../components/header/header';
 import styles from './MapReviews.style';
+import axios from 'axios';
+import {apiUrls} from '../../config/api';
+import {callAPI} from '../../Services/network';
 
 const MapReviews = props => {
   const {mapData} = props.navigation.state.params;
-  const reviews = (mapData && mapData.reviews) || [];
+  const paramReviews = (mapData && mapData.reviews) || [];
+
+  const [reviews, setReviews] = React.useState(paramReviews);
+
+  React.useEffect(() => {
+    callAPI(apiUrls.singleMapReview, {map_id: mapData.id})
+      .then(data => {
+        setReviews(data.data);
+      })
+      .catch(err => alert(JSON.stringify(err)));
+  }, []);
+
   return (
     <>
       <Header

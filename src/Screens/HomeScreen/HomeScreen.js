@@ -263,7 +263,7 @@ class HomeScreen extends React.Component {
     Linking.getInitialURL()
       .then(url => {
         if (url) {
-          console.log('Initial url is: ' + url);
+          alert('Initial url is: ' + url);
         }
       })
       .catch(err => console.error('An error occurred', err));
@@ -275,8 +275,9 @@ class HomeScreen extends React.Component {
     Linking.removeEventListener('url', this._handleOpenURL);
     BackHandler.removeEventListener('hardwareBackPress', () => {});
   }
-  _handleOpenURL(event) {
-    console.log(event.url);
+  _handleOpenURL(e) {
+    const route = e.url.replace(/.*?:\/\//g, '')
+    alert("_handleOpenURL => ",route)
   }
 
   _renderItemCate = ({item, index}) => {

@@ -155,6 +155,7 @@ const AuthStack = createStackNavigator(
     },
     SetPassScreen: {
       screen: SetPassScreen,
+      path:'setpass/:email'
     },
   },
   {
