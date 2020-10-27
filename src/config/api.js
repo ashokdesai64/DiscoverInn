@@ -44,5 +44,6 @@ export const apiUrls = {
   shareMap: 'https://discover-inn.com/api/v1/shared_your_map',
   searchUsers: 'https://discover-inn.com/api/v1/search_users',
   searchUserMaps: 'https://discover-inn.com/api/v1/search_users_maplist',
-  singleMapReview:'https://discover-inn.com/api/v1/single_map_review'
+  singleMapReview:'https://discover-inn.com/api/v1/single_map_review',
+  setPassword:'https://discover-inn.com/api/v1/set_new_password'
 };

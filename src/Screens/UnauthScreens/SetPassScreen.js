@@ -7,7 +7,7 @@ import {
   TextInput,
   SafeAreaView,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import styles from './Unauthscreens.style';
@@ -26,6 +26,7 @@ class SetPassScreen extends React.Component {
       lastname: props.navigation.state.params.lastName,
       email: props.navigation.state.params.email,
       signingUp: false,
+      fromDeepLink: props.navigation.state.params.deepLink,
     };
   }
 
@@ -44,13 +45,26 @@ class SetPassScreen extends React.Component {
       return;
     }
     this.setState({signingUp: true});
-    this.props.authAction
-      .userSignup({email, password, firstname, lastname})
-      .then(d => this.props.navigation.navigate('LoginScreen'))
-      .catch(e => {
-        alert(JSON.stringify(e));
-        this.setState({signingUp: false});
-      });
+
+    if (this.state.fromDeepLink) {
+      this.props.authAction
+        .setPassword({email, new_password:password, confirm_password:password})
+        .then(d => {
+          this.props.authAction.userLogin(email,new_password)
+        })
+        .catch(e => {
+          alert(JSON.stringify(e));
+          this.setState({signingUp: false});
+        });
+    } else {
+      this.props.authAction
+        .userSignup({email, password, firstname, lastname})
+        .then(d => this.props.navigation.navigate('LoginScreen'))
+        .catch(e => {
+          alert(JSON.stringify(e));
+          this.setState({signingUp: false});
+        });
+    }
   }
 
   render() {
@@ -95,11 +109,11 @@ class SetPassScreen extends React.Component {
                   {this.state.signingUp ? (
                     <ActivityIndicator size="small" color="#fff" />
                   ) : (
-                    <Text style={styles.buttonText}>Sign Up</Text>
+                    <Text style={styles.buttonText}>{this.state.fromDeepLink ? 'Submit':'Sign Up'}</Text>
                   )}
                 </TouchableOpacity>
               </View>
-              
+
               <Text style={styles.fixedFooter}>
                 Are you already registered?
                 <Text
@@ -128,4 +142,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SetPassScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SetPassScreen);

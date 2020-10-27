@@ -6,7 +6,6 @@ import {
   ScrollView,
   Dimensions,
   TouchableOpacity,
-  Linking,
   BackHandler,
   Alert,
 } from 'react-native';
@@ -260,19 +259,9 @@ class HomeScreen extends React.Component {
       // }
     });
 
-    Linking.getInitialURL()
-      .then(url => {
-        if (url) {
-          alert('Initial url is: ' + url);
-        }
-      })
-      .catch(err => console.error('An error occurred', err));
-
-    Linking.addEventListener('url', this._handleOpenURL);
   }
 
   componentWillUnmount() {
-    Linking.removeEventListener('url', this._handleOpenURL);
     BackHandler.removeEventListener('hardwareBackPress', () => {});
   }
   _handleOpenURL(e) {

@@ -27,14 +27,14 @@ const persistedReducer = persistReducer(persistConfig, reducer);
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 const store = createStoreWithMiddleware(persistedReducer);
 let persistor = persistStore(store);
+const prefix = 'discoverinn://';
 
 export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <Routes />
-          {/* <VideoPlayer /> */}
+          <Routes uriPrefix={prefix}/>
         </PersistGate>
       </Provider>
     );

@@ -48,6 +48,25 @@ export function userSignup(postData) {
   };
 }
 
+export function setPassword(postData) {
+  return async function (dispatch, getState) {
+    return new Promise(async (resolve, reject) => {
+      alert(JSON.stringify(postData))
+      let response = await callAPI(
+        apiUrls.setPassword,
+        postData,
+      );
+
+      if (response.status) {
+        resolve(true)
+      } else {
+        reject(response.message)
+      }
+
+    })
+  };
+}
+
 export function forgotPassword(postData) {
   return async function (dispatch, getState) {
     return new Promise(async (resolve, reject) => {

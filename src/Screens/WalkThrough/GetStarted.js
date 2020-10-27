@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react';
+import {Linking} from 'react-native';
 import {
   SafeAreaView,
   View,
@@ -8,7 +9,7 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import {useSelector,useDispatch} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
 
@@ -16,6 +17,32 @@ const FirstScreen = props => {
   const dispatch = useDispatch();
 
   const isIntroCompleted = useSelector(state => state.user.introCompleted);
+
+  useEffect(() => {
+    Linking.addEventListener('url', handleOpenURL);
+    handleDeepLinkingRequests();
+
+    return () => Linking.removeEventListener('url', handleOpenURL);
+  }, []);
+
+  const handleDeepLinkingRequests = () => {
+    Linking.getInitialURL()
+      .then(handleOpenURL)
+      .catch(error => {
+        alert(JSON.stringify(error));
+      });
+  };
+
+  const handleOpenURL = data => {
+    let finalUrl = data.url || data
+    if (finalUrl) {
+      let splitted = JSON.stringify(finalUrl).split('/');
+      let email = splitted[splitted.length - 1] || '';
+      if (email) {
+        props.navigation.navigate('SetPassScreen', {email, deepLink: true});
+      }
+    }
+  };
 
   useEffect(() => {
     if (isIntroCompleted) {
