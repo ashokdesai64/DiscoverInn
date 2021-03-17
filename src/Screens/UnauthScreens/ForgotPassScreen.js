@@ -37,7 +37,9 @@ class ForgotPassScreen extends React.Component {
       .forgotPassword({email: this.state.email})
       .then(msg => {
         alert(msg);
-        this.setState({inProgress: false});
+        this.setState({inProgress: false},()=>{
+          this.props.navigation.navigate('LoginScreen')
+        });
       })
       .catch(e => {
         alert(e);

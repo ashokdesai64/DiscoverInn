@@ -120,7 +120,7 @@ class PinView extends React.Component {
       <ImageBlurLoading
         withIndicator
         style={styles.cateSlideCardIcon}
-        source={{uri: item.thumb_image || item.image}}
+        source={{uri: item.image || item.thumb_image}}
         thumbnailSource={{
           uri: 'https://discover-inn.com/upload/cover/map-image.jpeg',
         }}
@@ -237,7 +237,7 @@ class PinView extends React.Component {
       if (typeof pinData.images == 'string') {
         imagePath = pinData.images;
       } else if (Array.isArray(pinData.images) && pinData.images.length > 0) {
-        imagePath = pinData.images[0].thumb_image || pinData.images[0].image;
+        imagePath = pinData.images[0].image || pinData.images[0].thumb_image;
       }
 
       let fileName = imagePath.split('/').pop();
@@ -544,7 +544,6 @@ export default connect(
 
 const PinImages = props => {
   const carRef = useRef(null);
-  console.log(props.data);
   return (
     <View style={{position: 'relative'}}>
       <Carousel

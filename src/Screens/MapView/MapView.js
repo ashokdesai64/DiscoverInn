@@ -405,7 +405,7 @@ class MapView extends React.Component {
                 );
                 let imageData = pin.images && pin.images[0] && pin.images[0];
                 let image = imageData
-                  ? {uri: imageData.thumb_image || imageData.image}
+                  ? {uri: imageData.image || imageData.thumb_image}
                   : require('./../../Images/login-bg.jpg');
                 return (
                   <TouchableOpacity

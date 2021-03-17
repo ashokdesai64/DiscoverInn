@@ -270,7 +270,7 @@ class MapList extends React.Component {
               let temp = [];
               let pinImages = [];
               pinImages.push(
-                mapData.thumb_cover_image || mapData.cover_image || '',
+                mapData.cover_image || mapData.thumb_cover_image || '',
               );
               pinList.map(pin => {
                 if (pin.longitude && pin.latitude) {
@@ -302,7 +302,7 @@ class MapList extends React.Component {
                     pin.images.length > 0
                   ) {
                     pinImages.push(
-                      pin.images[0].thumb_image || pin.images[0].image,
+                      pin.images[0].image || pin.images[0].thumb_image,
                     );
                   }
                 }
@@ -1725,7 +1725,7 @@ class MapList extends React.Component {
               </TouchableOpacity>
             </View>
             <ScrollView
-              style={{backgroundColor: 'white'}}
+              style={{backgroundColor: 'white' ,paddingBottom: 20}}
               showsVerticalScrollIndicator={false}>
               <View style={(styles.mdPopupImgCard, {height: 180})}>
                 <ImageBlurLoading

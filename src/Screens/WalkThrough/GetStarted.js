@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-
+import DeepLinking from 'react-native-deep-linking';
 const DEVICE_WIDTH = Dimensions.get('window').width;
 
 const FirstScreen = props => {
@@ -19,27 +19,41 @@ const FirstScreen = props => {
   const isIntroCompleted = useSelector(state => state.user.introCompleted);
 
   useEffect(() => {
-    Linking.addEventListener('url', handleOpenURL);
+    DeepLinking.addScheme('discoverinn://');
+
+    DeepLinking.addRoute('/maps/:email', (response) => {
+      navigate('SetPassScreen', {email:response.email, deepLink: true});
+    });
+
+    Linking.addEventListener('url', handleUrl);
     handleDeepLinkingRequests();
 
-    return () => Linking.removeEventListener('url', handleOpenURL);
+    return () => Linking.removeEventListener('url', handleUrl);
   }, []);
+
+  const handleUrl = ({ url }) => {
+    Linking.canOpenURL(url).then((supported) => {
+      if (supported) {
+        DeepLinking.evaluateUrl(url);
+      }
+    });
+  };
 
   const handleDeepLinkingRequests = () => {
     Linking.getInitialURL()
       .then(handleOpenURL)
-      .catch(error => {
-        alert(JSON.stringify(error));
-      });
   };
 
   const handleOpenURL = data => {
-    let finalUrl = data.url || data
+    let finalUrl = data.url || data;
     if (finalUrl) {
-      let splitted = JSON.stringify(finalUrl).split('/');
-      let email = splitted[splitted.length - 1] || '';
-      if (email) {
-        props.navigation.navigate('SetPassScreen', {email, deepLink: true});
+      const {navigate} = props.navigation;
+      const route = finalUrl.replace(/.*?:\/\//g, '');
+      const email = route.match(/\/([^\/]+)\/?$/)[1];
+      const routeName = route.split('/')[0];
+
+      if (routeName === 'maps') {
+        navigate('SetPassScreen', {email, deepLink: true});
       }
     }
   };

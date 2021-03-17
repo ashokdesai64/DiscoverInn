@@ -1,12 +1,10 @@
 import React from 'react';
-import {View, TouchableOpacity, Text, Image, ScrollView} from 'react-native';
-import Feather from 'react-native-vector-icons/Feather';
+import {View, Text, Image, ScrollView} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImageBlurLoading from './../../components/ImageLoader';
 import moment from 'moment';
 import Header from './../../components/header/header';
 import styles from './MapReviews.style';
-import axios from 'axios';
 import {apiUrls} from '../../config/api';
 import {callAPI} from '../../Services/network';
 
@@ -21,7 +19,6 @@ const MapReviews = props => {
       .then(data => {
         setReviews(data.data);
       })
-      .catch(err => alert(JSON.stringify(err)));
   }, []);
 
   return (

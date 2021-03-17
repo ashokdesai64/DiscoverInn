@@ -264,10 +264,6 @@ class HomeScreen extends React.Component {
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', () => {});
   }
-  _handleOpenURL(e) {
-    const route = e.url.replace(/.*?:\/\//g, '')
-    alert("_handleOpenURL => ",route)
-  }
 
   _renderItemCate = ({item, index}) => {
     let category = this.state.carouselCateItems.find(c => c.title == item.name);

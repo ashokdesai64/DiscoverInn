@@ -431,7 +431,7 @@ const styles = StyleSheet.create({
   },
   customPopupContent: {
     paddingVertical: 20,
-    paddingHorizontal: 5,
+    paddingHorizontal: 40,
   },
   customPopupHeader: {
     flexDirection: 'row',
@@ -571,6 +571,8 @@ const styles = StyleSheet.create({
     color: '#BDBDBD',
     fontFamily: 'Montserrat-Regular',
     marginTop: 15,
+    paddingBottom:40,
+    marginBottom:20
   },
   reviewCard: {
     borderRadius: 5,
