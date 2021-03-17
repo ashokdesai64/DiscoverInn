@@ -120,7 +120,7 @@ class PinView extends React.Component {
       <ImageBlurLoading
         withIndicator
         style={styles.cateSlideCardIcon}
-        source={{uri: item.image || item.thumb_image}}
+        source={{uri: item.thumb_image || item.image }}
         thumbnailSource={{
           uri: 'https://discover-inn.com/upload/cover/map-image.jpeg',
         }}

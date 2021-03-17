@@ -70,6 +70,12 @@ class FilterScreen extends React.Component {
     this.props.navigation.state.params.setParams({ selectedAge, selectedBudget, selectedCategory, selectedCreatedWithin, selectedTravelType });
     this.props.navigation.goBack()
   }
+  clearFilter() {
+    console.log('5464564654');
+    this.props.navigation.state.params.setParams({ selectedAge:'', selectedBudget:'',
+     selectedCategory:[], selectedCreatedWithin:'', selectedTravelType:'' });
+    this.props.navigation.goBack()
+  }
 
   toggleFilterValue(filterType, value) {
     let filterValues = this.state[filterType];
@@ -237,14 +243,14 @@ class FilterScreen extends React.Component {
             </ScrollView>
           </View>
           <View style={styles.footerButton}>
-            <TouchableOpacity
+            <TouchableOpacity 
               style={[
                 styles.button,
                 styles.filterButton,
                 styles.filterButtonCancel,
                 styles.buttonOutline,
               ]}
-              onPress={() => { }}>
+              onPress={() => {this.clearFilter() }}>
               <Text style={[styles.buttonText, styles.buttonTextWhite]}>
                 Undo
               </Text>

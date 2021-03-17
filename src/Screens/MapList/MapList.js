@@ -1096,7 +1096,7 @@ class MapList extends React.Component {
             <Text style={styles.searchresultText}>
               {this.props.mapListCount || 0} Results Found
             </Text>
-            {this.props.userData && this.props.userData.id && (
+            {/* {this.props.userData && this.props.userData.id && (
               <TouchableOpacity
                 style={styles.searchresultSelect}
                 onPress={() => this.setState({showTripList: true})}>
@@ -1108,7 +1108,7 @@ class MapList extends React.Component {
                   name="chevron-down"
                 />
               </TouchableOpacity>
-            )}
+            )} */}
           </View>
           <View style={[styles.shareMapContant, {flex: 1}]}>
             {this.props.mapList && this.props.mapList.length > 0 ? (
@@ -1725,8 +1725,7 @@ class MapList extends React.Component {
               </TouchableOpacity>
             </View>
             <ScrollView
-              style={{backgroundColor: 'white' ,paddingBottom: 20}}
-              showsVerticalScrollIndicator={false}>
+              style={{backgroundColor: 'white' ,paddingBottom: 20}}>
               <View style={(styles.mdPopupImgCard, {height: 180})}>
                 <ImageBlurLoading
                   withIndicator
