@@ -19,7 +19,7 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - Mapbox-iOS-SDK (5.8.0):
+  - Mapbox-iOS-SDK (5.9.0):
     - MapboxMobileEvents (= 0.10.2)
   - MapboxMobileEvents (0.10.2)
   - QBImagePickerController (3.4.0)
@@ -186,7 +186,7 @@ PODS:
     - React-cxxreact (= 0.61.2)
     - React-jsi (= 0.61.2)
   - React-jsinspector (0.61.2)
-  - react-native-document-picker (3.5.2):
+  - react-native-document-picker (3.5.4):
     - React
   - react-native-image-picker (1.1.0):
     - React
@@ -235,28 +235,26 @@ PODS:
     - React-cxxreact (= 0.61.2)
     - React-jsi (= 0.61.2)
     - ReactCommon/jscallinvoker (= 0.61.2)
-  - ReactNativeGetLocation (1.4.3):
-    - React
   - rn-fetch-blob (0.12.0):
     - React-Core
-  - RNCAsyncStorage (1.11.0):
-    - React
-  - RNGestureHandler (1.6.1):
+  - RNCAsyncStorage (1.12.1):
+    - React-Core
+  - RNGestureHandler (1.8.0):
     - React
   - RNImageCropPicker (0.26.2):
     - QBImagePickerController
     - React-Core
     - React-RCTImage
     - RSKImageCropper
-  - RNReanimated (1.9.0):
+  - RNReanimated (1.13.1):
     - React
   - RNScreens (1.0.0-alpha.23):
     - React
-  - RNShare (3.4.0):
+  - RNShare (3.8.5):
+    - React-Core
+  - RNVectorIcons (6.1.0):
     - React
-  - RNVectorIcons (6.6.0):
-    - React
-  - RSKImageCropper (2.2.3)
+  - RSKImageCropper (3.0.0)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -292,7 +290,6 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/jscallinvoker (from `../node_modules/react-native/ReactCommon`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - ReactNativeGetLocation (from `../node_modules/react-native-get-location`)
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -370,8 +367,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
-  ReactNativeGetLocation:
-    :path: "../node_modules/react-native-get-location"
   rn-fetch-blob:
     :path: "../node_modules/rn-fetch-blob"
   RNCAsyncStorage:
@@ -398,7 +393,7 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 5a764c60abdc3336a213e5310c40b74741f32839
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
-  Mapbox-iOS-SDK: 02590a60fe300810c55432219a0caaa1338fbafb
+  Mapbox-iOS-SDK: a5915700ec84bc1a7f8b3e746d474789e35b7956
   MapboxMobileEvents: 2bc0ca2eedb627b73cf403258dce2b2fa98074a6
   QBImagePickerController: d54cf93db6decf26baf6ed3472f336ef35cae022
   RCTRequired: c639d59ed389cfb1f1203f65c2ea946d8ec586e2
@@ -410,7 +405,7 @@ SPEC CHECKSUMS:
   React-jsi: 32285a21b1b24c36060493ed3057a34677d58d09
   React-jsiexecutor: 8909917ff7d8f21a57e443a866fd8d4560e50c65
   React-jsinspector: 111d7d342b07a904c400592e02a2b958f1098b60
-  react-native-document-picker: 3026780fc04e7ad27534a0f35d5daefb550aa03a
+  react-native-document-picker: 4921045c5c6c78243010f784eae0a3f4b2af7799
   react-native-image-picker: 7a85cf7b0a53845f03ae52fb4592a2748ded069b
   react-native-location: 5a40ec1cc6abf2f6d94df979f98ec76c3a415681
   react-native-mapbox-gl: f94bda32d55284b202d72359ed7d5d43f5223c89
@@ -425,16 +420,15 @@ SPEC CHECKSUMS:
   React-RCTText: e3ef6191cdb627855ff7fe8fa0c1e14094967fb8
   React-RCTVibration: fb54c732fd20405a76598e431aa2f8c2bf527de9
   ReactCommon: 5848032ed2f274fcb40f6b9ec24067787c42d479
-  ReactNativeGetLocation: 1e71f6f2024a4215874998bee0e5f31d90a6dbe7
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
-  RNCAsyncStorage: d059c3ee71738c39834a627476322a5a8cd5bf36
-  RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
+  RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
+  RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
   RNImageCropPicker: 9d1a7eea4f8368fc479cbd2bf26459bd3c74d9aa
-  RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
+  RNReanimated: dd8c286ab5dd4ba36d3a7fef8bff7e08711b5476
   RNScreens: f28b48b8345f2f5f39ed6195518291515032a788
-  RNShare: d37b34279f840dd66ca233aa02005084b598f1b2
-  RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
-  RSKImageCropper: a446db0e8444a036b34f3c43db01b2373baa4b2a
+  RNShare: 7e22ba3bf66294ff7c122a1f2da8a8ec642091a0
+  RNVectorIcons: ac7bf6bfeafaf3ad34552cdc6eed6fb8c4b7c940
+  RSKImageCropper: 81f449b4df96bdaf28e1ad6dcce28dcda2235458
   Yoga: 14927e37bd25376d216b150ab2a561773d57911f
 
 PODFILE CHECKSUM: cff970869d80d123bbcddb58d7ce722f37aa82df
