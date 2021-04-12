@@ -160,11 +160,9 @@ export default class AutoCompleteLocation extends Component {
       let result = await axios.get(url);
       let places = result.data.predictions || [];
       this.setState({placeList: places, hideResults: false});
-      console.log('places => ', places);
       this.props.scroll && this.props.scroll()
     } catch (err) {
       this.setState({placeList: []});
-      console.log('err => ', err);
     }
   }
 
@@ -177,7 +175,6 @@ export default class AutoCompleteLocation extends Component {
     }
   }, 250);
   //     componentWillReceiveProps(nextProps) {
-  //         console.log("nextprops => ",nextProps)
   //         if (nextProps.locationFromImage && nextProps.value) {
   //         this.setState({searchTerm:nextProps.value})
   //     }

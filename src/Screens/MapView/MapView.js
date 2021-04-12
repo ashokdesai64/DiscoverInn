@@ -164,7 +164,6 @@ class MapView extends React.Component {
           });
         })
         .catch(err => {
-          console.log('error => ', err);
           this.setState({mapPinsInProgress: false, pinList: []});
         });
     }

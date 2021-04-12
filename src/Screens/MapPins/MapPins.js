@@ -45,7 +45,6 @@ class MapPins extends React.Component {
         map_id: params.mapID,
       })
       .then(data => {
-        console.log('data => ', data);
         let mapData = {...data.data};
         delete mapData.pin_list;
         let tripList = mapData.trip_list || '';
@@ -129,7 +128,6 @@ class MapPins extends React.Component {
         );
       })
       .catch(err => {
-        console.log('err => ', err);
       });
   };
 
@@ -460,7 +458,6 @@ class MapPins extends React.Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state.maps.tripList);
   return {
     userData: state.user.userData,
     tripList: state.maps.tripList,

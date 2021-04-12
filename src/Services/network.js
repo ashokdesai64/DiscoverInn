@@ -20,21 +20,20 @@ export async function callAPI(url, data, method = 'POST') {
       });
       apiSkeleton['body'] = formData;
     }
-
-    console.log('formdata => ', url, formData);
-
+    // console.log('url >>>>', url);
+    // console.log('body >>>>', formData);
     try {
       let response = await fetch(url, apiSkeleton);
-      
+
       try {
         let apiResponse = await response.json();
-        console.log('response => ', apiResponse);
+        // console.log('response >>>>', apiResponse);
         resolve(apiResponse);
       } catch (error) {
-        reject({error, status: false});
+        reject({ error, status: false });
       }
     } catch (err) {
-      reject({err, status: false});
+      reject({ err, status: false });
     }
   });
 }

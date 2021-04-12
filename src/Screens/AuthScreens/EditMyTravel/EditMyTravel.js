@@ -29,7 +29,6 @@ class EditMyTravel extends React.Component {
   constructor(props) {
     super(props);
     const {params} = props.navigation.state;
-    console.log('params.mapData => ', params.mapData);
     let mapName = '',
       coverImage = false;
 
@@ -70,7 +69,6 @@ class EditMyTravel extends React.Component {
           this.setState({showNameInput: false});
         })
         .catch(err => {
-          console.log('err => ', err);
         });
     } else {
       this.props.mapAction
@@ -87,7 +85,6 @@ class EditMyTravel extends React.Component {
           });
         })
         .catch(err => {
-          console.log('err => ', err);
         });
     }
   }
@@ -107,7 +104,6 @@ class EditMyTravel extends React.Component {
     if (!this.state.mapData.id) return alert('Please enter map name first...');
 
     ImagePicker.launchImageLibrary(options, response => {
-      console.log('respoonse => ', response);
       if (!response.didCancel) {
         this.setState({addCoverInProgress: true});
         let fileObj = {
@@ -131,7 +127,6 @@ class EditMyTravel extends React.Component {
           .catch(err => {
             this.setState({addCoverInProgress: false});
             alert("Couldn't update image, Please try again.");
-            console.log('err => ', err);
           });
       }
     });

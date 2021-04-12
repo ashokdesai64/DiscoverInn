@@ -5,7 +5,6 @@ export function loadPopularAndRated() {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
       let response = await callAPI(apiUrls.popularAndRated, {}, 'GET');
-      console.log("top rated => ",response)
       if (response.status) {
         dispatch({
           type: 'popularMaps',
@@ -145,7 +144,6 @@ export function fetchMyMaps(apiData) {
         });
         resolve(newMaps);
       } else {
-        console.log('apiData.page => ', apiData.page);
         dispatch({
           type: 'ownMaps',
           ownMaps: apiData.page > 1 ? [...oldMaps] : [],
@@ -164,7 +162,6 @@ export function fetchTripList() {
 
       if (userData && userData.id) {
         let response = await callAPI(apiUrls.tripList, { user_id: userData.id });
-        console.log("fetchTripList response = ",response)
         if (response.status) {
           dispatch({
             type: 'tripList',
@@ -196,7 +193,6 @@ export function fetchMapList(apiData) {
         mapListLoaded: true,
       });
       if (response.status) {
-        console.log('response => ', response);
         dispatch({
           type: apiData.page > 1 ? 'mapPagination' : 'mapList',
           mapList: response.data,
@@ -234,7 +230,6 @@ export function fetchUserMapList(apiData) {
         mapListLoaded: true,
       });
       if (response.status) {
-        console.log('response => ', response);
         dispatch({
           type: 'mapList',
           mapList: response.data,
@@ -524,7 +519,6 @@ export function addPinFromTripList(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
       let response = await callAPI(apiUrls.addPinFromTripList, apiData);
-      console.log("response => ",response)
       if (response.status) {
         resolve(response.data);
       } else {

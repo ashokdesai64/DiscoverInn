@@ -46,7 +46,6 @@ class MyMapShareList extends React.Component {
       })
       .catch(err => {
         this.setState({carouselItems: [], fetchingMaps: false});
-        console.log('err => ', err);
       });
   }
 

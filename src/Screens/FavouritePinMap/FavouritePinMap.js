@@ -53,7 +53,6 @@ class FavouritePinMap extends React.Component {
 
   componentWillMount() {
     const { params } = this.props.navigation.state;
-    console.log("params => ", params)
     let tripID = params.tripID;
     if (tripID) {
       this.props.mapAction
@@ -68,7 +67,6 @@ class FavouritePinMap extends React.Component {
             pinList: data.favorite_pin || [],
             mapPinsInProgress: false,
           });
-          console.log('data => ', data);
           let pinList = data.favorite_pin || [];
           let { params } = this.props.navigation.state;
           params = params || {};
@@ -153,7 +151,6 @@ class FavouritePinMap extends React.Component {
         })
         .catch(err => {
           this.setState({ pinList: [], isPinListFetching: false });
-          console.log('err => ', err);
         });
     }
   }

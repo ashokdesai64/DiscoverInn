@@ -206,10 +206,8 @@ export default class GoogleAutoComplete extends Component {
       let result = await axios.get(url);
       let places = result.data.predictions || [];
       this.setState({placeList: places, hideResults: false});
-      console.log('places => ', places);
     } catch (err) {
       this.setState({placeList: []});
-      console.log('err => ', err);
     }
   }
 

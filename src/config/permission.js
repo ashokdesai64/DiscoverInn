@@ -9,7 +9,6 @@ export async function askForPermissions() {
       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
       PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
     ]).then(result => {
-      console.log("permission result => ",JSON.stringify(result))
       if (
         result['android.permission.ACCESS_COARSE_LOCATION'] &&
         result['android.permission.CAMERA'] &&

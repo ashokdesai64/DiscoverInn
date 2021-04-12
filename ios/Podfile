@@ -48,6 +48,15 @@ target 'DiscoverInn' do
   end
   use_frameworks! :linkage => :static
 
+  pre_install do |installer|
+    $RNMBGL.pre_install(installer)
+  end
+
+  post_install do |installer|
+    $RNMBGL.post_install(installer)
+  end
+
+
   use_native_modules!
 end
 

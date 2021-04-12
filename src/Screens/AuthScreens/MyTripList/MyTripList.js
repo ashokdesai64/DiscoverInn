@@ -60,7 +60,6 @@ class MyTripList extends React.Component {
       })
       .catch(err => {
         this.setState({pinDeleteInProgress: false});
-        console.log('errr => ', err);
       });
   }
 

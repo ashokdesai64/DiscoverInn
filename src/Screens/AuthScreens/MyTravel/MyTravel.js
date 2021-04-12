@@ -124,7 +124,6 @@ class MyTravel extends React.Component {
   }
 
   async downloadMap(mapData) {
-    console.log('mapData => ', mapData);
     if (!this.props.userData || !this.props.userData.id) {
       return alert('You need to login to access this feature');
     }
@@ -265,7 +264,6 @@ class MyTravel extends React.Component {
               MapboxGL.offlineManager.createPack(
                 options,
                 async (offlineRegion, offlineRegionStatus) => {
-                  console.log('offlineRegionStatus => ', offlineRegionStatus);
                   if (this.mounted) {
                     this.setState({
                       name: offlineRegion.name,
@@ -382,7 +380,6 @@ class MyTravel extends React.Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    console.log('nextProps => ', nextProps);
     if (nextProps.fetchingMaps != this.state.fetchingMaps) {
       this.setState({fetchingMaps: nextProps.fetchingMaps});
     }
@@ -405,11 +402,6 @@ class MyTravel extends React.Component {
     if (showLoader) {
       this.setState({fetchingMaps: true});
     }
-    console.log({
-      user_id: this.props.userData.id,
-      search: this.state.search,
-      page: this.pageNo,
-    });
     this.props.mapAction.fetchMyMaps({
       user_id: this.props.userData.id,
       search: this.state.search,
@@ -454,7 +446,6 @@ class MyTravel extends React.Component {
               showsVerticalScrollIndicator={false}
               onScroll={({nativeEvent}) => {
                 if (isCloseToBottom(nativeEvent) && !this.state.fetchingMaps) {
-                  console.log('scrolled to bottom');
                   this.pageNo += 1;
                   this.fetchMaps(true);
                 }
@@ -612,7 +603,6 @@ class MyTravel extends React.Component {
 }
 
 function mapStateToProps(state) {
-  console.log('state.maps => ', state.maps.offlineMaps);
   return {
     userData: state.user.userData,
     categories: state.maps.categories,

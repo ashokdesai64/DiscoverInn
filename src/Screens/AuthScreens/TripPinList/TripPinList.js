@@ -37,7 +37,6 @@ class TripPinList extends React.Component {
 
   changeTripName(tripName) {
     const {params} = this.props.navigation.state;
-    console.log(params);
     this.props.mapAction
       .updateFavouriteList({
         user_id: this.props.userData.id,
@@ -46,7 +45,6 @@ class TripPinList extends React.Component {
       })
       .then(data => {})
       .catch(err => {
-        console.log('err => ', err);
       });
   }
 
@@ -63,7 +61,6 @@ class TripPinList extends React.Component {
         page: 1,
       })
       .then(data => {
-        console.log('data.favorite_pin => ', data.favorite_pin);
         this.setState({
           pinList: data.favorite_pin || [],
           isPinListFetching: false,
@@ -71,7 +68,6 @@ class TripPinList extends React.Component {
       })
       .catch(err => {
         this.setState({pinList: [], isPinListFetching: false});
-        console.log('err => ', err);
       });
   }
 
@@ -94,7 +90,6 @@ class TripPinList extends React.Component {
           this.setState({showDeletePinModal: false, deletingPin: false});
         })
         .catch(err => {
-          console.log('err => ', err);
         });
     } else {
       alert('Can not remove from trip list');

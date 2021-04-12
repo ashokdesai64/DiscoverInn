@@ -59,7 +59,6 @@ class MapList extends React.Component {
     this.carousel = null;
     this.mounted = null;
     const {params} = props.navigation.state;
-    console.log('params => ', params);
     const searchTerm = (params && params.searchTerm) || '';
     this.state = {
       showTripList: false,
@@ -227,7 +226,6 @@ class MapList extends React.Component {
     if (!this.props.userData || !this.props.userData.id) {
       return alert('You need to login to access this feature');
     }
-    console.log('map data => ', mapData);
     let packs = await MapboxGL.offlineManager.getPacks();
     let isDownloaded = packs.find(
       pack => pack.name == `${mapData.id}${mapData.name}`,
@@ -243,7 +241,6 @@ class MapList extends React.Component {
             user_id: this.props.userData && this.props.userData.id,
           })
           .then(async data => {
-            console.log('data => ', data);
             let pinList = data.mapID.pin_list || [];
 
             let featureCollections = [],
@@ -323,7 +320,6 @@ class MapList extends React.Component {
                 }
               });
               let boundsResult = getBoundingBox(pinLatLongs);
-              console.log('boundsResult => ', boundsResult);
               topLeft = boundsResult.topLeft;
               bottomRight = boundsResult.bottomRight;
               let filteredCollections = featureCollections.filter(
@@ -355,7 +351,6 @@ class MapList extends React.Component {
                 minZoom: 10,
                 maxZoom: 15,
               };
-              console.log('options => ', options);
 
               this.setState({
                 downloadSpinnerMsg: 'Downloading map...',
@@ -365,7 +360,6 @@ class MapList extends React.Component {
               MapboxGL.offlineManager.createPack(
                 options,
                 async (offlineRegion, offlineRegionStatus) => {
-                  console.log('offlineRegionStatus => ', offlineRegionStatus);
                   if (this.mounted) {
                     this.setState({
                       name: offlineRegion.name,
@@ -734,7 +728,6 @@ class MapList extends React.Component {
         });
       })
       .catch(err => {
-        console.log('err => ', err);
         alert(err);
         this.setState({addingReview: false});
       });
@@ -770,7 +763,6 @@ class MapList extends React.Component {
         })
         .catch(err => {
           this.setState({shareModal: false});
-          console.log('err => ', err);
           alert(`Can't share to ${type} because, ${err.error.message}`);
         });
     }
@@ -966,7 +958,6 @@ class MapList extends React.Component {
       this.setState({placeList: places, showPlaces: true});
     } catch (err) {
       this.setState({placeList: []});
-      console.log('err => ', err);
     }
   }
 

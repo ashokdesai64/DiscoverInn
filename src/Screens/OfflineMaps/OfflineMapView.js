@@ -67,7 +67,6 @@ class OfflineMapView extends React.Component {
   render() {
     let {params} = this.props.navigation.state;
     params = params || {};
-    console.log('params => ', params);
 
     let {filteredCollections, mapData, pinList} = this.state;
     return (

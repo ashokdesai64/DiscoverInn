@@ -1,4 +1,4 @@
-import React, {Fragment, useRef} from 'react';
+import React, { Fragment, useRef } from 'react';
 import {
   View,
   Dimensions,
@@ -12,15 +12,15 @@ import {
   ActivityIndicator,
   Image,
 } from 'react-native';
-import {getStatusBarHeight} from './../../config/statusbar';
+import { getStatusBarHeight } from './../../config/statusbar';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import RNFetchBlob from 'rn-fetch-blob';
-import Carousel, {Pagination} from 'react-native-snap-carousel';
-import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
+import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog';
 import fontelloConfig from '../../selection.json';
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
-import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import ImageBlurLoading from '../../components/ImageLoader';
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const DEVICE_WIDTH = Dimensions.get('window').width;
@@ -28,15 +28,15 @@ import Spinner from '../../components/Loader';
 import styles from './PinView.styles';
 import KeyboardSpacer from './KeyboardSpacer'
 //REDUX
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import * as mapActions from '../../actions/mapActions';
 
 class PinView extends React.Component {
   constructor(props) {
     super(props);
-    const {params} = props.navigation.state;
+    const { params } = props.navigation.state;
     this.state = {
       saveToListModal: false,
       activeSlide: 0,
@@ -53,14 +53,14 @@ class PinView extends React.Component {
       isOffline: params.isOffline,
       mapPins: [],
       firstItem: 0,
-      keyboardHeight:0
+      keyboardHeight: 0
     };
   }
 
   componentWillMount() {
 
     if (this.state.isOffline) {
-      const {params} = this.props.navigation.state;
+      const { params } = this.props.navigation.state;
       let allPins = params.allPins || [];
       let pinIndex = allPins.findIndex(p => p.id == params.pinID);
       this.setPinData(allPins, pinIndex);
@@ -85,7 +85,7 @@ class PinView extends React.Component {
   }
 
   fetchSinglePinData() {
-    const {params} = this.props.navigation.state;
+    const { params } = this.props.navigation.state;
     let pinID = params.pinID;
     let mapID = params.mapID;
     let fromFav = params.fromFav;
@@ -96,7 +96,7 @@ class PinView extends React.Component {
         let pinIndex = pinData.findIndex(p => p.id == pinID);
         this.setPinData(pinData, pinIndex);
       } else {
-        this.setState({loaderMsg: 'Fetching Pin Data', pinLoader: true});
+        this.setState({ loaderMsg: 'Fetching Pin Data', pinLoader: true });
         this.props.mapAction
           .fetchMapPinList({
             user_id: this.props.userData && this.props.userData.id,
@@ -108,19 +108,18 @@ class PinView extends React.Component {
             this.setPinData(pinData, pinIndex);
           })
           .catch(err => {
-            this.setState({loaderMsg: '', pinLoader: false});
-            console.log('err => ', err);
+            this.setState({ loaderMsg: '', pinLoader: false });
           });
       }
     }
   }
 
-  _renderItemCate = ({item, index}) => {
+  _renderItemCate = ({ item, index }) => {
     return (
       <ImageBlurLoading
         withIndicator
         style={styles.cateSlideCardIcon}
-        source={{uri: item.thumb_image || item.image }}
+        source={{ uri: item.image || item.thumb_image }}
         thumbnailSource={{
           uri: 'https://discover-inn.com/upload/cover/map-image.jpeg',
         }}
@@ -129,7 +128,7 @@ class PinView extends React.Component {
   };
 
   addToTrip(tripID) {
-    let {params} = this.props.navigation.state;
+    let { params } = this.props.navigation.state;
     if (
       params &&
       params.mapID &&
@@ -145,13 +144,12 @@ class PinView extends React.Component {
           user_id: this.props.userData.id,
         })
         .then(data => {
-          this.setState({saveToListModal: false,tripInputFocus:false}, () => {
+          this.setState({ saveToListModal: false, tripInputFocus: false }, () => {
             this.fetchSinglePinData();
             this.props.mapAction.fetchTripList();
           });
         })
         .catch(err => {
-          console.log('err => ', err);
         });
     }
   }
@@ -160,8 +158,8 @@ class PinView extends React.Component {
     if (!this.state.tripListName.trim()) {
       return alert('Please enter trip list name');
     }
-    this.setState({creatingTripList: true});
-    let {params} = this.props.navigation.state;
+    this.setState({ creatingTripList: true });
+    let { params } = this.props.navigation.state;
     this.props.mapAction
       .createFavouriteList({
         user_id: this.props.userData.id,
@@ -179,7 +177,7 @@ class PinView extends React.Component {
           .then(data => {
             this.props.mapAction.fetchTripList();
             this.setState(
-              {saveToListModal: false, creatingTripList: false,tripInputFocus:false},
+              { saveToListModal: false, creatingTripList: false, tripInputFocus: false },
               () => {
                 this.fetchSinglePinData();
               },
@@ -187,18 +185,18 @@ class PinView extends React.Component {
           })
           .catch(err => {
             alert(err);
-            this.setState({saveToListModal: false,tripInputFocus:false, creatingTripList: false});
+            this.setState({ saveToListModal: false, tripInputFocus: false, creatingTripList: false });
           });
       })
       .catch(err => {
         alert(err);
-        this.setState({saveToListModal: false, tripInputFocus:false,creatingTripList: false});
+        this.setState({ saveToListModal: false, tripInputFocus: false, creatingTripList: false });
       });
   }
 
   removeFromTrip(tripListID) {
-    let {params} = this.props.navigation.state;
-    this.setState({loaderMsg: 'Removing pin...', pinLoader: true});
+    let { params } = this.props.navigation.state;
+    this.setState({ loaderMsg: 'Removing pin...', pinLoader: true });
     this.props.mapAction
       .addRemoveToTrip({
         map_id: params.mapID,
@@ -207,7 +205,7 @@ class PinView extends React.Component {
         user_id: this.props.userData.id,
       })
       .then(data => {
-        this.setState({loaderMsg: '', pinLoader: false}, () => {
+        this.setState({ loaderMsg: '', pinLoader: false }, () => {
           this.fetchSinglePinData();
         });
       })
@@ -221,7 +219,7 @@ class PinView extends React.Component {
       return alert('Please connect to internet');
     }
     if (this.props.userData && this.props.userData.id) {
-      this.setState({saveToListModal: true});
+      this.setState({ saveToListModal: true });
     } else {
       alert('You need to login to access this feature');
     }
@@ -251,7 +249,7 @@ class PinView extends React.Component {
           <ImageBlurLoading
             withIndicator
             style={styles.cateSlideCardIcon}
-            source={{uri: pathToDisplay}}
+            source={{ uri: pathToDisplay }}
             thumbnailSource={{
               uri: pathToDisplay,
             }}
@@ -260,7 +258,7 @@ class PinView extends React.Component {
           <PinImages
             data={sliderData}
             renderItem={this._renderItemCate}
-            onSnapToItem={index => this.setState({activeSlide: index})}
+            onSnapToItem={index => this.setState({ activeSlide: index })}
           />
         )}
       </>
@@ -299,7 +297,7 @@ class PinView extends React.Component {
   }
 
   renderPinContent(pinData) {
-    let {categories} = this.props;
+    let { categories } = this.props;
 
     let selectedCategory =
       categories && categories.find(c => c.id == pinData.categories);
@@ -326,7 +324,7 @@ class PinView extends React.Component {
           <Text
             style={[
               styles.pinViewCateText,
-              {marginBottom: 15, paddingLeft: 15},
+              { marginBottom: 15, paddingLeft: 15 },
             ]}>
             {' '}
             Added From: {pinData.added_from || ''}
@@ -350,7 +348,7 @@ class PinView extends React.Component {
   setIsSaved(index) {
     let allMapPins = [...this.state.mapPins];
     let currentPinData = allMapPins[index];
-    this.setState({isSaved: currentPinData.save_triplist, currentPinData});
+    this.setState({ isSaved: currentPinData.save_triplist, currentPinData });
   }
 
   render() {
@@ -362,7 +360,7 @@ class PinView extends React.Component {
     }
     return (
       <>
-        <View style={[styles.pinHeader, {paddingTop, height}]}>
+        <View style={[styles.pinHeader, { paddingTop, height }]}>
           <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
             <Feather name={'arrow-left'} size={24} color={'white'} />
           </TouchableOpacity>
@@ -382,11 +380,11 @@ class PinView extends React.Component {
         <Spinner
           visible={this.state.pinLoader}
           textContent={this.state.loaderMsg}
-          textStyle={{color: '#fff'}}
+          textStyle={{ color: '#fff' }}
         />
 
         {this.state.mapPins.length > 0 && (
-          <View style={{position: 'relative'}}>
+          <View style={{ position: 'relative' }}>
             <Carousel
               data={this.state.mapPins}
               sliderWidth={DEVICE_WIDTH}
@@ -394,7 +392,7 @@ class PinView extends React.Component {
               inactiveSlideOpacity={1}
               inactiveSlideScale={1}
               firstItem={this.state.firstItem}
-              renderItem={({item, index}) => this.renderPin(item)}
+              renderItem={({ item, index }) => this.renderPin(item)}
               onSnapToItem={index => this.setIsSaved(index)}
               useScrollView
               nestedScrollEnabled={true}
@@ -408,7 +406,7 @@ class PinView extends React.Component {
           hasOverlay={true}
           animationDuration={1}
           onTouchOutside={() => {
-            this.setState({saveToListModal: false,tripInputFocus:false});
+            this.setState({ saveToListModal: false, tripInputFocus: false });
           }}
           dialogAnimation={
             new FadeAnimation({
@@ -418,16 +416,16 @@ class PinView extends React.Component {
             })
           }
           onHardwareBackPress={() => {
-            this.setState({saveToListModal: false,tripInputFocus:false});
+            this.setState({ saveToListModal: false, tripInputFocus: false });
             return true;
           }}
-          dialogStyle={[styles.customPopup,{bottom:this.state.tripInputFocus ? this.state.keyboardHeight:0}]}>
+          dialogStyle={[styles.customPopup, { bottom: this.state.tripInputFocus ? this.state.keyboardHeight : 0 }]}>
           <DialogContent style={styles.customPopupContent}>
             <View style={styles.customPopupHeader}>
               <Text style={styles.customPopupHeaderTitle}>Save to list</Text>
               <TouchableOpacity
                 style={styles.buttonClose}
-                onPress={() => this.setState({saveToListModal: false,tripInputFocus:false})}>
+                onPress={() => this.setState({ saveToListModal: false, tripInputFocus: false })}>
                 <Feather style={styles.buttonCloseIcon} name={'x'} />
               </TouchableOpacity>
             </View>
@@ -437,7 +435,7 @@ class PinView extends React.Component {
                 <>
                   <ScrollView
                     style={styles.MVTripList}
-                    contentContainerStyle={{maxHeight: 200, flexGrow: 0}}
+                    contentContainerStyle={{ maxHeight: 200, flexGrow: 0 }}
                     showsVerticalScrollIndicator={true}>
                     {this.props.tripList.map(trip => {
                       return (
@@ -479,16 +477,16 @@ class PinView extends React.Component {
                 style={styles.formControl}
                 placeholder={'Enter trip list name'}
                 placeholderTextColor={'#828894'}
-                onChangeText={tripListName => this.setState({tripListName})}
+                onChangeText={tripListName => this.setState({ tripListName })}
                 onFocus={() => {
-                  this.setState({tripInputFocus: true});
+                  this.setState({ tripInputFocus: true });
                 }}
                 onBlur={() => {
-                  this.setState({tripInputFocus: false});
+                  this.setState({ tripInputFocus: false });
                 }}
               />
             </View>
-            
+
             <View style={styles.buttonCTGroup}>
               <TouchableOpacity
                 style={[
@@ -497,7 +495,7 @@ class PinView extends React.Component {
                   styles.buttonCTCancel,
                   styles.buttonOutline,
                 ]}
-                onPress={() => this.setState({saveToListModal: false,tripInputFocus:false})}>
+                onPress={() => this.setState({ saveToListModal: false, tripInputFocus: false })}>
                 <Text style={[styles.buttonText, styles.buttonTextDark]}>
                   Cancel
                 </Text>
@@ -517,7 +515,7 @@ class PinView extends React.Component {
                 )}
               </TouchableOpacity>
             </View>
-            <KeyboardSpacer/>
+            <KeyboardSpacer />
           </DialogContent>
         </Dialog>
       </>
@@ -545,7 +543,7 @@ export default connect(
 const PinImages = props => {
   const carRef = useRef(null);
   return (
-    <View style={{position: 'relative'}}>
+    <View style={{ position: 'relative' }}>
       <Carousel
         sliderWidth={DEVICE_WIDTH}
         itemWidth={DEVICE_WIDTH}

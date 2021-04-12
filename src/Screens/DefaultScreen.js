@@ -12,7 +12,6 @@ class DefaultScreen extends Component {
 
   redirectToApp(props) {
     let {params} = props.navigation.state;
-    console.log("params => ",params)
     // if (props && props.userData && props.userData.userId) {
     if (params && params.signInFromIntro) {
       this.resetAction('Auth');

@@ -299,7 +299,6 @@ class AddMapDetail extends React.Component {
       this.setState({locationName: placeName});
     } catch (err) {
       this.setState({locationName: ''});
-      console.log('err => ', err);
     }
   }
 
@@ -318,7 +317,6 @@ class AddMapDetail extends React.Component {
       pinTitle,
       pinDescription,
     } = this.state;
-    console.log(this.state);
     const {params} = this.props.navigation.state;
 
     // if (!pinDescription) return alert('Pin description is required');
@@ -374,7 +372,6 @@ class AddMapDetail extends React.Component {
       }
     } catch (err) {
       this.setState({selectedLocation: false});
-      console.log('err => ', err);
     }
   }
 

@@ -250,7 +250,6 @@ class EditMapDetails extends React.Component {
           }
         }
       }
-      console.log(imageLocation);
       if (imageLocation && imageLocation.lat && imageLocation.lng) {
         this.getPlaceNameFromLocation({latitude:imageLocation.lat,longitude:imageLocation.lng})
       } else if(!!this.state.hasCameraImage){
@@ -305,7 +304,6 @@ class EditMapDetails extends React.Component {
       }
     } catch (err) {
       this.setState({locationName: ''});
-      console.log('err => ', err);
     }
   }
 
@@ -339,7 +337,6 @@ class EditMapDetails extends React.Component {
       this.setState({locationName: placeName, gotTrueLocation: true});
     } catch (err) {
       this.setState({locationName: '', gotTrueLocation: false});
-      console.log('err => ', err);
     }
   }
 
@@ -377,7 +374,6 @@ class EditMapDetails extends React.Component {
         })
         .catch(err => {
           this.setState({pinDetailInProgress: false});
-          console.log('err => ', err);
         });
     }
   }
@@ -446,7 +442,6 @@ class EditMapDetails extends React.Component {
           this.setState({webImages: filteredImage});
         })
         .catch(err => {
-          console.log('err => ', err);
           alert('Can not delete image, Please try again later.');
         });
     }
@@ -468,7 +463,6 @@ class EditMapDetails extends React.Component {
       }
     } catch (err) {
       this.setState({selectedLocation: false});
-      console.log('err => ', err);
     }
   }
 
@@ -479,7 +473,6 @@ class EditMapDetails extends React.Component {
       gotTrueLocation,
       locationFromImage,
     } = this.state;
-    console.log(this.state);
     const {params} = this.props.navigation.state;
     return (
       <Fragment>

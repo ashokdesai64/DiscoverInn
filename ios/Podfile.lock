@@ -186,15 +186,26 @@ PODS:
     - React-cxxreact (= 0.61.2)
     - React-jsi (= 0.61.2)
   - React-jsinspector (0.61.2)
-  - react-native-document-picker (3.5.4):
+  - react-native-document-picker (3.5.2):
     - React
   - react-native-image-picker (1.1.0):
     - React
   - react-native-location (2.5.0):
     - React
-  - react-native-mapbox-gl (7.2.0):
-    - Mapbox-iOS-SDK (~> 5.6)
+  - react-native-mapbox-gl (8.2.0-beta1):
+    - Mapbox-iOS-SDK (~> 5.9.0)
     - React
+    - React-Core
+    - react-native-mapbox-gl/DynamicLibrary (= 8.2.0-beta1)
+    - react-native-mapbox-gl/StaticLibraryFixer (= 8.2.0-beta1)
+  - react-native-mapbox-gl/DynamicLibrary (8.2.0-beta1):
+    - Mapbox-iOS-SDK (~> 5.9.0)
+    - React
+    - React-Core
+  - react-native-mapbox-gl/StaticLibraryFixer (8.2.0-beta1):
+    - Mapbox-iOS-SDK (~> 5.9.0)
+    - React
+    - React-Core
   - react-native-video (4.4.5):
     - React
     - react-native-video/Video (= 4.4.5)
@@ -237,23 +248,23 @@ PODS:
     - ReactCommon/jscallinvoker (= 0.61.2)
   - rn-fetch-blob (0.12.0):
     - React-Core
-  - RNCAsyncStorage (1.12.1):
-    - React-Core
-  - RNGestureHandler (1.8.0):
+  - RNCAsyncStorage (1.11.0):
+    - React
+  - RNGestureHandler (1.6.1):
     - React
   - RNImageCropPicker (0.26.2):
     - QBImagePickerController
     - React-Core
     - React-RCTImage
     - RSKImageCropper
-  - RNReanimated (1.13.1):
+  - RNReanimated (1.9.0):
     - React
   - RNScreens (1.0.0-alpha.23):
     - React
-  - RNShare (3.8.5):
-    - React-Core
-  - RNVectorIcons (6.1.0):
+  - RNShare (3.4.0):
     - React
+  - RNVectorIcons (8.1.0):
+    - React-Core
   - RSKImageCropper (3.0.0)
   - Yoga (1.14.0)
 
@@ -405,11 +416,11 @@ SPEC CHECKSUMS:
   React-jsi: 32285a21b1b24c36060493ed3057a34677d58d09
   React-jsiexecutor: 8909917ff7d8f21a57e443a866fd8d4560e50c65
   React-jsinspector: 111d7d342b07a904c400592e02a2b958f1098b60
-  react-native-document-picker: 4921045c5c6c78243010f784eae0a3f4b2af7799
-  react-native-image-picker: 7a85cf7b0a53845f03ae52fb4592a2748ded069b
-  react-native-location: 5a40ec1cc6abf2f6d94df979f98ec76c3a415681
-  react-native-mapbox-gl: f94bda32d55284b202d72359ed7d5d43f5223c89
-  react-native-video: eee541262ada11bc7ffe8ec5508e6a877937c462
+  react-native-document-picker: 1be88dafddd6565f883df156a7abd08466812e97
+  react-native-image-picker: 3637d63fef7e32a230141ab4660d3ceb773c824f
+  react-native-location: 9c53c0957756f7d70e8fdc76b1c7ed85867c8d0b
+  react-native-mapbox-gl: b147c5e106c69870198ae6bd16b190a261ecbbcc
+  react-native-video: aa527b0acb37f94c4491e70df0274cb26979405d
   React-RCTActionSheet: 89b037c0fb7d2671607cb645760164e7e0c013f6
   React-RCTAnimation: e3cefa93c38c004c318f7ec04b883eb14b8b8235
   React-RCTBlob: d26ac0e313fbf14e7203473fd593ccaaeee8329e
@@ -421,16 +432,16 @@ SPEC CHECKSUMS:
   React-RCTVibration: fb54c732fd20405a76598e431aa2f8c2bf527de9
   ReactCommon: 5848032ed2f274fcb40f6b9ec24067787c42d479
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
-  RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
-  RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
+  RNCAsyncStorage: db711e29e5e0500d9bd21aa0c2e397efa45302b1
+  RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNImageCropPicker: 9d1a7eea4f8368fc479cbd2bf26459bd3c74d9aa
-  RNReanimated: dd8c286ab5dd4ba36d3a7fef8bff7e08711b5476
+  RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
   RNScreens: f28b48b8345f2f5f39ed6195518291515032a788
-  RNShare: 7e22ba3bf66294ff7c122a1f2da8a8ec642091a0
-  RNVectorIcons: ac7bf6bfeafaf3ad34552cdc6eed6fb8c4b7c940
+  RNShare: d37b34279f840dd66ca233aa02005084b598f1b2
+  RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
   RSKImageCropper: 81f449b4df96bdaf28e1ad6dcce28dcda2235458
   Yoga: 14927e37bd25376d216b150ab2a561773d57911f
 
-PODFILE CHECKSUM: cff970869d80d123bbcddb58d7ce722f37aa82df
+PODFILE CHECKSUM: 6a5c50560fe37b6086e4576ae5e6fbb680b3055f
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.10.1

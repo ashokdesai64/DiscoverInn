@@ -71,7 +71,6 @@ class FilterScreen extends React.Component {
     this.props.navigation.goBack()
   }
   clearFilter() {
-    console.log('5464564654');
     this.props.navigation.state.params.setParams({ selectedAge:'', selectedBudget:'',
      selectedCategory:[], selectedCreatedWithin:'', selectedTravelType:'' });
     this.props.navigation.goBack()

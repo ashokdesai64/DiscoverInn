@@ -14,7 +14,7 @@ import { bindActionCreators } from 'redux';
 
 import * as mapActions from '../../../actions/mapActions';
 const currentYear = new Date().getFullYear()
-const year = Array(currentYear-2000).fill('').map((v,i)=> (i+2000).toString())
+const year = Array(currentYear - 1999).fill('').map((v, i) => (i + 2000).toString()).reverse()
 class EditMyTravelDetails extends React.Component {
 
   constructor(props) {
@@ -22,7 +22,7 @@ class EditMyTravelDetails extends React.Component {
 
     const { params } = props.navigation.state;
 
-    let travelMonth = 'select month', travelYear = 'select year';
+    let travelMonth = '', travelYear = '';
     if (params.type == 'edit') {
 
       let momentMonth = moment(params.mapData.date_of_travel).month();
@@ -35,7 +35,6 @@ class EditMyTravelDetails extends React.Component {
         travelYear = momentYear.toString();
       }
     }
-    console.log("travelYear => ",travelYear)
     this.state = {
       mapTitle: '',
       mapDescription: params.type == 'edit' ? params.mapData.description : '',
@@ -125,7 +124,6 @@ class EditMyTravelDetails extends React.Component {
           });
         }).catch(err => {
           this.props.navigation.goBack()
-          console.log("err => ", err);
         })
       })
       .catch(err => {
@@ -136,8 +134,8 @@ class EditMyTravelDetails extends React.Component {
   }
 
   render() {
+    console.log('this.state.year', this.state.year);
     const { params } = this.props.navigation.state;
-    console.log(params)
     return (
       <Fragment>
         <ImageBackground
@@ -156,205 +154,205 @@ class EditMyTravelDetails extends React.Component {
             textContent={'Updating Map...'}
             textStyle={{ color: '#fff' }}
           />
-            <View style={styles.pageContent}>
-              <ScrollView
-                showsHorizontalScrollIndicator={false}
-                showsVerticalScrollIndicator={false}
-                keyboardShouldPersistTaps={'handled'}
-                // contentContainerStyle={{ height: '100%' }}
-              >
-                <View style={styles.formGroup}>
-                  <Text style={styles.formLabel}>Description</Text>
-                  <KeyboardAvoidingView behavior="padding" enabled>
-                    <Textarea
-                      rowSpan={5}
-                      style={styles.formControlTextarea}
-                      value={this.state.mapDescription}
-                      onChangeText={mapDescription => {
-                        this.setState({ mapDescription });
-                      }}
-                    />
-                  </KeyboardAvoidingView>
+          <View style={styles.pageContent}>
+            <ScrollView
+              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps={'handled'}
+            // contentContainerStyle={{ height: '100%' }}
+            >
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Description</Text>
+                <KeyboardAvoidingView behavior="padding" enabled>
+                  <Textarea
+                    rowSpan={5}
+                    style={styles.formControlTextarea}
+                    value={this.state.mapDescription}
+                    onChangeText={mapDescription => {
+                      this.setState({ mapDescription });
+                    }}
+                  />
+                </KeyboardAvoidingView>
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Travel Type</Text>
+                <View style={styles.checkboxCard}>
+                  {this.props.travelTypes &&
+                    this.props.travelTypes.map(travelType => (
+                      <ListItem style={[styles.checkboxItem]}>
+                        <TouchableOpacity
+                          style={[
+                            styles.checkboxCustom,
+                            this.state.travelType == travelType.id
+                              ? styles.CheckboxBlue
+                              : styles.UnCheckboxBlue,
+                          ]}
+                          onPress={() =>
+                            this.setState({ travelType: travelType.id })
+                          }>
+                          <Text
+                            style={[
+                              styles.checkboxCustomText,
+                              this.state.travelType == travelType.id
+                                ? styles.CheckboxBlueText
+                                : styles.UnCheckboxBlueText,
+                            ]}>
+                            {travelType.name}
+                          </Text>
+                        </TouchableOpacity>
+                      </ListItem>
+                    ))}
                 </View>
-                <View style={styles.formGroup}>
-                  <Text style={styles.formLabel}>Travel Type</Text>
-                  <View style={styles.checkboxCard}>
-                    {this.props.travelTypes &&
-                      this.props.travelTypes.map(travelType => (
-                        <ListItem style={[styles.checkboxItem]}>
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Budget</Text>
+                <View style={styles.checkboxCard}>
+                  {this.props.budgetLists &&
+                    this.props.budgetLists.map(budget => {
+                      return (
+                        <ListItem
+                          style={[
+                            styles.checkboxItem,
+                            styles.checkboxItemGreen,
+                          ]}>
                           <TouchableOpacity
                             style={[
                               styles.checkboxCustom,
-                              this.state.travelType == travelType.id
-                                ? styles.CheckboxBlue
-                                : styles.UnCheckboxBlue,
+                              this.state.selectedBudget == budget.value
+                                ? styles.CheckboxGreen
+                                : styles.UnCheckboxGreen,
                             ]}
                             onPress={() =>
-                              this.setState({ travelType: travelType.id })
+                              this.setState({ selectedBudget: budget.value })
                             }>
                             <Text
                               style={[
                                 styles.checkboxCustomText,
-                                this.state.travelType == travelType.id
-                                  ? styles.CheckboxBlueText
-                                  : styles.UnCheckboxBlueText,
+                                this.state.selectedBudget == budget.value
+                                  ? styles.CheckboxGreenText
+                                  : styles.UnCheckboxGreenText,
                               ]}>
-                              {travelType.name}
+                              {budget.name}
                             </Text>
                           </TouchableOpacity>
                         </ListItem>
-                      ))}
-                  </View>
+                      );
+                    })}
                 </View>
-                <View style={styles.formGroup}>
-                  <Text style={styles.formLabel}>Budget</Text>
-                  <View style={styles.checkboxCard}>
-                    {this.props.budgetLists &&
-                      this.props.budgetLists.map(budget => {
-                        return (
-                          <ListItem
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.formLabel}>Age at travel</Text>
+                <View style={styles.checkboxCard}>
+                  {this.props.ageLists &&
+                    this.props.ageLists.map(age => {
+                      return (
+                        <ListItem style={styles.checkboxItem}>
+                          <TouchableOpacity
                             style={[
-                              styles.checkboxItem,
-                              styles.checkboxItemGreen,
-                            ]}>
-                            <TouchableOpacity
+                              styles.checkboxCustom,
+                              this.state.selectedAge == age.value
+                                ? styles.CheckboxYellow
+                                : styles.UnCheckboxYellow,
+                            ]}
+                            onPress={() =>
+                              this.setState({ selectedAge: age.value })
+                            }>
+                            <Text
                               style={[
-                                styles.checkboxCustom,
-                                this.state.selectedBudget == budget.value
-                                  ? styles.CheckboxGreen
-                                  : styles.UnCheckboxGreen,
-                              ]}
-                              onPress={() =>
-                                this.setState({ selectedBudget: budget.value })
-                              }>
-                              <Text
-                                style={[
-                                  styles.checkboxCustomText,
-                                  this.state.selectedBudget == budget.value
-                                    ? styles.CheckboxGreenText
-                                    : styles.UnCheckboxGreenText,
-                                ]}>
-                                {budget.name}
-                              </Text>
-                            </TouchableOpacity>
-                          </ListItem>
-                        );
-                      })}
-                  </View>
-                </View>
-                <View style={styles.formGroup}>
-                  <Text style={styles.formLabel}>Age at travel</Text>
-                  <View style={styles.checkboxCard}>
-                    {this.props.ageLists &&
-                      this.props.ageLists.map(age => {
-                        return (
-                          <ListItem style={styles.checkboxItem}>
-                            <TouchableOpacity
-                              style={[
-                                styles.checkboxCustom,
+                                styles.checkboxCustomText,
                                 this.state.selectedAge == age.value
-                                  ? styles.CheckboxYellow
-                                  : styles.UnCheckboxYellow,
-                              ]}
-                              onPress={() =>
-                                this.setState({ selectedAge: age.value })
-                              }>
-                              <Text
-                                style={[
-                                  styles.checkboxCustomText,
-                                  this.state.selectedAge == age.value
-                                    ? styles.CheckboxYellowText
-                                    : styles.UnCheckboxYellowText,
-                                ]}>
-                                {age.name}
-                              </Text>
-                            </TouchableOpacity>
-                          </ListItem>
+                                  ? styles.CheckboxYellowText
+                                  : styles.UnCheckboxYellowText,
+                              ]}>
+                              {age.name}
+                            </Text>
+                          </TouchableOpacity>
+                        </ListItem>
+                      );
+                    })}
+                </View>
+              </View>
+              <Text style={styles.formLabel}>Date of travel</Text>
+              <View style={styles.dropdownGroup__vertical}>
+                <View style={[styles.formGroup, styles.picker]}>
+                  <Picker
+                    style={styles.formDropdown}
+                    placeholderStyle={{ color: '#2874F0' }}
+                    selectedValue={this.state.month}
+                    textStyle={styles.dropdownText}
+                    onValueChange={this.change_month}
+                    mode="dropdown"
+                    iosHeader="Select Month"
+                    iosIcon={
+                      <Feather
+                        name="chevron-down"
+                        style={styles.formDropdownIcon}
+                      />
+                    }>
+                    <Picker.Item label="Month" value="" />
+                    {Array(12)
+                      .fill(1)
+                      .map((value, index) => {
+                        let displayMonth = `0${index + 1}`.slice(-2);
+                        return (
+                          <Picker.Item
+                            label={displayMonth}
+                            value={displayMonth}
+                          />
                         );
                       })}
-                  </View>
+                  </Picker>
                 </View>
-                <Text style={styles.formLabel}>Date of travel</Text>
-                <View style={styles.dropdownGroup__vertical}>
-                  <View style={[styles.formGroup, styles.picker]}>
-                    <Picker
-                      style={styles.formDropdown}
-                      placeholderStyle={{ color: '#2874F0' }}
-                      selectedValue={this.state.month}
-                      textStyle={styles.dropdownText}
-                      onValueChange={this.change_month}
-                      mode="dropdown"
-                      iosHeader="Select Month"
-                      iosIcon={
-                        <Feather
-                          name="chevron-down"
-                          style={styles.formDropdownIcon}
-                        />
-                      }>
-                      <Picker.Item label="Month" value="" />
-                      {Array(12)
-                        .fill(1)
-                        .map((value, index) => {
-                          let displayMonth = `0${index + 1}`.slice(-2);
-                          return (
-                            <Picker.Item
-                              label={displayMonth}
-                              value={displayMonth}
-                            />
-                          );
-                        })}
-                    </Picker>
-                  </View>
-                  <View style={[styles.formGroup, styles.picker]}>
-                    <Picker
-                      style={styles.formDropdown}
-                      selectedValue={this.state.year}
-                      onValueChange={this.change_year}
-                      textStyle={styles.dropdownText}
-                      mode="dropdown"
-                      iosHeader="Select Year"
-                      iosIcon={
-                        <Feather
-                          name="chevron-down"
-                          style={styles.formDropdownIcon}
-                        />
-                      }>
-                      <Picker.Item label="Year" value="" />
-                      {
-                        year.map(y => (
-                          <Picker.Item key={y} label={y} value={y} />
-                        ))
-                      }
-                    </Picker>
-                  </View>
-                  
+                <View style={[styles.formGroup, styles.picker]}>
+                  <Picker
+                    style={styles.formDropdown}
+                    selectedValue={this.state.year}
+                    onValueChange={this.change_year}
+                    textStyle={styles.dropdownText}
+                    mode="dropdown"
+                    iosHeader="Select Year"
+                    iosIcon={
+                      <Feather
+                        name="chevron-down"
+                        style={styles.formDropdownIcon}
+                      />
+                    }>
+                    <Picker.Item label="Year" value="" />
+                    {
+                      year.map(y => (
+                        <Picker.Item key={y} label={y} value={y} />
+                      ))
+                    }
+                  </Picker>
                 </View>
 
-                
-                <View style={styles.actionButton}>
-                  <TouchableOpacity
-                    style={[
-                      styles.button,
-                      styles.buttonOutline,
-                      styles.buttonEditMapDetail,
-                    ]}
-                    onPress={() => this.props.navigation.goBack()}
-                  >
-                    <Text style={styles.buttonTextGray}>Cancel</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[
-                      styles.button,
-                      styles.buttonPrimary,
-                      styles.buttonEditPin,
-                    ]}
-                    onPress={() => this.updateMap()}
-                  >
-                    <Text style={styles.buttonText}>Save</Text>
-                  </TouchableOpacity>
-                </View>
-              </ScrollView>
-            </View>
+              </View>
+
+
+              <View style={styles.actionButton}>
+                <TouchableOpacity
+                  style={[
+                    styles.button,
+                    styles.buttonOutline,
+                    styles.buttonEditMapDetail,
+                  ]}
+                  onPress={() => this.props.navigation.goBack()}
+                >
+                  <Text style={styles.buttonTextGray}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.button,
+                    styles.buttonPrimary,
+                    styles.buttonEditPin,
+                  ]}
+                  onPress={() => this.updateMap()}
+                >
+                  <Text style={styles.buttonText}>Save</Text>
+                </TouchableOpacity>
+              </View>
+            </ScrollView>
+          </View>
 
         </ImageBackground>
       </Fragment>
