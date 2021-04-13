@@ -27,7 +27,7 @@ const InfoScreen = ({values, onSkip, onSignIn}) => {
           <Text style={styles.buttonText}>SKIP</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={onSignIn}>
-          <Text style={styles.buttonText}>SIGN IN</Text>
+          <Text style={styles.buttonText}>SIGN UP</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

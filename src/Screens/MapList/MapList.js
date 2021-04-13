@@ -559,7 +559,7 @@ class MapList extends React.Component {
                 style={[styles.mapDetaileChild, styles.mapDetaileChildRight]}>
                 <Text style={[styles.mapDetaileTitle]}>Budget</Text>
                 <Text style={[styles.mapDetaileValue]}>
-                  {item.budget || '-'}
+                  {item.budget_limit || '-'}
                 </Text>
               </View>
             </View>

@@ -70,7 +70,7 @@ const FirstScreen = props => {
 
   const onSignIn = () => {
     dispatch({type: 'introCompleted', value: true});
-    props.navigation.navigate('AuthLoading', {signInFromIntro: true});
+    props.navigation.navigate('SignupScreen');
   };
 
   return !isIntroCompleted ? (
@@ -103,7 +103,7 @@ const FirstScreen = props => {
           <Text style={styles.buttonText}>GET STARTED</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={onSignIn} style={styles.button}>
-          <Text style={styles.buttonText}>SIGN IN</Text>
+          <Text style={styles.buttonText}>SIGN UP</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

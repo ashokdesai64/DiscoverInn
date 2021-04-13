@@ -10,7 +10,7 @@ import {
   TextInput,
   Platform,
   ActivityIndicator,
-  Image,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { getStatusBarHeight } from './../../config/statusbar';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -27,6 +27,7 @@ const DEVICE_WIDTH = Dimensions.get('window').width;
 import Spinner from '../../components/Loader';
 import styles from './PinView.styles';
 import KeyboardSpacer from './KeyboardSpacer'
+import ZoomImage from './zoomImage'
 //REDUX
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -116,14 +117,16 @@ class PinView extends React.Component {
 
   _renderItemCate = ({ item, index }) => {
     return (
-      <ImageBlurLoading
-        withIndicator
-        style={styles.cateSlideCardIcon}
-        source={{ uri: item.image || item.thumb_image }}
-        thumbnailSource={{
-          uri: 'https://discover-inn.com/upload/cover/map-image.jpeg',
-        }}
-      />
+      <TouchableWithoutFeedback onPress={() => this.setState({ zoomImage: item.image || item.thumb_image })} >
+        <ImageBlurLoading
+          withIndicator
+          style={styles.cateSlideCardIcon}
+          source={{ uri: item.image || item.thumb_image }}
+          thumbnailSource={{
+            uri: 'https://discover-inn.com/upload/cover/map-image.jpeg',
+          }}
+        />
+      </TouchableWithoutFeedback>
     );
   };
 
@@ -518,6 +521,17 @@ class PinView extends React.Component {
             <KeyboardSpacer />
           </DialogContent>
         </Dialog>
+        {this.state.zoomImage &&
+          <ZoomImage
+            closeModal={() => this.setState({ zoomImage: null })}
+            uri={this.state.zoomImage}
+            navigation={this.props.navigation}
+            isOffline={this.state.isOffline}
+            isSaved={this.state.isSaved}
+            removeFromTrip={() => this.removeFromTrip(this.state.isSaved)}
+            openSaveToListModal={() => this.openSaveToListModal()}
+          />
+        }
       </>
     );
   }
@@ -567,7 +581,7 @@ const PinImages = props => {
             flexDirection: 'row',
             justifyContent: 'space-between',
             width: DEVICE_WIDTH,
-            height: 350,
+            top: 160,
             alignItems: 'center',
             position: 'absolute',
             paddingHorizontal: 15,

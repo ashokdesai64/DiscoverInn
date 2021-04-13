@@ -120,7 +120,7 @@ const WalkThrough = props => {
 
   const onSignIn = () => {
     dispatch({type: 'introCompleted', value: true});
-    props.navigation.navigate('AuthLoading', {signInFromIntro: true});
+    props.navigation.navigate('SignupScreen');
   };
 
   const onVideoEnd = () => {
