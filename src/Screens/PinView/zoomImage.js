@@ -21,6 +21,18 @@ const ZoomImage = ({ closeModal, uri, navigation, isSaved, isOffline, removeFrom
         <TouchableOpacity onPress={closeModal}>
           <Feather name={'arrow-left'} size={24} color={'white'} />
         </TouchableOpacity>
+
+        {!isOffline &&
+          (isSaved ? (
+            <TouchableOpacity
+              onPress={removeFromTrip}>
+              <AntDesign name={'heart'} size={24} color={'white'} />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={openSaveToListModal}>
+              <AntDesign name={'hearto'} size={24} color={'white'} />
+            </TouchableOpacity>
+          ))}
       </View>
       <View style={{ flex: 1, backgroundColor: '#000' }} >
         <ImageBlurLoading

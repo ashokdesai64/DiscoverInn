@@ -528,8 +528,8 @@ class PinView extends React.Component {
             navigation={this.props.navigation}
             isOffline={this.state.isOffline}
             isSaved={this.state.isSaved}
-            removeFromTrip={() => this.removeFromTrip(this.state.isSaved)}
-            openSaveToListModal={() => this.openSaveToListModal()}
+            removeFromTrip={() => this.setState({ zoomImage: null }, () => this.removeFromTrip(this.state.isSaved))}
+            openSaveToListModal={() => this.setState({ zoomImage: null }, () => this.openSaveToListModal())}
           />
         }
       </>
