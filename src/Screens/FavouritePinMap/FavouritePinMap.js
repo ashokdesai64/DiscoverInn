@@ -32,13 +32,13 @@ class FavouritePinMap extends React.Component {
       currentLat: 21.2148224,
       currentLong: 72.8629248,
       isSelected: '1',
-      featureCollection: MapboxGL.geoUtils.makeFeatureCollection(),
+      // featureCollection: MapboxGL.geoUtils.makeFeatureCollection(),
       showDestination: true,
       pinList: [],
       mapPinsInProgress: true,
       followUserLocation: false,
       filteredCollections: [],
-      allPins:[]
+      allPins: []
     };
     this.categoryImages = {
       '1': sights1,
@@ -63,7 +63,7 @@ class FavouritePinMap extends React.Component {
         })
         .then(data => {
           this.setState({
-            allPins:data.favorite_pin || [],
+            allPins: data.favorite_pin || [],
             pinList: data.favorite_pin || [],
             mapPinsInProgress: false,
           });
@@ -168,7 +168,7 @@ class FavouritePinMap extends React.Component {
             textContent={'Fetching Pins...'}
             textStyle={{ color: '#fff' }}
             onClose={() => {
-              this.setState({mapPinsInProgress: false});
+              this.setState({ mapPinsInProgress: false });
             }}
           />
 
@@ -231,7 +231,7 @@ class FavouritePinMap extends React.Component {
                             mapID: payload.properties.mapID,
                             mapName: params.mapName,
                             fromFav: true,
-                            pinList:this.state.allPins
+                            pinList: this.state.allPins
                           });
                         }
                       }}>
@@ -259,7 +259,7 @@ class FavouritePinMap extends React.Component {
                       />
                       <MapboxGL.SymbolLayer
                         id={`singlePointSelected${collection.id}`}
-                        filter={['!',['has', 'point_count']]}
+                        filter={['!', ['has', 'point_count']]}
                         style={{
                           iconImage: ['get', 'category'],
                           iconAllowOverlap: true,
