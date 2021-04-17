@@ -14,7 +14,7 @@ import {
   Keyboard,
 } from 'react-native';
 import Share from 'react-native-share';
-import { checkIfHasPermission } from './../../config/permission';
+import { askForPermissions, checkIfHasPermission } from './../../config/permission';
 
 import { Item, Input, Button, Icon, Textarea, List, CheckBox } from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
@@ -36,7 +36,8 @@ import axios from 'axios';
 import _ from 'underscore';
 import { getBoundingBox } from 'geolocation-utils';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-
+import RNLocation from 'react-native-location'
+// import Geolocation from 'react-native-geolocation-service';
 MapboxGL.setAccessToken(
   'sk.eyJ1IjoicmF2aXNvaml0cmF3b3JrIiwiYSI6ImNrYTByeHVxZjBqbGszZXBtZjF3NmJleWgifQ.idSimILJ3_sk1gSWs2sMsQ',
 );
@@ -624,7 +625,7 @@ class MapList extends React.Component {
     );
   }
 
-  fetchMapList() {
+  async fetchMapList() {
     const { params } = this.props.navigation.state;
     const {
       selectedAge,
@@ -632,16 +633,41 @@ class MapList extends React.Component {
       selectedCategory,
       selectedCreatedWithin,
       selectedTravelType,
+      sortBy,
+      searchTerm
     } = this.state;
-
+    let latitude, longitude;
     this.setState({ fetchingMaps: true });
 
     let apiData = {
       // user_id: this.props.userData.id,
-      sort_by: this.state.sortBy || 'rating',
+      sort_by: sortBy || 'rating',
       page: this.pageNo,
-      search: this.state.searchTerm || '',
+      search: searchTerm || '',
     };
+
+    if (sortBy == 'distance') {
+      if (Platform.OS == 'android') {
+        await askForPermissions();
+      }
+      RNLocation.configure({
+        distanceFilter: 5.0,
+      });
+      await RNLocation.requestPermission({ ios: 'whenInUse', android: { detail: 'coarse' }, });
+      let location = await RNLocation.getLatestLocation({ timeout: 5000 });
+      apiData['latitude'] = location && location.latitude;
+      apiData['longitude'] = location && location.longitude;
+      // Geolocation.getCurrentPosition(
+      //   (position) => {
+      //     console.log('position position', position);
+      //   },
+      //   (error) => {
+      //     // See error code charts below.
+      //     console.log('error error', error);
+      //   },
+      //   { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+      // );
+    }
     if (selectedCategory || (params && params.category)) {
       let category = selectedCategory || (params && params.category);
       if (category && category.length) {

@@ -54,8 +54,8 @@ let data = [
   },
   {
     type: 'video',
-    uri: 'https://res.cloudinary.com/codetwisters/video/upload/q_auto/video_1_320_480_oxldvt.mp4',
-    poster: 'https://res.cloudinary.com/codetwisters/video/upload/q_auto/video_1_320_480_oxldvt.jpg',
+    uri: 'https://res.cloudinary.com/discover-inn/video/upload/q_auto/Discover-inn%20-%20How%20it%20works/video_1_320_480_rvqqvl.mp4',
+    poster: 'https://res.cloudinary.com/discover-inn/video/upload/q_auto/Discover-inn%20-%20How%20it%20works/video_1_320_480_rvqqvl.jpg',
   },
   {
     type: 'info',
@@ -65,8 +65,8 @@ let data = [
   },
   {
     type: 'video',
-    uri: 'https://res.cloudinary.com/codetwisters/video/upload/q_auto/video_2_320_480_uxuuyl.mp4',
-    poster: 'https://res.cloudinary.com/codetwisters/video/upload/q_auto/video_2_320_480_uxuuyl.jpg',
+    uri: 'https://res.cloudinary.com/discover-inn/video/upload/q_auto/Discover-inn%20-%20How%20it%20works/video_2_320_480_r3xjqs.mp4',
+    poster: 'https://res.cloudinary.com/discover-inn/video/upload/q_auto/Discover-inn%20-%20How%20it%20works/video_2_320_480_r3xjqs.jpg',
   },
   {
     type: 'info',
@@ -76,8 +76,8 @@ let data = [
   },
   {
     type: 'video',
-    uri: 'https://res.cloudinary.com/codetwisters/video/upload/q_auto/video_3_320_480_oflimp.mp4',
-    poster: 'https://res.cloudinary.com/codetwisters/video/upload/q_auto/video_3_320_480_oflimp.jpg',
+    uri: 'https://res.cloudinary.com/discover-inn/video/upload/q_auto/Discover-inn%20-%20How%20it%20works/video_3_320_480_yma81y.mp4',
+    poster: 'https://res.cloudinary.com/discover-inn/video/upload/q_auto/Discover-inn%20-%20How%20it%20works/video_3_320_480_yma81y.jpg',
   },
   {
     type: 'info',
@@ -87,8 +87,8 @@ let data = [
   },
   {
     type: 'video',
-    uri: 'https://res.cloudinary.com/codetwisters/video/upload/q_auto/video_4_320_480_js5toi.mp4',
-    poster: 'https://res.cloudinary.com/codetwisters/video/upload/q_auto/video_4_320_480_js5toi.jpg',
+    uri: 'https://res.cloudinary.com/discover-inn/video/upload/q_auto/Discover-inn%20-%20How%20it%20works/video_4_320_480_dm4tow.mp4',
+    poster: 'https://res.cloudinary.com/discover-inn/video/upload/q_auto/Discover-inn%20-%20How%20it%20works/video_4_320_480_dm4tow.jpg',
   },
 ];
 
