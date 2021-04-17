@@ -1,9 +1,9 @@
-import React, {useState, useEffect, useRef, useCallback} from 'react';
-import {View, BackHandler, StyleSheet, Dimensions} from 'react-native';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { View, BackHandler, StyleSheet, Dimensions } from 'react-native';
 import InfoScreen from './InfoScreen';
 import Carousel from 'react-native-snap-carousel';
 import Video from 'react-native-video';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import debounce from 'lodash.debounce';
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
@@ -49,54 +49,46 @@ let data = [
   {
     type: 'info',
     title: 'Start exploring',
-    info:
-      `Navigate through well known travel guides, bloggers' suggestions or your friends' last trip.`,
-    cover:
-      'https://discover-inn.s3.ca-central-1.amazonaws.com/cover_249_thumb2_image-922.jpg',
+    info: `Navigate through well known travel guides, bloggers' suggestions or your friends' last trip.`,
+    cover: 'https://discover-inn.s3.ca-central-1.amazonaws.com/cover_249_thumb2_image-922.jpg',
   },
   {
     type: 'video',
-    uri:
-      'https://discover-inn.s3.ca-central-1.amazonaws.com/walkthrough/video_1_320_480.mp4',
+    uri: 'https://res.cloudinary.com/codetwisters/video/upload/q_auto/video_1_320_480_oxldvt.mp4',
+    poster: 'https://res.cloudinary.com/codetwisters/video/upload/q_auto/video_1_320_480_oxldvt.jpg',
   },
   {
     type: 'info',
     title: 'Set your Trip',
-    info:
-      'Dive into multiple maps and add your favorite suggestions to your Trip List.',
-    cover:
-      'https://discover-inn.s3.ca-central-1.amazonaws.com/cover_202_thumb5_image-168.jpg',
+    info: 'Dive into multiple maps and add your favorite suggestions to your Trip List.',
+    cover: 'https://discover-inn.s3.ca-central-1.amazonaws.com/cover_202_thumb5_image-168.jpg',
   },
   {
     type: 'video',
-    uri:
-      'https://discover-inn.s3.ca-central-1.amazonaws.com/walkthrough/video_2_320_480.mp4',
+    uri: 'https://res.cloudinary.com/codetwisters/video/upload/q_auto/video_2_320_480_uxuuyl.mp4',
+    poster: 'https://res.cloudinary.com/codetwisters/video/upload/q_auto/video_2_320_480_uxuuyl.jpg',
   },
   {
     type: 'info',
     title: 'Create Souvenirs',
-    info:
-      `Do your own map based on your experiences and photos or import from Google MyMaps on Discover-inn.com`,
-    cover:
-      'https://discover-inn.s3.ca-central-1.amazonaws.com/cover_251_thumb4_image-408.jpg',
+    info: `Do your own map based on your experiences and photos or import from Google MyMaps on Discover-inn.com`,
+    cover: 'https://discover-inn.s3.ca-central-1.amazonaws.com/cover_251_thumb4_image-408.jpg',
   },
   {
     type: 'video',
-    uri:
-      'https://discover-inn.s3.ca-central-1.amazonaws.com/walkthrough/video_3_320_480.mp4',
+    uri: 'https://res.cloudinary.com/codetwisters/video/upload/q_auto/video_3_320_480_oflimp.mp4',
+    poster: 'https://res.cloudinary.com/codetwisters/video/upload/q_auto/video_3_320_480_oflimp.jpg',
   },
   {
     type: 'info',
     title: 'No Internet? No Problem!',
-    info:
-      'Download maps for Offline use to keep your Travel Guide right in your pocket.',
-    cover:
-      'https://discover-inn.s3.ca-central-1.amazonaws.com/cover_254_thumb7_image-755.jpg',
+    info: 'Download maps for Offline use to keep your Travel Guide right in your pocket.',
+    cover: 'https://discover-inn.s3.ca-central-1.amazonaws.com/cover_254_thumb7_image-755.jpg',
   },
   {
     type: 'video',
-    uri:
-      'https://discover-inn.s3.ca-central-1.amazonaws.com/walkthrough/video_4_320_480.mp4',
+    uri: 'https://res.cloudinary.com/codetwisters/video/upload/q_auto/video_4_320_480_js5toi.mp4',
+    poster: 'https://res.cloudinary.com/codetwisters/video/upload/q_auto/video_4_320_480_js5toi.jpg',
   },
 ];
 
@@ -106,7 +98,7 @@ const WalkThrough = props => {
   const sliderRef = useRef();
 
   useEffect(() => {
-    dispatch({type: 'introCompleted', value: true});
+    dispatch({ type: 'introCompleted', value: true });
     let eventHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       return props.navigation.navigate('GetStarted');
     });
@@ -114,12 +106,12 @@ const WalkThrough = props => {
   }, []);
 
   const onSkip = () => {
-    dispatch({type: 'introCompleted', value: true});
+    dispatch({ type: 'introCompleted', value: true });
     props.navigation.navigate('AuthLoading');
   };
 
   const onSignIn = () => {
-    dispatch({type: 'introCompleted', value: true});
+    dispatch({ type: 'introCompleted', value: true });
     props.navigation.navigate('SignupScreen');
   };
 
@@ -131,21 +123,22 @@ const WalkThrough = props => {
     }
   };
 
-  const renderComp = ({item, index}) => {
+  const renderComp = ({ item, index }) => {
     return item.type == 'video' ? (
       <VideoComponent
         uri={item.uri}
+        poster={item.poster}
         paused={index != currentIndex}
         currentIndex={currentIndex}
         onVideoEnd={onVideoEnd}
       />
     ) : (
-      <InfoScreen values={{...item}} onSkip={onSkip} onSignIn={onSignIn} />
+      <InfoScreen values={{ ...item }} onSkip={onSkip} onSignIn={onSignIn} />
     );
   };
 
   return (
-    <View style={{backgroundColor:'white',flexGrow:1}}>
+    <View style={{ backgroundColor: 'white', flexGrow: 1 }}>
       <Carousel
         ref={sliderRef}
         data={data}
@@ -161,15 +154,15 @@ const WalkThrough = props => {
   );
 };
 
-const VideoComponent = React.memo(({uri, paused, onVideoEnd,currentIndex}) => {
+const VideoComponent = React.memo(({ uri, paused, onVideoEnd, currentIndex, poster }) => {
 
   const videoRef = useRef(null);
-  useEffect(()=>{
+  useEffect(() => {
     videoRef && videoRef.current.seek(0);
-  },[currentIndex])
+  }, [currentIndex])
 
   const f = useCallback(
-    debounce(({currentTime, playableDuration}) => {
+    debounce(({ currentTime, playableDuration }) => {
       if (Math.ceil(currentTime) == Math.ceil(playableDuration)) {
         onVideoEnd();
       }
@@ -180,7 +173,7 @@ const VideoComponent = React.memo(({uri, paused, onVideoEnd,currentIndex}) => {
   return (
     <View style={styles.slide2}>
       <Video
-        source={{uri}}
+        source={{ uri }}
         volume={1.0}
         key={uri}
         paused={paused}
@@ -188,6 +181,7 @@ const VideoComponent = React.memo(({uri, paused, onVideoEnd,currentIndex}) => {
         ref={videoRef}
         // controls
         onProgress={f}
+        poster={poster}
       />
     </View>
   );

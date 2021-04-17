@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
+import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog';
 import ImageBlurLoading from './../../components/ImageLoader';
 
 import styles from './MapView.style';
@@ -21,8 +22,9 @@ import Header from './../../components/header/header';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import Spinner from './../../components/Loader';
 import _ from 'underscore';
-import {getBoundingBox} from 'geolocation-utils';
-import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
+import { getBoundingBox } from 'geolocation-utils';
+import Feather from 'react-native-vector-icons/Feather';
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import fontelloConfig from './../../selection.json';
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 MapboxGL.setAccessToken(
@@ -30,8 +32,8 @@ MapboxGL.setAccessToken(
 );
 
 //REDUX
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import * as mapActions from './../../actions/mapActions';
 
@@ -61,7 +63,7 @@ class MapView extends React.Component {
 
   loadMapPins(mapID) {
     if (mapID) {
-      this.setState({mapPinsInProgress: true});
+      this.setState({ mapPinsInProgress: true });
       this.props.mapAction
         .fetchMapPinList({
           map_id: mapID,
@@ -69,7 +71,7 @@ class MapView extends React.Component {
         })
         .then(data => {
           let pinList = data.mapID.pin_list || [];
-          let {params} = this.props.navigation.state;
+          let { params } = this.props.navigation.state;
           params = params || {};
 
           let featureCollections = [],
@@ -80,11 +82,11 @@ class MapView extends React.Component {
 
           if (pinList && pinList.length > 0) {
             allPins = [...pinList];
-            var splitByString = function(source, splitBy) {
+            var splitByString = function (source, splitBy) {
               var splitter = splitBy.split('');
               splitter.push([source]); //Push initial value
 
-              return splitter.reduceRight(function(accumulator, curValue) {
+              return splitter.reduceRight(function (accumulator, curValue) {
                 var k = [];
                 accumulator.forEach(v => (k = [...k, ...v.split(curValue)]));
                 return k;
@@ -164,13 +166,13 @@ class MapView extends React.Component {
           });
         })
         .catch(err => {
-          this.setState({mapPinsInProgress: false, pinList: []});
+          this.setState({ mapPinsInProgress: false, pinList: [] });
         });
     }
   }
 
   addNewPin() {
-    let {params} = this.props.navigation.state;
+    let { params } = this.props.navigation.state;
     this.props.navigation.navigate('AddMapDetail', {
       mapID: params.mapID,
       mapName: params.mapName,
@@ -178,7 +180,7 @@ class MapView extends React.Component {
   }
 
   editPins() {
-    let {params} = this.props.navigation.state;
+    let { params } = this.props.navigation.state;
     this.props.navigation.navigate('MapPins', {
       mapID: params.mapID,
       mapName: params.mapName,
@@ -186,14 +188,13 @@ class MapView extends React.Component {
   }
 
   componentDidMount() {
-    const {params} = this.props.navigation.state;
+    const { params } = this.props.navigation.state;
     this.loadMapPins(params && params.mapID);
   }
 
   render() {
-    let {params} = this.props.navigation.state;
-    params = params || {};
-    let {topLeft, bottomRight, filteredCollections, mapHasLoaded} = this.state;
+    let { params = {} } = this.props.navigation.state;
+    let { topLeft, bottomRight, filteredCollections, mapHasLoaded } = this.state;
     let hasCollection = filteredCollections && filteredCollections.length > 0;
     return (
       <View style={styles.page}>
@@ -201,18 +202,19 @@ class MapView extends React.Component {
           <Spinner
             visible={this.state.mapPinsInProgress}
             textContent={'Fetching Pins...'}
-            textStyle={{color: '#fff'}}
+            textStyle={{ color: '#fff' }}
             onClose={() => {
-              this.setState({mapPinsInProgress: false});
+              this.setState({ mapPinsInProgress: false });
             }}
           />
 
           <Header
             showBack={true}
             rightEmpty={true}
-            showRightButton={false}
-            // title={params.mapName}
+            customButton={true}
             {...this.props}
+            onRightPress={() => { this.setState({ mapDetailsModal: true }) }}
+            customIcon={<Feather style={[{ fontSize: 22 }]} name="info" />}
             absoluteHeader={true}
           />
 
@@ -223,11 +225,11 @@ class MapView extends React.Component {
             attributionEnabled={false}
             rotateEnabled={false}
             onDidFinishRenderingMapFully={r => {
-              this.setState({followUserLocation: false, mapHasLoaded: true});
+              this.setState({ followUserLocation: false, mapHasLoaded: true });
             }}
             onRegionDidChange={() => {
               if (!this.state.followUserLocation) {
-                this.setState({followUserLocation: false});
+                this.setState({ followUserLocation: false });
               }
             }}>
             {topLeft && bottomRight && hasCollection && mapHasLoaded ? (
@@ -242,7 +244,7 @@ class MapView extends React.Component {
             ) : (
               <>
                 <MapboxGL.Camera followUserLocation />
-                <MapboxGL.UserLocation animated={false}/>
+                <MapboxGL.UserLocation animated={false} />
               </>
             )}
 
@@ -260,78 +262,78 @@ class MapView extends React.Component {
 
             {hasCollection
               ? filteredCollections.map(collection => {
-                  let random = Math.floor(Math.random() * 90000) + 10000;
-                  return (
-                    <MapboxGL.ShapeSource
-                      key={collection.id}
-                      id={'symbolLocationSource' + random}
-                      hitbox={{width: 20, height: 20}}
-                      shape={collection}
-                      cluster
-                      clusterMaxZoomLevel={14}
-                      clusterRadius={40}
-                      onPress={e => {
-                        let payload = e.nativeEvent.payload;
-                        if (!payload.properties.cluster) {
-                          this.props.navigation.navigate('PinView', {
-                            pinID: payload.id,
-                            mapID: payload.properties.mapID,
-                            mapName: params.mapName,
-                            allPins: this.state.allPins,
-                          });
-                        }
-                      }}>
-                      <MapboxGL.CircleLayer
-                        id={`singlePoint${Math.random()}`}
-                        filter={['has', 'point_count']}
-                        style={{
-                          circleColor: 'rgba(47,128,237,1)',
-                          circleRadius: 20,
-                          circleStrokeWidth: 2,
-                          circleStrokeColor: 'white',
-                        }}
-                      />
-                      <MapboxGL.SymbolLayer
-                        id={`pointCount${Math.random()}`}
-                        filter={['has', 'point_count']}
-                        style={{
-                          textField: '{point_count}',
-                          textSize: 14,
-                          textHaloColor: '#fff',
-                          textHaloWidth: 0.3,
-                          textColor: '#fff',
-                          iconAllowOverlap: false,
-                        }}
-                      />
-                      <MapboxGL.SymbolLayer
-                        id={`singlePointSelected${collection.id}`}
-                        filter={['!', ['has', 'point_count']]}
-                        style={{
-                          iconImage: ['get', 'category'],
-                          iconAllowOverlap: true,
-                          textAllowOverlap: true,
-                          iconSize: 0.4,
-                        }}
-                      />
+                let random = Math.floor(Math.random() * 90000) + 10000;
+                return (
+                  <MapboxGL.ShapeSource
+                    key={collection.id}
+                    id={'symbolLocationSource' + random}
+                    hitbox={{ width: 20, height: 20 }}
+                    shape={collection}
+                    cluster
+                    clusterMaxZoomLevel={14}
+                    clusterRadius={40}
+                    onPress={e => {
+                      let payload = e.nativeEvent.payload;
+                      if (!payload.properties.cluster) {
+                        this.props.navigation.navigate('PinView', {
+                          pinID: payload.id,
+                          mapID: payload.properties.mapID,
+                          mapName: params.mapName,
+                          allPins: this.state.allPins,
+                        });
+                      }
+                    }}>
+                    <MapboxGL.CircleLayer
+                      id={`singlePoint${Math.random()}`}
+                      filter={['has', 'point_count']}
+                      style={{
+                        circleColor: 'rgba(47,128,237,1)',
+                        circleRadius: 20,
+                        circleStrokeWidth: 2,
+                        circleStrokeColor: 'white',
+                      }}
+                    />
+                    <MapboxGL.SymbolLayer
+                      id={`pointCount${Math.random()}`}
+                      filter={['has', 'point_count']}
+                      style={{
+                        textField: '{point_count}',
+                        textSize: 14,
+                        textHaloColor: '#fff',
+                        textHaloWidth: 0.3,
+                        textColor: '#fff',
+                        iconAllowOverlap: false,
+                      }}
+                    />
+                    <MapboxGL.SymbolLayer
+                      id={`singlePointSelected${collection.id}`}
+                      filter={['!', ['has', 'point_count']]}
+                      style={{
+                        iconImage: ['get', 'category'],
+                        iconAllowOverlap: true,
+                        textAllowOverlap: true,
+                        iconSize: 0.4,
+                      }}
+                    />
 
-                      <MapboxGL.SymbolLayer
-                        id={`singleNumberSelected${collection.id}`}
-                        filter={['==', 'hasNumber', true]}
-                        style={{
-                          textField: '{number}',
-                          textColor: 'white',
-                          textJustify: 'left',
-                          textAnchor: 'bottom-right',
-                          textOffset: [-0.5, -1],
-                          textHaloColor: 'rgba(47,128,237,1)',
-                          textHaloWidth: 5,
-                          textTranslate: [-0.5, -0.5],
-                          textPadding: 2,
-                        }}
-                      />
-                    </MapboxGL.ShapeSource>
-                  );
-                })
+                    <MapboxGL.SymbolLayer
+                      id={`singleNumberSelected${collection.id}`}
+                      filter={['==', 'hasNumber', true]}
+                      style={{
+                        textField: '{number}',
+                        textColor: 'white',
+                        textJustify: 'left',
+                        textAnchor: 'bottom-right',
+                        textOffset: [-0.5, -1],
+                        textHaloColor: 'rgba(47,128,237,1)',
+                        textHaloWidth: 5,
+                        textTranslate: [-0.5, -0.5],
+                        textPadding: 2,
+                      }}
+                    />
+                  </MapboxGL.ShapeSource>
+                );
+              })
               : null}
 
             {/* <MapboxGL.UserLocation
@@ -404,7 +406,7 @@ class MapView extends React.Component {
                 );
                 let imageData = pin.images && pin.images[0] && pin.images[0];
                 let image = imageData
-                  ? {uri: imageData.image || imageData.thumb_image}
+                  ? { uri: imageData.image || imageData.thumb_image }
                   : require('./../../Images/login-bg.jpg');
                 return (
                   <TouchableOpacity
@@ -434,7 +436,7 @@ class MapView extends React.Component {
                           'https://discover-inn.com/upload/cover/map-image.jpeg',
                       }}
                     />
-                    <View style={[styles.mapViewCardContent, {height: 95}]}>
+                    <View style={[styles.mapViewCardContent, { height: 95 }]}>
                       <View style={styles.mapViewTitle}>
                         <Text
                           style={styles.mapViewTitleText}
@@ -467,6 +469,72 @@ class MapView extends React.Component {
             </ScrollView>
           )}
         </View>
+
+        {/* map details modal */}
+        <Dialog
+          rounded={false}
+          visible={this.state.mapDetailsModal}
+          hasOverlay={true}
+          animationDuration={1}
+          onTouchOutside={() => {
+            this.setState({ mapDetailsModal: false });
+          }}
+          dialogAnimation={
+            new FadeAnimation({
+              initialValue: 0, // optional
+              animationDuration: 150, // optional
+              useNativeDriver: true, // optional
+            })
+          }
+          onHardwareBackPress={() => {
+            this.setState({ mapDetailsModal: false });
+            return true;
+          }}
+          dialogStyle={[styles.customPopup]}>
+          <DialogContent style={styles.customPopupContent}>
+            <View style={styles.customPopupHeader}>
+              <Text style={styles.customPopupHeaderTitle}>Map Details</Text>
+              <TouchableOpacity
+                style={styles.buttonClose}
+                onPress={() => this.setState({ mapDetailsModal: false })}>
+                <Feather
+                  style={styles.buttonCloseIcon}
+                  name={'x'}
+                  color={'black'}
+                />
+              </TouchableOpacity>
+            </View>
+            <ScrollView
+              style={{ backgroundColor: 'white', paddingBottom: 20 }}>
+              <View style={(styles.mdPopupImgCard, { height: 180 })}>
+                <ImageBlurLoading
+                  withIndicator
+                  style={styles.mdPopupImages}
+                  source={{ uri: params.mapData && params.mapData.cover_image }}
+                  thumbnailSource={{
+                    uri: 'https://discover-inn.com/upload/cover/map-image.jpeg',
+                  }}
+                />
+              </View>
+
+              <Text style={styles.mdPopupTitle}>
+                {params.mapData && params.mapData.name}
+              </Text>
+              <View style={styles.mdPopupAuthor}>
+                <Text style={styles.mdPopupAuthorLabel}>Traveller: </Text>
+                <Text style={styles.mdPopupAuthorName}>
+                  {' '}
+                  {params.mapData && (params.mapData.owner || params.mapData.username)}
+                </Text>
+              </View>
+              <Text style={styles.mdPopupDis}>
+                {params.mapData && params.mapData.description}{' '}
+              </Text>
+            </ScrollView>
+          </DialogContent>
+        </Dialog>
+
+
       </View>
     );
   }

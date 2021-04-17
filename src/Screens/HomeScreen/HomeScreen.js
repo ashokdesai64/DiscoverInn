@@ -85,6 +85,7 @@ class HomeScreen extends React.Component {
           this.props.navigation.navigate('MapView', {
             mapID: item.id,
             mapName: item.name,
+            mapData: item
           })
         }
         activeOpacity={1}>
@@ -155,6 +156,7 @@ class HomeScreen extends React.Component {
           this.props.navigation.navigate('MapView', {
             mapID: item.id,
             mapName: item.name,
+            mapData: item
           })
         }>
         <View style={styles.mapSlidCardInner}>

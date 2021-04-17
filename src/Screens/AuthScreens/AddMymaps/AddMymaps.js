@@ -104,7 +104,7 @@ class AddMymaps extends React.Component {
 
     this.props.mapAction.addMyMap(addMapObject).then((data) => {
       this.setState({ addMapInProgress: false }, () => {
-        this.props.navigation.navigate('MapView', { mapID: data.mapID,mapName:mapTitle })
+        this.props.navigation.navigate('MapView', { mapID: data.mapID, mapName: mapTitle, mapData: data })
       });
     }).catch((err) => {
       this.setState({ addMapInProgress: false }, () => { alert(err) });

@@ -71,9 +71,10 @@ class FilterScreen extends React.Component {
     this.props.navigation.goBack()
   }
   clearFilter() {
-    this.props.navigation.state.params.setParams({ selectedAge:'', selectedBudget:'',
-     selectedCategory:[], selectedCreatedWithin:'', selectedTravelType:'' });
-    this.props.navigation.goBack()
+    this.setState({ selectedCategory: [], selectedTravelType: [], selectedBudget: [], selectedAge: [], selectedCreatedWithin: [] })
+    // this.props.navigation.state.params.setParams({ selectedAge:'', selectedBudget:'',
+    //  selectedCategory:[], selectedCreatedWithin:'', selectedTravelType:'' });
+    // this.props.navigation.goBack()
   }
 
   toggleFilterValue(filterType, value) {
@@ -221,7 +222,7 @@ class FilterScreen extends React.Component {
                             ]}
                             onPress={() => {
                               this.setState({
-                                selectedCreatedWithin : this.state.selectedCreatedWithin == createdWithin.value ? '' : createdWithin.value
+                                selectedCreatedWithin: this.state.selectedCreatedWithin == createdWithin.value ? '' : createdWithin.value
                               })
                               // this.toggleFilterValue('', createdWithin.value)
                             }}>
@@ -242,14 +243,14 @@ class FilterScreen extends React.Component {
             </ScrollView>
           </View>
           <View style={styles.footerButton}>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={[
                 styles.button,
                 styles.filterButton,
                 styles.filterButtonCancel,
                 styles.buttonOutline,
               ]}
-              onPress={() => {this.clearFilter() }}>
+              onPress={() => { this.clearFilter() }}>
               <Text style={[styles.buttonText, styles.buttonTextWhite]}>
                 Undo
               </Text>

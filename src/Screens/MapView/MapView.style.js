@@ -206,6 +206,80 @@ const styles = StyleSheet.create({
   iconButtonView: {
     marginBottom: 10,
   },
+  customPopup: {
+    width: DEVICE_WIDTH,
+    padding: 0,
+    position: 'absolute',
+    bottom: 0,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowOffset: {width: 0, height: -2},
+    shadowRadius: 10,
+    maxHeight: DEVICE_HEIGHT - 190,
+  },
+  customPopupContent: {
+    paddingVertical: 20,
+    paddingHorizontal: 40,
+  },
+  customPopupHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  customPopupHeaderTitle: {
+    fontSize: 16,
+    fontFamily: 'Montserrat-SemiBold',
+    color: '#333333',
+  },
+  buttonClose: {
+    width: 24,
+    height: 24,
+  },
+  buttonCloseIcon: {
+    color: '#BDBDBD',
+    fontSize: 24,
+  },
+  mdPopupImages: {
+    height: 180,
+    borderRadius: 5,
+    width: '100%',
+  },
+  mdPopupTitle: {
+    color: '#333333',
+    fontSize: 18,
+    marginTop: 15,
+    marginBottom: 5,
+    fontFamily: 'Montserrat-SemiBold',
+  },
+  mdPopupAuthor: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  mdPopupAuthorLabel: {
+    fontFamily: 'Montserrat-SemiBold',
+    fontSize: 14,
+    color: '#4F4F4F',
+  },
+  mdPopupAuthorName: {
+    fontFamily: 'Montserrat-Medium',
+    fontSize: 12,
+    color: '#BDBDBD',
+    paddingLeft: 2,
+  },
+  mdPopupDis: {
+    fontSize: 12,
+    color: '#BDBDBD',
+    fontFamily: 'Montserrat-Regular',
+    marginTop: 15,
+    paddingBottom:40,
+    marginBottom:20
+  },
 });
 
 export default styles;

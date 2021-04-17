@@ -332,6 +332,7 @@ class EditMyTravel extends React.Component {
                     this.props.navigation.navigate('MapView', {
                       mapID,
                       mapName: this.state.mapName,
+                      mapData: params.mapData
                     });
                   }}
                   style={{

@@ -340,6 +340,7 @@ class MyTravel extends React.Component {
                 this.props.navigation.navigate('MapView', {
                   mapID: item.id,
                   mapName: item.name,
+                  mapData: item,
                   fromMyTravel: true,
                 });
               }}>

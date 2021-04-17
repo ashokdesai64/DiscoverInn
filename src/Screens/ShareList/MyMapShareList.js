@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   Text,
@@ -7,7 +7,7 @@ import {
   Dimensions,
   ActivityIndicator,
 } from 'react-native';
-import {Item, Input, Button} from 'native-base';
+import { Item, Input, Button } from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import styles from './MyMapShareList.style';
 import Carousel from 'react-native-snap-carousel';
@@ -16,11 +16,11 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import _ from 'underscore';
 
 //REDUX
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import * as mapActions from './../../actions/mapActions';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const height = Dimensions.get('window').height;
 class MyMapShareList extends React.Component {
@@ -36,7 +36,7 @@ class MyMapShareList extends React.Component {
 
   componentWillMount() {
     this.props.mapAction
-      .sharedMapsList({email: this.props.userData.email, page: '1'})
+      .sharedMapsList({ email: this.props.userData.email, page: '1' })
       .then(data => {
         this.setState({
           carouselItems: data,
@@ -45,7 +45,7 @@ class MyMapShareList extends React.Component {
         });
       })
       .catch(err => {
-        this.setState({carouselItems: [], fetchingMaps: false});
+        this.setState({ carouselItems: [], fetchingMaps: false });
       });
   }
 
@@ -60,24 +60,24 @@ class MyMapShareList extends React.Component {
     } else {
       filteredMapList = [...allMaps];
     }
-    this.setState({carouselItems: filteredMapList});
+    this.setState({ carouselItems: filteredMapList });
   }, 250);
 
-  navigateToMap(mapID, mapName) {
-    this.props.navigation.navigate('MapView', {mapID, mapName});
+  navigateToMap(mapID, mapName, mapData) {
+    this.props.navigation.navigate('MapView', { mapID, mapName, mapData });
   }
 
-  _renderItem({item, index}) {
+  _renderItem({ item, index }) {
     let avgReview = item.avrage_review || 0;
     return (
       <View style={[styles.mapSlideCard]}>
         <TouchableOpacity
           style={styles.mapSlideCardHeader}
           activeOpacity={0.5}
-          onPress={() => this.navigateToMap(item.id, item.name)}>
+          onPress={() => this.navigateToMap(item.id, item.name, item)}>
           <Image
             style={styles.mapSlideCardImg}
-            source={{uri: item.cover_image}}
+            source={{ uri: item.cover_image }}
           />
           <View style={styles.mapSlideCardImg_overlay} />
           {/* <Button style={styles.shareButton}>
@@ -137,12 +137,12 @@ class MyMapShareList extends React.Component {
   }
 
   render() {
-    const {width} = Dimensions.get('window');
-    let {carouselItems} = this.state;
+    const { width } = Dimensions.get('window');
+    let { carouselItems } = this.state;
 
     if (this.state.fetchingMaps) {
       return (
-        <View style={{backgroundColor: '#F3F3F4', flex: 1}}>
+        <View style={{ backgroundColor: '#F3F3F4', flex: 1 }}>
           <Header
             showBack={true}
             title={'Shared Zone'}
@@ -193,14 +193,14 @@ class MyMapShareList extends React.Component {
                 placeholder="Search your maps"
                 value={this.state.searchTerm}
                 onChangeText={searchTerm =>
-                  this.setState({searchTerm}, () => {
+                  this.setState({ searchTerm }, () => {
                     this.searchSharedMaps();
                   })
                 }
               />
             </Item>
           </View>
-          <View style={{paddingTop: 20}}>
+          <View style={{ paddingTop: 20 }}>
             {carouselItems && carouselItems.length > 0 ? (
               <Carousel
                 data={this.state.carouselItems}
