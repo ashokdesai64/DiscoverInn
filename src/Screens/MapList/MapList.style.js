@@ -563,12 +563,12 @@ const styles = StyleSheet.create({
   mdPopupAuthorName: {
     fontFamily: 'Montserrat-Medium',
     fontSize: 12,
-    color: '#BDBDBD',
+    color: '#4F4F4F',
     paddingLeft: 2,
   },
   mdPopupDis: {
     fontSize: 12,
-    color: '#BDBDBD',
+    color: '#4F4F4F',
     fontFamily: 'Montserrat-Regular',
     marginTop: 15,
     paddingBottom:40,
