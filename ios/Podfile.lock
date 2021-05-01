@@ -188,6 +188,8 @@ PODS:
   - React-jsinspector (0.61.2)
   - react-native-document-picker (3.5.2):
     - React
+  - react-native-geolocation-service (5.2.0):
+    - React
   - react-native-image-picker (1.1.0):
     - React
   - react-native-location (2.5.0):
@@ -250,6 +252,8 @@ PODS:
     - React-Core
   - RNCAsyncStorage (1.11.0):
     - React
+  - RNFS (2.17.0):
+    - React
   - RNGestureHandler (1.6.1):
     - React
   - RNImageCropPicker (0.26.2):
@@ -266,6 +270,8 @@ PODS:
   - RNVectorIcons (8.1.0):
     - React-Core
   - RSKImageCropper (3.0.0)
+  - toolbar-android (0.1.0-rc.2):
+    - React
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -286,6 +292,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
+  - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-location (from `../node_modules/react-native-location`)
   - "react-native-mapbox-gl (from `../node_modules/@react-native-mapbox-gl/maps`)"
@@ -303,12 +310,14 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
+  - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNShare (from `../node_modules/react-native-share`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
+  - "toolbar-android (from `../node_modules/@react-native-community/toolbar-android`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -350,6 +359,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-document-picker:
     :path: "../node_modules/react-native-document-picker"
+  react-native-geolocation-service:
+    :path: "../node_modules/react-native-geolocation-service"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
   react-native-location:
@@ -382,6 +393,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/rn-fetch-blob"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-community/async-storage"
+  RNFS:
+    :path: "../node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNImageCropPicker:
@@ -394,6 +407,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-share"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
+  toolbar-android:
+    :path: "../node_modules/@react-native-community/toolbar-android"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -417,6 +432,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 8909917ff7d8f21a57e443a866fd8d4560e50c65
   React-jsinspector: 111d7d342b07a904c400592e02a2b958f1098b60
   react-native-document-picker: 1be88dafddd6565f883df156a7abd08466812e97
+  react-native-geolocation-service: 7c9436da6dfdecd9526c62eac62ea2bc3f0cc8ea
   react-native-image-picker: 3637d63fef7e32a230141ab4660d3ceb773c824f
   react-native-location: 9c53c0957756f7d70e8fdc76b1c7ed85867c8d0b
   react-native-mapbox-gl: b147c5e106c69870198ae6bd16b190a261ecbbcc
@@ -433,6 +449,7 @@ SPEC CHECKSUMS:
   ReactCommon: 5848032ed2f274fcb40f6b9ec24067787c42d479
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCAsyncStorage: db711e29e5e0500d9bd21aa0c2e397efa45302b1
+  RNFS: 93d5b5535eb39d98e6b19009faa8fe717f7ea45d
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNImageCropPicker: 9d1a7eea4f8368fc479cbd2bf26459bd3c74d9aa
   RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
@@ -440,6 +457,7 @@ SPEC CHECKSUMS:
   RNShare: d37b34279f840dd66ca233aa02005084b598f1b2
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
   RSKImageCropper: 81f449b4df96bdaf28e1ad6dcce28dcda2235458
+  toolbar-android: 404f4450b203597e7b417f714ff417bed562a1be
   Yoga: 14927e37bd25376d216b150ab2a561773d57911f
 
 PODFILE CHECKSUM: 6a5c50560fe37b6086e4576ae5e6fbb680b3055f
