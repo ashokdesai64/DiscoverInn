@@ -252,7 +252,7 @@ PODS:
     - React-Core
   - RNCAsyncStorage (1.11.0):
     - React
-  - RNFS (2.17.0):
+  - RNFS (2.18.0):
     - React
   - RNGestureHandler (1.6.1):
     - React
@@ -449,7 +449,7 @@ SPEC CHECKSUMS:
   ReactCommon: 5848032ed2f274fcb40f6b9ec24067787c42d479
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCAsyncStorage: db711e29e5e0500d9bd21aa0c2e397efa45302b1
-  RNFS: 93d5b5535eb39d98e6b19009faa8fe717f7ea45d
+  RNFS: 3ab21fa6c56d65566d1fb26c2228e2b6132e5e32
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNImageCropPicker: 9d1a7eea4f8368fc479cbd2bf26459bd3c74d9aa
   RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
