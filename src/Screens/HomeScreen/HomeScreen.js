@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   Text,
@@ -10,32 +10,51 @@ import {
   Alert,
 } from 'react-native';
 import styles from './HomeScreen.style';
-import Carousel from 'react-native-snap-carousel';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from './../../components/header/header';
 import GoogleAutoComplete from './../../components/GoogleAutoComplete';
-import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import fontelloConfig from './../../selection.json';
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 import ImageBlurLoading from './../../components/ImageLoader';
-import {askForPermissions} from '../../config/permission';
+import { askForPermissions } from '../../config/permission';
 import RNLocation from 'react-native-location';
 import MapboxGL from '@react-native-mapbox-gl/maps';
+
+import Tabs from '../../components/TopTabBars'
+const { width } = Dimensions.get('window');
+
+function Test2() {
+  return (
+    <View style={{ flex: 1, }} />
+  )
+}
+
+// const TopTab = createMaterialTopTabNavigator({
+//   Test1: { screen: Test1 },
+//   Test2: { screen: Test2 },
+// },
+// {
+//   initialRouteName: 'Test1',
+//   activeTintColor: '#F44336',
+// },)
 //REDUX
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import * as authActions from './../../actions/authActions';
 import * as mapActions from './../../actions/mapActions';
-import {NavigationEvents} from 'react-navigation';
+import { NavigationEvents } from 'react-navigation';
+import MostPopular from './MostPopular';
+import TopRated from './TopRated';
 
 class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       showSorting: false,
-      userData: {userName: 'test'},
+      userData: { userName: 'test' },
       carouselCateItems: [
         {
           title: 'Sights',
@@ -73,10 +92,10 @@ class HomeScreen extends React.Component {
     this._renderItem = this._renderItem.bind(this);
   }
 
-  _renderItem({item, index}) {
+  _renderItem({ item, index }) {
     let avgReview = parseInt(item.avrage_review);
     let coverImage = item.cover_image
-      ? {uri: item.cover_image}
+      ? { uri: item.cover_image }
       : require('./../../Images/login-bg.jpg');
     return (
       <TouchableOpacity
@@ -143,10 +162,10 @@ class HomeScreen extends React.Component {
     );
   }
 
-  _renderItemTop({item, index}) {
+  _renderItemTop({ item, index }) {
     let avgReview = parseInt(item.avrage_review) || 0;
     let coverImage = item.cover_image
-      ? {uri: item.cover_image}
+      ? { uri: item.cover_image }
       : require('./../../Images/login-bg.jpg');
     return (
       <TouchableOpacity
@@ -247,9 +266,9 @@ class HomeScreen extends React.Component {
               onPress: () => console.log('Cancel Pressed'),
               style: 'cancel',
             },
-            {text: 'Yes', onPress: () => BackHandler.exitApp()},
+            { text: 'Yes', onPress: () => BackHandler.exitApp() },
           ],
-          {cancelable: false},
+          { cancelable: false },
         );
         return true;
       }
@@ -264,10 +283,10 @@ class HomeScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', () => {});
+    BackHandler.removeEventListener('hardwareBackPress', () => { });
   }
 
-  _renderItemCate = ({item, index}) => {
+  _renderItemCate = ({ item, index }) => {
     let category = this.state.carouselCateItems.find(c => c.title == item.name);
     let iconName = category.icon || 'other';
     return (
@@ -309,26 +328,66 @@ class HomeScreen extends React.Component {
       search: searchTerm,
     };
 
-    this.props.navigation.navigate('MapList', {searchTerm, searchObj});
+    this.props.navigation.navigate('MapList', { searchTerm, searchObj });
   }
 
   render() {
-    const {width} = Dimensions.get('window');
 
-    const {query} = this.state;
+    const { query } = this.state;
 
     return (
       <Fragment>
-        <Header
-          showMenu={true}
-          title={'Discover Inn'}
-          {...this.props}
-          style={{backgroundColor: '#F3F4F6'}}
-          rightEmpty={true}
-          showRightButton={false}
+        <View style={styles.header} >
+          <Header
+            // showMenu={true}
+            title={'Discover-Inn'}
+            {...this.props}
+            style={{ backgroundColor: '#F3F4F6' }}
+            rightEmpty={true}
+            showRightButton={false}
+          />
+          <NavigationEvents onWillFocus={() => this.setState({ searchTerm: '' })} />
+          <GoogleAutoComplete
+            autoCapitalize="none"
+            autoCorrect={false}
+            defaultValue={query}
+            onChangeText={text => {
+              this.setState({ searchTerm: text });
+            }}
+            placeholder="Next Travel Destination"
+            fetchSearchedMaps={(searchTerm, userId) => this.fetchSearchedMaps(searchTerm, userId)}
+            onValueChange={(searchTerm, userId) => {
+              this.setState({ searchTerm, userId }, () => {
+                this.fetchSearchedMaps(searchTerm, userId);
+              });
+            }}
+          // showSorting={() => {
+          //   this.setState({ showSorting: !this.state.showSorting });
+          // }}
+          />
+        </View>
+        <Tabs
+          screen={[
+            {
+              title: "Most Popular",
+              component: MostPopular,
+              props: this.props
+            },
+            {
+              title: "Top Rated",
+              component: TopRated,
+              props: this.props
+            },
+            {
+              title: "Nearby",
+              component: Test2,
+              props: this.props
+            },
+          ]}
+          activeBorderColor={"gray"}
+          selectedFontColor={"black"}
         />
-        <NavigationEvents onWillFocus={() => this.setState({searchTerm: ''})} />
-        <ScrollView
+        {/* <ScrollView
           style={styles.scrollView}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
@@ -340,26 +399,6 @@ class HomeScreen extends React.Component {
                 The 1-stop Travel Planner that suits your needs!
               </Text>
             </View>
-
-            <GoogleAutoComplete
-              autoCapitalize="none"
-              autoCorrect={false}
-              defaultValue={query}
-              onChangeText={text => {
-                this.setState({searchTerm: text});
-              }}
-              placeholder="Discover maps or search @user_name"
-              fetchSearchedMaps={(searchTerm, userId) => this.fetchSearchedMaps(searchTerm, userId)}
-              onValueChange={(searchTerm, userId) => {
-                this.setState({searchTerm, userId}, () => {
-                  this.fetchSearchedMaps(searchTerm, userId);
-                });
-              }}
-              showSorting={() => {
-                this.setState({showSorting: !this.state.showSorting});
-              }}
-            />
-
             {this.state.showSorting && (
               <View style={styles.categoryDropdown}>
                 <TouchableOpacity style={[styles.button, styles.buttonPrimary]}>
@@ -371,7 +410,7 @@ class HomeScreen extends React.Component {
                     styles.buttonOutlinePrimary,
                     styles.buttonDisabled,
                   ]}
-                  onPress={() => this.setState({saveToListModal: false})}>
+                  onPress={() => this.setState({ saveToListModal: false })}>
                   <Text
                     style={
                       ([styles.buttonText],
@@ -384,14 +423,12 @@ class HomeScreen extends React.Component {
                 </TouchableOpacity>
               </View>
             )}
-
             <View style={styles.cateCard}>
               <Text style={styles.sectionTitle}>Categories</Text>
             </View>
-
             <ScrollView
               horizontal={true}
-              contentContainerStyle={{paddingRight: 15}}>
+              contentContainerStyle={{ paddingRight: 15 }}>
               {this.props.categories &&
                 this.props.categories.map(item => {
                   let category = this.state.carouselCateItems.find(
@@ -419,37 +456,8 @@ class HomeScreen extends React.Component {
                   );
                 })}
             </ScrollView>
-
-            <View style={styles.cateCard}>
-              <Text style={styles.sectionTitle}>Most Popular</Text>
-            </View>
-            <View style={styles.carouselMapView}>
-              <Carousel
-                data={this.props.popularMaps}
-                sliderWidth={width}
-                itemWidth={300}
-                firstItem={2}
-                inactiveSlideOpacity={1}
-                inactiveSlideScale={1}
-                renderItem={this._renderItem}
-              />
-            </View>
-            <View style={styles.cateCard}>
-              <Text style={styles.sectionTitle}>Top Rated</Text>
-            </View>
-            <View style={[styles.carouselMapView, styles.carouselMapViewRated]}>
-              <Carousel
-                data={this.props.topRatedMaps}
-                sliderWidth={width}
-                itemWidth={300}
-                firstItem={2}
-                inactiveSlideOpacity={1}
-                inactiveSlideScale={1}
-                renderItem={this._renderItemTop}
-              />
-            </View>
           </View>
-        </ScrollView>
+        </ScrollView> */}
       </Fragment>
     );
   }

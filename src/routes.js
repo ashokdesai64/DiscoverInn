@@ -1,6 +1,7 @@
-import {createAppContainer, createSwitchNavigator} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
-import {createDrawerNavigator} from 'react-navigation-drawer';
+import React from 'react';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createDrawerNavigator } from 'react-navigation-drawer';
 import HomeScreen from './Screens/HomeScreen/HomeScreen';
 import EditCategories from './Screens/EditCategories/EditCategories';
 import EditProfile from './Screens/AuthScreens/EditProfile/EditProfile';
@@ -39,8 +40,10 @@ import SideMenu from './components/SideMenu/SideMenu';
 import DefaultScreen from './Screens/DefaultScreen';
 import WalkThrough from './Screens/WalkThrough';
 import GetStarted from './Screens/WalkThrough/GetStarted';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-const userStack = createStackNavigator(
+const userStack = () => (
   {
     Home: {
       screen: HomeScreen,
@@ -135,11 +138,7 @@ const userStack = createStackNavigator(
     MapReviews: {
       screen: MapReviews,
     },
-  },
-  {
-    headerMode: 'none',
-    initialRouteName: 'Home',
-  },
+  }
 );
 
 const AuthStack = createStackNavigator(
@@ -155,7 +154,7 @@ const AuthStack = createStackNavigator(
     },
     SetPassScreen: {
       screen: SetPassScreen,
-      path:'setpass/:email'
+      path: 'setpass/:email'
     },
   },
   {
@@ -164,24 +163,669 @@ const AuthStack = createStackNavigator(
   },
 );
 
-const DrawerStack = createDrawerNavigator(
+// const DrawerStack = createDrawerNavigator(
+//   {
+//     userStack: { screen: userStack },
+//   },
+//   {
+//     gesturesEnabled: false,
+//     contentComponent: SideMenu,
+//     initialRouteName: 'userStack',
+//   },
+// );
+
+const HomeStack = createStackNavigator(
   {
-    userStack: {screen: userStack},
+    Home: {
+      screen: HomeScreen,
+    },
+    // userStack: {
+    //   screen: userStack
+    // }
+    MapPins: {
+      screen: MapPins,
+    },
+    ChangePassword: {
+      screen: ChangePassword,
+    },
+    EditCategories: {
+      screen: EditCategories,
+    },
+    TripPinList: {
+      screen: TripPinList,
+    },
+    EditProfile: {
+      screen: EditProfile,
+    },
+    EditMymaps: {
+      screen: EditMymaps,
+    },
+    MyTravel: {
+      screen: MyTravel,
+    },
+    EditMyTravel: {
+      screen: EditMyTravel,
+    },
+    EditMyTravelDetails: {
+      screen: EditMyTravelDetails,
+    },
+    AddMymaps: {
+      screen: AddMymaps,
+    },
+    MyReviews: {
+      screen: MyReviews,
+    },
+    MyTripList: {
+      screen: MyTripList,
+    },
+    MyMapShareList: {
+      screen: MyMapShareList,
+    },
+    MapList: {
+      screen: MapList,
+    },
+    MapView: {
+      screen: MapView,
+    },
+    FavouritePinMap: {
+      screen: FavouritePinMap,
+    },
+    PinCategories: {
+      screen: PinCategories,
+    },
+    SinglePinView: {
+      screen: SinglePinView,
+    },
+    FilterScreen: {
+      screen: FilterScreen,
+    },
+    UploadMap: {
+      screen: UploadMap,
+    },
+    PinView: {
+      screen: PinView,
+    },
+    AddMapDetail: {
+      screen: AddMapDetail,
+    },
+    EditMapDetails: {
+      screen: EditMapDetails,
+    },
+    AboutUsScreen: {
+      screen: AboutUsScreen,
+    },
+    PrivacyPolicyScreen: {
+      screen: PrivacyPolicyScreen,
+    },
+    TermsConditionScreen: {
+      screen: TermsConditionScreen,
+    },
+    DefaultScreen: {
+      screen: DefaultScreen,
+    },
+    OfflineMaps: {
+      screen: OfflineMaps,
+    },
+    OfflineMapView: {
+      screen: OfflineMapView,
+    },
+    MapReviews: {
+      screen: MapReviews,
+    },
+  }, {
+  headerMode: 'none',
+})
+
+const MyTravelStack = createStackNavigator(
+  {
+    MyTravel: {
+      screen: MyTravel,
+    },
+    Home: {
+      screen: HomeScreen,
+    },
+    MapPins: {
+      screen: MapPins,
+    },
+    ChangePassword: {
+      screen: ChangePassword,
+    },
+    EditCategories: {
+      screen: EditCategories,
+    },
+    TripPinList: {
+      screen: TripPinList,
+    },
+    EditProfile: {
+      screen: EditProfile,
+    },
+    EditMymaps: {
+      screen: EditMymaps,
+    },
+    EditMyTravel: {
+      screen: EditMyTravel,
+    },
+    EditMyTravelDetails: {
+      screen: EditMyTravelDetails,
+    },
+    AddMymaps: {
+      screen: AddMymaps,
+    },
+    MyReviews: {
+      screen: MyReviews,
+    },
+    MyTripList: {
+      screen: MyTripList,
+    },
+    MyMapShareList: {
+      screen: MyMapShareList,
+    },
+    MapList: {
+      screen: MapList,
+    },
+    MapView: {
+      screen: MapView,
+    },
+    FavouritePinMap: {
+      screen: FavouritePinMap,
+    },
+    PinCategories: {
+      screen: PinCategories,
+    },
+    SinglePinView: {
+      screen: SinglePinView,
+    },
+    FilterScreen: {
+      screen: FilterScreen,
+    },
+    UploadMap: {
+      screen: UploadMap,
+    },
+    PinView: {
+      screen: PinView,
+    },
+    AddMapDetail: {
+      screen: AddMapDetail,
+    },
+    EditMapDetails: {
+      screen: EditMapDetails,
+    },
+    AboutUsScreen: {
+      screen: AboutUsScreen,
+    },
+    PrivacyPolicyScreen: {
+      screen: PrivacyPolicyScreen,
+    },
+    TermsConditionScreen: {
+      screen: TermsConditionScreen,
+    },
+    DefaultScreen: {
+      screen: DefaultScreen,
+    },
+    OfflineMaps: {
+      screen: OfflineMaps,
+    },
+    OfflineMapView: {
+      screen: OfflineMapView,
+    },
+    MapReviews: {
+      screen: MapReviews,
+    },
+  }, {
+  headerMode: 'none',
+})
+
+const MyTripListStack = createStackNavigator(
+  {
+    MyTripList: {
+      screen: MyTripList,
+    },
+    MyTravel: {
+      screen: MyTravel,
+    },
+    Home: {
+      screen: HomeScreen,
+    },
+    MapPins: {
+      screen: MapPins,
+    },
+    ChangePassword: {
+      screen: ChangePassword,
+    },
+    EditCategories: {
+      screen: EditCategories,
+    },
+    TripPinList: {
+      screen: TripPinList,
+    },
+    EditProfile: {
+      screen: EditProfile,
+    },
+    EditMymaps: {
+      screen: EditMymaps,
+    },
+    EditMyTravel: {
+      screen: EditMyTravel,
+    },
+    EditMyTravelDetails: {
+      screen: EditMyTravelDetails,
+    },
+    AddMymaps: {
+      screen: AddMymaps,
+    },
+    MyReviews: {
+      screen: MyReviews,
+    },
+    MyMapShareList: {
+      screen: MyMapShareList,
+    },
+    MapList: {
+      screen: MapList,
+    },
+    MapView: {
+      screen: MapView,
+    },
+    FavouritePinMap: {
+      screen: FavouritePinMap,
+    },
+    PinCategories: {
+      screen: PinCategories,
+    },
+    SinglePinView: {
+      screen: SinglePinView,
+    },
+    FilterScreen: {
+      screen: FilterScreen,
+    },
+    UploadMap: {
+      screen: UploadMap,
+    },
+    PinView: {
+      screen: PinView,
+    },
+    AddMapDetail: {
+      screen: AddMapDetail,
+    },
+    EditMapDetails: {
+      screen: EditMapDetails,
+    },
+    AboutUsScreen: {
+      screen: AboutUsScreen,
+    },
+    PrivacyPolicyScreen: {
+      screen: PrivacyPolicyScreen,
+    },
+    TermsConditionScreen: {
+      screen: TermsConditionScreen,
+    },
+    DefaultScreen: {
+      screen: DefaultScreen,
+    },
+    OfflineMaps: {
+      screen: OfflineMaps,
+    },
+    OfflineMapView: {
+      screen: OfflineMapView,
+    },
+    MapReviews: {
+      screen: MapReviews,
+    },
+  }, {
+  headerMode: 'none',
+})
+
+const OfflineMapsStack = createStackNavigator(
+  {
+    OfflineMaps: {
+      screen: OfflineMaps,
+    },
+    MyTripList: {
+      screen: MyTripList,
+    },
+    MyTravel: {
+      screen: MyTravel,
+    },
+    Home: {
+      screen: HomeScreen,
+    },
+    MapPins: {
+      screen: MapPins,
+    },
+    ChangePassword: {
+      screen: ChangePassword,
+    },
+    EditCategories: {
+      screen: EditCategories,
+    },
+    TripPinList: {
+      screen: TripPinList,
+    },
+    EditProfile: {
+      screen: EditProfile,
+    },
+    EditMymaps: {
+      screen: EditMymaps,
+    },
+    EditMyTravel: {
+      screen: EditMyTravel,
+    },
+    EditMyTravelDetails: {
+      screen: EditMyTravelDetails,
+    },
+    AddMymaps: {
+      screen: AddMymaps,
+    },
+    MyReviews: {
+      screen: MyReviews,
+    },
+    MyMapShareList: {
+      screen: MyMapShareList,
+    },
+    MapList: {
+      screen: MapList,
+    },
+    MapView: {
+      screen: MapView,
+    },
+    FavouritePinMap: {
+      screen: FavouritePinMap,
+    },
+    PinCategories: {
+      screen: PinCategories,
+    },
+    SinglePinView: {
+      screen: SinglePinView,
+    },
+    FilterScreen: {
+      screen: FilterScreen,
+    },
+    UploadMap: {
+      screen: UploadMap,
+    },
+    PinView: {
+      screen: PinView,
+    },
+    AddMapDetail: {
+      screen: AddMapDetail,
+    },
+    EditMapDetails: {
+      screen: EditMapDetails,
+    },
+    AboutUsScreen: {
+      screen: AboutUsScreen,
+    },
+    PrivacyPolicyScreen: {
+      screen: PrivacyPolicyScreen,
+    },
+    TermsConditionScreen: {
+      screen: TermsConditionScreen,
+    },
+    DefaultScreen: {
+      screen: DefaultScreen,
+    },
+    OfflineMapView: {
+      screen: OfflineMapView,
+    },
+    MapReviews: {
+      screen: MapReviews,
+    },
+  }, {
+  headerMode: 'none',
+})
+
+const MyReviewsStack = createStackNavigator(
+  {
+    MyReviews: {
+      screen: MyReviews,
+    },
+    OfflineMaps: {
+      screen: OfflineMaps,
+    },
+    MyTripList: {
+      screen: MyTripList,
+    },
+    MyTravel: {
+      screen: MyTravel,
+    },
+    Home: {
+      screen: HomeScreen,
+    },
+    MapPins: {
+      screen: MapPins,
+    },
+    ChangePassword: {
+      screen: ChangePassword,
+    },
+    EditCategories: {
+      screen: EditCategories,
+    },
+    TripPinList: {
+      screen: TripPinList,
+    },
+    EditProfile: {
+      screen: EditProfile,
+    },
+    EditMymaps: {
+      screen: EditMymaps,
+    },
+    EditMyTravel: {
+      screen: EditMyTravel,
+    },
+    EditMyTravelDetails: {
+      screen: EditMyTravelDetails,
+    },
+    AddMymaps: {
+      screen: AddMymaps,
+    },
+    MyMapShareList: {
+      screen: MyMapShareList,
+    },
+    MapList: {
+      screen: MapList,
+    },
+    MapView: {
+      screen: MapView,
+    },
+    FavouritePinMap: {
+      screen: FavouritePinMap,
+    },
+    PinCategories: {
+      screen: PinCategories,
+    },
+    SinglePinView: {
+      screen: SinglePinView,
+    },
+    FilterScreen: {
+      screen: FilterScreen,
+    },
+    UploadMap: {
+      screen: UploadMap,
+    },
+    PinView: {
+      screen: PinView,
+    },
+    AddMapDetail: {
+      screen: AddMapDetail,
+    },
+    EditMapDetails: {
+      screen: EditMapDetails,
+    },
+    AboutUsScreen: {
+      screen: AboutUsScreen,
+    },
+    PrivacyPolicyScreen: {
+      screen: PrivacyPolicyScreen,
+    },
+    TermsConditionScreen: {
+      screen: TermsConditionScreen,
+    },
+    DefaultScreen: {
+      screen: DefaultScreen,
+    },
+    OfflineMapView: {
+      screen: OfflineMapView,
+    },
+    MapReviews: {
+      screen: MapReviews,
+    },
+  }, {
+  headerMode: 'none',
+})
+
+const MyMapShareListStack = createStackNavigator(
+  {
+    MyMapShareList: {
+      screen: MyMapShareList,
+    },
+    MyReviews: {
+      screen: MyReviews,
+    },
+    OfflineMaps: {
+      screen: OfflineMaps,
+    },
+    MyTripList: {
+      screen: MyTripList,
+    },
+    MyTravel: {
+      screen: MyTravel,
+    },
+    Home: {
+      screen: HomeScreen,
+    },
+    MapPins: {
+      screen: MapPins,
+    },
+    ChangePassword: {
+      screen: ChangePassword,
+    },
+    EditCategories: {
+      screen: EditCategories,
+    },
+    TripPinList: {
+      screen: TripPinList,
+    },
+    EditProfile: {
+      screen: EditProfile,
+    },
+    EditMymaps: {
+      screen: EditMymaps,
+    },
+    EditMyTravel: {
+      screen: EditMyTravel,
+    },
+    EditMyTravelDetails: {
+      screen: EditMyTravelDetails,
+    },
+    AddMymaps: {
+      screen: AddMymaps,
+    },
+    MapList: {
+      screen: MapList,
+    },
+    MapView: {
+      screen: MapView,
+    },
+    FavouritePinMap: {
+      screen: FavouritePinMap,
+    },
+    PinCategories: {
+      screen: PinCategories,
+    },
+    SinglePinView: {
+      screen: SinglePinView,
+    },
+    FilterScreen: {
+      screen: FilterScreen,
+    },
+    UploadMap: {
+      screen: UploadMap,
+    },
+    PinView: {
+      screen: PinView,
+    },
+    AddMapDetail: {
+      screen: AddMapDetail,
+    },
+    EditMapDetails: {
+      screen: EditMapDetails,
+    },
+    AboutUsScreen: {
+      screen: AboutUsScreen,
+    },
+    PrivacyPolicyScreen: {
+      screen: PrivacyPolicyScreen,
+    },
+    TermsConditionScreen: {
+      screen: TermsConditionScreen,
+    },
+    DefaultScreen: {
+      screen: DefaultScreen,
+    },
+    OfflineMapView: {
+      screen: OfflineMapView,
+    },
+    MapReviews: {
+      screen: MapReviews,
+    },
+  }, {
+  headerMode: 'none',
+})
+
+const TabNavigation = createBottomTabNavigator(
+  {
+    'Home': HomeStack,
+    'Travel': MyTravelStack,
+    'Trip List': MyTripListStack,
+    'Downloaded': OfflineMapsStack,
+    'Reviews': MyReviewsStack,
+    'Share': MyMapShareListStack
   },
   {
-    gesturesEnabled: false,
-    contentComponent: SideMenu,
-    initialRouteName: 'userStack',
-  },
-);
+    defaultNavigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ focused, horizontal, tintColor }) => {
+        const { routeName } = navigation.state;
+        let IconComponent = MaterialIcons;
+        let iconName;
+        if (routeName === 'Home') {
+          iconName = focused
+            ? 'airplanemode-on'
+            : 'airplanemode-off';
+        } else if (routeName === 'Travel') {
+          iconName = focused ? 'airplanemode-on'
+            : 'airplanemode-off';
+        } else if (routeName === 'Trip List') {
+          iconName = focused ? 'airplanemode-on'
+            : 'airplanemode-off';
+        } else if (routeName === 'Downloaded') {
+          iconName = focused ? 'airplanemode-on'
+            : 'airplanemode-off';
+        } else if (routeName === 'Reviews') {
+          iconName = focused ? 'airplanemode-on'
+            : 'airplanemode-off';
+        } else if (routeName === 'Share') {
+          iconName = focused ? 'airplanemode-on'
+            : 'airplanemode-off';
+        }
+        return <IconComponent name={iconName} size={25} color={tintColor} />;
+      },
+    }),
+    tabBarOptions: {
+      activeTintColor: 'black',
+      inactiveTintColor: 'gray',
+    },
+  }
+)
 
 const App = createSwitchNavigator(
   {
     AuthLoading: {
       screen: DefaultScreen,
     },
+    // App: {
+    //   screen: DrawerStack,
+    // },
     App: {
-      screen: DrawerStack,
+      screen: TabNavigation,
     },
     Auth: {
       screen: AuthStack,

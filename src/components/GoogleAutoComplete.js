@@ -251,7 +251,7 @@ export default class GoogleAutoComplete extends Component {
             <Feather style={styles.searchbarIcon} name="search" />
             <Input
               style={styles.searchbarInput}
-              placeholder="Discover maps or search @user_name"
+              placeholder="Next Travel Destination"
               value={this.state.searchTerm}
               onChangeText={searchTerm =>
                 this.setState({searchTerm}, () => {
@@ -259,9 +259,9 @@ export default class GoogleAutoComplete extends Component {
                 })
               }
             />
-            <TouchableOpacity onPress={() => this.props.showSorting()}>
+           {this.props.showSorting && <TouchableOpacity onPress={() => this.props.showSorting()}>
               <Feather style={styles.searchbarFilter} name="sliders" />
-            </TouchableOpacity>
+            </TouchableOpacity>}
             <Button
               style={styles.searchbarCardButton}
               disabled={this.state.searchTerm[0] === '@'}

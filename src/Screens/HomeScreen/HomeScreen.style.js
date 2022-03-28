@@ -1,4 +1,6 @@
-import {StyleSheet} from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
+
+const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -57,7 +59,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     marginBottom: 10,
-    shadowOffset: {width: 0, height: 5},
+    shadowOffset: { width: 0, height: 5 },
     shadowColor: 'rgba(6, 18, 42, 0.08);',
     shadowOpacity: 1.0,
     backgroundColor: '#fff',
@@ -95,10 +97,10 @@ const styles = StyleSheet.create({
   mapSlidCard: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: 15,
+    marginVertical: 6,
   },
   mapSlideCardImg: {
-    width: 280,
+    width: width - 10,
     height: 280,
     borderRadius: 10,
   },
@@ -108,7 +110,7 @@ const styles = StyleSheet.create({
     left: 0,
     top: 0,
     bottom: 0,
-    width: 280,
+    width: width - 10,
     height: 280,
     borderRadius: 10,
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
@@ -170,7 +172,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
     shadowColor: '#000000',
     shadowOpacity: 0.05,
-    shadowOffset: {width: 0, height: 4},
+    shadowOffset: { width: 0, height: 4 },
     shadowRadius: 10,
   },
   searchbarInputBox: {
@@ -245,6 +247,10 @@ const styles = StyleSheet.create({
   buttonDisabled: {
     opacity: 0.2,
   },
+  header: {
+    height: 120,
+    backgroundColor: '#F3F4F6'
+  }
 });
 
 export default styles;

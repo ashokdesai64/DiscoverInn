@@ -5,6 +5,15 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import VideoPlayer from './src/components/Video'
 import RNFileSystem from 'react-native-fs';
 import RNFetchBlob from 'rn-fetch-blob';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+MaterialCommunityIcons.loadFont();
+MaterialIcons.loadFont();
+AntDesign.loadFont();
+SimpleLineIcons.loadFont();
 Feather.loadFont();
 Ionicons.loadFont();
 

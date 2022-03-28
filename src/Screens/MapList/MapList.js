@@ -1038,7 +1038,7 @@ class MapList extends React.Component {
                 <Feather style={styles.searchbarIcon} name="search" />
                 <Input
                   style={styles.searchbarInput}
-                  placeholder="Discover maps or search @user_name"
+                  placeholder="Next Travel Destination"
                   value={this.state.searchTerm}
                   onChangeText={searchTerm =>
                     this.setState({ searchTerm }, () => {
