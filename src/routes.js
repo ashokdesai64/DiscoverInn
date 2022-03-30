@@ -42,6 +42,8 @@ import WalkThrough from './Screens/WalkThrough';
 import GetStarted from './Screens/WalkThrough/GetStarted';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { homeIcon, travel, travelList, download, review, share } from './Images';
+import { Image, StyleSheet } from 'react-native';
 
 const userStack = () => (
   {
@@ -776,7 +778,7 @@ const TabNavigation = createBottomTabNavigator(
     'Home': HomeStack,
     'Travel': MyTravelStack,
     'Trip List': MyTripListStack,
-    'Downloaded': OfflineMapsStack,
+    'Download': OfflineMapsStack,
     'Reviews': MyReviewsStack,
     'Share': MyMapShareListStack
   },
@@ -787,26 +789,19 @@ const TabNavigation = createBottomTabNavigator(
         let IconComponent = MaterialIcons;
         let iconName;
         if (routeName === 'Home') {
-          iconName = focused
-            ? 'airplanemode-on'
-            : 'airplanemode-off';
+          iconName = homeIcon
         } else if (routeName === 'Travel') {
-          iconName = focused ? 'airplanemode-on'
-            : 'airplanemode-off';
+          iconName = travel
         } else if (routeName === 'Trip List') {
-          iconName = focused ? 'airplanemode-on'
-            : 'airplanemode-off';
-        } else if (routeName === 'Downloaded') {
-          iconName = focused ? 'airplanemode-on'
-            : 'airplanemode-off';
+          iconName = travelList
+        } else if (routeName === 'Download') {
+          iconName = download
         } else if (routeName === 'Reviews') {
-          iconName = focused ? 'airplanemode-on'
-            : 'airplanemode-off';
+          iconName = review
         } else if (routeName === 'Share') {
-          iconName = focused ? 'airplanemode-on'
-            : 'airplanemode-off';
+          iconName = share
         }
-        return <IconComponent name={iconName} size={25} color={tintColor} />;
+        return <Image source={iconName} style={[styles.tabIcon, { tintColor: focused ? 'red' : 'gray' }]} />
       },
     }),
     tabBarOptions: {
@@ -843,3 +838,11 @@ const App = createSwitchNavigator(
 );
 
 export default createAppContainer(App);
+
+
+const styles = StyleSheet.create({
+  tabIcon: {
+    width: 20,
+    height: 20
+  }
+})

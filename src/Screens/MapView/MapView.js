@@ -400,7 +400,7 @@ class MapView extends React.Component {
                 bottom: 30,
                 paddingRight: 30,
               }}>
-              {this.state.pinList.map(pin => {
+              {this.state.pinList.map((pin, index) => {
                 let category = this.props.categories.find(
                   c => c.id == pin.categories,
                 );
@@ -408,6 +408,7 @@ class MapView extends React.Component {
                 let image = imageData
                   ? { uri: imageData.image || imageData.thumb_image }
                   : require('./../../Images/login-bg.jpg');
+                let nameSplit = pin.name.split(".");
                 return (
                   <TouchableOpacity
                     key={pin.id}
@@ -443,7 +444,7 @@ class MapView extends React.Component {
                           numberOfLines={1}
                           ellipsizeMode={'tail'}>
                           {' '}
-                          {pin.name}{' '}
+                          {index + 1 + '. ' + nameSplit[nameSplit.length - 1]}{' '}
                         </Text>
                       </View>
                       <View style={styles.mapViewCate}>

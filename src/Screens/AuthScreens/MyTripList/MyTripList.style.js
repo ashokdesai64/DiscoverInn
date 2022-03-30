@@ -125,13 +125,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    flex:1,
-    backgroundColor:'white',
-    width:width-30,
-    paddingHorizontal:10,
-    paddingVertical:10,
-    borderTopWidth:1,
-    borderColor:'#ddd'
+    flex: 1,
+    backgroundColor: 'white',
+    width: width - 30,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderTopWidth: 1,
+    borderColor: '#ddd'
   },
   myTravelActionLeft: {
     flexDirection: 'row',
@@ -233,6 +233,13 @@ const styles = StyleSheet.create({
   buttonTextGray: {
     color: '#333333',
   },
+  buttonIcon1: {
+    width: 20,
+    height: 20
+  },
+  button1: {
+    marginHorizontal: 10
+  }
 });
 
 export default styles;

@@ -1,12 +1,12 @@
 import * as React from "react";
-import { View, ScrollView } from "react-native";
+import { View } from "react-native";
 import styles from "./Components/styles";
 import Title from "./Components/title";
 import Body from "./Components/body";
 
 
 
-export default function App(props) {
+export default function Tab(props) {
   const [active, setActive] = React.useState(0);
   const _scrollView = React.useRef(null);
   const scrollView = React.useRef();

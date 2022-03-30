@@ -30,23 +30,26 @@ class MyMapShareList extends React.Component {
       carouselItems: [],
       allMaps: [],
       searchTerm: '',
-      fetchingMaps: true,
+      fetchingMaps: false,
     };
   }
 
   componentWillMount() {
-    this.props.mapAction
-      .sharedMapsList({ email: this.props.userData.email, page: '1' })
-      .then(data => {
-        this.setState({
-          carouselItems: data,
-          allMaps: data,
-          fetchingMaps: false,
+    if (this.props.userData && this.props.userData.id) {
+      this.setState({ fetchingMaps: true });
+      this.props.mapAction
+        .sharedMapsList({ email: this.props.userData.email, page: '1' })
+        .then(data => {
+          this.setState({
+            carouselItems: data,
+            allMaps: data,
+            fetchingMaps: false,
+          });
+        })
+        .catch(err => {
+          this.setState({ carouselItems: [], fetchingMaps: false });
         });
-      })
-      .catch(err => {
-        this.setState({ carouselItems: [], fetchingMaps: false });
-      });
+    }
   }
 
   searchSharedMaps = _.debounce(() => {

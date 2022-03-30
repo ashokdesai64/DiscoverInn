@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import styles from './FavouritePinMap.style';
 
 import sights1 from './../../Images/sights1.png';
@@ -14,6 +14,9 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 import Spinner from './../../components/Loader';
 import _ from 'underscore';
 import { getBoundingBox } from 'geolocation-utils';
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import fontelloConfig from './../../selection.json';
+const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 MapboxGL.setAccessToken(
   'sk.eyJ1IjoicmF2aXNvaml0cmF3b3JrIiwiYSI6ImNrYTByeHVxZjBqbGszZXBtZjF3NmJleWgifQ.idSimILJ3_sk1gSWs2sMsQ',
 );
@@ -23,6 +26,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as mapActions from './../../actions/mapActions';
+import ImageBlurLoading from '../../components/ImageLoader';
 
 class FavouritePinMap extends React.Component {
   constructor(props) {
@@ -35,7 +39,7 @@ class FavouritePinMap extends React.Component {
       // featureCollection: MapboxGL.geoUtils.makeFeatureCollection(),
       showDestination: true,
       pinList: [],
-      mapPinsInProgress: true,
+      mapPinsInProgress: false,
       followUserLocation: false,
       filteredCollections: [],
       allPins: []
@@ -52,106 +56,108 @@ class FavouritePinMap extends React.Component {
   }
 
   componentWillMount() {
-    const { params } = this.props.navigation.state;
-    let tripID = params.tripID;
-    if (tripID) {
-      this.props.mapAction
-        .singleFavouritePinList({
-          user_id: this.props.userData.id,
-          favorite_id: tripID,
-          page: 1,
-        })
-        .then(data => {
-          this.setState({
-            allPins: data.favorite_pin || [],
-            pinList: data.favorite_pin || [],
-            mapPinsInProgress: false,
-          });
-          let pinList = data.favorite_pin || [];
-          let { params } = this.props.navigation.state;
-          params = params || {};
+    if (this.props.userData && this.props.userData.id) {
+      const { params } = this.props.navigation.state;
+      let tripID = params.tripID;
+      if (tripID) {
+        this.props.mapAction
+          .singleFavouritePinList({
+            user_id: this.props.userData.id,
+            favorite_id: tripID,
+            page: 1,
+          })
+          .then(data => {
+            this.setState({
+              allPins: data.favorite_pin || [],
+              pinList: data.favorite_pin || [],
+              mapPinsInProgress: false,
+            });
+            let pinList = data.favorite_pin || [];
+            let { params } = this.props.navigation.state;
+            params = params || {};
 
-          let featureCollections = [],
-            pinLatLongs = [],
-            topLeft = null,
-            bottomRight = null;
+            let featureCollections = [],
+              pinLatLongs = [],
+              topLeft = null,
+              bottomRight = null;
 
-          if (pinList && pinList.length > 0) {
-            var splitByString = function (source, splitBy) {
-              var splitter = splitBy.split('');
-              splitter.push([source]); //Push initial value
+            if (pinList && pinList.length > 0) {
+              var splitByString = function (source, splitBy) {
+                var splitter = splitBy.split('');
+                splitter.push([source]); //Push initial value
 
-              return splitter.reduceRight(function (accumulator, curValue) {
-                var k = [];
-                accumulator.forEach(v => (k = [...k, ...v.split(curValue)]));
-                return k;
-              });
-            };
+                return splitter.reduceRight(function (accumulator, curValue) {
+                  var k = [];
+                  accumulator.forEach(v => (k = [...k, ...v.split(curValue)]));
+                  return k;
+                });
+              };
 
-            let temp = [];
-            pinList.map(pin => {
+              let temp = [];
+              pinList.map(pin => {
 
-              if (pin.longitude && pin.latitude) {
-                let exploded = splitByString(pin.name, '.,-');
-                let parsed = parseInt(exploded[0]);
-                temp.push({
-                  type: 'Feature',
-                  id: pin.id,
-                  properties: {
+                if (pin.longitude && pin.latitude) {
+                  let exploded = splitByString(pin.name, '.,-');
+                  let parsed = parseInt(exploded[0]);
+                  temp.push({
+                    type: 'Feature',
                     id: pin.id,
-                    mapName: data.mapName,
-                    mapID: pin.map_id,
-                    hasNumber: !isNaN(parsed),
-                    number: parsed,
-                    category: pin.categories
-                  },
-                  geometry: {
-                    type: 'Point',
-                    coordinates: [
-                      parseFloat(pin.longitude),
-                      parseFloat(pin.latitude),
-                    ],
-                  },
-                });
-              }
-            });
+                    properties: {
+                      id: pin.id,
+                      mapName: data.mapName,
+                      mapID: pin.map_id,
+                      hasNumber: !isNaN(parsed),
+                      number: parsed,
+                      category: pin.categories
+                    },
+                    geometry: {
+                      type: 'Point',
+                      coordinates: [
+                        parseFloat(pin.longitude),
+                        parseFloat(pin.latitude),
+                      ],
+                    },
+                  });
+                }
+              });
 
-            featureCollections.push({
-              type: `FeatureCollection`,
-              features: temp,
-              id: Math.random(),
-            });
+              featureCollections.push({
+                type: `FeatureCollection`,
+                features: temp,
+                id: Math.random(),
+              });
 
-            pinList.map(t => {
-              if (t.latitude && t.longitude) {
-                pinLatLongs.push({
-                  lat: parseFloat(t.latitude),
-                  lon: parseFloat(t.longitude),
-                });
-              }
-            });
-            let boundsResult = getBoundingBox(pinLatLongs, 10000);
-            topLeft = boundsResult.topLeft;
-            bottomRight = boundsResult.bottomRight;
-          }
+              pinList.map(t => {
+                if (t.latitude && t.longitude) {
+                  pinLatLongs.push({
+                    lat: parseFloat(t.latitude),
+                    lon: parseFloat(t.longitude),
+                  });
+                }
+              });
+              let boundsResult = getBoundingBox(pinLatLongs, 10000);
+              topLeft = boundsResult.topLeft;
+              bottomRight = boundsResult.bottomRight;
+            }
 
-          let filteredCollections = featureCollections.filter(
-            collection =>
-              collection &&
-              collection.features &&
-              collection.features.length > 0,
-          );
-          this.setState({
-            mapPinsInProgress: false,
-            pinList,
-            filteredCollections,
-            topLeft,
-            bottomRight,
+            let filteredCollections = featureCollections.filter(
+              collection =>
+                collection &&
+                collection.features &&
+                collection.features.length > 0,
+            );
+            this.setState({
+              mapPinsInProgress: false,
+              pinList,
+              filteredCollections,
+              topLeft,
+              bottomRight,
+            });
+          })
+          .catch(err => {
+            this.setState({ pinList: [], isPinListFetching: false });
           });
-        })
-        .catch(err => {
-          this.setState({ pinList: [], isPinListFetching: false });
-        });
+      }
     }
   }
 
@@ -290,6 +296,79 @@ class FavouritePinMap extends React.Component {
               {/* <MapboxGL.UserLocation visible animated /> */}
             </MapboxGL.MapView>
           ) : null}
+          <ScrollView
+            horizontal={true}
+            style={{
+              height: 95,
+              position: 'absolute',
+              bottom: 30,
+              paddingRight: 30,
+            }}>
+            {this.state.pinList.map((pin, index) => {
+              let category = this.props.categories.find(
+                c => c.id == pin.categories,
+              );
+              let imageData = pin.images && pin.images[0] && pin.images[0];
+              let image = imageData
+                ? { uri: imageData.image || imageData.thumb_image }
+                : require('./../../Images/login-bg.jpg');
+              let nameSplit = pin.name.split(".");
+              return (
+                <TouchableOpacity
+                  key={pin.id}
+                  activeOpacity={0.9}
+                  style={styles.mapViewCard}
+                // onPress={
+                //   () =>
+                //     this.props.navigation.navigate('PinView', {
+                //       pinID: pin.id,
+                //       mapID: params.mapID,
+                //       mapName: params.mapName,
+                //       allPins: this.state.allPins,
+                //     })
+                //   // this.setState({followUserLocation: true})
+                //   }
+                >
+                  <ImageBlurLoading
+                    withIndicator
+                    style={styles.mapViewCardImg}
+                    source={image}
+                    thumbnailSource={{
+                      uri:
+                        'https://discover-inn.com/upload/cover/map-image.jpeg',
+                    }}
+                  />
+                  <View style={[styles.mapViewCardContent, { height: 95 }]}>
+                    <View style={styles.mapViewTitle}>
+                      <Text
+                        style={styles.mapViewTitleText}
+                        numberOfLines={1}
+                        ellipsizeMode={'tail'}>
+                        {' '}
+                        {index + 1 + '. ' + nameSplit[nameSplit.length - 1]}{' '}
+                      </Text>
+                    </View>
+                    <View style={styles.mapViewCate}>
+                      <IconMoon
+                        name={category.name && category.name.toLowerCase()}
+                        style={styles.mapViewCateIcon}
+                      />
+                      <Text style={styles.mapViewCateText}>
+                        {' '}
+                        {category.name || ''}
+                      </Text>
+                    </View>
+                    <Text
+                      style={styles.mapViewContentText}
+                      numberOfLines={3}
+                      ellipsizeMode={'tail'}>
+                      {pin.description}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </ScrollView>
         </View>
       </View>
     );

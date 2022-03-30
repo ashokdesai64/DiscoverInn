@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   ScrollView,
@@ -12,15 +12,16 @@ import {
 import styles from './MyTripList.style';
 import Header from './../../../components/header/header';
 import Feather from 'react-native-vector-icons/Feather';
-import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
+import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog';
 import Spinner from './../../../components/Loader';
-import {NavigationEvents} from 'react-navigation';
+import { NavigationEvents } from 'react-navigation';
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const DEVICE_WIDTH = Dimensions.get('window').width;
+import { editing, eye, deleteIcon } from '../../../Images'
 
 //REDUX
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import * as mapActions from './../../../actions/mapActions';
 
@@ -34,53 +35,53 @@ class MyTripList extends React.Component {
     };
   }
 
-  fetchTripList(){
+  fetchTripList() {
     this.props.mapAction
-    .fetchTripList()
-    .then(d => this.setState({fetchingTripList: false}))
-    .catch(d => this.setState({fetchingTripList: false}));
+      .fetchTripList()
+      .then(d => this.setState({ fetchingTripList: false }))
+      .catch(d => this.setState({ fetchingTripList: false }));
   }
 
   componentDidMount() {
     if (!this.props.tripList || this.props.tripList.length == 0) {
-      this.setState({fetchingTripList: true});
+      this.setState({ fetchingTripList: true });
     }
     this.fetchTripList()
   }
 
   deleteFavouriteList(tripID) {
-    this.setState({pinDeleteInProgress: true});
+    this.setState({ pinDeleteInProgress: true });
     this.props.mapAction
       .deleteFavouriteList({
         user_id: this.props.userData.id,
         favorite_id: tripID,
       })
       .then(data => {
-        this.setState({pinDeleteInProgress: false});
+        this.setState({ pinDeleteInProgress: false });
       })
       .catch(err => {
-        this.setState({pinDeleteInProgress: false});
+        this.setState({ pinDeleteInProgress: false });
       });
   }
 
   createTripList() {
-    this.setState({createListInProgress: true});
+    this.setState({ createListInProgress: true });
     this.props.mapAction
       .createFavouriteList({
         user_id: this.props.userData.id,
         name: this.state.tripName,
       })
       .then(data => {
-        this.setState({createListInProgress: false, newTripListModal: false});
+        this.setState({ createListInProgress: false, newTripListModal: false });
         this.props.mapAction.fetchTripList();
       })
       .catch(err => {
-        this.setState({createListInProgress: false});
+        this.setState({ createListInProgress: false });
       });
   }
 
   viewPinsOnMap(tripID, tripName) {
-    this.props.navigation.navigate('FavouritePinMap', {tripID, tripName});
+    this.props.navigation.navigate('FavouritePinMap', { tripID, tripName });
   }
 
   render() {
@@ -95,7 +96,7 @@ class MyTripList extends React.Component {
           showBack={true}
           title={'Trip List'}
           {...this.props}
-          style={{backgroundColor: '#F3F4F6'}}
+          style={{ backgroundColor: '#F3F4F6' }}
           rightEmpty={true}
           showRightButton={false}
         />
@@ -105,7 +106,7 @@ class MyTripList extends React.Component {
           <Spinner
             visible={this.state.pinDeleteInProgress}
             textContent={'Deleting favourite list...'}
-            textStyle={{color: '#fff'}}
+            textStyle={{ color: '#fff' }}
           />
           <View
             style={{
@@ -122,7 +123,7 @@ class MyTripList extends React.Component {
                 paddingHorizontal: 10,
                 marginBottom: 10,
               }}>
-              <Text style={{fontFamily: 'Montserrat-Regular'}}>
+              <Text style={{ fontFamily: 'Montserrat-Regular' }}>
                 My Trip List
               </Text>
               <View
@@ -133,7 +134,7 @@ class MyTripList extends React.Component {
                 }}>
                 <Feather name={'edit'} color={'#2F80ED'} size={14} />
                 <TouchableOpacity
-                  onPress={() => this.setState({newTripListModal: true})}>
+                  onPress={() => this.setState({ newTripListModal: true })}>
                   <Text
                     style={{
                       fontFamily: 'Montserrat-Regular',
@@ -171,7 +172,7 @@ class MyTripList extends React.Component {
                           borderTopRightRadius: 10,
                         },
                       ]}>
-                      <Text style={{fontFamily: 'Montserrat-Regular'}}>
+                      <Text style={{ fontFamily: 'Montserrat-Regular' }}>
                         {trip.name}
                       </Text>
                       <View
@@ -197,41 +198,27 @@ class MyTripList extends React.Component {
                       <View />
                       <View style={styles.myTravelActionRight}>
                         <TouchableOpacity
-                          style={[
-                            styles.button,
-                            styles.buttonSm,
-                            styles.buttonPrimary,
-                          ]}
+                          style={styles.button1}
                           onPress={() => {
                             this.viewPinsOnMap(trip.id, trip.name);
                           }}>
-                          <Text style={styles.buttonText}>View</Text>
+                          <Image source={eye} style={styles.buttonIcon1} />
                         </TouchableOpacity>
                         <TouchableOpacity
-                          style={[
-                            styles.button,
-                            styles.buttonSm,
-                            styles.buttonSuccess,
-                            {marginLeft: 5},
-                          ]}
+                          style={styles.button1}
                           onPress={() =>
                             this.props.navigation.navigate('TripPinList', {
                               trip,
                             })
                           }>
-                          <Text style={styles.buttonText}>Edit</Text>
+                          <Image source={editing} style={styles.buttonIcon1} />
                         </TouchableOpacity>
                         <TouchableOpacity
-                          style={[
-                            styles.button,
-                            styles.buttonSm,
-                            styles.buttonDanger,
-                            {marginLeft: 5},
-                          ]}
+                          style={styles.button1}
                           onPress={() => {
                             this.deleteFavouriteList(trip.id);
                           }}>
-                          <Text style={styles.buttonText}>Delete</Text>
+                          <Image source={deleteIcon} style={styles.buttonIcon1} />
                         </TouchableOpacity>
                       </View>
                     </View>
@@ -258,7 +245,7 @@ class MyTripList extends React.Component {
             hasOverlay={true}
             animationDuration={1}
             onTouchOutside={() => {
-              this.setState({newTripListModal: false});
+              this.setState({ newTripListModal: false });
             }}
             dialogAnimation={
               new FadeAnimation({
@@ -268,7 +255,7 @@ class MyTripList extends React.Component {
               })
             }
             onHardwareBackPress={() => {
-              this.setState({newTripListModal: false});
+              this.setState({ newTripListModal: false });
               return true;
             }}
             dialogStyle={styles.customPopup}>
@@ -279,7 +266,7 @@ class MyTripList extends React.Component {
                 </Text>
                 <TouchableOpacity
                   style={styles.buttonClose}
-                  onPress={() => this.setState({newTripListModal: false})}>
+                  onPress={() => this.setState({ newTripListModal: false })}>
                   <Feather name={'x'} style={styles.buttonCloseIcon} />
                 </TouchableOpacity>
               </View>
@@ -290,7 +277,7 @@ class MyTripList extends React.Component {
                   style={styles.formControl}
                   placeholder={'Enter trip list name'}
                   placeholderTextColor={'#828894'}
-                  onChangeText={tripName => this.setState({tripName})}
+                  onChangeText={tripName => this.setState({ tripName })}
                   value={this.state.tripName}
                 />
               </View>

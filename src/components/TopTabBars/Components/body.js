@@ -18,11 +18,11 @@ const Body = React.forwardRef(({ item }, ref) => {
               ? tabsOnScreen && tabsOnScreen === screen.length
                 ? event.nativeEvent.contentOffset.x / tabsOnScreen
                 : tabsOnScreen
-                ? event.nativeEvent.contentOffset.x / (tabsOnScreen + 0.5)
-                : event.nativeEvent.contentOffset.x / 2.5
+                  ? event.nativeEvent.contentOffset.x / (tabsOnScreen + 0.5)
+                  : event.nativeEvent.contentOffset.x / 2.5
               : screen.length === 2
-              ? event.nativeEvent.contentOffset.x / 2
-              : event.nativeEvent.contentOffset.x,
+                ? event.nativeEvent.contentOffset.x / 2
+                : event.nativeEvent.contentOffset.x,
         });
         stateChanger(Math.ceil(event.nativeEvent.contentOffset.x / width));
       }}
@@ -32,7 +32,6 @@ const Body = React.forwardRef(({ item }, ref) => {
     >
       {screen.map((data, index) => (
         <View key={index} style={styles.child}>
-          {console.log("Data ====", data)}
           <data.component
             props={{
               index: index,

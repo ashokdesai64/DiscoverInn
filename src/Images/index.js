@@ -1,0 +1,9 @@
+export const homeIcon = require('./Tab/home.png');
+export const travel = require('./Tab/airplane.png');
+export const travelList = require('./Tab/checklist.png');
+export const download = require('./Tab/download.png');
+export const review = require('./Tab/feedback.png');
+export const share = require('./Tab/share.png');
+export const eye = require('./eye.png');
+export const editing = require('./editing.png');
+export const deleteIcon = require('./delete.png');

@@ -59,7 +59,6 @@ class PinView extends React.Component {
   }
 
   componentWillMount() {
-
     if (this.state.isOffline) {
       const { params } = this.props.navigation.state;
       let allPins = params.allPins || [];

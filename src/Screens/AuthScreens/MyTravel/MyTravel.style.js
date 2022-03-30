@@ -1,4 +1,4 @@
-import {StyleSheet, Dimensions} from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const DEVICE_WIDTH = Dimensions.get('window').width;
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     flex: 1,
     shadowColor: '#000000',
     shadowOpacity: 0.05,
-    shadowOffset: {width: 0, height: 4},
+    shadowOffset: { width: 0, height: 4 },
     shadowRadius: 10,
     elevation: 5,
   },
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     shadowColor: '#000',
     shadowOpacity: 0.05,
-    shadowOffset: {width: 0, height: -2},
+    shadowOffset: { width: 0, height: -2 },
     shadowRadius: 10,
     maxHeight: DEVICE_HEIGHT - 190,
   },
@@ -379,6 +379,13 @@ const styles = StyleSheet.create({
   buttonNewMap: {
     width: DEVICE_WIDTH - 30,
   },
+  buttonIcon1: {
+    width: 20,
+    height: 20
+  },
+  button1: {
+    marginHorizontal: 10
+  }
 });
 
 export default styles;

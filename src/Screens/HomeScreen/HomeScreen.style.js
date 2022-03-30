@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
     opacity: 0.2,
   },
   header: {
-    height: 120,
+    height: '22%',
     backgroundColor: '#F3F4F6'
   }
 });

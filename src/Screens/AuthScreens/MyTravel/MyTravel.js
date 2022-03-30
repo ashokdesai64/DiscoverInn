@@ -1,34 +1,37 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   Text,
   ScrollView,
   ActivityIndicator,
   Platform,
+  Image,
 } from 'react-native';
-import {Item, Input, Button, Content, Accordion, CheckBox} from 'native-base';
+import { Item, Input, Button, Content, Accordion, CheckBox } from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import RNFetchBlob from 'rn-fetch-blob';
-import {checkIfHasPermission} from './../../../config/permission';
+import { checkIfHasPermission } from './../../../config/permission';
 
-import {Switch} from './../../../components/RNSwitch';
+import { Switch } from './../../../components/RNSwitch';
 import styles from './MyTravel.style';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import Header from '../../../components/header/header';
-import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
+import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog';
 import Spinner from './../../../components/Loader';
 import _ from 'underscore';
-import {getBoundingBox} from 'geolocation-utils';
+import { getBoundingBox } from 'geolocation-utils';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 //REDUX
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 MapboxGL.setAccessToken(
   'sk.eyJ1IjoicmF2aXNvaml0cmF3b3JrIiwiYSI6ImNrYTByeHVxZjBqbGszZXBtZjF3NmJleWgifQ.idSimILJ3_sk1gSWs2sMsQ',
 );
 import * as mapActions from '../../../actions/mapActions';
+import { editing, eye, deleteIcon } from '../../../Images'
+
 MapboxGL.offlineManager.setTileCountLimit(15000);
-const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
   const paddingToBottom = 20;
   return (
     layoutMeasurement.height + contentOffset.y >=
@@ -65,12 +68,14 @@ class MyTravel extends React.Component {
   };
 
   _updateSections = activeSections => {
-    this.setState({activeSections});
+    this.setState({ activeSections });
   };
 
   componentDidMount() {
-    this.mounted = true;
-    this.fetchFirstMaps();
+    if (this.props.userData && this.props.userData.id) {
+      this.mounted = true;
+      this.fetchFirstMaps();
+    }
   }
 
   componentWillUnmount() {
@@ -156,11 +161,11 @@ class MyTravel extends React.Component {
                 mapDownloadInProgress: true,
                 downloadSpinnerMsg: `Downloading assets...`,
               });
-              var splitByString = function(source, splitBy) {
+              var splitByString = function (source, splitBy) {
                 var splitter = splitBy.split('');
                 splitter.push([source]); //Push initial value
 
-                return splitter.reduceRight(function(accumulator, curValue) {
+                return splitter.reduceRight(function (accumulator, curValue) {
                   var k = [];
                   accumulator.forEach(v => (k = [...k, ...v.split(curValue)]));
                   return k;
@@ -296,7 +301,7 @@ class MyTravel extends React.Component {
             }
           })
           .catch(err => {
-            this.setState({mapDownloadInProgress: false});
+            this.setState({ mapDownloadInProgress: false });
           });
       } else {
         alert(
@@ -335,24 +340,19 @@ class MyTravel extends React.Component {
           </View>
           <View style={styles.myTravelActionRight}>
             <TouchableOpacity
-              style={[styles.button, styles.buttonSm, styles.buttonPrimary]}
+              style={styles.button1}
               onPress={() => {
                 this.props.navigation.navigate('MapView', {
                   mapID: item.id,
                   mapName: item.name,
                   mapData: item,
-                  fromMyTravel: true,
+                  // fromMyTravel: true,
                 });
               }}>
-              <Text style={styles.buttonText}>View</Text>
+              <Image source={eye} style={styles.buttonIcon1} />
             </TouchableOpacity>
             <TouchableOpacity
-              style={[
-                styles.button,
-                styles.buttonSm,
-                styles.buttonSuccess,
-                {marginLeft: 5},
-              ]}
+              style={styles.button1}
               onPress={() => {
                 // this.props.navigation.navigate('Test');
                 this.props.navigation.navigate('EditMyTravel', {
@@ -360,19 +360,14 @@ class MyTravel extends React.Component {
                   mapData: item,
                 });
               }}>
-              <Text style={styles.buttonText}>Edit</Text>
+              <Image source={editing} style={styles.buttonIcon1} />
             </TouchableOpacity>
             <TouchableOpacity
-              style={[
-                styles.button,
-                styles.buttonSm,
-                styles.buttonDanger,
-                {marginLeft: 5},
-              ]}
+              style={styles.button1}
               onPress={() => {
-                this.setState({showDeleteModal: true, selectedMap: item});
+                this.setState({ showDeleteModal: true, selectedMap: item });
               }}>
-              <Text style={styles.buttonText}>Delete</Text>
+              <Image source={deleteIcon} style={styles.buttonIcon1} />
             </TouchableOpacity>
           </View>
         </View>
@@ -382,13 +377,13 @@ class MyTravel extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.fetchingMaps != this.state.fetchingMaps) {
-      this.setState({fetchingMaps: nextProps.fetchingMaps});
+      this.setState({ fetchingMaps: nextProps.fetchingMaps });
     }
   }
 
   fetchFirstMaps() {
     if (!this.props.myMaps || this.props.myMaps.length == 0) {
-      this.setState({fetchingMaps: true});
+      this.setState({ fetchingMaps: true });
     }
     this.props.mapAction
       .fetchMyFirstMaps({
@@ -396,12 +391,13 @@ class MyTravel extends React.Component {
         search: this.state.search,
         page: 1,
       })
-      .then(d => this.setState({fetchingMaps: false}));
+      .then(d => this.setState({ fetchingMaps: false }))
+      .catch(err => this.setState({ fetchingMaps: false }));
   }
 
   fetchMaps(showLoader = false) {
     if (showLoader) {
-      this.setState({fetchingMaps: true});
+      this.setState({ fetchingMaps: true });
     }
     this.props.mapAction.fetchMyMaps({
       user_id: this.props.userData.id,
@@ -411,17 +407,17 @@ class MyTravel extends React.Component {
   }
 
   deleteMap() {
-    this.setState({deleteInProgrss: true});
+    this.setState({ deleteInProgrss: true });
     this.props.mapAction
       .removeMap({
         map_id: this.state.selectedMap.id,
         user_id: this.props.userData.id,
       })
       .then(data => {
-        this.setState({deleteInProgrss: false, showDeleteModal: false});
+        this.setState({ deleteInProgrss: false, showDeleteModal: false });
       })
       .catch(err => {
-        this.setState({deleteInProgrss: false, showDeleteModal: false}, () => {
+        this.setState({ deleteInProgrss: false, showDeleteModal: false }, () => {
           alert(err);
         });
       });
@@ -445,7 +441,7 @@ class MyTravel extends React.Component {
               showsHorizontalScrollIndicator={false}
               keyboardShouldPersistTaps={'handled'}
               showsVerticalScrollIndicator={false}
-              onScroll={({nativeEvent}) => {
+              onScroll={({ nativeEvent }) => {
                 if (isCloseToBottom(nativeEvent) && !this.state.fetchingMaps) {
                   this.pageNo += 1;
                   this.fetchMaps(true);
@@ -455,12 +451,12 @@ class MyTravel extends React.Component {
               <Spinner
                 visible={this.state.fetchingMaps}
                 textContent={'Fetching more maps...'}
-                textStyle={{color: '#fff'}}
+                textStyle={{ color: '#fff' }}
               />
               <Spinner
                 visible={this.state.mapDownloadInProgress}
                 textContent={this.state.downloadSpinnerMsg}
-                textStyle={{color: '#fff'}}
+                textStyle={{ color: '#fff' }}
                 canGoBack={this.state.canGoBack}
                 backButtonText={'Download in background'}
                 onGoBack={() =>
@@ -477,7 +473,7 @@ class MyTravel extends React.Component {
                     style={styles.searchbarInput}
                     placeholder="Search your maps"
                     value={this.state.search}
-                    onChangeText={search => this.setState({search})}
+                    onChangeText={search => this.setState({ search })}
                   />
                 </Item>
                 <Button
@@ -501,7 +497,7 @@ class MyTravel extends React.Component {
                     renderHeader={this._renderHeader}
                     renderContent={this._renderContent}
                     onChange={this._updateSections}
-                    contentStyle={{marginBottom: 10}}
+                    contentStyle={{ marginBottom: 10 }}
                   />
                 </Content>
               ) : (
@@ -526,7 +522,7 @@ class MyTravel extends React.Component {
             <TouchableOpacity
               style={[styles.button, styles.buttonPrimary, styles.buttonNewMap]}
               onPress={() => {
-                this.props.navigation.navigate('EditMyTravel', {type: 'add'});
+                this.props.navigation.navigate('EditMyTravel', { type: 'add' });
               }}>
               <Text style={styles.buttonText}>Add New Map</Text>
             </TouchableOpacity>
@@ -539,7 +535,7 @@ class MyTravel extends React.Component {
           hasOverlay={true}
           animationDuration={1}
           onTouchOutside={() => {
-            this.setState({showDeleteModal: false});
+            this.setState({ showDeleteModal: false });
           }}
           dialogAnimation={
             new FadeAnimation({
@@ -549,7 +545,7 @@ class MyTravel extends React.Component {
             })
           }
           onHardwareBackPress={() => {
-            this.setState({showDeleteModal: false});
+            this.setState({ showDeleteModal: false });
             return true;
           }}
           dialogStyle={styles.customPopup}>
@@ -558,7 +554,7 @@ class MyTravel extends React.Component {
               <Text style={styles.customPopupHeaderTitle}>Delete Map</Text>
               <TouchableOpacity
                 style={styles.buttonClose}
-                onPress={() => this.setState({showDeleteModal: false})}>
+                onPress={() => this.setState({ showDeleteModal: false })}>
                 <Feather name={'x'} style={styles.buttonCloseIcon} />
               </TouchableOpacity>
             </View>
@@ -578,7 +574,7 @@ class MyTravel extends React.Component {
                   styles.buttonDecline,
                 ]}
                 onPress={() => {
-                  this.setState({showDeleteModal: false});
+                  this.setState({ showDeleteModal: false });
                 }}>
                 <Text style={[styles.buttonText, styles.buttonTextGray]}>
                   Decline
