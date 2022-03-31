@@ -250,7 +250,15 @@ const styles = StyleSheet.create({
   header: {
     height: '22%',
     backgroundColor: '#F3F4F6'
-  }
+  },
+  mapSlideCardText: {
+    color: '#000',
+    fontFamily: 'Montserrat-Medium',
+    fontSize: 14,
+    lineHeight: 22,
+    alignSelf: 'flex-start',
+    marginLeft: 5
+  },
 });
 
 export default styles;

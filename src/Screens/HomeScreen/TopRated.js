@@ -23,17 +23,18 @@ export default class TopRated extends React.Component {
 			? { uri: item.cover_image }
 			: require('./../../Images/login-bg.jpg');
 		return (
-			<TouchableOpacity
+			<View
 				style={styles.mapSlidCard}
-				onPress={() =>
-					this.props.props.props.navigation.navigate('MapView', {
-						mapID: item.id,
-						mapName: item.name,
-						mapData: item
-					})
-				}
 				activeOpacity={1}>
-				<View>
+				<TouchableOpacity
+					onPress={() =>
+						this.props.props.props.navigation.navigate('MapView', {
+							mapID: item.id,
+							mapName: item.name,
+							mapData: item
+						})
+					}
+				>
 					<ImageBlurLoading
 						withIndicator
 						style={styles.mapSlideCardImg}
@@ -49,7 +50,6 @@ export default class TopRated extends React.Component {
 								{item.views} <Feather name="eye" />
 							</Text>
 						</View>
-						<Text style={styles.mapSlideCardTitle}>{item.name}</Text>
 						<View style={styles.rateList}>
 							{Array(avgReview)
 								.fill(1)
@@ -82,8 +82,10 @@ export default class TopRated extends React.Component {
 							</Text>
 						</View>
 					</View>
-				</View>
-			</TouchableOpacity>
+				</TouchableOpacity>
+				<Text style={styles.mapSlideCardText}>Map:     {item.name}</Text>
+				<Text style={styles.mapSlideCardText}>Author:  {item.owner}</Text>
+			</View>
 		);
 	}
 	render() {

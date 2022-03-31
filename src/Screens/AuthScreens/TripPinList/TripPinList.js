@@ -7,12 +7,14 @@ import {
   TouchableOpacity,
   Image,
   ActivityIndicator,
+  TextInput,
 } from 'react-native';
 import {NavigationEvents} from 'react-navigation';
 import styles from './TripPinList.style';
 import Header from './../../../components/header/header';
 import Feather from 'react-native-vector-icons/Feather';
 import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
+import { option, list } from '../../../Images'
 
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const DEVICE_WIDTH = Dimensions.get('window').width;
@@ -32,6 +34,7 @@ class TripPinList extends React.Component {
       pinList: [],
       deletingPin: false,
       isPinListFetching: true,
+      switchView: true
     };
   }
 
@@ -61,6 +64,7 @@ class TripPinList extends React.Component {
         page: 1,
       })
       .then(data => {
+        data.favorite_pin.map(item=>item.editable = false)
         this.setState({
           pinList: data.favorite_pin || [],
           isPinListFetching: false,
@@ -159,6 +163,14 @@ class TripPinList extends React.Component {
               alignItems: 'center',
               padding: 15,
             }}>
+            <View style={styles.menuContainer} >
+              <TouchableOpacity style={this.state.switchView ? styles.selectedMenu : styles.menuButton} onPress={()=>this.setState({ switchView: true })} > 
+                <Image source={option} style={styles.menuIcon} />
+              </TouchableOpacity>
+              <TouchableOpacity style={!this.state.switchView ? styles.selectedMenu : styles.menuButton} onPress={()=>this.setState({ switchView: false })} >
+                <Image source={list} style={styles.menuIcon} />
+              </TouchableOpacity> 
+            </View>
             {this.state.pinList && this.state.pinList.length <= 0 ? (
               <View style={styles.container}>
                 <View
@@ -180,8 +192,8 @@ class TripPinList extends React.Component {
                   </Text>
                 </View>
               </View>
-            ) : (
-              this.state.pinList.map(pin => {
+            ) : this.state.switchView ? (
+              this.state.pinList.map((pin, index) => {
                 let imageSource = require('./../../../Images/map.png');
                 if (pin.images && pin.images.length > 0) {
                   let currentPinImages = pin.images[0];
@@ -192,7 +204,7 @@ class TripPinList extends React.Component {
                       'https://discover-inn.com/upload/cover/map-image.jpeg',
                   };
                 }
-
+                let nameSplit = pin.name.split(".");
                 return (
                   <View
                     style={{
@@ -211,8 +223,8 @@ class TripPinList extends React.Component {
                         styles.mymapsAction,
                         {paddingHorizontal: 10, width: DEVICE_WIDTH - 30},
                       ]}>
-                      <Text style={{fontFamily: 'Montserrat-Regular'}}>
-                        {pin.name}
+                      <Text style={{fontFamily: 'Montserrat-Regular', width: '90%'}}>
+                        {index + 1 + '. ' + nameSplit[nameSplit.length - 1]}{' '}
                       </Text>
                       <TouchableOpacity
                         onPress={() =>
@@ -254,6 +266,85 @@ class TripPinList extends React.Component {
                       {pin.description}
                     </Text>
                   </View>
+                );
+              })
+            ) : (
+              this.state.pinList.map((pin, index) => {
+                let imageSource = require('./../../../Images/map.png');
+                if (pin.images && pin.images.length > 0) {
+                  let currentPinImages = pin.images[0];
+                  imageSource = {
+                    uri:
+                      currentPinImages.thumb_image ||
+                      currentPinImages.image ||
+                      'https://discover-inn.com/upload/cover/map-image.jpeg',
+                  };
+                }
+                let nameSplit = pin.name.split(".");
+                let name = nameSplit[nameSplit.length - 1];
+
+                const _changeEditable = (index) => {
+                  let obj = this.state.pinList;
+                  obj[index].editable = !obj[index].editable;
+                  this.setState({ pinList: obj })
+                }
+
+                const _onChangeText = (text) => {
+                  let obj = this.state.pinList;
+                  obj[index].name = text;
+                  this.setState({ pinList: obj })
+                }
+
+                return (
+                  <View
+                    style={{
+                      // elevation: 5,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      // backgroundColor: '#fff',
+                      marginBottom: 20,
+                      // borderRadius: 10,
+                      paddingHorizontal: 15,
+                      // paddingVertical: 10,
+                      width: DEVICE_WIDTH - 30,
+                    }}>
+                      <View style={{ flexDirection: 'row' }} >
+                        <View style={styles.indexContainer} >
+                          <Text>
+                            {index + 1}
+                          </Text>
+                        </View>
+                        <View style={styles.titleContainer} >
+                          {pin.editable ? 
+                            <TextInput
+                              autoCorrect={false}
+                              value={name}
+                              onChangeText={(text) => _onChangeText(text)}
+                              onBlur={() => _changeEditable(index)}
+                            /> :
+                            <Text style={{fontFamily: 'Montserrat-Regular', width: '90%'}}>
+                              {name}{' '}
+                            </Text>
+                          }
+                        </View>
+                        <TouchableOpacity
+                          style={{ alignSelf: 'center' }}
+                          onPress={() => _changeEditable(index)}>
+                          {
+                            pin.editable ? 
+                            <Feather
+                            name="check"
+                            style={{ color: '#2F80ED', fontSize: 18, }}
+                          /> :
+                          <Feather
+                            name={'edit'}
+                            color={'#2F80ED'}
+                            style={{fontSize: 18, }}
+                          />
+                        }
+                        </TouchableOpacity>
+                      </View>
+                    </View>
                 );
               })
             )}

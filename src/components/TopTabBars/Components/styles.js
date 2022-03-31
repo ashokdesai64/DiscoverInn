@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Platform } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
@@ -16,7 +16,7 @@ export default StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingBottom: (height / 100) * 1,
-    width: width/3
+    width: width / 3
   },
   title: {
     color: "#000",
@@ -25,5 +25,6 @@ export default StyleSheet.create({
   child: {
     width: width,
     height: '86%',
+    marginBottom: Platform.OS === 'ios' ? '-2%' : 0,
   },
 });

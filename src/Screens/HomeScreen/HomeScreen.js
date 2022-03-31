@@ -334,7 +334,6 @@ class HomeScreen extends React.Component {
   render() {
 
     const { query } = this.state;
-
     return (
       <Fragment>
         <View style={styles.header} >

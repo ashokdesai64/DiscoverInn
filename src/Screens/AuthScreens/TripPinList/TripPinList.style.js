@@ -190,6 +190,39 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 10,
   },
+  menuContainer: {
+    flexDirection: 'row',
+    width: '30%',
+    justifyContent: 'space-between',
+    marginBottom: 10
+  },
+  selectedMenu: { 
+    elevation: 5, 
+    borderWidth: 2, 
+    borderColor: 'gray', 
+    borderRadius: 50, 
+    padding: 7 
+  },
+  menuButton: {
+    padding: 7 
+  },
+  menuIcon: { 
+    width: 20, 
+    height: 20 
+  },
+  indexContainer: { 
+    borderWidth: 1, 
+    justifyContent: 'center', 
+    alignItems: 'center',
+    padding: 10 
+  },
+  titleContainer: {
+    borderWidth: 1,
+    width: '80%',
+    justifyContent: 'center',
+    marginHorizontal: '2%',
+    paddingHorizontal: 5
+  }
 });
 
 export default styles;

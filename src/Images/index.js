@@ -7,3 +7,5 @@ export const share = require('./Tab/share.png');
 export const eye = require('./eye.png');
 export const editing = require('./editing.png');
 export const deleteIcon = require('./delete.png');
+export const option = require('./option.png');
+export const list = require('./list.png');
