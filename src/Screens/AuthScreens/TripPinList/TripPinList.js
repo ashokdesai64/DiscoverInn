@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   ScrollView,
@@ -9,19 +9,19 @@ import {
   ActivityIndicator,
   TextInput,
 } from 'react-native';
-import {NavigationEvents} from 'react-navigation';
+import { NavigationEvents } from 'react-navigation';
 import styles from './TripPinList.style';
 import Header from './../../../components/header/header';
 import Feather from 'react-native-vector-icons/Feather';
-import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
+import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog';
 import { option, list } from '../../../Images'
-
+import DraggableFlatList from "react-native-draggable-flatlist";
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const DEVICE_WIDTH = Dimensions.get('window').width;
 
 //REDUX
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import * as mapActions from './../../../actions/mapActions';
 
@@ -39,14 +39,14 @@ class TripPinList extends React.Component {
   }
 
   changeTripName(tripName) {
-    const {params} = this.props.navigation.state;
+    const { params } = this.props.navigation.state;
     this.props.mapAction
       .updateFavouriteList({
         user_id: this.props.userData.id,
         name: tripName,
         favorite_id: params.trip.id,
       })
-      .then(data => {})
+      .then(data => { })
       .catch(err => {
       });
   }
@@ -56,7 +56,7 @@ class TripPinList extends React.Component {
   }
 
   fetchPinList() {
-    const {params} = this.props.navigation.state;
+    const { params } = this.props.navigation.state;
     this.props.mapAction
       .singleFavouritePinList({
         user_id: this.props.userData.id,
@@ -64,23 +64,23 @@ class TripPinList extends React.Component {
         page: 1,
       })
       .then(data => {
-        data.favorite_pin.map(item=>item.editable = false)
+        data.favorite_pin.map(item => item.editable = false)
         this.setState({
           pinList: data.favorite_pin || [],
           isPinListFetching: false,
         });
       })
       .catch(err => {
-        this.setState({pinList: [], isPinListFetching: false});
+        this.setState({ pinList: [], isPinListFetching: false });
       });
   }
 
   deletePin() {
-    let {deletePin} = this.state;
+    let { deletePin } = this.state;
 
-    let {params} = this.props.navigation.state;
+    let { params } = this.props.navigation.state;
     if (deletePin.map_id && deletePin.id && params.trip.id) {
-      this.setState({deletingPin: true});
+      this.setState({ deletingPin: true });
       this.props.mapAction
         .addRemoveToTrip({
           map_id: deletePin.map_id,
@@ -91,18 +91,18 @@ class TripPinList extends React.Component {
         .then(data => {
           this.fetchPinList();
           this.props.mapAction.fetchTripList();
-          this.setState({showDeletePinModal: false, deletingPin: false});
+          this.setState({ showDeletePinModal: false, deletingPin: false });
         })
         .catch(err => {
         });
     } else {
       alert('Can not remove from trip list');
-      this.setState({showDeletePinModal: false, deletingPin: false});
+      this.setState({ showDeletePinModal: false, deletingPin: false });
     }
   }
 
   render() {
-    const {params} = this.props.navigation.state;
+    const { params } = this.props.navigation.state;
 
     if (this.state.isPinListFetching) {
       return (
@@ -111,7 +111,7 @@ class TripPinList extends React.Component {
             showBack={true}
             title={params.trip.name}
             {...this.props}
-            style={{backgroundColor: '#F3F4F6'}}
+            style={{ backgroundColor: '#F3F4F6' }}
             rightEmpty={true}
             showRightButton={false}
             headerEditable={true}
@@ -148,7 +148,7 @@ class TripPinList extends React.Component {
           showBack={true}
           title={params.trip.name}
           {...this.props}
-          style={{backgroundColor: '#F3F4F6'}}
+          style={{ backgroundColor: '#F3F4F6' }}
           rightEmpty={true}
           showRightButton={false}
           headerEditable={true}
@@ -164,12 +164,12 @@ class TripPinList extends React.Component {
               padding: 15,
             }}>
             <View style={styles.menuContainer} >
-              <TouchableOpacity style={this.state.switchView ? styles.selectedMenu : styles.menuButton} onPress={()=>this.setState({ switchView: true })} > 
+              <TouchableOpacity style={this.state.switchView ? styles.selectedMenu : styles.menuButton} onPress={() => this.setState({ switchView: true })} >
                 <Image source={option} style={styles.menuIcon} />
               </TouchableOpacity>
-              <TouchableOpacity style={!this.state.switchView ? styles.selectedMenu : styles.menuButton} onPress={()=>this.setState({ switchView: false })} >
+              <TouchableOpacity style={!this.state.switchView ? styles.selectedMenu : styles.menuButton} onPress={() => this.setState({ switchView: false })} >
                 <Image source={list} style={styles.menuIcon} />
-              </TouchableOpacity> 
+              </TouchableOpacity>
             </View>
             {this.state.pinList && this.state.pinList.length <= 0 ? (
               <View style={styles.container}>
@@ -221,9 +221,9 @@ class TripPinList extends React.Component {
                     <View
                       style={[
                         styles.mymapsAction,
-                        {paddingHorizontal: 10, width: DEVICE_WIDTH - 30},
+                        { paddingHorizontal: 10, width: DEVICE_WIDTH - 30 },
                       ]}>
-                      <Text style={{fontFamily: 'Montserrat-Regular', width: '90%'}}>
+                      <Text style={{ fontFamily: 'Montserrat-Regular', width: '90%' }}>
                         {index + 1 + '. ' + nameSplit[nameSplit.length - 1]}{' '}
                       </Text>
                       <TouchableOpacity
@@ -269,45 +269,47 @@ class TripPinList extends React.Component {
                 );
               })
             ) : (
-              this.state.pinList.map((pin, index) => {
-                let imageSource = require('./../../../Images/map.png');
-                if (pin.images && pin.images.length > 0) {
-                  let currentPinImages = pin.images[0];
-                  imageSource = {
-                    uri:
-                      currentPinImages.thumb_image ||
-                      currentPinImages.image ||
-                      'https://discover-inn.com/upload/cover/map-image.jpeg',
-                  };
-                }
-                let nameSplit = pin.name.split(".");
-                let name = nameSplit[nameSplit.length - 1];
+              <DraggableFlatList
+                data={this.state.pinList}
+                onDragEnd={({ data }) => this.setState({ pinList: data })}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item, index, drag, isActive }) => {
+                  const pin = item
+                  let imageSource = require('./../../../Images/map.png');
+                  if (pin.images && pin.images.length > 0) {
+                    let currentPinImages = pin.images[0];
+                    imageSource = {
+                      uri:
+                        currentPinImages.thumb_image ||
+                        currentPinImages.image ||
+                        'https://discover-inn.com/upload/cover/map-image.jpeg',
+                    };
+                  }
+                  let nameSplit = pin.name.split(".");
+                  let name = nameSplit[nameSplit.length - 1];
 
-                const _changeEditable = (index) => {
-                  let obj = this.state.pinList;
-                  obj[index].editable = !obj[index].editable;
-                  this.setState({ pinList: obj })
-                }
+                  const _changeEditable = (index) => {
+                    let obj = this.state.pinList;
+                    obj[index].editable = !obj[index].editable;
+                    this.setState({ pinList: obj })
+                  }
 
-                const _onChangeText = (text) => {
-                  let obj = this.state.pinList;
-                  obj[index].name = text;
-                  this.setState({ pinList: obj })
-                }
+                  const _onChangeText = (text) => {
+                    let obj = this.state.pinList;
+                    obj[index].name = text;
+                    this.setState({ pinList: obj })
+                  }
 
-                return (
-                  <View
-                    style={{
-                      // elevation: 5,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      // backgroundColor: '#fff',
-                      marginBottom: 20,
-                      // borderRadius: 10,
-                      paddingHorizontal: 15,
-                      // paddingVertical: 10,
-                      width: DEVICE_WIDTH - 30,
-                    }}>
+                  return (
+                    <TouchableOpacity
+                      onLongPress={drag}
+                      style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginBottom: 20,
+                        paddingHorizontal: 15,
+                        width: DEVICE_WIDTH - 30,
+                      }}>
                       <View style={{ flexDirection: 'row' }} >
                         <View style={styles.indexContainer} >
                           <Text>
@@ -315,14 +317,14 @@ class TripPinList extends React.Component {
                           </Text>
                         </View>
                         <View style={styles.titleContainer} >
-                          {pin.editable ? 
+                          {pin.editable ?
                             <TextInput
                               autoCorrect={false}
                               value={name}
                               onChangeText={(text) => _onChangeText(text)}
                               onBlur={() => _changeEditable(index)}
                             /> :
-                            <Text style={{fontFamily: 'Montserrat-Regular', width: '90%'}}>
+                            <Text style={{ fontFamily: 'Montserrat-Regular', width: '90%' }}>
                               {name}{' '}
                             </Text>
                           }
@@ -331,22 +333,23 @@ class TripPinList extends React.Component {
                           style={{ alignSelf: 'center' }}
                           onPress={() => _changeEditable(index)}>
                           {
-                            pin.editable ? 
-                            <Feather
-                            name="check"
-                            style={{ color: '#2F80ED', fontSize: 18, }}
-                          /> :
-                          <Feather
-                            name={'edit'}
-                            color={'#2F80ED'}
-                            style={{fontSize: 18, }}
-                          />
-                        }
+                            pin.editable ?
+                              <Feather
+                                name="check"
+                                style={{ color: '#2F80ED', fontSize: 18, }}
+                              /> :
+                              <Feather
+                                name={'edit'}
+                                color={'#2F80ED'}
+                                style={{ fontSize: 18, }}
+                              />
+                          }
                         </TouchableOpacity>
                       </View>
-                    </View>
-                );
-              })
+                    </TouchableOpacity>
+                  );
+                }}
+              />
             )}
           </View>
 
@@ -356,7 +359,7 @@ class TripPinList extends React.Component {
             hasOverlay={true}
             animationDuration={1}
             onTouchOutside={() => {
-              this.setState({showDeletePinModal: false});
+              this.setState({ showDeletePinModal: false });
             }}
             dialogAnimation={
               new FadeAnimation({
@@ -366,7 +369,7 @@ class TripPinList extends React.Component {
               })
             }
             onHardwareBackPress={() => {
-              this.setState({showDeletePinModal: false});
+              this.setState({ showDeletePinModal: false });
               return true;
             }}
             dialogStyle={styles.customPopup}>
@@ -377,7 +380,7 @@ class TripPinList extends React.Component {
                 </Text>
                 <TouchableOpacity
                   style={styles.buttonClose}
-                  onPress={() => this.setState({showDeletePinModal: false})}>
+                  onPress={() => this.setState({ showDeletePinModal: false })}>
                   <Feather name={'x'} style={styles.buttonCloseIcon} />
                 </TouchableOpacity>
               </View>
@@ -419,7 +422,7 @@ class TripPinList extends React.Component {
                     borderColor: '#BDBDBD',
                     borderRadius: 5,
                   }}
-                  onPress={() => this.setState({showDeletePinModal: false})}>
+                  onPress={() => this.setState({ showDeletePinModal: false })}>
                   <Text
                     style={{
                       fontFamily: 'Montserrat-Regular',

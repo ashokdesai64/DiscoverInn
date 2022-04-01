@@ -336,35 +336,33 @@ class HomeScreen extends React.Component {
     const { query } = this.state;
     return (
       <Fragment>
-        <View style={styles.header} >
-          <Header
-            // showMenu={true}
-            title={'Discover-Inn'}
-            {...this.props}
-            style={{ backgroundColor: '#F3F4F6' }}
-            rightEmpty={true}
-            showRightButton={false}
-          />
-          <NavigationEvents onWillFocus={() => this.setState({ searchTerm: '' })} />
-          <GoogleAutoComplete
-            autoCapitalize="none"
-            autoCorrect={false}
-            defaultValue={query}
-            onChangeText={text => {
-              this.setState({ searchTerm: text });
-            }}
-            placeholder="Next Travel Destination"
-            fetchSearchedMaps={(searchTerm, userId) => this.fetchSearchedMaps(searchTerm, userId)}
-            onValueChange={(searchTerm, userId) => {
-              this.setState({ searchTerm, userId }, () => {
-                this.fetchSearchedMaps(searchTerm, userId);
-              });
-            }}
-          // showSorting={() => {
-          //   this.setState({ showSorting: !this.state.showSorting });
-          // }}
-          />
-        </View>
+        <Header
+          // showMenu={true}
+          title={'Discover-Inn'}
+          {...this.props}
+          style={{ backgroundColor: '#F3F4F6' }}
+          rightEmpty={true}
+          showRightButton={false}
+        />
+        <NavigationEvents onWillFocus={() => this.setState({ searchTerm: '' })} />
+        <GoogleAutoComplete
+          autoCapitalize="none"
+          autoCorrect={false}
+          defaultValue={query}
+          onChangeText={text => {
+            this.setState({ searchTerm: text });
+          }}
+          placeholder="Next Travel Destination"
+          fetchSearchedMaps={(searchTerm, userId) => this.fetchSearchedMaps(searchTerm, userId)}
+          onValueChange={(searchTerm, userId) => {
+            this.setState({ searchTerm, userId }, () => {
+              this.fetchSearchedMaps(searchTerm, userId);
+            });
+          }}
+        // showSorting={() => 
+        //   this.setState({ showSorting: !this.state.showSorting });
+        // }}
+        />
         <Tabs
           screen={[
             {

@@ -251,13 +251,22 @@ const styles = StyleSheet.create({
     height: '22%',
     backgroundColor: '#F3F4F6'
   },
-  mapSlideCardText: {
+  mapTitle: {
     color: '#000',
+    fontFamily: 'Montserrat-Medium',
+    fontSize: 18,
+    lineHeight: 22,
+    alignSelf: 'flex-start',
+    marginLeft: 5
+  },
+  authorTitle: {
+    color: 'gray',
     fontFamily: 'Montserrat-Medium',
     fontSize: 14,
     lineHeight: 22,
     alignSelf: 'flex-start',
-    marginLeft: 5
+    marginLeft: 5,
+    marginBottom: 5
   },
 });
 
