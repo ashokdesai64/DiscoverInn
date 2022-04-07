@@ -83,8 +83,8 @@ export default class TopRated extends React.Component {
 						</View>
 					</View>
 				</TouchableOpacity>
-				<Text style={styles.mapSlideCardText}>Map:     {item.name}</Text>
-				<Text style={styles.mapSlideCardText}>Author:  {item.owner}</Text>
+				<Text style={styles.mapTitle}>{item.name}</Text>
+				<Text style={styles.authorTitle}>{item.owner}</Text>
 			</View>
 		);
 	}

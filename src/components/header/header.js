@@ -270,7 +270,7 @@ class Header extends Component {
                         style={styles.loginDialogLinkIcon}
                         size={18}
                       />
-                      <Text style={styles.loginDialogLinkText}>Login</Text>
+                      <Text style={styles.loginDialogLinkText}>Log In</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() => this.goToSignup()}

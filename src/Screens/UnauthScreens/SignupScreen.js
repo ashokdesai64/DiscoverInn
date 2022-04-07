@@ -24,23 +24,23 @@ class SignupScreen extends React.Component {
     }
   }
 
-  goToNextStep(){
+  goToNextStep() {
     const { firstName, lastName, email } = this.state;
 
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    if(!firstName){
+    if (!firstName) {
       alert("Please enter first name.")
       return
     }
-    if(!lastName){
+    if (!lastName) {
       alert("Please enter last name.")
       return
     }
-    if(!email){
+    if (!email) {
       alert("Please enter email.")
       return
-    } else if(!re.test(email)){
+    } else if (!re.test(email)) {
       alert("Please enter valid email.");
       return
     }
@@ -61,7 +61,7 @@ class SignupScreen extends React.Component {
               width: '100%',
               height: '100%',
             }}>
-            <ScrollView style={[styles.container,styles.unauthContent]} keyboardShouldPersistTaps={'always'} contentContainerStyle={{height:DEVICE_HEIGHT-80}}>
+            <ScrollView style={[styles.container, styles.unauthContent]} keyboardShouldPersistTaps={'always'} contentContainerStyle={{ height: DEVICE_HEIGHT - 80 }}>
               <Text style={styles.logoText}>Discover - Inn</Text>
               <View style={styles.unauthForm}>
                 <Text style={styles.formTitle}>Sign Up</Text>
@@ -87,14 +87,14 @@ class SignupScreen extends React.Component {
               </View>
               <Text style={styles.fixedFooter}>
                 Are you already registered?
-                  <Text
+                <Text
                   style={styles.toggleTextLink}
                   onPress={() =>
                     this.props.navigation.navigate('LoginScreen')
                   }>
                   {' '}
-                  SignIn
-                  </Text>
+                  Log In
+                </Text>
               </Text>
             </ScrollView>
           </SafeAreaView>

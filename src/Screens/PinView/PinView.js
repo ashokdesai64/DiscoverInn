@@ -11,6 +11,7 @@ import {
   Platform,
   ActivityIndicator,
   TouchableWithoutFeedback,
+  Alert,
 } from 'react-native';
 import { getStatusBarHeight } from './../../config/statusbar';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -223,7 +224,11 @@ class PinView extends React.Component {
     if (this.props.userData && this.props.userData.id) {
       this.setState({ saveToListModal: true });
     } else {
-      alert('You need to login to access this feature');
+      // alert('Please Log In to access this feature');
+      Alert.alert('', 'Please Log In to access this feature', [
+        { text: 'Log In', onPress: () => this.props.navigation.navigate('LoginScreen') },
+        { text: 'OK' }
+      ])
     }
   }
 

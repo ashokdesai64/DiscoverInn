@@ -11,7 +11,7 @@ import {
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
 
-const InfoScreen = ({values, onSkip, onSignIn}) => {
+const InfoScreen = ({ values, onSkip, onSignIn }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -39,12 +39,12 @@ export default InfoScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent:'center'
+    justifyContent: 'center'
   },
   gif: {
     width: DEVICE_WIDTH,
     height: 250,
-    marginVertical:50,
+    marginVertical: 50,
     // paddingVertical:50
   },
   pageLogo: {
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   header: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical:50
+    marginVertical: 50
   },
   rightBorder: {
     borderRightWidth: 1,

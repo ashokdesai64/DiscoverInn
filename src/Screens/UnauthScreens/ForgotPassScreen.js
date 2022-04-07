@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   Text,
@@ -14,8 +14,8 @@ import {
 import styles from './Unauthscreens.style';
 
 //REDUX
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import * as authActions from './../../actions/authActions';
 
 class ForgotPassScreen extends React.Component {
@@ -32,18 +32,18 @@ class ForgotPassScreen extends React.Component {
       alert('Please enter email.');
       return;
     }
-    this.setState({inProgress: true});
+    this.setState({ inProgress: true });
     this.props.authAction
-      .forgotPassword({email: this.state.email})
+      .forgotPassword({ email: this.state.email })
       .then(msg => {
         alert(msg);
-        this.setState({inProgress: false},()=>{
+        this.setState({ inProgress: false }, () => {
           this.props.navigation.navigate('LoginScreen')
         });
       })
       .catch(e => {
         alert(e);
-        this.setState({inProgress: false});
+        this.setState({ inProgress: false });
       });
   }
 
@@ -67,7 +67,7 @@ class ForgotPassScreen extends React.Component {
               height: '100%',
             }}>
             <KeyboardAvoidingView
-              style={{flex: 1}}
+              style={{ flex: 1 }}
               behavior={Platform.OS === 'ios' ? 'padding' : undefined}
               keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}>
               <View style={styles.container}>
@@ -81,7 +81,7 @@ class ForgotPassScreen extends React.Component {
                         style={styles.formControl}
                         value={this.state.email}
                         onChangeText={email => {
-                          this.setState({email: email.trim()});
+                          this.setState({ email: email.trim() });
                         }}
                       />
                     </View>
@@ -104,7 +104,7 @@ class ForgotPassScreen extends React.Component {
                         this.props.navigation.navigate('LoginScreen')
                       }>
                       {' '}
-                      SignIn
+                      Log In
                     </Text>
                   </Text>
 

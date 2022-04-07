@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   Text,
@@ -16,8 +16,8 @@ import {
 import styles from './Unauthscreens.style';
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 //REDUX
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import * as authActions from './../../actions/authActions';
 import * as mapActions from './../../actions/mapActions';
 
@@ -47,7 +47,7 @@ class LoginScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', () => {});
+    BackHandler.removeEventListener('hardwareBackPress', () => { });
   }
 
   checkLogin(props) {
@@ -59,8 +59,8 @@ class LoginScreen extends React.Component {
   login() {
     // this.props.navigation.navigate('Home');
     // return
-    this.setState({loggingIn: true});
-    let {email, password} = this.state;
+    this.setState({ loggingIn: true });
+    let { email, password } = this.state;
     if (!email) {
       return alert('Please enter email');
     }
@@ -84,7 +84,7 @@ class LoginScreen extends React.Component {
       })
       .catch(e => {
         alert(e);
-        this.setState({loggingIn: false});
+        this.setState({ loggingIn: false });
       });
   }
 
@@ -106,17 +106,17 @@ class LoginScreen extends React.Component {
             <ScrollView
               style={[styles.container, styles.unauthContent]}
               keyboardShouldPersistTaps={'always'}
-              contentContainerStyle={{height: DEVICE_HEIGHT - 80}}>
+              contentContainerStyle={{ height: DEVICE_HEIGHT - 80 }}>
               <View style={styles.unauthContent}>
                 <Text style={styles.logoText}>Discover - Inn</Text>
                 <View style={styles.unauthForm}>
-                  <Text style={styles.formTitle}>Sign in</Text>
+                  <Text style={styles.formTitle}>Log In</Text>
                   <View style={styles.formGroup}>
                     <Text style={styles.formLabel}>Email</Text>
                     <TextInput
                       style={styles.formControl}
                       onChangeText={email => {
-                        this.setState({email: email.trim()});
+                        this.setState({ email: email.trim() });
                       }}
                       value={this.state.email}
                       autoCapitalize={'none'}
@@ -138,7 +138,7 @@ class LoginScreen extends React.Component {
                       secureTextEntry={true}
                       style={styles.formControl}
                       onChangeText={password => {
-                        this.setState({password: password.trim()});
+                        this.setState({ password: password.trim() });
                       }}
                       value={this.state.password}
                       autoCapitalize={'none'}
@@ -152,11 +152,11 @@ class LoginScreen extends React.Component {
                     {this.state.loggingIn ? (
                       <ActivityIndicator size="small" color="#fff" />
                     ) : (
-                      <Text style={styles.buttonText}>Sign In</Text>
+                      <Text style={styles.buttonText}>Log In</Text>
                     )}
                   </TouchableOpacity>
                 </View>
-                <Text style={[styles.toggleText, {marginBottom: 5}]}>
+                <Text style={[styles.toggleText, { marginBottom: 5 }]}>
                   New User?
                   <Text
                     style={styles.toggleTextLink}
@@ -164,7 +164,7 @@ class LoginScreen extends React.Component {
                       this.props.navigation.navigate('SignupScreen')
                     }>
                     {' '}
-                    SignUp
+                    Sign Up
                   </Text>
                 </Text>
               </View>

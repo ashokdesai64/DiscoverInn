@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   Platform,
   Image,
+  Alert,
 } from 'react-native';
 import { Item, Input, Button, Content, Accordion, CheckBox } from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
@@ -130,7 +131,10 @@ class MyTravel extends React.Component {
 
   async downloadMap(mapData) {
     if (!this.props.userData || !this.props.userData.id) {
-      return alert('You need to login to access this feature');
+      return Alert.alert('', 'Please Log In to access this feature', [
+        { text: 'Log In', onPress: () => this.props.navigation.navigate('LoginScreen') },
+        { text: 'OK' }
+      ]);
     }
 
     let packs = await MapboxGL.offlineManager.getPacks();

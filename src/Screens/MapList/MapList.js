@@ -12,6 +12,7 @@ import {
   Platform,
   KeyboardAvoidingView,
   Keyboard,
+  Alert,
 } from 'react-native';
 import Share from 'react-native-share';
 import { askForPermissions, checkIfHasPermission } from './../../config/permission';
@@ -226,7 +227,10 @@ class MapList extends React.Component {
     });
 
     if (!this.props.userData || !this.props.userData.id) {
-      return alert('You need to login to access this feature');
+      return Alert.alert('', 'Please Log In to access this feature', [
+        { text: 'Log In', onPress: () => this.props.navigation.navigate('LoginScreen') },
+        { text: 'OK' }
+      ]);
     }
     let packs = await MapboxGL.offlineManager.getPacks();
     let isDownloaded = packs.find(
@@ -603,7 +607,10 @@ class MapList extends React.Component {
                       selectedMap: item,
                     });
                   } else {
-                    alert('You need to login to access this feature.');
+                    Alert.alert('', 'Please Log In to access this feature', [
+                      { text: 'Log In', onPress: () => this.props.navigation.navigate('LoginScreen') },
+                      { text: 'OK' }
+                    ]);
                   }
                 }}>
                 <Text style={styles.buttonText}>Add Review</Text>

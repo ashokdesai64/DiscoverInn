@@ -25,6 +25,6 @@ export default StyleSheet.create({
   child: {
     width: width,
     height: '86%',
-    marginBottom: Platform.OS === 'ios' ? '-2%' : 0,
+    marginBottom: -5,
   },
 });
