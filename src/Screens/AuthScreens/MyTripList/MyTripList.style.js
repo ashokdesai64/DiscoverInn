@@ -239,7 +239,24 @@ const styles = StyleSheet.create({
   },
   button1: {
     marginHorizontal: 10
-  }
+  },
+  deleteModalBody: {
+    paddingTop: 20,
+    paddingHorizontal: 35,
+    paddingBottom: 50,
+  },
+  deleteModalBodyText: {
+    fontSize: 18,
+    fontFamily: 'Montserrat-SemiBold',
+    textAlign: 'center',
+  },
+  footerButton: {
+    flexDirection: 'row',
+    marginTop: 0,
+    marginHorizontal: 15,
+    alignItems: 'flex-end',
+    marginBottom: 20,
+  },
 });
 
 export default styles;

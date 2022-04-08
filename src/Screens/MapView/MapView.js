@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   View,
-  Dimensions,
   Text,
   ScrollView,
   TouchableOpacity,
@@ -10,7 +9,6 @@ import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog'
 import ImageBlurLoading from './../../components/ImageLoader';
 
 import styles from './MapView.style';
-import geoViewport from '@mapbox/geo-viewport';
 import sights1 from './../../Images/sights1.png';
 import activities1 from './../../Images/activities1.png';
 import restaurants1 from './../../Images/restaurants1.png';
@@ -105,7 +103,7 @@ class MapView extends React.Component {
               );
             }
 
-            pinList.map(pin => {
+            pinList.map((pin, index) => {
               if (pin.longitude && pin.latitude) {
                 let exploded = splitByString(pin.name, '.,-');
                 let parsed = parseInt(exploded[0]);
@@ -119,6 +117,7 @@ class MapView extends React.Component {
                     hasNumber: !isNaN(parsed),
                     number: parsed,
                     category: pin.categories,
+                    index: ++index
                   },
                   geometry: {
                     type: 'Point',
@@ -320,7 +319,7 @@ class MapView extends React.Component {
                       id={`singleNumberSelected${collection.id}`}
                       filter={['==', 'hasNumber', true]}
                       style={{
-                        textField: '{number}',
+                        textField: '{index}',
                         textColor: 'white',
                         textJustify: 'left',
                         textAnchor: 'bottom-right',

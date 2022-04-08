@@ -9,14 +9,12 @@ import {
   ActivityIndicator,
   TextInput,
 } from 'react-native';
-import { NavigationEvents } from 'react-navigation';
 import styles from './TripPinList.style';
 import Header from './../../../components/header/header';
 import Feather from 'react-native-vector-icons/Feather';
 import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog';
 import { option, list } from '../../../Images'
 import DraggableFlatList from "react-native-draggable-flatlist";
-const DEVICE_HEIGHT = Dimensions.get('window').height;
 const DEVICE_WIDTH = Dimensions.get('window').width;
 
 //REDUX
@@ -171,6 +169,7 @@ class TripPinList extends React.Component {
                 <Image source={list} style={styles.menuIcon} />
               </TouchableOpacity>
             </View>
+            {!this.state.switchView && <Text style={styles.holdDrag} >Hold to drag pin</Text>}
             {this.state.pinList && this.state.pinList.length <= 0 ? (
               <View style={styles.container}>
                 <View
@@ -306,14 +305,13 @@ class TripPinList extends React.Component {
                       style={{
                         justifyContent: 'center',
                         alignItems: 'center',
-                        marginBottom: 20,
                         paddingHorizontal: 15,
                         width: DEVICE_WIDTH - 30,
                       }}>
-                      <View style={{ flexDirection: 'row' }} >
+                      <View style={styles.boxContainer} >
                         <View style={styles.indexContainer} >
                           <Text>
-                            {index + 1}
+                            {index + 1}.
                           </Text>
                         </View>
                         <View style={styles.titleContainer} >

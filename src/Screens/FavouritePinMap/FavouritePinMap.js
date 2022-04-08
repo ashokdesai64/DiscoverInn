@@ -94,7 +94,7 @@ class FavouritePinMap extends React.Component {
               };
 
               let temp = [];
-              pinList.map(pin => {
+              pinList.map((pin, index) => {
 
                 if (pin.longitude && pin.latitude) {
                   let exploded = splitByString(pin.name, '.,-');
@@ -108,7 +108,8 @@ class FavouritePinMap extends React.Component {
                       mapID: pin.map_id,
                       hasNumber: !isNaN(parsed),
                       number: parsed,
-                      category: pin.categories
+                      category: pin.categories,
+                      index: ++index
                     },
                     geometry: {
                       type: 'Point',
@@ -278,7 +279,7 @@ class FavouritePinMap extends React.Component {
                         id={`singleNumberSelected${collection.id}`}
                         filter={['==', 'hasNumber', true]}
                         style={{
-                          textField: '{number}',
+                          textField: '{index}',
                           textColor: 'white',
                           textJustify: 'left',
                           textAnchor: 'bottom-right',
@@ -318,16 +319,16 @@ class FavouritePinMap extends React.Component {
                   key={pin.id}
                   activeOpacity={0.9}
                   style={styles.mapViewCard}
-                // onPress={
-                //   () =>
-                //     this.props.navigation.navigate('PinView', {
-                //       pinID: pin.id,
-                //       mapID: params.mapID,
-                //       mapName: params.mapName,
-                //       allPins: this.state.allPins,
-                //     })
-                //   // this.setState({followUserLocation: true})
-                //   }
+                  onPress={
+                    () =>
+                      this.props.navigation.navigate('PinView', {
+                        pinID: pin.id,
+                        mapID: params.mapID,
+                        mapName: params.mapName,
+                        allPins: this.state.allPins,
+                      })
+                    // this.setState({followUserLocation: true})
+                  }
                 >
                   <ImageBlurLoading
                     withIndicator

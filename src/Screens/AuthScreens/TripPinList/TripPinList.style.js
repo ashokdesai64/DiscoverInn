@@ -1,5 +1,6 @@
-import {StyleSheet, Dimensions} from 'react-native';
-const {width} = Dimensions.get('window');
+import { StyleSheet, Dimensions } from 'react-native';
+import colors from '../../../config/colors';
+const { width } = Dimensions.get('window');
 const height = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   container: {
@@ -158,8 +159,8 @@ const styles = StyleSheet.create({
   },
   formGroup: {
     marginHorizontal: 15,
-    justifyContent:'center',
-    alignItems:'center'
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   formLabel: {
     fontFamily: 'Montserrat-Medium',
@@ -196,32 +197,40 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 10
   },
-  selectedMenu: { 
-    elevation: 5, 
-    borderWidth: 2, 
-    borderColor: 'gray', 
-    borderRadius: 50, 
-    padding: 7 
+  selectedMenu: {
+    elevation: 5,
+    borderWidth: 2,
+    borderColor: 'gray',
+    borderRadius: 50,
+    padding: 7
   },
   menuButton: {
-    padding: 7 
+    padding: 7
   },
-  menuIcon: { 
-    width: 20, 
-    height: 20 
+  menuIcon: {
+    width: 20,
+    height: 20
   },
-  indexContainer: { 
-    borderWidth: 1, 
-    justifyContent: 'center', 
+  indexContainer: {
+    justifyContent: 'center',
     alignItems: 'center',
-    padding: 10 
+
   },
   titleContainer: {
-    borderWidth: 1,
-    width: '80%',
+    width: '90%',
     justifyContent: 'center',
-    marginHorizontal: '2%',
-    paddingHorizontal: 5
+    marginRight: '2%',
+    paddingHorizontal: 5,
+  },
+  holdDrag: {
+    marginVertical: 10
+  },
+  boxContainer: {
+    flexDirection: 'row',
+    backgroundColor: colors.white,
+    borderBottomWidth: 0.5,
+    borderColor: colors.gray,
+    padding: 12,
   }
 });
 

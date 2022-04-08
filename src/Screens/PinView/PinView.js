@@ -60,13 +60,17 @@ class PinView extends React.Component {
   }
 
   componentWillMount() {
+    const { params } = this.props.navigation.state;
+    let allPins = params.allPins || [];
+    let pinIndex = allPins.findIndex(p => p.id == params.pinID);
     if (this.state.isOffline) {
-      const { params } = this.props.navigation.state;
-      let allPins = params.allPins || [];
-      let pinIndex = allPins.findIndex(p => p.id == params.pinID);
       this.setPinData(allPins, pinIndex);
     } else {
-      this.fetchSinglePinData();
+      if (params?.mapID) {
+        this.fetchSinglePinData();
+      } else {
+        this.setPinData(allPins, pinIndex);
+      }
     }
   }
 
@@ -303,12 +307,13 @@ class PinView extends React.Component {
     );
   }
 
-  renderPinContent(pinData) {
+  renderPinContent(pinData, index) {
     let { categories } = this.props;
 
     let selectedCategory =
       categories && categories.find(c => c.id == pinData.categories);
     let categoryName = (selectedCategory && selectedCategory.name) || '';
+    let nameSplit = pinData.name.split(".");
     return (
       <ScrollView
         style={styles.pinScrollView}
@@ -319,7 +324,7 @@ class PinView extends React.Component {
           borderRadius: 100,
         }}
         nestedScrollEnabled={true}>
-        <Text style={styles.pinViewTitle}>{pinData.name}</Text>
+        <Text style={styles.pinViewTitle}>{index + 1 + '. ' + nameSplit[nameSplit.length - 1]}{' '}</Text>
         <View style={styles.pinViewCate}>
           <IconMoon
             name={categoryName.toLowerCase()}
@@ -342,12 +347,12 @@ class PinView extends React.Component {
     );
   }
 
-  renderPin(pinData) {
+  renderPin(pinData, index) {
     return (
       <>
         {this.renderImages(pinData)}
         {!this.state.isOffline && this.renderPagination(pinData)}
-        {this.renderPinContent(pinData)}
+        {this.renderPinContent(pinData, index)}
       </>
     );
   }
@@ -399,7 +404,7 @@ class PinView extends React.Component {
               inactiveSlideOpacity={1}
               inactiveSlideScale={1}
               firstItem={this.state.firstItem}
-              renderItem={({ item, index }) => this.renderPin(item)}
+              renderItem={({ item, index }) => this.renderPin(item, index)}
               onSnapToItem={index => this.setIsSaved(index)}
               useScrollView
               nestedScrollEnabled={true}

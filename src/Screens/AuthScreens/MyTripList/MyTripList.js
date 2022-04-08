@@ -24,6 +24,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as mapActions from './../../../actions/mapActions';
+import { Button } from 'native-base';
 
 class MyTripList extends React.Component {
   constructor(props) {
@@ -32,6 +33,7 @@ class MyTripList extends React.Component {
       newTripListModal: false,
       tripName: '',
       fetchingTripList: false,
+      deleteTripId: 0
     };
   }
 
@@ -49,18 +51,18 @@ class MyTripList extends React.Component {
     this.fetchTripList()
   }
 
-  deleteFavouriteList(tripID) {
+  deleteFavouriteList() {
     this.setState({ pinDeleteInProgress: true });
     this.props.mapAction
       .deleteFavouriteList({
         user_id: this.props.userData.id,
-        favorite_id: tripID,
+        favorite_id: this.state.deleteTripId,
       })
       .then(data => {
-        this.setState({ pinDeleteInProgress: false });
+        this.setState({ pinDeleteInProgress: false, deleteTripId: 0 });
       })
       .catch(err => {
-        this.setState({ pinDeleteInProgress: false });
+        this.setState({ pinDeleteInProgress: false, deleteTripId: 0 });
       });
   }
 
@@ -216,7 +218,8 @@ class MyTripList extends React.Component {
                         <TouchableOpacity
                           style={styles.button1}
                           onPress={() => {
-                            this.deleteFavouriteList(trip.id);
+                            this.setState({ deleteTripId: trip.id })
+                            // this.deleteFavouriteList(trip.id);
                           }}>
                           <Image source={deleteIcon} style={styles.buttonIcon1} />
                         </TouchableOpacity>
@@ -239,6 +242,72 @@ class MyTripList extends React.Component {
               </Text>
             )}
           </View>
+          <Dialog
+            rounded={false}
+            visible={this.state.deleteTripId}
+            hasOverlay={true}
+            animationDuration={1}
+            onTouchOutside={() => {
+              this.setState({ deleteTripId: 0 });
+            }}
+            dialogAnimation={
+              new FadeAnimation({
+                initialValue: 0, // optional
+                animationDuration: 150, // optional
+                useNativeDriver: true, // optional
+              })
+            }
+            onHardwareBackPress={() => {
+              this.setState({ deleteTripId: 0 });
+              return true;
+            }}
+            dialogStyle={styles.customPopup}>
+            <DialogContent style={styles.customPopupContent}>
+              <View style={styles.customPopupHeader}>
+                <Text style={styles.customPopupHeaderTitle}>Delete Trip</Text>
+                <TouchableOpacity
+                  style={styles.buttonClose}
+                  onPress={() => this.setState({ deleteTripId: 0 })}>
+                  <Feather name={'x'} style={styles.buttonCloseIcon} />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.deleteModalBody}>
+                <Text style={styles.deleteModalBodyText}>
+                  Are you sure you want to remove this trip?
+                </Text>
+              </View>
+
+              <View style={[styles.footerButton]}>
+                <Button
+                  style={[
+                    styles.button,
+                    styles.buttonOutline,
+                    styles.buttonOutlineGray,
+                    styles.buttonDecline,
+                  ]}
+                  onPress={() => {
+                    this.setState({ deleteTripId: 0 });
+                  }}>
+                  <Text style={[styles.buttonText, styles.buttonTextGray]}>
+                    Decline
+                  </Text>
+                </Button>
+                <Button
+                  style={[styles.button, styles.buttonDanger, styles.buttonSave]}
+                  onPress={() => {
+                    // this.deleteMap();
+                    this.deleteFavouriteList()
+                  }}>
+                  {this.state.deleteInProgrss ? (
+                    <ActivityIndicator size={'small'} color={'white'} />
+                  ) : (
+                    <Text style={styles.buttonText}>Yes Sure</Text>
+                  )}
+                </Button>
+              </View>
+            </DialogContent>
+          </Dialog>
           <Dialog
             rounded={false}
             visible={this.state.newTripListModal}

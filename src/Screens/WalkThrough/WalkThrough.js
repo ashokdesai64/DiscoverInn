@@ -247,7 +247,7 @@ const VideoComponent = React.memo(({ uri, paused, onVideoEnd, currentIndex, post
         // controls
         onProgress={f}
         poster={poster}
-        resizeMode="stretch"
+        resizeMode="contain"
       />
     </View>
   );
