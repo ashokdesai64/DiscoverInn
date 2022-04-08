@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
-  Image,
   SafeAreaView,
   TouchableOpacity,
-  Dimensions,
   TextInput,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
@@ -13,11 +11,9 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import MenuIcon from './../../Images/hamburger.png';
 import colors from './../../config/colors';
 import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog';
 import styles from './header.style.js';
-const { width } = Dimensions.get('window');
 //REDUX
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';

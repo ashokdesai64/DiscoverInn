@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   Text,
@@ -7,7 +7,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import {Item, Input, Button, Content, Accordion, Picker} from 'native-base';
+import { Item, Input, Button, Content, Accordion, Picker } from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import styles from './Sights.style';
 import Header from '../../../components/header/header';

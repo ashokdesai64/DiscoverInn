@@ -1,8 +1,7 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import Routes from './src/routes';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import VideoPlayer from './src/components/Video'
 import RNFileSystem from 'react-native-fs';
 import RNFetchBlob from 'rn-fetch-blob';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';

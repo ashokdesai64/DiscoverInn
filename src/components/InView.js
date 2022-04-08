@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {View, Dimensions, NativeMethodsMixin} from 'react-native';
+import React, { Component } from 'react';
+import { View, Dimensions } from 'react-native';
 
 class InView extends Component {
   constructor(props) {

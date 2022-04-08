@@ -1,5 +1,4 @@
-import { StyleSheet,Dimensions } from 'react-native';
-import { Row } from 'native-base';
+import { StyleSheet, Dimensions } from 'react-native';
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 const styles = StyleSheet.create({
@@ -23,9 +22,9 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     maxHeight: height - 190,
   },
-  buttonCamera:{
-    backgroundColor:'#2F80ED',
-    color:'black'
+  buttonCamera: {
+    backgroundColor: '#2F80ED',
+    color: 'black'
   },
   customPopupContent: {
     paddingVertical: 20,
@@ -53,9 +52,9 @@ const styles = StyleSheet.create({
   shareSocial: {
     flexDirection: 'row',
     marginHorizontal: -7.5,
-    justifyContent:'space-around',
-    alignItems:'center',
-    flex:1,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    flex: 1,
   },
   pageContent: {
     paddingVertical: 10,
@@ -243,7 +242,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 12,
     fontFamily: 'Montserrat-Medium',
-    marginLeft:5
+    marginLeft: 5
   },
   mapPins: {
     justifyContent: 'flex-start',

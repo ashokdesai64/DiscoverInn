@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
-import {
-  TouchableOpacity,
-  PanResponder,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { Item, Input, Button } from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import axios from 'axios';
@@ -15,7 +11,6 @@ import {
   Text,
   TextInput,
   View,
-  ViewPropTypes as RNViewPropTypes,
   ScrollView,
 } from 'react-native';
 import { apiUrls } from '../config/api';

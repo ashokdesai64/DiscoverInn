@@ -1,13 +1,12 @@
 import React, { Fragment } from 'react';
 import { View, Text, KeyboardAvoidingView, ScrollView, ImageBackground, TouchableOpacity, } from 'react-native';
-import { ListItem, CheckBox, Picker, Textarea } from 'native-base';
+import { ListItem, Picker, Textarea } from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import Header from '../../../components/header/header';
 import styles from './EditMyTravelDetails.style';
 import ImagePicker from 'react-native-image-picker';
 import Spinner from '../../../components/Loader';
 import moment from 'moment';
-import { NavigationActions, StackActions } from 'react-navigation';
 //REDUX
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';

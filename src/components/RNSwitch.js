@@ -1,12 +1,9 @@
 import React, { Component } from "react";
 import {
-  View,
   Text,
   StyleSheet,
   Animated,
-  PanResponder,
-  TouchableWithoutFeedback,
-  ViewPropTypes
+  TouchableWithoutFeedback
 } from "react-native";
 import PropTypes from "prop-types";
 
@@ -78,7 +75,7 @@ export class Switch extends Component {
       transformSwitch: new Animated.Value(
         props.value
           ? props.circleSize / props.switchLeftPx
-          : -this.props.circleSize+15,
+          : -this.props.circleSize + 15,
       ),
       backgroundColor: new Animated.Value(props.value ? 75 : -75),
       circleColor: new Animated.Value(props.value ? 75 : -75),
@@ -124,12 +121,12 @@ export class Switch extends Component {
     }
   };
 
-  animateSwitch = (value, cb = () => {}) => {
+  animateSwitch = (value, cb = () => { }) => {
     Animated.parallel([
       Animated.spring(this.state.transformSwitch, {
         toValue: value
           ? 20
-          : -this.props.circleSize+15,
+          : -this.props.circleSize + 15,
         useNativeDriver: false
       }),
       Animated.timing(this.state.backgroundColor, {

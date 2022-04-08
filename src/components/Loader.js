@@ -1,6 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import {StyleSheet, View, Text, Modal, ActivityIndicator,TouchableOpacity} from 'react-native';
+import { StyleSheet, View, Text, Modal, ActivityIndicator, TouchableOpacity } from 'react-native';
 
 const transparent = 'transparent';
 const styles = StyleSheet.create({
@@ -65,11 +64,11 @@ export default class Spinner extends React.PureComponent {
     overlayColor: 'rgba(0, 0, 0, 0.4)',
     // canGoBack: true,
     backButtonText: 'Download map in background',
-    onGoBack: () => {},
+    onGoBack: () => { },
   };
 
   close() {
-    this.setState({visible: false});
+    this.setState({ visible: false });
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -89,7 +88,7 @@ export default class Spinner extends React.PureComponent {
     }
   }
 
-    _renderDefaultContent() {
+  _renderDefaultContent() {
     return (
       <View style={styles.background}>
         {this.props.customIndicator ? (
@@ -98,10 +97,10 @@ export default class Spinner extends React.PureComponent {
           <ActivityIndicator
             color={this.props.color}
             size={this.props.size}
-            style={[styles.activityIndicator, {...this.props.indicatorStyle}]}
+            style={[styles.activityIndicator, { ...this.props.indicatorStyle }]}
           />
         )}
-        <View style={[styles.textContainer, {...this.props.indicatorStyle}]}>
+        <View style={[styles.textContainer, { ...this.props.indicatorStyle }]}>
           <Text style={[styles.textContent, this.props.textStyle]}>
             {this.state.textContent}
           </Text>
@@ -113,13 +112,13 @@ export default class Spinner extends React.PureComponent {
               marginBottom: 15,
               paddingHorizontal: 20,
               paddingVertical: 10,
-              width:'80%',
-              justifyContent:'center',
-              alignItems:'center',
-              height:55
+              width: '80%',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: 55
             }}
             onPress={() => this.props.onGoBack()}>
-            <Text style={{fontFamily: 'Montserrat-Medium', color: 'white',textAlign:'center',fontSize:17}}>
+            <Text style={{ fontFamily: 'Montserrat-Medium', color: 'white', textAlign: 'center', fontSize: 17 }}>
               {this.props.backButtonText}
             </Text>
           </TouchableOpacity>
@@ -133,7 +132,7 @@ export default class Spinner extends React.PureComponent {
 
     const spinner = (
       <View
-        style={[styles.container, {backgroundColor: this.props.overlayColor}]}
+        style={[styles.container, { backgroundColor: this.props.overlayColor }]}
         key={
           this.props.spinnerKey
             ? this.props.spinnerKey

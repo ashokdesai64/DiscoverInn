@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import {
     FlatList,
     Platform,
@@ -7,7 +6,7 @@ import {
     Text,
     TextInput,
     View,
-    ViewPropTypes as RNViewPropTypes, ScrollView
+    ScrollView
 } from 'react-native';
 
 class Autocomplete extends Component {

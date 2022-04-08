@@ -1,12 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   TouchableOpacity,
-  PanResponder,
-  TouchableWithoutFeedback,
   KeyboardAvoidingView,
 } from 'react-native';
-import {Item, Input, Button} from 'native-base';
-import Feather from 'react-native-vector-icons/Feather';
+import { Item, Input } from 'native-base';
 import axios from 'axios';
 import _ from 'underscore';
 import {
@@ -15,8 +12,6 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  View,
-  ViewPropTypes as RNViewPropTypes,
   ScrollView,
 } from 'react-native';
 
@@ -25,7 +20,7 @@ export default class AutoCompleteLocation extends Component {
     data: [],
     keyboardShouldPersistTaps: 'always',
     onStartShouldSetResponderCapture: () => false,
-    renderItem: ({item}) => <Text>{item}</Text>,
+    renderItem: ({ item }) => <Text>{item}</Text>,
     renderSeparator: null,
     renderTextInput: props => {
       return (
@@ -70,7 +65,7 @@ export default class AutoCompleteLocation extends Component {
    * Proxy `blur()` to autocomplete's text input.
    */
   blur() {
-    const {textInput} = this;
+    const { textInput } = this;
     textInput && textInput.blur();
   }
 
@@ -78,7 +73,7 @@ export default class AutoCompleteLocation extends Component {
    * Proxy `focus()` to autocomplete's text input.
    */
   focus() {
-    const {textInput} = this;
+    const { textInput } = this;
     textInput && textInput.focus();
   }
 
@@ -86,7 +81,7 @@ export default class AutoCompleteLocation extends Component {
    * Proxy `isFocused()` to autocomplete's text input.
    */
   isFocused() {
-    const {textInput} = this;
+    const { textInput } = this;
     return textInput && textInput.isFocused();
   }
 
@@ -102,24 +97,24 @@ export default class AutoCompleteLocation extends Component {
       onEndReached,
       onEndReachedThreshold,
     } = this.props;
-    const {placeList} = this.state;
+    const { placeList } = this.state;
     return (
       <FlatList
         ref={this.onRefListView}
         data={placeList}
         keyboardShouldPersistTaps={keyboardShouldPersistTaps}
-        renderItem={({item, i}) => (
+        renderItem={({ item, i }) => (
           <TouchableOpacity
-            style={{marginBottom: 10, padding: 5}}
+            style={{ marginBottom: 10, padding: 5 }}
             onPress={() =>
               this.setState(
-                {searchTerm: item.description, hideResults: true},
+                { searchTerm: item.description, hideResults: true },
                 () => {
                   this.props.onValueSelected(item.place_id, item.description);
                 },
               )
             }>
-            <Text style={{fontFamily: 'Montserrat-Medium', fontSize: 16}}>
+            <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: 16 }}>
               {item.description}
             </Text>
           </TouchableOpacity>
@@ -130,7 +125,7 @@ export default class AutoCompleteLocation extends Component {
         onEndReachedThreshold={onEndReachedThreshold}
         style={[styles.list, listStyle]}
         ListEmptyComponent={() => (
-          <Text style={{textAlign: 'center', color: '#bbb', fontSize: 14}}>
+          <Text style={{ textAlign: 'center', color: '#bbb', fontSize: 14 }}>
             No Places Found
           </Text>
         )}
@@ -140,7 +135,7 @@ export default class AutoCompleteLocation extends Component {
   }
 
   renderTextInput() {
-    const {renderTextInput, style} = this.props;
+    const { renderTextInput, style } = this.props;
     const props = {
       style: [styles.input, style],
       ref: this.onRefTextInput,
@@ -159,10 +154,10 @@ export default class AutoCompleteLocation extends Component {
     try {
       let result = await axios.get(url);
       let places = result.data.predictions || [];
-      this.setState({placeList: places, hideResults: false});
+      this.setState({ placeList: places, hideResults: false });
       this.props.scroll && this.props.scroll()
     } catch (err) {
-      this.setState({placeList: []});
+      this.setState({ placeList: [] });
     }
   }
 
@@ -171,7 +166,7 @@ export default class AutoCompleteLocation extends Component {
     if (searchTerm.trim() != '') {
       this.fetchPlaces(searchTerm.trim());
     } else {
-      this.setState({hideResults: true});
+      this.setState({ hideResults: true });
     }
   }, 250);
   //     componentWillReceiveProps(nextProps) {
@@ -190,19 +185,19 @@ export default class AutoCompleteLocation extends Component {
 
     // Notify listener if the suggestion will be shown.
     onShowResults && onShowResults(showResults);
-      let isDisabled = this.props.locationFromImage && this.props.value;
+    let isDisabled = this.props.locationFromImage && this.props.value;
     return (
       <KeyboardAvoidingView behavior={'padding'} style={[styles.container, containerStyle]}>
         <Item style={styles.searchbarInputBox}>
           <Input
-            style={[styles.searchbarInput,{backgroundColor:isDisabled?'#ddd':'transparent'}]}
+            style={[styles.searchbarInput, { backgroundColor: isDisabled ? '#ddd' : 'transparent' }]}
             placeholder="Type in the Location name!"
             value={this.props.value}
             disabled={isDisabled}
             onChangeText={searchTerm => {
               this.props.onValueChange(searchTerm);
               if (!this.props.locationFromImage) {
-                this.setState({searchTerm}, () => {
+                this.setState({ searchTerm }, () => {
                   this.searchPlaces();
                 });
               }
@@ -213,7 +208,7 @@ export default class AutoCompleteLocation extends Component {
         {!this.state.hideResults && (
           <ScrollView
             nestedScrollEnabled={true}
-            style={{maxHeight: 200}}
+            style={{ maxHeight: 200 }}
             keyboardShouldPersistTaps={'always'}
             ref='_scrollView'
           >
@@ -279,8 +274,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   ...Platform.select({
-    android: {...androidStyles},
-    ios: {...iosStyles},
+    android: { ...androidStyles },
+    ios: { ...iosStyles },
   }),
   searchbarCard: {
     marginHorizontal: 15,
@@ -292,7 +287,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
     shadowColor: '#000000',
     shadowOpacity: 0.05,
-    shadowOffset: {width: 0, height: 4},
+    shadowOffset: { width: 0, height: 4 },
     shadowRadius: 10,
   },
   searchbarInputBox: {

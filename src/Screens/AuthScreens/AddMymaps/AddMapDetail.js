@@ -1,8 +1,7 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   Text,
-  Dimensions,
   KeyboardAvoidingView,
   TextInput,
   ScrollView,
@@ -12,29 +11,27 @@ import {
   Platform,
   Keyboard,
 } from 'react-native';
-import {ListItem, CheckBox, Picker, Textarea, Form} from 'native-base';
+import { Textarea } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import Header from './../../../components/header/header';
 import styles from './AddMapDetail.style';
-import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import fontelloConfig from './../../../selection.json';
-import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
-import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
+import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog';
 import ImagePicker from 'react-native-image-crop-picker';
 import Spinner from './../../../components/Loader';
 import AutoCompleteLocation from '../../../components/AutoCompleteLocation';
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
-const DEVICE_WIDTH = Dimensions.get('window').width;
 import axios from 'axios';
 import RNLocation from 'react-native-location'
 //REDUX
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import * as mapActions from './../../../actions/mapActions';
 
-const convertDMSToDD = function(degrees, minutes, seconds, direction) {
+const convertDMSToDD = function (degrees, minutes, seconds, direction) {
   var dd = degrees + minutes / 60 + seconds / 3600;
 
   if (direction == 'S' || direction == 'W') {
@@ -84,19 +81,19 @@ class AddMapDetail extends React.Component {
       addingPin: false,
       locationFromImage: true,
       selectedCategory: 7,
-      currentLocation:false,
-      hasCameraImage:false
+      currentLocation: false,
+      hasCameraImage: false
     };
   }
 
-  async componentDidMount(){
+  async componentDidMount() {
     let location = await RNLocation.getLatestLocation({ timeout: 60000 });
-    if(location && location.latitude && location.longitude){
-      if(!this.state.selectedLocation || !this.state.selectedLocation.lat){
+    if (location && location.latitude && location.longitude) {
+      if (!this.state.selectedLocation || !this.state.selectedLocation.lat) {
         this.setState({
-          currentLocation:{
-            lat:location.latitude,
-            lng:location.longitude
+          currentLocation: {
+            lat: location.latitude,
+            lng: location.longitude
           },
         });
       }
@@ -141,7 +138,7 @@ class AddMapDetail extends React.Component {
               tempArray.push(image);
             });
             this.setState(
-              {pinImages: [...this.state.pinImages, ...tempArray]},
+              { pinImages: [...this.state.pinImages, ...tempArray] },
               () => {
                 this.getLocationFromSelectedImages();
               },
@@ -164,7 +161,7 @@ class AddMapDetail extends React.Component {
             type: item.mime,
             exif: item.exif,
           };
-          this.setState({pinImages: [...this.state.pinImages, image],hasCameraImage:true}, () => {
+          this.setState({ pinImages: [...this.state.pinImages, image], hasCameraImage: true }, () => {
             this.getLocationFromSelectedImages();
           });
         }
@@ -181,7 +178,7 @@ class AddMapDetail extends React.Component {
         lng = -lng;
       }
     }
-    return {lat, lng};
+    return { lat, lng };
   };
 
   async getLocationFromSelectedImages() {
@@ -192,7 +189,7 @@ class AddMapDetail extends React.Component {
         let item = this.state.pinImages[i];
 
         if (item.exif) {
-          
+
           let latitudeDirection =
             item.exif['{GPS}'] && item.exif['{GPS}'].LatitudeRef;
           let latitude =
@@ -234,7 +231,7 @@ class AddMapDetail extends React.Component {
                     longitudeDirection,
                   );
                   imageLocation = selectedLocation;
-                  this.setState({selectedLocation, locationFromImage: true});
+                  this.setState({ selectedLocation, locationFromImage: true });
                   break;
                 }
               }
@@ -247,7 +244,7 @@ class AddMapDetail extends React.Component {
               );
 
               this.setState({
-                selectedLocation:imageLocation,
+                selectedLocation: imageLocation,
                 locationFromImage: true,
               });
             }
@@ -255,29 +252,29 @@ class AddMapDetail extends React.Component {
         }
       }
       if (imageLocation && imageLocation.lat && imageLocation.lng) {
-        this.getPlaceNameFromLocation({latitude:imageLocation.lat,longitude:imageLocation.lng})
-      } else if(!!this.state.hasCameraImage){
-        if(Platform.OS == 'ios'){
-          if(!this.state.selectedLocation || !this.state.selectedLocation.latitude){
-            if(this.state.currentLocation && this.state.currentLocation.lat){
+        this.getPlaceNameFromLocation({ latitude: imageLocation.lat, longitude: imageLocation.lng })
+      } else if (!!this.state.hasCameraImage) {
+        if (Platform.OS == 'ios') {
+          if (!this.state.selectedLocation || !this.state.selectedLocation.latitude) {
+            if (this.state.currentLocation && this.state.currentLocation.lat) {
               this.setState({
-                selectedLocation:{...this.state.currentLocation}
+                selectedLocation: { ...this.state.currentLocation }
               })
               this.getPlaceNameFromLocation({
-                latitude:this.state.currentLocation.lat,
-                longitude:this.state.currentLocation.lng
+                latitude: this.state.currentLocation.lat,
+                longitude: this.state.currentLocation.lng
               })
             }
           }
         }
-        
+
       } else {
-        this.setState({locationFromImage: false,locationName: '',gotTrueLocation: false});
+        this.setState({ locationFromImage: false, locationName: '', gotTrueLocation: false });
       }
     }
   }
 
-  async getPlaceNameFromLocation({latitude,longitude}){
+  async getPlaceNameFromLocation({ latitude, longitude }) {
     let latlng = `${latitude},${longitude}`;
     try {
       let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlng}&key=AIzaSyDVk4w7Wo8sefykoGcdjxk7aot3vPsRNxU`;
@@ -296,9 +293,9 @@ class AddMapDetail extends React.Component {
       if (addressRes && addressRes.formatted_address) {
         placeName = addressRes.formatted_address;
       }
-      this.setState({locationName: placeName});
+      this.setState({ locationName: placeName });
     } catch (err) {
-      this.setState({locationName: ''});
+      this.setState({ locationName: '' });
     }
   }
 
@@ -306,7 +303,7 @@ class AddMapDetail extends React.Component {
     let images = [...this.state.pinImages];
     let removeIndex = images.findIndex(image => image.uri == imageData.uri);
     images.splice(removeIndex, 1);
-    this.setState({pinImages: images});
+    this.setState({ pinImages: images });
   }
 
   addPin() {
@@ -317,13 +314,13 @@ class AddMapDetail extends React.Component {
       pinTitle,
       pinDescription,
     } = this.state;
-    const {params} = this.props.navigation.state;
+    const { params } = this.props.navigation.state;
 
     // if (!pinDescription) return alert('Pin description is required');
     if (!pinTitle) return alert('Pin title is required');
     if (!selectedCategory) return alert('Category is required');
 
-    this.setState({addingPin: true});
+    this.setState({ addingPin: true });
 
     let apiData = {
       map_id: params.mapID,
@@ -346,13 +343,13 @@ class AddMapDetail extends React.Component {
     this.props.mapAction
       .addMapPin(apiData)
       .then(data => {
-        this.setState({addingPin: false}, () => {
+        this.setState({ addingPin: false }, () => {
           this.props.navigation.goBack();
           // this.props.navigation.navigate('MapView', { mapID: params.mapID, mapName: params.mapName });
         });
       })
       .catch(err => {
-        this.setState({addingPin: false});
+        this.setState({ addingPin: false });
         alert(err);
       });
   }
@@ -371,18 +368,18 @@ class AddMapDetail extends React.Component {
         });
       }
     } catch (err) {
-      this.setState({selectedLocation: false});
+      this.setState({ selectedLocation: false });
     }
   }
 
   render() {
-    const {pinImages} = this.state;
-    const {params} = this.props.navigation.state;
+    const { pinImages } = this.state;
+    const { params } = this.props.navigation.state;
     return (
       <Fragment>
         <ImageBackground
           source={require('../../../Images/map-bg.png')}
-          style={{width: '100%', height: '100%'}}>
+          style={{ width: '100%', height: '100%' }}>
           <Header
             showBack={true}
             title={params.mapName}
@@ -394,9 +391,9 @@ class AddMapDetail extends React.Component {
           <Spinner
             visible={this.state.addingPin}
             textContent={'Adding Pin...'}
-            textStyle={{color: '#fff'}}
+            textStyle={{ color: '#fff' }}
             onClose={() => {
-              this.setState({addingPin: false});
+              this.setState({ addingPin: false });
             }}
           />
           <KeyboardAvoidingView behavior='padding' style={styles.container}>
@@ -416,10 +413,10 @@ class AddMapDetail extends React.Component {
                     }}>
                     {pinImages.map(image => {
                       return (
-                        <View style={{marginRight: 13, marginBottom: 15}}>
+                        <View style={{ marginRight: 13, marginBottom: 15 }}>
                           <Image
-                            style={{height: 80, width: 80, borderRadius: 5}}
-                            source={{uri: image.uri}}
+                            style={{ height: 80, width: 80, borderRadius: 5 }}
+                            source={{ uri: image.uri }}
                           />
                           <TouchableOpacity
                             onPress={() => this.removeSelectedImage(image)}
@@ -436,7 +433,7 @@ class AddMapDetail extends React.Component {
                               elevation: 5,
                               shadowColor: '#000000',
                               shadowOpacity: 0.05,
-                              shadowOffset: {width: 0, height: 4},
+                              shadowOffset: { width: 0, height: 4 },
                               shadowRadius: 10,
                             }}>
                             <Feather name={'x'} color={'red'} />
@@ -445,7 +442,7 @@ class AddMapDetail extends React.Component {
                       );
                     })}
                     <TouchableOpacity
-                      onPress={() => this.setState({showPickerDialog: true})}
+                      onPress={() => this.setState({ showPickerDialog: true })}
                       style={{
                         marginRight: 13,
                         marginBottom: 15,
@@ -473,7 +470,7 @@ class AddMapDetail extends React.Component {
                   </View>
                 ) : (
                   <TouchableOpacity
-                    onPress={() => this.setState({showPickerDialog: true})}
+                    onPress={() => this.setState({ showPickerDialog: true })}
                     style={[styles.uploadCoverCard]}>
                     <AntDesign
                       name={'pluscircleo'}
@@ -497,12 +494,12 @@ class AddMapDetail extends React.Component {
                     Location Name{' '}
                     {this.state.locationAccepted
                       ? !this.state.locationFromImage && (
-                          <Feather
-                            size={14}
-                            name="alert-triangle"
-                            color={'#F2994A'}
-                          />
-                        )
+                        <Feather
+                          size={14}
+                          name="alert-triangle"
+                          color={'#F2994A'}
+                        />
+                      )
                       : null}
                   </Text>
 
@@ -510,7 +507,7 @@ class AddMapDetail extends React.Component {
                     onValueSelected={(placeID, description) =>
                       this.getGeocodeFromPlace(placeID, description)
                     }
-                    onValueChange={name => this.setState({locationName: name})}
+                    onValueChange={name => this.setState({ locationName: name })}
                     locationFromImage={
                       this.state.locationFromImage &&
                       this.state.locationAccepted
@@ -534,7 +531,7 @@ class AddMapDetail extends React.Component {
                       return (
                         <TouchableOpacity
                           onPress={() => {
-                            this.setState({selectedCategory: category.id});
+                            this.setState({ selectedCategory: category.id });
                           }}
                           style={[
                             styles.singlePin,
@@ -559,7 +556,7 @@ class AddMapDetail extends React.Component {
                   <TextInput
                     style={styles.formControl}
                     placeholderTextColor={'#828894'}
-                    onChangeText={pinTitle => this.setState({pinTitle})}
+                    onChangeText={pinTitle => this.setState({ pinTitle })}
                     returnKeyType='done'
                   />
                 </View>
@@ -572,16 +569,16 @@ class AddMapDetail extends React.Component {
                     textAlignVertical={'top'}
                     placeholderTextColor={'#828894'}
                     onChangeText={pinDescription =>
-                      this.setState({pinDescription})
+                      this.setState({ pinDescription })
                     }
-                    onFocus={()=>{
+                    onFocus={() => {
                       this.refs._scrollView.scrollTo({
                         x: 0,
                         y: 500,
                         animated: true,
                       })
                     }}
-                    onSubmitEditing={()=> Keyboard.dismiss()}
+                    onSubmitEditing={() => Keyboard.dismiss()}
                     returnKeyType='done'
                   />
                 </View>
@@ -589,7 +586,7 @@ class AddMapDetail extends React.Component {
             </View>
             <View style={styles.footerButton}>
               <TouchableOpacity
-                style={[styles.button, styles.buttonPrimary, {flex: 1}]}
+                style={[styles.button, styles.buttonPrimary, { flex: 1 }]}
                 onPress={() => {
                   this.addPin();
                 }}>
@@ -611,7 +608,7 @@ class AddMapDetail extends React.Component {
             hasOverlay={true}
             animationDuration={1}
             onTouchOutside={() => {
-              this.setState({showPickerDialog: false});
+              this.setState({ showPickerDialog: false });
             }}
             dialogAnimation={
               new FadeAnimation({
@@ -621,7 +618,7 @@ class AddMapDetail extends React.Component {
               })
             }
             onHardwareBackPress={() => {
-              this.setState({showPickerDialog: false});
+              this.setState({ showPickerDialog: false });
               return true;
             }}
             dialogStyle={styles.customPopup}>
@@ -632,7 +629,7 @@ class AddMapDetail extends React.Component {
                 </Text>
                 <TouchableOpacity
                   style={styles.buttonClose}
-                  onPress={() => this.setState({showPickerDialog: false})}>
+                  onPress={() => this.setState({ showPickerDialog: false })}>
                   <Feather name={'x'} style={styles.buttonCloseIcon} />
                 </TouchableOpacity>
               </View>
@@ -642,7 +639,7 @@ class AddMapDetail extends React.Component {
                   <TouchableOpacity
                     style={[styles.button, styles.buttonCamera]}
                     onPress={() =>
-                      this.setState({showPickerDialog: false}, () => {
+                      this.setState({ showPickerDialog: false }, () => {
                         this.showPicker('gallery');
                       })
                     }>
@@ -652,7 +649,7 @@ class AddMapDetail extends React.Component {
                   <TouchableOpacity
                     style={[styles.button, styles.buttonCamera]}
                     onPress={() =>
-                      this.setState({showPickerDialog: false}, () => {
+                      this.setState({ showPickerDialog: false }, () => {
                         this.showPicker('camera');
                       })
                     }>

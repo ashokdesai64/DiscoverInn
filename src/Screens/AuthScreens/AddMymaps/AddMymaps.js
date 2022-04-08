@@ -2,16 +2,14 @@ import React, { Fragment } from 'react';
 import {
   View,
   Text,
-  Button,
   KeyboardAvoidingView,
   TextInput,
-  Dimensions,
   ScrollView,
   Image,
   ImageBackground,
   TouchableOpacity,
 } from 'react-native';
-import { ListItem, CheckBox, Picker, Textarea } from 'native-base';
+import { ListItem, Picker, Textarea } from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Header from './../../../components/header/header';

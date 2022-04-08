@@ -1,5 +1,5 @@
-import React, {Fragment} from 'react';
-import {View, Text, ScrollView} from 'react-native';
+import React, { Fragment } from 'react';
+import { View, Text, ScrollView } from 'react-native';
 import Header from '../../components/header/header';
 import styles from './AboutUsScreen.style';
 

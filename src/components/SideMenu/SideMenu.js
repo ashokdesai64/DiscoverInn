@@ -1,19 +1,17 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   ScrollView,
   Text,
-  Image,
   SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import styles from './SideMenu.style';
-import colors from './../../config/colors';
 import ImageBlurLoading from './../ImageLoader';
 //REDUX
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import * as authActions from './../../actions/authActions';
 
 class SideMenu extends Component {
@@ -30,7 +28,7 @@ class SideMenu extends Component {
   }
 
   render() {
-    const {userData} = this.props;
+    const { userData } = this.props;
     return (
       <SafeAreaView style={styles.menuWrapper}>
         <ScrollView>
@@ -40,7 +38,7 @@ class SideMenu extends Component {
                 <ImageBlurLoading
                   withIndicator
                   style={styles.profileAvatar}
-                  source={{uri: userData.image}}
+                  source={{ uri: userData.image }}
                   thumbnailSource={{
                     uri: 'https://discover-inn.com/upload/cover/map-image.jpeg',
                   }}

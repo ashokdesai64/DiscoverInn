@@ -24,8 +24,8 @@ if (Platform.OS === 'ios' && !Platform.isPad && !Platform.isTVOS) {
     }
 }
 
-export const isIPhoneX = () =>  isIPhoneX_v;
-export const isIPhoneXMax = () =>  isIPhoneXMax_v;
+export const isIPhoneX = () => isIPhoneX_v;
+export const isIPhoneXMax = () => isIPhoneXMax_v;
 export const isIPhoneWithMonobrow = () => isIPhoneWithMonobrow_v;
 
 const getExpoRoot = () => global.Expo || global.__expo || global.__exponent;

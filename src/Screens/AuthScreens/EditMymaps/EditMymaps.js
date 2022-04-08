@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { View, Text, ScrollView, Switch, Dimensions, Image } from 'react-native';
+import { View, Text, ScrollView, Switch, Image } from 'react-native';
 import { Item, Input, Button, Content, Accordion, CheckBox } from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -85,8 +85,8 @@ class EditMymaps extends React.Component {
         {expanded ? (
           <Feather style={styles.accordionCardHeaderIcon} name="chevron-up" />
         ) : (
-            <Feather style={styles.accordionCardHeaderIcon} name="chevron-down" />
-          )}
+          <Feather style={styles.accordionCardHeaderIcon} name="chevron-down" />
+        )}
       </View>
     );
   }
@@ -109,9 +109,9 @@ class EditMymaps extends React.Component {
               // trackColor={{true: '#fff', false: '#fff'}}
               thumbColor={'#2F80ED'}
               onValueChange={value =>
-                (this.state.dataArray[commentIndex].public = item.public
-                  ? false
-                  : true)
+              (this.state.dataArray[commentIndex].public = item.public
+                ? false
+                : true)
               }
             />
           </View>
@@ -253,7 +253,7 @@ class EditMymaps extends React.Component {
                     />
                   </Content>
                   :
-                  <Text style={[styles.buttonText,{marginTop:20,fontSize:16,color:'grey',alignSelf:'center'}]}>No Maps Found.</Text>
+                  <Text style={[styles.buttonText, { marginTop: 20, fontSize: 16, color: 'grey', alignSelf: 'center' }]}>No Maps Found.</Text>
               }
             </View>
           </View>
