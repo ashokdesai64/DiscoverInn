@@ -23,10 +23,10 @@ const Title = React.forwardRef(({ item }, ref) => {
             style={[
               styles.button,
               active === index && {
-                borderBottomColor: activeBorderColor
+                borderColor: activeBorderColor
                   ? activeBorderColor
-                  : "#000",
-                borderBottomWidth: 2,
+                  : '#d6d6d6',
+                borderWidth: 2,
               },
             ]}
             key={index}
@@ -41,7 +41,7 @@ const Title = React.forwardRef(({ item }, ref) => {
                   color:
                     active === index && selectedFontColor
                       ? selectedFontColor
-                      : "#000",
+                      : '#a6a6a6',
                 },
               ]}
             >

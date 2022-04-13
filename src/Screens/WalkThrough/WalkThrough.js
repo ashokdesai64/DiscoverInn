@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { View, BackHandler, StyleSheet, Dimensions, TouchableOpacity, Text } from 'react-native';
+import { View, BackHandler, StyleSheet, Dimensions, Text, TouchableOpacity } from 'react-native';
 // import InfoScreen from './InfoScreen';
 import Carousel from 'react-native-snap-carousel';
 import Video from 'react-native-video';
@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import debounce from 'lodash.debounce';
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
-const DEVICE_HEIGHT = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   wrapper: {},
@@ -34,7 +33,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   backgroundVideo: {
-    height: DEVICE_HEIGHT / 1.8,
+    height: '100%',
     width: DEVICE_WIDTH,
     // flex: 1,
     // position: 'absolute',
@@ -47,8 +46,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'absolute',
-    bottom: 0,
+    // position: 'absolute',
+    // bottom: 0,
   },
   button: {
     backgroundColor: '#2F80ED',
@@ -72,7 +71,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontFamily: 'Montserrat-Medium',
-    fontSize: 30,
+    fontSize: 26,
     textAlign: 'center',
   },
   infoText: {
@@ -247,7 +246,7 @@ const VideoComponent = React.memo(({ uri, paused, onVideoEnd, currentIndex, post
         // controls
         onProgress={f}
         poster={poster}
-        resizeMode="contain"
+        resizeMode="stretch"
       />
     </View>
   );

@@ -48,6 +48,7 @@ import * as mapActions from './../../actions/mapActions';
 import { NavigationEvents } from 'react-navigation';
 import MostPopular from './MostPopular';
 import TopRated from './TopRated';
+import colors from '../../config/colors';
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -363,6 +364,12 @@ class HomeScreen extends React.Component {
         //   this.setState({ showSorting: !this.state.showSorting });
         // }}
         />
+        <View style={{
+          width: '100%',
+          height: 1,
+          marginVertical: 8,
+          backgroundColor: colors.gray
+        }} />
         <Tabs
           screen={[
             {
@@ -381,7 +388,7 @@ class HomeScreen extends React.Component {
               props: this.props
             },
           ]}
-          activeBorderColor={"gray"}
+          activeBorderColor={colors.gray}
           selectedFontColor={"black"}
         />
         {/* <ScrollView

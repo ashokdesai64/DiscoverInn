@@ -16,6 +16,7 @@ import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog'
 import { option, list } from '../../../Images'
 import DraggableFlatList from "react-native-draggable-flatlist";
 const DEVICE_WIDTH = Dimensions.get('window').width;
+const DEVICE_HEIGHT = Dimensions.get('window').height;
 
 //REDUX
 import { connect } from 'react-redux';
@@ -154,6 +155,7 @@ class TripPinList extends React.Component {
         />
         <ScrollView
           style={styles.scrollView}
+          scrollEnabled={this.state.switchView ? true : false}
           showsVerticalScrollIndicator={false}>
           <View
             style={{
@@ -269,6 +271,8 @@ class TripPinList extends React.Component {
               })
             ) : (
               <DraggableFlatList
+                style={{ height: DEVICE_HEIGHT / 1.5 }}
+                showsVerticalScrollIndicator={false}
                 data={this.state.pinList}
                 onDragEnd={({ data }) => this.setState({ pinList: data })}
                 keyExtractor={(item) => item.id}
@@ -308,12 +312,13 @@ class TripPinList extends React.Component {
                         paddingHorizontal: 15,
                         width: DEVICE_WIDTH - 30,
                       }}>
-                      <View style={styles.boxContainer} >
-                        <View style={styles.indexContainer} >
-                          <Text>
-                            {index + 1}.
-                          </Text>
-                        </View>
+                      <View style={[styles.boxContainer, {
+                        padding: pin.editable ? 0 : 12,
+                        paddingHorizontal: 12,
+                      }]} >
+                        <Text>
+                          {index + 1}.
+                        </Text>
                         <View style={styles.titleContainer} >
                           {pin.editable ?
                             <TextInput
@@ -322,7 +327,7 @@ class TripPinList extends React.Component {
                               onChangeText={(text) => _onChangeText(text)}
                               onBlur={() => _changeEditable(index)}
                             /> :
-                            <Text style={{ fontFamily: 'Montserrat-Regular', width: '90%' }}>
+                            <Text numberOfLines={1} ellipsizeMode='tail' style={{ fontFamily: 'Montserrat-Regular', width: '90%' }}>
                               {name}{' '}
                             </Text>
                           }
@@ -334,12 +339,12 @@ class TripPinList extends React.Component {
                             pin.editable ?
                               <Feather
                                 name="check"
-                                style={{ color: '#2F80ED', fontSize: 18, }}
+                                style={{ color: '#2F80ED', fontSize: 18 }}
                               /> :
                               <Feather
                                 name={'edit'}
                                 color={'#2F80ED'}
-                                style={{ fontSize: 18, }}
+                                style={{ fontSize: 18 }}
                               />
                           }
                         </TouchableOpacity>

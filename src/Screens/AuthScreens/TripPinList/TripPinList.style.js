@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
 
   },
   titleContainer: {
-    width: '90%',
+    width: '85%',
     justifyContent: 'center',
     marginRight: '2%',
     paddingHorizontal: 5,
@@ -226,11 +226,14 @@ const styles = StyleSheet.create({
     marginVertical: 10
   },
   boxContainer: {
+    width: '100%',
     flexDirection: 'row',
     backgroundColor: colors.white,
     borderBottomWidth: 0.5,
     borderColor: colors.gray,
     padding: 12,
+    justifyContent: 'space-between',
+    alignItems: 'center',
   }
 });
 

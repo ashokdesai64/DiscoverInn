@@ -5,18 +5,21 @@ const { width, height } = Dimensions.get("window");
 export default StyleSheet.create({
   container: {
     backgroundColor: "#fff",
+    paddingHorizontal: 2
   },
   topMain: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    height: (height / 100) * 7
+    // height: (height / 100) * 9,
   },
   button: {
     alignItems: "center",
     justifyContent: "center",
-    paddingBottom: (height / 100) * 1,
-    width: width / 3
+    // paddingBottom: (height / 100) * 1,
+    padding: 5,
+    width: width / 3,
+    borderRadius: 5
   },
   title: {
     color: "#000",

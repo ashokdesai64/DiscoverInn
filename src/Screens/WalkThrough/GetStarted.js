@@ -45,7 +45,7 @@ const FirstScreen = props => {
   };
 
   const handleOpenURL = data => {
-    let finalUrl = data.url || data;
+    let finalUrl = data?.url || data;
     if (finalUrl) {
       const { navigate } = props.navigation;
       const route = finalUrl.replace(/.*?:\/\//g, '');
