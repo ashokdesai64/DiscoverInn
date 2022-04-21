@@ -205,7 +205,7 @@ class TripPinList extends React.Component {
                       'https://discover-inn.com/upload/cover/map-image.jpeg',
                   };
                 }
-                let nameSplit = pin.name.split(".");
+                let nameSplit = pin.name.split(/^\d*\.?/).filter(x => x != '');
                 return (
                   <View
                     style={{
@@ -225,7 +225,7 @@ class TripPinList extends React.Component {
                         { paddingHorizontal: 10, width: DEVICE_WIDTH - 30 },
                       ]}>
                       <Text style={{ fontFamily: 'Montserrat-Regular', width: '90%' }}>
-                        {index + 1 + '. ' + nameSplit[nameSplit.length - 1]}{' '}
+                        {index + 1 + '. ' + nameSplit[0]}{' '}
                       </Text>
                       <TouchableOpacity
                         onPress={() =>
@@ -288,8 +288,8 @@ class TripPinList extends React.Component {
                         'https://discover-inn.com/upload/cover/map-image.jpeg',
                     };
                   }
-                  let nameSplit = pin.name.split(".");
-                  let name = nameSplit[nameSplit.length - 1];
+                  let nameSplit = pin.name.split(/^\d*\.?/).filter(x => x != '');
+                  let name = nameSplit[0];
 
                   const _changeEditable = (index) => {
                     let obj = this.state.pinList;
@@ -306,49 +306,46 @@ class TripPinList extends React.Component {
                   return (
                     <TouchableOpacity
                       onLongPress={drag}
-                      style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        paddingHorizontal: 15,
-                        width: DEVICE_WIDTH - 30,
-                      }}>
-                      <View style={[styles.boxContainer, {
+                      style={[styles.boxContainer, {
+                        marginVertical: 1,
                         padding: pin.editable ? 0 : 12,
                         paddingHorizontal: 12,
-                      }]} >
-                        <Text>
-                          {index + 1}.
-                        </Text>
-                        <View style={styles.titleContainer} >
-                          {pin.editable ?
-                            <TextInput
-                              autoCorrect={false}
-                              value={name}
-                              onChangeText={(text) => _onChangeText(text)}
-                              onBlur={() => _changeEditable(index)}
-                            /> :
-                            <Text numberOfLines={1} ellipsizeMode='tail' style={{ fontFamily: 'Montserrat-Regular', width: '90%' }}>
-                              {name}{' '}
-                            </Text>
-                          }
-                        </View>
-                        <TouchableOpacity
-                          style={{ alignSelf: 'center' }}
-                          onPress={() => _changeEditable(index)}>
-                          {
-                            pin.editable ?
-                              <Feather
-                                name="check"
-                                style={{ color: '#2F80ED', fontSize: 18 }}
-                              /> :
-                              <Feather
-                                name={'edit'}
-                                color={'#2F80ED'}
-                                style={{ fontSize: 18 }}
-                              />
-                          }
-                        </TouchableOpacity>
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        width: DEVICE_WIDTH - 30,
+                      }]}>
+                      <Text>
+                        {index + 1}.
+                      </Text>
+                      <View style={styles.titleContainer} >
+                        {pin.editable ?
+                          <TextInput
+                            autoCorrect={false}
+                            value={name}
+                            onChangeText={(text) => _onChangeText(text)}
+                            onBlur={() => _changeEditable(index)}
+                          /> :
+                          <Text numberOfLines={1} ellipsizeMode='tail' style={{ fontFamily: 'Montserrat-Regular', width: '90%' }}>
+                            {name}
+                          </Text>
+                        }
                       </View>
+                      <TouchableOpacity
+                        style={{ alignSelf: 'center' }}
+                        onPress={() => _changeEditable(index)}>
+                        {
+                          pin.editable ?
+                            <Feather
+                              name="check"
+                              style={{ color: '#2F80ED', fontSize: 18 }}
+                            /> :
+                            <Feather
+                              name={'edit'}
+                              color={'#2F80ED'}
+                              style={{ fontSize: 18 }}
+                            />
+                        }
+                      </TouchableOpacity>
                     </TouchableOpacity>
                   );
                 }}

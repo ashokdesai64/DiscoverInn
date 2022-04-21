@@ -313,7 +313,7 @@ class PinView extends React.Component {
     let selectedCategory =
       categories && categories.find(c => c.id == pinData.categories);
     let categoryName = (selectedCategory && selectedCategory.name) || '';
-    let nameSplit = pinData.name.split(".");
+    let nameSplit = pinData.name.split(/^\d*\.?/).filter(x => x != '');
     return (
       <ScrollView
         style={styles.pinScrollView}
@@ -324,7 +324,7 @@ class PinView extends React.Component {
           borderRadius: 100,
         }}
         nestedScrollEnabled={true}>
-        <Text style={styles.pinViewTitle}>{index + 1 + '. ' + nameSplit[nameSplit.length - 1]}{' '}</Text>
+        <Text style={styles.pinViewTitle}>{index + 1 + '. ' + nameSplit[0]}{' '}</Text>
         <View style={styles.pinViewCate}>
           <IconMoon
             name={categoryName.toLowerCase()}

@@ -407,7 +407,7 @@ class MapView extends React.Component {
                 let image = imageData
                   ? { uri: imageData.image || imageData.thumb_image }
                   : require('./../../Images/login-bg.jpg');
-                let nameSplit = pin.name.split(".");
+                let nameSplit = pin.name.split(/^\d*\.?/).filter(x => x != '');
                 return (
                   <TouchableOpacity
                     key={pin.id}
@@ -443,7 +443,7 @@ class MapView extends React.Component {
                           numberOfLines={1}
                           ellipsizeMode={'tail'}>
                           {' '}
-                          {index + 1 + '. ' + nameSplit[nameSplit.length - 1]}{' '}
+                          {index + 1 + '. ' + nameSplit[0]}{' '}
                         </Text>
                       </View>
                       <View style={styles.mapViewCate}>

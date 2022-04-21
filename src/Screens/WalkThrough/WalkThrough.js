@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'black',
+    backgroundColor: 'white'
   },
   slide3: {
     flex: 1,
@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
   backgroundVideo: {
     height: '100%',
     width: DEVICE_WIDTH,
+    backgroundColor: 'white'
     // flex: 1,
     // position: 'absolute',
     // top: 0,
@@ -237,6 +238,7 @@ const VideoComponent = React.memo(({ uri, paused, onVideoEnd, currentIndex, post
   return (
     <View style={styles.slide2}>
       <Video
+        resizeMode="stretch"
         source={{ uri }}
         volume={1.0}
         key={uri}
@@ -246,7 +248,7 @@ const VideoComponent = React.memo(({ uri, paused, onVideoEnd, currentIndex, post
         // controls
         onProgress={f}
         poster={poster}
-        resizeMode="stretch"
+        posterResizeMode="stretch"
       />
     </View>
   );

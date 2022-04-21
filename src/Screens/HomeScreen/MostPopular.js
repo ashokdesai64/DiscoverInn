@@ -2,7 +2,7 @@ import React from 'react';
 import {
 	View,
 	Text,
-	TouchableOpacity,
+	TouchableWithoutFeedback,
 	FlatList,
 } from 'react-native';
 import styles from './HomeScreen.style';
@@ -25,7 +25,7 @@ export default class MostPopular extends React.Component {
 			<View
 				style={styles.mapSlidCard}
 				activeOpacity={1}>
-				<TouchableOpacity
+				<TouchableWithoutFeedback
 					onPress={() =>
 						this.props.props.props.navigation.navigate('MapView', {
 							mapID: item.id,
@@ -34,54 +34,56 @@ export default class MostPopular extends React.Component {
 						})
 					}
 				>
-					<ImageBlurLoading
-						withIndicator
-						style={styles.mapSlideCardImg}
-						source={coverImage}
-						thumbnailSource={{
-							uri: 'https://discover-inn.com/upload/cover/map-image.jpeg',
-						}}
-					/>
-					<View style={styles.mapSlideCardImg_overlay} />
-					<View style={styles.mapSlideCardContent}>
-						<View style={[styles.badgeRed, styles.badge]}>
-							<Text style={[styles.badgeText]}>
-								{item.views} <Feather name="eye" />
-							</Text>
-						</View>
-						<View style={styles.rateList}>
-							{Array(avgReview)
-								.fill(1)
-								.map((d, i) => {
-									return (
-										<MaterialCommunityIcons
-											style={styles.starIcon}
-											name="star"
-											size={15}
-											color="#FFAF2C"
-											key={item.id + '_' + i}
-										/>
-									);
-								})}
-							{Array(5 - avgReview)
-								.fill(1)
-								.map((d, i) => {
-									return (
-										<MaterialCommunityIcons
-											style={styles.starIcon}
-											name="star-outline"
-											size={15}
-											color="#FFAF2C"
-											key={'outline' + item.id + '_' + i}
-										/>
-									);
-								})}
-							<Text style={styles.rateListCount}>
-								({item.total_review} Reviews)
-							</Text>
+					<View>
+						<ImageBlurLoading
+							withIndicator
+							style={styles.mapSlideCardImg}
+							source={coverImage}
+							thumbnailSource={{
+								uri: 'https://discover-inn.com/upload/cover/map-image.jpeg',
+							}}
+						/>
+						<View style={styles.mapSlideCardImg_overlay} />
+						<View style={styles.mapSlideCardContent}>
+							<View style={[styles.badgeRed, styles.badge]}>
+								<Text style={[styles.badgeText]}>
+									{item.views} <Feather name="eye" />
+								</Text>
+							</View>
+							<View style={styles.rateList}>
+								{Array(avgReview)
+									.fill(1)
+									.map((d, i) => {
+										return (
+											<MaterialCommunityIcons
+												style={styles.starIcon}
+												name="star"
+												size={15}
+												color="#FFAF2C"
+												key={item.id + '_' + i}
+											/>
+										);
+									})}
+								{Array(5 - avgReview)
+									.fill(1)
+									.map((d, i) => {
+										return (
+											<MaterialCommunityIcons
+												style={styles.starIcon}
+												name="star-outline"
+												size={15}
+												color="#FFAF2C"
+												key={'outline' + item.id + '_' + i}
+											/>
+										);
+									})}
+								<Text style={styles.rateListCount}>
+									({item.total_review} Reviews)
+								</Text>
+							</View>
 						</View>
 					</View>
-				</TouchableOpacity>
+				</TouchableWithoutFeedback>
 				<Text style={styles.mapTitle}>{item.name}</Text>
 				<Text style={styles.authorTitle}>{item.owner}</Text>
 			</View>
