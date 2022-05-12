@@ -119,7 +119,7 @@ class MyReviews extends React.Component {
     return (
       <Fragment>
         <Header
-          showBack={true}
+          showBack={false}
           rightEmpty={true}
           showRightButton={false}
           title={'Review'}

@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
+  Alert,
   View,
   Text,
   SafeAreaView,
@@ -12,11 +13,11 @@ import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import colors from './../../config/colors';
-import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog';
+import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
 import styles from './header.style.js';
 //REDUX
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import * as authActions from './../../actions/authActions';
 import ImageBlurLoading from '../ImageLoader';
 
@@ -31,10 +32,10 @@ class Header extends Component {
     this.popupDialog = null;
   }
 
-  componentDidMount() { }
+  componentDidMount() {}
 
   goToSignup() {
-    this.setState({ authModal: false }, () => {
+    this.setState({authModal: false}, () => {
       setTimeout(() => {
         this.props.navigation.navigate('SignupScreen');
       }, 100);
@@ -42,7 +43,7 @@ class Header extends Component {
   }
 
   goToLogin() {
-    this.setState({ authModal: false }, () => {
+    this.setState({authModal: false}, () => {
       setTimeout(() => {
         this.props.navigation.navigate('LoginScreen');
       }, 100);
@@ -50,27 +51,39 @@ class Header extends Component {
   }
 
   signOut() {
-    this.props.authAction.userLogout();
-    this.setState({ authModal: false }, () => {
-      setTimeout(() => {
-        this.props.navigation.navigate('Auth');
-      }, 100);
-    });
+    Alert.alert('Signout', 'Are you sure to logout?', [
+      {
+        text: 'Cancel',
+        onPress: () => {},
+        style: 'cancel',
+      },
+      {
+        text: 'Yes',
+        onPress: () => {
+          this.props.authAction.userLogout();
+          this.setState({authModal: false}, () => {
+            setTimeout(() => {
+              this.props.navigation.navigate('Auth');
+            }, 100);
+          });
+        },
+      },
+    ]);
   }
 
   render() {
-    const { userData } = this.props;
-    let headerStyles = { ...styles.headerContainer };
+    const {userData} = this.props;
+    let headerStyles = {...styles.headerContainer};
     if (this.props.style) {
-      headerStyles = { ...headerStyles, ...this.props.style };
+      headerStyles = {...headerStyles, ...this.props.style};
     }
-    let headerStylesInner = { ...styles.headerContainerInner };
+    let headerStylesInner = {...styles.headerContainerInner};
     if (this.props.style) {
-      headerStylesInner = { ...headerStylesInner, ...this.props.style };
+      headerStylesInner = {...headerStylesInner, ...this.props.style};
     }
-    let rightTextStyles = { ...styles.headerRightText };
+    let rightTextStyles = {...styles.headerRightText};
     if (this.props.rightTextStyle) {
-      rightTextStyles = { ...rightTextStyles, ...this.props.rightTextStyle };
+      rightTextStyles = {...rightTextStyles, ...this.props.rightTextStyle};
     }
     if (this.props.absoluteHeader) {
       headerStyles = {
@@ -106,7 +119,7 @@ class Header extends Component {
               />
             </TouchableOpacity>
           ) : (
-            <View></View>
+            <View />
           )}
 
           {this.props.headerEditable ? (
@@ -120,28 +133,28 @@ class Header extends Component {
                 <TextInput
                   style={[
                     styles.formControl,
-                    { borderWidth: 0, borderBottomWidth: 1, minWidth: 200 },
+                    {borderWidth: 0, borderBottomWidth: 1, minWidth: 200},
                   ]}
                   placeholderTextColor={'#828894'}
-                  onChangeText={headerTitle => this.setState({ headerTitle })}
+                  onChangeText={headerTitle => this.setState({headerTitle})}
                   value={this.state.headerTitle}
                   placeholder={'Trip List Name'}
                 />
                 <TouchableOpacity
                   onPress={() =>
-                    this.setState({ editHeader: false }, () => {
+                    this.setState({editHeader: false}, () => {
                       this.props.onHeaderEditSubmit(this.state.headerTitle);
                     })
                   }>
                   <Feather
                     name="check"
-                    style={{ color: '#2F80ED', fontSize: 18, marginLeft: 15 }}
+                    style={{color: '#2F80ED', fontSize: 18, marginLeft: 15}}
                   />
                 </TouchableOpacity>
               </View>
             ) : (
               <TouchableOpacity
-                onPress={() => this.setState({ editHeader: true })}
+                onPress={() => this.setState({editHeader: true})}
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'center',
@@ -158,7 +171,7 @@ class Header extends Component {
                   name={'edit'}
                   color={'#2F80ED'}
                   size={14}
-                  style={{ paddingLeft: 5 }}
+                  style={{paddingLeft: 5}}
                 />
               </TouchableOpacity>
             )
@@ -191,15 +204,15 @@ class Header extends Component {
               </TouchableOpacity>
             ) : (
               <TouchableOpacity
-                onPress={() => this.setState({ authModal: true })}>
+                onPress={() => this.setState({authModal: true})}>
                 {userData && userData.image ? (
                   <ImageBlurLoading
                     withIndicator
                     style={[
                       styles.headerUserIcon,
-                      { height: 30, width: 30, borderWidth: 0 },
+                      {height: 30, width: 30, borderWidth: 0},
                     ]}
-                    source={{ uri: userData.image }}
+                    source={{uri: userData.image}}
                     thumbnailSource={{
                       uri:
                         'https://discover-inn.com/upload/cover/map-image.jpeg',
@@ -227,7 +240,7 @@ class Header extends Component {
             }}
             animationDuration={1}
             onTouchOutside={() => {
-              this.setState({ authModal: false });
+              this.setState({authModal: false});
             }}
             dialogAnimation={
               new FadeAnimation({
@@ -237,7 +250,7 @@ class Header extends Component {
               })
             }
             onHardwareBackPress={() => {
-              this.setState({ authModal: false });
+              this.setState({authModal: false});
               return true;
             }}
             dialogStyle={styles.customPopup}>
@@ -284,14 +297,16 @@ class Header extends Component {
 
                 <TouchableOpacity
                   onPress={() => {
-                    this.setState({
-                      authModal: false
-                    }, () => {
-                      setTimeout(() => {
-
-                        this.props.navigation.navigate('WalkThrough')
-                      }, 500);
-                    })
+                    this.setState(
+                      {
+                        authModal: false,
+                      },
+                      () => {
+                        setTimeout(() => {
+                          this.props.navigation.navigate('WalkThrough');
+                        }, 500);
+                      },
+                    );
                   }}
                   style={[styles.loginDialogLink, styles.loginDialogLinkLast]}>
                   <AntDesign
@@ -321,4 +336,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Header);

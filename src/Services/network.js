@@ -29,11 +29,11 @@ export async function callAPI(url, data, method = 'POST') {
         let apiResponse = await response.json();
         // console.log('response >>>>', apiResponse);
         resolve(apiResponse);
-      } catch (error) {
-        reject({ error, status: false });
+      } catch (err) {
+        reject({err, status: false});
       }
     } catch (err) {
-      reject({ err, status: false });
+      reject({err, status: false});
     }
   });
 }

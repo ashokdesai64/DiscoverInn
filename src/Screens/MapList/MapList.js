@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, {Fragment} from 'react';
 import {
   View,
   Text,
@@ -15,18 +15,21 @@ import {
   Alert,
 } from 'react-native';
 import Share from 'react-native-share';
-import { askForPermissions, checkIfHasPermission } from './../../config/permission';
+import {
+  askForPermissions,
+  checkIfHasPermission,
+} from './../../config/permission';
 
-import { Item, Input, Button, Icon, Textarea, List, CheckBox } from 'native-base';
+import {Item, Input, Button, Icon, Textarea, List, CheckBox} from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import styles from './MapList.style';
 import RNFetchBlob from 'rn-fetch-blob';
 import Carousel from 'react-native-snap-carousel';
 import Header from './../../components/header/header';
-import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog';
+import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
 import fontelloConfig from './../../selection.json';
 import moment from 'moment';
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
@@ -35,22 +38,22 @@ import Spinner from './../../components/Loader';
 import AutoComplete from './../../components/AutoComplete';
 import axios from 'axios';
 import _ from 'underscore';
-import { getBoundingBox } from 'geolocation-utils';
+import {getBoundingBox} from 'geolocation-utils';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import RNLocation from 'react-native-location'
+import RNLocation from 'react-native-location';
 // import Geolocation from 'react-native-geolocation-service';
 MapboxGL.setAccessToken(
   'sk.eyJ1IjoicmF2aXNvaml0cmF3b3JrIiwiYSI6ImNrYTByeHVxZjBqbGszZXBtZjF3NmJleWgifQ.idSimILJ3_sk1gSWs2sMsQ',
 );
 
 //REDUX
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
 import * as authActions from './../../actions/authActions';
 import * as mapActions from './../../actions/mapActions';
-import { callAPI } from '../../Services/network';
-import { apiUrls } from '../../config/api';
+import {callAPI} from '../../Services/network';
+import {apiUrls} from '../../config/api';
 import KeyboardSpacer from '../PinView/KeyboardSpacer';
 MapboxGL.offlineManager.setTileCountLimit(15000);
 
@@ -60,7 +63,7 @@ class MapList extends React.Component {
     this.pageNo = 1;
     this.carousel = null;
     this.mounted = null;
-    const { params } = props.navigation.state;
+    const {params} = props.navigation.state;
     const searchTerm = (params && params.searchTerm) || '';
     this.state = {
       showTripList: false,
@@ -115,7 +118,7 @@ class MapList extends React.Component {
       wrongEmail: false,
       sharingMap: false,
       showPlaces: false,
-      selectedMapCategories: { map_id: null, categories: [] },
+      selectedMapCategories: {map_id: null, categories: []},
       sortBy:
         (params && params.searchObj && params.searchObj.sort_by) ||
         'popularity',
@@ -137,28 +140,28 @@ class MapList extends React.Component {
   }
 
   componentWillMount() {
-    let { params } = this.props.navigation.state;
+    let {params} = this.props.navigation.state;
     if (params && params.searchObj) {
-      const { searchUserId } = params.searchObj;
-      this.setState({ fetchingMaps: true });
+      const {searchUserId} = params.searchObj;
+      this.setState({fetchingMaps: true});
       if (!!searchUserId) {
         this.props.mapAction
-          .fetchUserMapList({ userid: searchUserId })
+          .fetchUserMapList({userid: searchUserId})
           .then(data => {
-            this.setState({ fetchingMaps: false });
+            this.setState({fetchingMaps: false});
           })
           .catch(err => {
-            this.setState({ fetchingMaps: false });
+            this.setState({fetchingMaps: false});
             alert(err);
           });
       } else {
         this.props.mapAction
           .fetchMapList(params.searchObj)
           .then(data => {
-            this.setState({ fetchingMaps: false });
+            this.setState({fetchingMaps: false});
           })
           .catch(err => {
-            this.setState({ fetchingMaps: false });
+            this.setState({fetchingMaps: false});
             alert(err);
           });
       }
@@ -183,10 +186,10 @@ class MapList extends React.Component {
   }
 
   pinToggle(categoryID, mapID, mapName) {
-    let { selectedMapCategories } = this.state;
+    let {selectedMapCategories} = this.state;
     if (selectedMapCategories.map_id != mapID) {
       this.setState({
-        selectedMapCategories: { map_id: mapID, categories: [categoryID] },
+        selectedMapCategories: {map_id: mapID, categories: [categoryID]},
       });
     } else {
       let categories = selectedMapCategories.categories;
@@ -197,7 +200,7 @@ class MapList extends React.Component {
         categories.push(categoryID);
       }
       this.setState({
-        selectedMapCategories: { map_id: mapID, categories: [...categories] },
+        selectedMapCategories: {map_id: mapID, categories: [...categories]},
       });
     }
   }
@@ -228,8 +231,11 @@ class MapList extends React.Component {
 
     if (!this.props.userData || !this.props.userData.id) {
       return Alert.alert('', 'Please Log In to access this feature', [
-        { text: 'Log In', onPress: () => this.props.navigation.navigate('LoginScreen') },
-        { text: 'OK' }
+        {
+          text: 'Log In',
+          onPress: () => this.props.navigation.navigate('LoginScreen'),
+        },
+        {text: 'OK'},
       ]);
     }
     let packs = await MapboxGL.offlineManager.getPacks();
@@ -259,11 +265,11 @@ class MapList extends React.Component {
                 mapDownloadInProgress: true,
                 downloadSpinnerMsg: `Preparing to download map.`,
               });
-              var splitByString = function (source, splitBy) {
+              var splitByString = function(source, splitBy) {
                 var splitter = splitBy.split('');
                 splitter.push([source]); //Push initial value
 
-                return splitter.reduceRight(function (accumulator, curValue) {
+                return splitter.reduceRight(function(accumulator, curValue) {
                   var k = [];
                   accumulator.forEach(v => (k = [...k, ...v.split(curValue)]));
                   return k;
@@ -398,7 +404,7 @@ class MapList extends React.Component {
             }
           })
           .catch(err => {
-            this.setState({ mapDownloadInProgress: false });
+            this.setState({mapDownloadInProgress: false});
           });
       } else {
         alert(
@@ -410,7 +416,7 @@ class MapList extends React.Component {
 
   _renderItem(item, index) {
     let avgReview = parseInt(item.avrage_review) || 0;
-    let { selectedMapCategories } = this.state;
+    let {selectedMapCategories} = this.state;
     let travelType = item.travel_type == '0' ? '-' : item.travel_type;
     return (
       <View style={[styles.mapSlideCard]}>
@@ -419,7 +425,7 @@ class MapList extends React.Component {
             activeOpacity={0.8}
             style={styles.shareButton}
             onPress={() =>
-              this.setState({ shareModal: true, shareSelectedMap: item })
+              this.setState({shareModal: true, shareSelectedMap: item})
             }>
             <Feather style={styles.shareButtonText} name="share-2" />
           </TouchableOpacity>
@@ -429,7 +435,7 @@ class MapList extends React.Component {
             <ImageBlurLoading
               withIndicator
               style={styles.mapSlideCardImg}
-              source={{ uri: item.cover_image }}
+              source={{uri: item.cover_image}}
               thumbnailSource={{
                 uri: 'https://discover-inn.com/upload/cover/map-image.jpeg',
               }}
@@ -440,10 +446,10 @@ class MapList extends React.Component {
             activeOpacity={0.8}
             style={styles.mapButton}
             onPress={() =>
-              this.setState({ selectedMap: item, mapDetailsModal: true })
+              this.setState({selectedMap: item, mapDetailsModal: true})
             }>
             <Feather
-              style={[styles.shareButtonText, { fontSize: 18 }]}
+              style={[styles.shareButtonText, {fontSize: 18}]}
               name="info"
             />
           </TouchableOpacity>
@@ -476,7 +482,7 @@ class MapList extends React.Component {
             style={styles.rateList}
             onPress={() => {
               // this.setState({showReviewModal: true})
-              this.props.navigation.navigate('MapReviews', { mapData: item });
+              this.props.navigation.navigate('MapReviews', {mapData: item});
             }}>
             {Array(avgReview)
               .fill(1)
@@ -608,8 +614,12 @@ class MapList extends React.Component {
                     });
                   } else {
                     Alert.alert('', 'Please Log In to access this feature', [
-                      { text: 'Log In', onPress: () => this.props.navigation.navigate('LoginScreen') },
-                      { text: 'OK' }
+                      {
+                        text: 'Log In',
+                        onPress: () =>
+                          this.props.navigation.navigate('LoginScreen'),
+                      },
+                      {text: 'OK'},
                     ]);
                   }
                 }}>
@@ -625,7 +635,7 @@ class MapList extends React.Component {
   sortBy(sortBy) {
     this.pageNo = 1;
     this.setState(
-      { sortBy: sortBy == this.state.sortBy ? null : sortBy, sortByModal: false },
+      {sortBy: sortBy == this.state.sortBy ? null : sortBy, sortByModal: false},
       () => {
         this.fetchMapList();
       },
@@ -633,7 +643,7 @@ class MapList extends React.Component {
   }
 
   async fetchMapList() {
-    const { params } = this.props.navigation.state;
+    const {params} = this.props.navigation.state;
     const {
       selectedAge,
       selectedBudget,
@@ -641,10 +651,10 @@ class MapList extends React.Component {
       selectedCreatedWithin,
       selectedTravelType,
       sortBy,
-      searchTerm
+      searchTerm,
     } = this.state;
     let latitude, longitude;
-    this.setState({ fetchingMaps: true });
+    this.setState({fetchingMaps: true});
 
     let apiData = {
       // user_id: this.props.userData.id,
@@ -660,8 +670,11 @@ class MapList extends React.Component {
       RNLocation.configure({
         distanceFilter: 5.0,
       });
-      await RNLocation.requestPermission({ ios: 'whenInUse', android: { detail: 'coarse' }, });
-      let location = await RNLocation.getLatestLocation({ timeout: 5000 });
+      await RNLocation.requestPermission({
+        ios: 'whenInUse',
+        android: {detail: 'coarse'},
+      });
+      let location = await RNLocation.getLatestLocation({timeout: 5000});
       apiData['latitude'] = location && location.latitude;
       apiData['longitude'] = location && location.longitude;
       // Geolocation.getCurrentPosition(
@@ -696,36 +709,36 @@ class MapList extends React.Component {
     this.props.mapAction
       .fetchMapList(apiData)
       .then(data => {
-        this.setState({ fetchingMaps: false }, () => {
+        this.setState({fetchingMaps: false}, () => {
           if (this.pageNo == 1) {
             this.carousel && this.carousel.snapToItem(0, false);
           }
         });
       })
       .catch(err => {
-        this.setState({ fetchingMaps: false });
+        this.setState({fetchingMaps: false});
         alert(err);
       });
   }
 
   fetchUsersMap(userid) {
-    this.setState({ fetchingMaps: true });
+    this.setState({fetchingMaps: true});
     this.props.mapAction
-      .fetchUserMapList({ userid })
+      .fetchUserMapList({userid})
       .then(data => {
-        this.setState({ fetchingMaps: false }, () => {
+        this.setState({fetchingMaps: false}, () => {
           this.carousel && this.carousel.snapToItem(0, false);
         });
       })
       .catch(err => {
-        this.setState({ fetchingMaps: false });
+        this.setState({fetchingMaps: false});
         alert(err);
       });
   }
 
   setParams = filterParams => {
     this.pageNo = 1;
-    this.setState({ ...filterParams }, () => {
+    this.setState({...filterParams}, () => {
       this.fetchMapList();
     });
   };
@@ -741,12 +754,12 @@ class MapList extends React.Component {
   }
 
   addReview() {
-    const { reviewText, addReviewValue, selectedMap } = this.state;
+    const {reviewText, addReviewValue, selectedMap} = this.state;
     if (!addReviewValue) {
       alert('Please select review rate');
       return;
     }
-    this.setState({ addingReview: true });
+    this.setState({addingReview: true});
     this.props.mapAction
       .addReview({
         map_id: selectedMap.id,
@@ -763,7 +776,7 @@ class MapList extends React.Component {
       })
       .catch(err => {
         alert(err);
-        this.setState({ addingReview: false });
+        this.setState({addingReview: false});
       });
   }
 
@@ -773,28 +786,30 @@ class MapList extends React.Component {
       Share.shareSingle({
         social: Share.Social.FACEBOOK,
         message: map.name,
-        url: `https://discover-inn.com/search-maps?map-id=${map.id
-          }&fb=true&appId=1223643894484714`,
+        url: `https://discover-inn.com/search-maps?map-id=${
+          map.id
+        }&fb=true&appId=1223643894484714`,
       })
         .then(res => {
-          this.setState({ shareModal: false });
+          this.setState({shareModal: false});
         })
         .catch(err => {
-          this.setState({ shareModal: false });
+          this.setState({shareModal: false});
           alert(`Can't share to ${type} because, ${err.error.message}`);
         });
     } else {
       Share.shareSingle({
         social: Share.Social.TWITTER,
         message: map.name,
-        url: `https://discover-inn.com/search-maps?map-id=${map.id
-          }&fb=true&appId=1223643894484714`,
+        url: `https://discover-inn.com/search-maps?map-id=${
+          map.id
+        }&fb=true&appId=1223643894484714`,
       })
         .then(res => {
-          this.setState({ shareModal: false });
+          this.setState({shareModal: false});
         })
         .catch(err => {
-          this.setState({ shareModal: false });
+          this.setState({shareModal: false});
           alert(`Can't share to ${type} because, ${err.error.message}`);
         });
     }
@@ -804,8 +819,8 @@ class MapList extends React.Component {
     if (query === '') {
       return [];
     }
-    const { selectedUserNames } = this.state;
-    const { allUserNames } = this.props;
+    const {selectedUserNames} = this.state;
+    const {allUserNames} = this.props;
     const regex = new RegExp(`${query.trim()}`, 'i');
     return allUserNames.filter(
       user =>
@@ -815,45 +830,45 @@ class MapList extends React.Component {
   }
 
   selectedShareUserName(user) {
-    let { selectedUserNames } = this.state;
+    let {selectedUserNames} = this.state;
     let userNames = [...selectedUserNames];
     userNames.push(user);
-    this.setState({ query: '', selectedUserNames: userNames });
+    this.setState({query: '', selectedUserNames: userNames});
   }
 
   removeSelectedUserName(user) {
-    const { selectedUserNames } = this.state;
+    const {selectedUserNames} = this.state;
     let userNames = [...selectedUserNames];
     let selectedIndex = userNames.findIndex(u => u.id == user.id);
     userNames.splice(selectedIndex, 1);
-    this.setState({ selectedUserNames: userNames });
+    this.setState({selectedUserNames: userNames});
   }
 
   shareNewEmail() {
-    let { selectedUserEmails, registeredEmail } = this.state;
+    let {selectedUserEmails, registeredEmail} = this.state;
     let emails = [...selectedUserEmails];
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    this.setState({ wrongEmail: false });
+    this.setState({wrongEmail: false});
     if (reg.test(registeredEmail)) {
       emails.push(registeredEmail);
-      this.setState({ selectedUserEmails: emails, registeredEmail: '' });
+      this.setState({selectedUserEmails: emails, registeredEmail: ''});
     } else {
-      this.setState({ wrongEmail: true });
+      this.setState({wrongEmail: true});
     }
   }
 
   removeSelectedEmail(email) {
-    const { selectedUserEmails } = this.state;
+    const {selectedUserEmails} = this.state;
     let userEmails = [...selectedUserEmails];
     let selectedIndex = userEmails.findIndex(e => e == email);
     userEmails.splice(selectedIndex, 1);
-    this.setState({ selectedUserEmails: userEmails });
+    this.setState({selectedUserEmails: userEmails});
   }
 
   shareMap() {
-    this.setState({ sharingMap: true });
+    this.setState({sharingMap: true});
 
-    let { shareSelectedMap, selectedUserNames, selectedUserEmails } = this.state;
+    let {shareSelectedMap, selectedUserNames, selectedUserEmails} = this.state;
 
     if (
       shareSelectedMap.id &&
@@ -888,24 +903,24 @@ class MapList extends React.Component {
   }
 
   renderResultList() {
-    const { placeList } = this.state;
+    const {placeList} = this.state;
     return (
       <FlatList
         data={placeList}
         keyboardShouldPersistTaps={'always'}
-        renderItem={({ item, i }) => (
+        renderItem={({item, i}) => (
           <TouchableOpacity
-            style={{ marginBottom: 10, padding: 5 }}
+            style={{marginBottom: 10, padding: 5}}
             onPress={() =>
               this.setState(
-                { searchTerm: item.description, showPlaces: false },
+                {searchTerm: item.description, showPlaces: false},
                 () => {
                   this.pageNo = 1;
                   this.fetchMapList();
                 },
               )
             }>
-            <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: 16 }}>
+            <Text style={{fontFamily: 'Montserrat-Medium', fontSize: 16}}>
               {item.description}
             </Text>
           </TouchableOpacity>
@@ -913,7 +928,7 @@ class MapList extends React.Component {
         renderSeparator={null}
         style={styles.list}
         ListEmptyComponent={() => (
-          <Text style={{ textAlign: 'center', color: '#bbb', fontSize: 14 }}>
+          <Text style={{textAlign: 'center', color: '#bbb', fontSize: 14}}>
             No Places Found
           </Text>
         )}
@@ -922,24 +937,24 @@ class MapList extends React.Component {
   }
 
   renderUsersList() {
-    const { placeList } = this.state;
+    const {placeList} = this.state;
     return (
       <FlatList
         data={placeList}
         keyboardShouldPersistTaps={'always'}
-        renderItem={({ item, i }) => (
+        renderItem={({item, i}) => (
           <TouchableOpacity
-            style={{ marginBottom: 10, padding: 5 }}
+            style={{marginBottom: 10, padding: 5}}
             onPress={() =>
               this.setState(
-                { searchTerm: '@' + item.name, showPlaces: false },
+                {searchTerm: '@' + item.name, showPlaces: false},
                 () => {
                   this.pageNo = 1;
                   this.fetchUsersMap(item.id);
                 },
               )
             }>
-            <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: 16 }}>
+            <Text style={{fontFamily: 'Montserrat-Medium', fontSize: 16}}>
               {item.name}
             </Text>
           </TouchableOpacity>
@@ -947,7 +962,7 @@ class MapList extends React.Component {
         renderSeparator={null}
         style={styles.list}
         ListEmptyComponent={() => (
-          <Text style={{ textAlign: 'center', color: '#bbb', fontSize: 14 }}>
+          <Text style={{textAlign: 'center', color: '#bbb', fontSize: 14}}>
             No Users Found
           </Text>
         )}
@@ -956,8 +971,8 @@ class MapList extends React.Component {
   }
 
   async fetchUsers(search_value) {
-    callAPI(apiUrls.searchUsers, { search_value }).then(result => {
-      this.setState({ placeList: result.data, showPlaces: true });
+    callAPI(apiUrls.searchUsers, {search_value}).then(result => {
+      this.setState({placeList: result.data, showPlaces: true});
     });
   }
 
@@ -975,7 +990,7 @@ class MapList extends React.Component {
         this.fetchPlaces(searchTerm.trim());
       }
     } else {
-      this.setState({ showPlaces: false });
+      this.setState({showPlaces: false});
     }
   }, 250);
 
@@ -987,14 +1002,14 @@ class MapList extends React.Component {
     try {
       let result = await axios.get(url);
       let places = result.data.predictions || [];
-      this.setState({ placeList: places, showPlaces: true });
+      this.setState({placeList: places, showPlaces: true});
     } catch (err) {
-      this.setState({ placeList: [] });
+      this.setState({placeList: []});
     }
   }
 
   render() {
-    const { width } = Dimensions.get('window');
+    const {width} = Dimensions.get('window');
     const {
       selectedAge,
       selectedBudget,
@@ -1004,7 +1019,7 @@ class MapList extends React.Component {
       addReviewValue,
       selectedMap,
     } = this.state;
-    const { query, selectedUserNames, selectedUserEmails } = this.state;
+    const {query, selectedUserNames, selectedUserEmails} = this.state;
     const userNames = this.findUsers(query);
     const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
 
@@ -1013,32 +1028,32 @@ class MapList extends React.Component {
         <Spinner
           visible={this.state.fetchingMaps}
           textContent={'Loading maps...'}
-          textStyle={{ color: '#fff' }}
+          textStyle={{color: '#fff'}}
         />
         <Spinner
           visible={this.state.mapDownloadInProgress}
           textContent={this.state.downloadSpinnerMsg}
-          textStyle={{ color: '#fff' }}
+          textStyle={{color: '#fff'}}
           canGoBack={this.state.canGoBack}
           backButtonText={'Download in background'}
           onGoBack={() =>
-            this.setState({ mapDownloadInProgress: false, canGoBack: false })
+            this.setState({mapDownloadInProgress: false, canGoBack: false})
           }
         />
         <Header
           showBack={true}
           title={'Discover Inn'}
           {...this.props}
-          style={{ backgroundColor: '#F3F4F6' }}
+          style={{backgroundColor: '#F3F4F6'}}
           rightEmpty={true}
-        // showRightButton={false}
+          // showRightButton={false}
         />
         <ScrollView
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           keyboardShouldPersistTaps={'always'}
-          contentContainerStyle={{ flexGrow: 1 }}>
+          contentContainerStyle={{flexGrow: 1}}>
           <View style={styles.searchSection}>
             <View searchBar style={styles.searchbarCard}>
               <Item style={styles.searchbarInputBox}>
@@ -1048,7 +1063,7 @@ class MapList extends React.Component {
                   placeholder="Next Travel Destination"
                   value={this.state.searchTerm}
                   onChangeText={searchTerm =>
-                    this.setState({ searchTerm }, () => {
+                    this.setState({searchTerm}, () => {
                       this.searchPlaces();
                     })
                   }
@@ -1072,7 +1087,7 @@ class MapList extends React.Component {
                   styles.iconbuttonShort,
                 ]}
                 activeOpacity={0.8}
-                onPress={() => this.setState({ sortByModal: true })}>
+                onPress={() => this.setState({sortByModal: true})}>
                 <Feather style={styles.iconButtonIcon} name="sliders" />
               </TouchableOpacity>
               <TouchableOpacity
@@ -1108,7 +1123,7 @@ class MapList extends React.Component {
                 marginHorizontal: 10,
                 borderWidth: 1,
                 borderColor: '#ddd',
-                width: width - 20
+                width: width - 20,
               }}
               keyboardShouldPersistTaps={'always'}>
               {this.state.searchTerm[0] == '@'
@@ -1135,7 +1150,7 @@ class MapList extends React.Component {
               </TouchableOpacity>
             )} */}
           </View>
-          <View style={[styles.shareMapContant, { flex: 1 }]}>
+          <View style={[styles.shareMapContant, {flex: 1}]}>
             {this.props.mapList && this.props.mapList.length > 0 ? (
               <Carousel
                 ref={c => (this.carousel = c)}
@@ -1145,7 +1160,7 @@ class MapList extends React.Component {
                 firstItem={0}
                 inactiveSlideOpacity={1}
                 inactiveSlideScale={1}
-                renderItem={({ item, index }) => this._renderItem(item, index)}
+                renderItem={({item, index}) => this._renderItem(item, index)}
                 onSnapToItem={index => {
                   this.loadMoreMaps(index);
                 }}
@@ -1180,7 +1195,7 @@ class MapList extends React.Component {
           hasOverlay={true}
           animationDuration={1}
           onTouchOutside={() => {
-            this.setState({ showTripList: false });
+            this.setState({showTripList: false});
           }}
           dialogAnimation={
             new FadeAnimation({
@@ -1190,7 +1205,7 @@ class MapList extends React.Component {
             })
           }
           onHardwareBackPress={() => {
-            this.setState({ showTripList: false });
+            this.setState({showTripList: false});
             return true;
           }}
           dialogStyle={styles.customPopup}>
@@ -1201,7 +1216,7 @@ class MapList extends React.Component {
               </Text>
               <TouchableOpacity
                 style={styles.buttonClose}
-                onPress={() => this.setState({ showTripList: false })}>
+                onPress={() => this.setState({showTripList: false})}>
                 <Feather name={'x'} style={styles.buttonCloseIcon} />
               </TouchableOpacity>
             </View>
@@ -1209,7 +1224,7 @@ class MapList extends React.Component {
               <TouchableOpacity
                 style={[styles.button, styles.buttonPrimary]}
                 onPress={() =>
-                  this.setState({ showTripList: false, saveToListModal: true })
+                  this.setState({showTripList: false, saveToListModal: true})
                 }>
                 <Text style={styles.buttonText}>Create a New List</Text>
               </TouchableOpacity>
@@ -1225,29 +1240,29 @@ class MapList extends React.Component {
             <View style={styles.selectList}>
               {this.props.tripList
                 ? this.props.tripList.map(trip => {
-                  let tripID = trip.id;
-                  return (
-                    <View style={styles.selectListItem}>
-                      <CheckBox
-                        checked={this.state.selectedTripID == tripID}
-                        color={'#2F80ED'}
-                        style={[
-                          styles.selectListRadioButton,
-                          { marginRight: 10 },
-                        ]}
-                        onPress={() =>
-                          this.setState({
-                            selectedTripID:
-                              this.state.selectedTripID == tripID
-                                ? null
-                                : tripID,
-                          })
-                        }
-                      />
-                      <Text style={styles.selectListText}>{trip.name}</Text>
-                    </View>
-                  );
-                })
+                    let tripID = trip.id;
+                    return (
+                      <View style={styles.selectListItem}>
+                        <CheckBox
+                          checked={this.state.selectedTripID == tripID}
+                          color={'#2F80ED'}
+                          style={[
+                            styles.selectListRadioButton,
+                            {marginRight: 10},
+                          ]}
+                          onPress={() =>
+                            this.setState({
+                              selectedTripID:
+                                this.state.selectedTripID == tripID
+                                  ? null
+                                  : tripID,
+                            })
+                          }
+                        />
+                        <Text style={styles.selectListText}>{trip.name}</Text>
+                      </View>
+                    );
+                  })
                 : null}
             </View>
           </DialogContent>
@@ -1260,7 +1275,7 @@ class MapList extends React.Component {
           hasOverlay={true}
           animationDuration={1}
           onTouchOutside={() => {
-            this.setState({ saveToListModal: false });
+            this.setState({saveToListModal: false});
           }}
           dialogAnimation={
             new FadeAnimation({
@@ -1270,7 +1285,7 @@ class MapList extends React.Component {
             })
           }
           onHardwareBackPress={() => {
-            this.setState({ saveToListModal: false });
+            this.setState({saveToListModal: false});
             return true;
           }}
           dialogStyle={styles.customPopup}>
@@ -1281,7 +1296,7 @@ class MapList extends React.Component {
               </Text>
               <TouchableOpacity
                 style={styles.buttonClose}
-                onPress={() => this.setState({ saveToListModal: false })}>
+                onPress={() => this.setState({saveToListModal: false})}>
                 <Feather name={'x'} style={styles.buttonCloseIcon} />
               </TouchableOpacity>
             </View>
@@ -1302,7 +1317,7 @@ class MapList extends React.Component {
                   styles.buttonCTCancel,
                   styles.buttonOutline,
                 ]}
-                onPress={() => this.setState({ saveToListModal: false })}>
+                onPress={() => this.setState({saveToListModal: false})}>
                 <Text style={[styles.buttonText, styles.buttonTextDark]}>
                   Cancel
                 </Text>
@@ -1314,7 +1329,7 @@ class MapList extends React.Component {
                   styles.buttonCTSubmit,
                   styles.buttonPrimary,
                 ]}
-                onPress={() => this.setState({ saveToListModal: false })}>
+                onPress={() => this.setState({saveToListModal: false})}>
                 <Text style={styles.buttonText}>Submit</Text>
               </TouchableOpacity>
             </View>
@@ -1332,7 +1347,7 @@ class MapList extends React.Component {
           hasOverlay={true}
           animationDuration={1}
           onTouchOutside={() => {
-            this.setState({ sortByModal: false });
+            this.setState({sortByModal: false});
           }}
           dialogAnimation={
             new FadeAnimation({
@@ -1342,7 +1357,7 @@ class MapList extends React.Component {
             })
           }
           onHardwareBackPress={() => {
-            this.setState({ sortByModal: false });
+            this.setState({sortByModal: false});
             return true;
           }}
           dialogStyle={styles.customPopup}>
@@ -1351,7 +1366,7 @@ class MapList extends React.Component {
               <Text style={styles.customPopupHeaderTitle}>Sort By</Text>
               <TouchableOpacity
                 style={styles.buttonClose}
-                onPress={() => this.setState({ sortByModal: false })}>
+                onPress={() => this.setState({sortByModal: false})}>
                 <Feather name={'x'} style={styles.buttonCloseIcon} />
               </TouchableOpacity>
             </View>
@@ -1362,7 +1377,7 @@ class MapList extends React.Component {
                 <CheckBox
                   checked={this.state.sortBy == 'popularity'}
                   color={'#2F80ED'}
-                  style={{ marginRight: 10 }}
+                  style={{marginRight: 10}}
                   onPress={() => this.sortBy('popularity')}
                 />
                 <Text style={styles.selectListText}>Popularity</Text>
@@ -1373,18 +1388,18 @@ class MapList extends React.Component {
                 <CheckBox
                   checked={this.state.sortBy == 'rating'}
                   color={'#2F80ED'}
-                  style={{ marginRight: 10 }}
+                  style={{marginRight: 10}}
                   onPress={() => this.sortBy('rating')}
                 />
                 <Text style={styles.selectListText}>Rating</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => this.sortBy('distance')}
-                style={[styles.selectListItem, { borderBottomWidth: 0 }]}>
+                style={[styles.selectListItem, {borderBottomWidth: 0}]}>
                 <CheckBox
                   checked={this.state.sortBy == 'distance'}
                   color={'#2F80ED'}
-                  style={{ marginRight: 10 }}
+                  style={{marginRight: 10}}
                   onPress={() => this.sortBy('distance')}
                 />
                 <Text style={styles.selectListText}>Distance</Text>
@@ -1400,7 +1415,7 @@ class MapList extends React.Component {
           hasOverlay={true}
           animationDuration={1}
           onTouchOutside={() => {
-            this.setState({ showAddReviewModal: false, reviewFocus: false });
+            this.setState({showAddReviewModal: false, reviewFocus: false});
           }}
           dialogAnimation={
             new FadeAnimation({
@@ -1410,12 +1425,12 @@ class MapList extends React.Component {
             })
           }
           onHardwareBackPress={() => {
-            this.setState({ showAddReviewModal: false, reviewFocus: false });
+            this.setState({showAddReviewModal: false, reviewFocus: false});
             return true;
           }}
-          dialogStyle={[styles.customPopup, { bottom: 0 }]}>
+          dialogStyle={[styles.customPopup, {bottom: 0}]}>
           <DialogContent style={styles.customPopupContent}>
-            <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+            <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
               <View style={styles.customPopupHeader}>
                 <Text style={styles.customPopupHeaderTitle}>Add Review</Text>
                 <TouchableOpacity
@@ -1431,13 +1446,13 @@ class MapList extends React.Component {
               </View>
               <View style={styles.formGroup}>
                 <Text style={styles.formLabel}>Rating</Text>
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{flexDirection: 'row'}}>
                   {Array(5)
                     .fill(1)
                     .map((d, i) => {
                       return (
                         <MaterialCommunityIcons
-                          onPress={() => this.setState({ addReviewValue: i + 1 })}
+                          onPress={() => this.setState({addReviewValue: i + 1})}
                           style={styles.starIcon}
                           name={
                             addReviewValue >= i + 1 ? 'star' : 'star-outline'
@@ -1456,13 +1471,13 @@ class MapList extends React.Component {
                   placeholderTextColor={'#828894'}
                   rowSpan={5}
                   onFocus={() => {
-                    this.setState({ reviewFocus: true });
+                    this.setState({reviewFocus: true});
                   }}
                   onBlur={() => {
-                    this.setState({ reviewFocus: false });
+                    this.setState({reviewFocus: false});
                   }}
                   style={styles.formControlTextarea}
-                  onChangeText={reviewText => this.setState({ reviewText })}
+                  onChangeText={reviewText => this.setState({reviewText})}
                 />
               </View>
               <View style={styles.customPopupFooter}>
@@ -1555,25 +1570,25 @@ class MapList extends React.Component {
                     <Text style={styles.orDividerText}>OR</Text>
                   </View>
 
-                  <View style={[styles.formGroup, { marginBottom: 5 }]}>
+                  <View style={[styles.formGroup, {marginBottom: 5}]}>
                     <Text style={styles.formLabel}>Registered Users Name</Text>
                     <AutoComplete
                       autoCapitalize="none"
                       autoCorrect={false}
                       data={
                         userNames.length === 1 &&
-                          comp(query, userNames[0].username)
+                        comp(query, userNames[0].username)
                           ? []
                           : userNames
                       }
                       defaultValue={query}
-                      onChangeText={text => this.setState({ query: text })}
+                      onChangeText={text => this.setState({query: text})}
                       placeholder="Enter Name"
-                      renderItem={({ item, i }) => (
+                      renderItem={({item, i}) => (
                         <TouchableOpacity
-                          style={{ flex: 1, margin: 5, padding: 5 }}
+                          style={{flex: 1, margin: 5, padding: 5}}
                           onPress={() => this.selectedShareUserName(item)}>
-                          <Text style={{ fontFamily: 'Montserrat-Medium' }}>
+                          <Text style={{fontFamily: 'Montserrat-Medium'}}>
                             {item.username}
                           </Text>
                         </TouchableOpacity>
@@ -1626,7 +1641,7 @@ class MapList extends React.Component {
                         );
                       })}
                   </View>
-                  <View style={[styles.formGroup, { marginBottom: 5 }]}>
+                  <View style={[styles.formGroup, {marginBottom: 5}]}>
                     <Text style={styles.formLabel}>
                       Not Registered Users Email:
                     </Text>
@@ -1643,7 +1658,7 @@ class MapList extends React.Component {
                       placeholderTextColor={'#828894'}
                       returnKeyType={'done'}
                       onChangeText={registeredEmail =>
-                        this.setState({ registeredEmail })
+                        this.setState({registeredEmail})
                       }
                       value={this.state.registeredEmail}
                       onSubmitEditing={() => this.shareNewEmail()}
@@ -1723,7 +1738,7 @@ class MapList extends React.Component {
           hasOverlay={true}
           animationDuration={1}
           onTouchOutside={() => {
-            this.setState({ mapDetailsModal: false });
+            this.setState({mapDetailsModal: false});
           }}
           dialogAnimation={
             new FadeAnimation({
@@ -1733,7 +1748,7 @@ class MapList extends React.Component {
             })
           }
           onHardwareBackPress={() => {
-            this.setState({ mapDetailsModal: false });
+            this.setState({mapDetailsModal: false});
             return true;
           }}
           dialogStyle={[styles.customPopup]}>
@@ -1742,7 +1757,7 @@ class MapList extends React.Component {
               <Text style={styles.customPopupHeaderTitle}>Map Details</Text>
               <TouchableOpacity
                 style={styles.buttonClose}
-                onPress={() => this.setState({ mapDetailsModal: false })}>
+                onPress={() => this.setState({mapDetailsModal: false})}>
                 <Feather
                   style={styles.buttonCloseIcon}
                   name={'x'}
@@ -1750,13 +1765,12 @@ class MapList extends React.Component {
                 />
               </TouchableOpacity>
             </View>
-            <ScrollView
-              style={{ backgroundColor: 'white', paddingBottom: 20 }}>
-              <View style={(styles.mdPopupImgCard, { height: 180 })}>
+            <ScrollView style={{backgroundColor: 'white', paddingBottom: 20}}>
+              <View style={(styles.mdPopupImgCard, {height: 180})}>
                 <ImageBlurLoading
                   withIndicator
                   style={styles.mdPopupImages}
-                  source={{ uri: selectedMap && selectedMap.cover_image }}
+                  source={{uri: selectedMap && selectedMap.cover_image}}
                   thumbnailSource={{
                     uri: 'https://discover-inn.com/upload/cover/map-image.jpeg',
                   }}
@@ -1787,7 +1801,7 @@ class MapList extends React.Component {
           hasOverlay={true}
           animationDuration={1}
           onTouchOutside={() => {
-            this.setState({ showReviewModal: false });
+            this.setState({showReviewModal: false});
           }}
           dialogAnimation={
             new FadeAnimation({
@@ -1797,7 +1811,7 @@ class MapList extends React.Component {
             })
           }
           onHardwareBackPress={() => {
-            this.setState({ showReviewModal: false });
+            this.setState({showReviewModal: false});
             return true;
           }}
           dialogStyle={styles.customPopup}>
@@ -1806,7 +1820,7 @@ class MapList extends React.Component {
               <Text style={styles.customPopupHeaderTitle}>Map Review</Text>
               <TouchableOpacity
                 style={styles.buttonClose}
-                onPress={() => this.setState({ showReviewModal: false })}>
+                onPress={() => this.setState({showReviewModal: false})}>
                 <Feather
                   style={styles.buttonCloseIcon}
                   name={'x'}

@@ -161,13 +161,13 @@ export function fetchTripList() {
       let userData = getState().user && getState().user.userData;
 
       if (userData && userData.id) {
-        let response = await callAPI(apiUrls.tripList, { user_id: userData.id });
+        let response = await callAPI(apiUrls.tripList, {user_id: userData.id});
         if (response.status) {
           dispatch({
             type: 'tripList',
             tripList: response.data,
           });
-          resolve({data:response.data,total_pins:response.total_pins});
+          resolve({data: response.data, total_pins: response.total_pins});
         } else {
           dispatch({
             type: 'tripList',
@@ -187,7 +187,12 @@ export function fetchMapList(apiData) {
       mapListLoaded: false,
     });
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.mapList, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.mapList, apiData);
+      } catch (err) {
+        reject(err.err);
+      }
       dispatch({
         type: 'mapListLoaded',
         mapListLoaded: true,
@@ -224,7 +229,13 @@ export function fetchUserMapList(apiData) {
       mapListLoaded: false,
     });
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.searchUserMaps, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.searchUserMaps, apiData);
+      } catch (err) {
+        console.log(err);
+        reject(err);
+      }
       dispatch({
         type: 'mapListLoaded',
         mapListLoaded: true,
@@ -360,18 +371,18 @@ export function addReview(apiData) {
       let response = await callAPI(apiUrls.addReview, apiData);
       if (response.status) {
         resolve({mapID: response.data});
-        const currentMaps = [...getState().maps.mapList]
+        const currentMaps = [...getState().maps.mapList];
         currentMaps.map(map => {
-          if(map.id == apiData.map_id){
-            let oldReviewCount = map['total_review']
-            let oldAvg = map['avrage_review']|0
-            map['total_review'] = oldReviewCount+1;
+          if (map.id == apiData.map_id) {
+            let oldReviewCount = map['total_review'];
+            let oldAvg = map['avrage_review'] | 0;
+            map['total_review'] = oldReviewCount + 1;
             map['avrage_review'] = Math.round(
-              ((oldAvg*oldReviewCount)+apiData.ratings) / map['total_review']
-            )
+              (oldAvg * oldReviewCount + apiData.ratings) / map['total_review'],
+            );
           }
-          return map
-        })
+          return map;
+        });
         dispatch({
           type: 'mapList',
           mapList: currentMaps,
@@ -494,7 +505,7 @@ export function getMapPinsList(apiData) {
     return new Promise(async (resolve, reject) => {
       let response = await callAPI(apiUrls.getMapPins, apiData);
       if (response.status) {
-        resolve({data:response.data,pin_count:response.total_pins});
+        resolve({data: response.data, pin_count: response.total_pins});
       } else {
         reject(response.message);
       }
@@ -724,8 +735,8 @@ export function storeOfflineMapData({mapData, pinData, bounds, pinList}) {
 export function removeOfflineMapData(mapData) {
   return function(dispatch, getState) {
     return new Promise((resolve, reject) => {
-        let offlineMaps = getState().maps.offlineMaps || [];
-        let maps = [...offlineMaps];
+      let offlineMaps = getState().maps.offlineMaps || [];
+      let maps = [...offlineMaps];
       let isAlreadyDownloadedIndex = maps.findIndex(
         d => d.mapData.id == mapData.id,
       );
