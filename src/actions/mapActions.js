@@ -503,11 +503,15 @@ export function removeMap(apiData) {
 export function getMapPinsList(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.getMapPins, apiData);
-      if (response.status) {
-        resolve({data: response.data, pin_count: response.total_pins});
-      } else {
-        reject(response.message);
+      try {
+        let response = await callAPI(apiUrls.getMapPins, apiData);
+        if (response.status) {
+          resolve({data: response.data, pin_count: response.total_pins});
+        } else {
+          reject(response.message);
+        }
+      } catch (err) {
+        reject(err);
       }
     });
   };

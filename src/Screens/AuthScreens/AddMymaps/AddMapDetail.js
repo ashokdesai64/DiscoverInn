@@ -577,7 +577,7 @@ class AddMapDetail extends React.Component {
                 </View>
 
                 <View style={styles.formGroup}>
-                  <Text style={styles.formLabel}>Description:</Text>
+                  <Text style={styles.formLabel}>Description</Text>
                   <Textarea
                     numberOfLines={4}
                     style={[styles.formControlTextarea]}

@@ -66,6 +66,7 @@ class MyTravel extends React.Component {
       },
     ],
     fetchingMaps: false,
+    maps: this.props.myMaps,
   };
 
   _updateSections = activeSections => {
@@ -73,14 +74,20 @@ class MyTravel extends React.Component {
   };
 
   componentDidMount() {
-    if (this.props.userData && this.props.userData.id) {
-      this.mounted = true;
-      this.fetchFirstMaps();
-    }
+    this.willFocusSubscription = this.props.navigation.addListener(
+      'willFocus',
+      () => {
+        if (this.props.userData && this.props.userData.id) {
+          this.mounted = true;
+          this.fetchFirstMaps();
+        }
+      },
+    );
   }
 
   componentWillUnmount() {
     this.mounted = false;
+    this.willFocusSubscription.remove();
   }
 
   _renderHeader(item, expanded) {
@@ -103,11 +110,19 @@ class MyTravel extends React.Component {
     );
   }
 
-  changeMapStatus(mapID) {
-    this.props.mapAction.changeMapStatus({
+  async changeMapStatus(mapID, val) {
+    await this.props.mapAction.changeMapStatus({
       user_id: this.props.userData.id,
       map_id: mapID,
     });
+    const currentData = this.state.maps.map(function(x) {
+      if (x.id === mapID) {
+        return {...x, status: val ? '1' : '0'};
+      } else {
+        return x;
+      }
+    });
+    this.setState({maps: currentData, fetchingMaps: false});
   }
 
   async downloadAssets(pinImages = []) {
@@ -326,8 +341,11 @@ class MyTravel extends React.Component {
             <Text style={styles.myTravelItemTitle}>Publish</Text>
             <Switch
               value={item.status != '0'}
-              onValueChange={val => this.changeMapStatus(item.id)}
-              changeValueImmediately={false}
+              onValueChange={val => {
+                this.setState({fetchingMaps: true});
+                this.changeMapStatus(item.id, val);
+              }}
+              changeValueImmediately={true}
               disabled={false}
               activeText={'On'}
               inActiveText={'Off'}
@@ -389,7 +407,7 @@ class MyTravel extends React.Component {
   }
 
   fetchFirstMaps() {
-    if (!this.props.myMaps || this.props.myMaps.length == 0) {
+    if (!this.state.maps || this.state.maps.length == 0) {
       this.setState({fetchingMaps: true});
     }
     this.props.mapAction
@@ -482,12 +500,12 @@ class MyTravel extends React.Component {
                     value={this.state.search}
                     onChangeText={search => {
                       if (search.length === 0) {
-                        console.log('====>');
                         this.pageNo = 1;
                         this.setState({search: ''});
                         this.fetchMaps(true, true);
+                      } else {
+                        this.setState({search});
                       }
-                      this.setState({search});
                     }}
                   />
                 </Item>
@@ -504,11 +522,11 @@ class MyTravel extends React.Component {
                 </Button>
               </View>
 
-              {this.props.myMaps && this.props.myMaps.length > 0 ? (
+              {this.state.maps && this.state.maps.length > 0 ? (
                 <Content style={styles.accordionCard}>
                   <Accordion
                     style={styles.accordionCardContent}
-                    dataArray={this.props.myMaps}
+                    dataArray={this.state.maps}
                     renderHeader={this._renderHeader}
                     renderContent={this._renderContent}
                     onChange={this._updateSections}

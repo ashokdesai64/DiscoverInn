@@ -8,6 +8,7 @@ import {
   Image,
   TextInput,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import styles from './MyTripList.style';
 import Header from './../../../components/header/header';
@@ -76,6 +77,7 @@ class MyTripList extends React.Component {
       .then(data => {
         this.setState({createListInProgress: false, newTripListModal: false});
         this.props.mapAction.fetchTripList();
+        this.setState({tripName: ''});
       })
       .catch(err => {
         this.setState({createListInProgress: false});
@@ -361,7 +363,13 @@ class MyTripList extends React.Component {
               <View style={styles.customPopupFooter}>
                 <TouchableOpacity
                   style={[styles.button, styles.buttonPrimary]}
-                  onPress={() => this.createTripList()}>
+                  onPress={() => {
+                    if (this.state.tripName.length === 0) {
+                      alert('Please enter trip name');
+                      return;
+                    }
+                    this.createTripList();
+                  }}>
                   {this.state.createListInProgress ? (
                     <ActivityIndicator color={'white'} size={'small'} />
                   ) : (
