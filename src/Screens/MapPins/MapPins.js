@@ -52,18 +52,21 @@ class MapPins extends React.Component {
         let allPins = data.data.pin_list || [],
           searchTerm = this.state.searchTerm,
           filteredPinList = data.data.pin_list || [];
+
         if (allPins && allPins.length > 0 && searchTerm.trim() != '') {
           filteredPinList = allPins.filter(
             pin =>
               pin.name.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0,
           );
         }
+
         if (allPins && allPins.length > 0) {
           filteredPinList = allPins.filter(
             p =>
               !p.save_triplist || (p.save_triplist && p.save_triplist == '0'),
           );
         }
+
         let isPinAdded = false,
           pinCount = 0;
         if (tripList) {

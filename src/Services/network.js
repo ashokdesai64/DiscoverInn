@@ -24,10 +24,8 @@ export async function callAPI(url, data, method = 'POST') {
     // console.log('body >>>>', formData);
     try {
       let response = await fetch(url, apiSkeleton);
-
       try {
         let apiResponse = await response.json();
-        // console.log('response >>>>', apiResponse);
         resolve(apiResponse);
       } catch (err) {
         reject({err, status: false});

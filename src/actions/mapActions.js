@@ -655,11 +655,24 @@ export function addRemoveToTrip(apiData) {
   };
 }
 
-export function changeMapStatus(apiData) {
+export function changeMapStatus(apiData, val) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
       let response = await callAPI(apiUrls.changeMapStatus, apiData);
       if (response.status) {
+        const oldData = getState().maps.ownMaps;
+        const currentData = oldData.map(function(x) {
+          if (x.id == apiData.map_id) {
+            return {...x, status: val ? '1' : '0'};
+          } else {
+            return x;
+          }
+        });
+        dispatch({
+          type: 'ownMaps',
+          fetchingMaps: false,
+          ownMaps: currentData,
+        });
         resolve(response.data);
       } else {
         reject(response.message);

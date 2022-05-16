@@ -66,7 +66,6 @@ class MyTravel extends React.Component {
       },
     ],
     fetchingMaps: false,
-    maps: this.props.myMaps,
   };
 
   _updateSections = activeSections => {
@@ -110,19 +109,14 @@ class MyTravel extends React.Component {
     );
   }
 
-  async changeMapStatus(mapID, val) {
-    await this.props.mapAction.changeMapStatus({
-      user_id: this.props.userData.id,
-      map_id: mapID,
-    });
-    const currentData = this.state.maps.map(function(x) {
-      if (x.id === mapID) {
-        return {...x, status: val ? '1' : '0'};
-      } else {
-        return x;
-      }
-    });
-    this.setState({maps: currentData, fetchingMaps: false});
+  changeMapStatus(mapID, val) {
+    this.props.mapAction.changeMapStatus(
+      {
+        user_id: this.props.userData.id,
+        map_id: mapID,
+      },
+      val,
+    );
   }
 
   async downloadAssets(pinImages = []) {
@@ -407,12 +401,12 @@ class MyTravel extends React.Component {
   }
 
   fetchFirstMaps() {
-    if (!this.state.maps || this.state.maps.length == 0) {
+    if (!this.props.myMaps || this.props.myMaps.length == 0) {
       this.setState({fetchingMaps: true});
     }
     this.props.mapAction
       .fetchMyFirstMaps({
-        user_id: this.props.userData.id,
+        user_id: this.props.userData && this.props.userData.id,
         search: this.state.search,
         page: 1,
       })
@@ -425,7 +419,7 @@ class MyTravel extends React.Component {
       this.setState({fetchingMaps: true});
     }
     this.props.mapAction.fetchMyMaps({
-      user_id: this.props.userData.id,
+      user_id: this.props.userData && this.props.userData.id,
       search: isBlank ? '' : this.state.search,
       page: this.pageNo,
     });
@@ -522,11 +516,11 @@ class MyTravel extends React.Component {
                 </Button>
               </View>
 
-              {this.state.maps && this.state.maps.length > 0 ? (
+              {this.props.myMaps && this.props.myMaps.length > 0 ? (
                 <Content style={styles.accordionCard}>
                   <Accordion
                     style={styles.accordionCardContent}
-                    dataArray={this.state.maps}
+                    dataArray={this.props.myMaps}
                     renderHeader={this._renderHeader}
                     renderContent={this._renderContent}
                     onChange={this._updateSections}

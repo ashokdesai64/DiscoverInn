@@ -190,62 +190,34 @@ class EditMyTravel extends React.Component {
               showsVerticalScrollIndicator={false}
               scrollEventThrottle={400}>
               <View style={styles.myTravelName}>
-                {!this.state.showNameInput ? (
-                  <TouchableOpacity
-                    onPress={() => this.setState({showNameInput: true})}
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <Text
-                      style={[
-                        styles.myTravelNameText,
-                        {
-                          color: params.type == 'add' ? '#828894' : '#000',
-                          marginRight: 10,
-                          minWidth: 200,
-                          maxWidth: DEVICE_WIDTH - 100,
-                        },
-                      ]}>
-                      {this.state.mapName ||
-                        (params.type == 'edit'
-                          ? this.state.mapName
-                          : 'Add Map Title')}
-                    </Text>
-
-                    <Feather name="edit" style={styles.myTravelNameIcon} />
-                  </TouchableOpacity>
-                ) : (
-                  <View
-                    style={{
-                      padding: 10,
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <TextInput
-                      style={[
-                        styles.formControl,
-                        {
-                          borderWidth: 0,
-                          borderBottomWidth: 1,
-                          minWidth: 200,
-                          maxWidth: DEVICE_WIDTH - 100,
-                        },
-                      ]}
-                      placeholderTextColor={'#828894'}
-                      onChangeText={mapName => this.setState({mapName})}
-                      value={this.state.mapName}
-                      placeholder={'Add Map Name'}
-                      returnKeyType={'done'}
-                      onSubmitEditing={() => this.updateMapName()}
-                    />
-                    <TouchableOpacity onPress={() => this.updateMapName()}>
-                      <Feather name="check" style={styles.myTravelNameIcon} />
-                    </TouchableOpacity>
-                  </View>
-                )}
+                <View
+                  style={{
+                    padding: 10,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <TextInput
+                    style={[
+                      styles.formControl,
+                      {
+                        borderWidth: 0,
+                        borderBottomWidth: 1,
+                        minWidth: DEVICE_WIDTH - 100,
+                        maxWidth: DEVICE_WIDTH,
+                      },
+                    ]}
+                    placeholderTextColor={'#828894'}
+                    onChangeText={mapName => this.setState({mapName})}
+                    value={this.state.mapName}
+                    placeholder={'Add Map Name'}
+                    returnKeyType={'done'}
+                    onSubmitEditing={() => this.updateMapName()}
+                    onEndEditing={e => {
+                      this.updateMapName();
+                    }}
+                  />
+                </View>
               </View>
               <View style={styles.uploadCover}>
                 {this.state.coverImage ? (

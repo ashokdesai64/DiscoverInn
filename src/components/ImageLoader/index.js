@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { View, Animated, ActivityIndicator } from 'react-native';
+import React, {Component} from 'react';
+import {View, Animated, ActivityIndicator} from 'react-native';
 
 import styles from './style';
 
@@ -9,7 +9,7 @@ export default class ImageBlurLoading extends Component {
     this.state = {
       imgAnim: new Animated.Value(0),
       thumbnailAnim: new Animated.Value(0),
-      isLoading: true,
+      isLoading: false,
       source: props.source,
       thumbnailSource: props.thumbnailSource,
     };
@@ -25,14 +25,14 @@ export default class ImageBlurLoading extends Component {
   }
 
   handleThumbnailLoad = async () => {
-    let { thumbnailAnim } = this.state;
-    await this.setState({ isLoading: false });
+    let {thumbnailAnim} = this.state;
+    await this.setState({isLoading: false});
     Animated.timing(thumbnailAnim, {
       toValue: 1,
     }).start();
   };
   onImageLoad = () => {
-    let { imgAnim } = this.state;
+    let {imgAnim} = this.state;
     Animated.timing(imgAnim, {
       toValue: 1,
     }).start();
@@ -47,23 +47,23 @@ export default class ImageBlurLoading extends Component {
       source,
       thumbnailSource,
     } = this.state;
-    let { withIndicator, style, ...props } = this.props;
+    let {withIndicator, style, ...props} = this.props;
     return (
       <View style={[styles.container, style]}>
         <Animated.Image
           {...props}
           source={thumbnailSource}
-          style={[style, { opacity: thumbnailAnim }]}
+          style={[style, {opacity: thumbnailAnim}]}
           onLoad={this.handleThumbnailLoad}
           blurRadius={1}
         />
         <Animated.Image
           {...props}
           source={source}
-          style={[styles.imageOverlay, style, { opacity: imgAnim }]}
+          style={[styles.imageOverlay, style, {opacity: imgAnim}]}
           onLoad={this.onImageLoad}
           onError={() =>
-            this.setState({ source: require('./../../Images/login-bg.jpg') })
+            this.setState({source: require('./../../Images/login-bg.jpg')})
           }
         />
         {withIndicator && isLoading && (

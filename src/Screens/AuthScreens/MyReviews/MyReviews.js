@@ -206,7 +206,7 @@ class MyReviews extends React.Component {
                         />
                         <View style={styles.reviewCardHeading}>
                           <Text style={styles.reviewCardTitle}>
-                            {review.firstname} {review.lastname}
+                            {review.name}
                           </Text>
                           <View style={styles.reviewCardRateList}>
                             {Array(parseInt(review.ratings))
@@ -271,7 +271,7 @@ class MyReviews extends React.Component {
                         />
                         <View style={styles.reviewCardHeading}>
                           <Text style={styles.reviewCardTitle}>
-                            {review.firstname} {review.lastname}
+                            {review.name}
                           </Text>
                           <View style={styles.reviewCardRateList}>
                             {Array(parseInt(review.ratings))
@@ -575,7 +575,7 @@ class MyReviews extends React.Component {
                   borderColor: '#BDBDBD',
                   borderRadius: 5,
                 }}
-                onPress={() => this.setState({saveToListModal: false})}>
+                onPress={() => this.setState({showDeleteReviewModal: false})}>
                 <Text
                   style={{
                     fontFamily: 'Montserrat-Regular',
