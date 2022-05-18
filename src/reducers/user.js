@@ -1,5 +1,5 @@
 const initialState = {
-  introCompleted:false
+  introCompleted: false,
 };
 
 export default function user(state = initialState, action = {}) {
@@ -22,14 +22,14 @@ export default function user(state = initialState, action = {}) {
       return {
         ...state,
         userData: {},
-        tripList:[]
+        tripList: [],
       };
     }
-    case 'introCompleted':{
+    case 'introCompleted': {
       return {
         ...state,
-        introCompleted:action.value
-      }
+        introCompleted: action.value,
+      };
     }
     default:
       return state;

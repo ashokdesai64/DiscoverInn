@@ -1,7 +1,7 @@
 import React from 'react';
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
-import { createDrawerNavigator } from 'react-navigation-drawer';
+import {createAppContainer, createSwitchNavigator} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
+import {createDrawerNavigator} from 'react-navigation-drawer';
 import HomeScreen from './Screens/HomeScreen/HomeScreen';
 import EditCategories from './Screens/EditCategories/EditCategories';
 import EditProfile from './Screens/AuthScreens/EditProfile/EditProfile';
@@ -40,108 +40,106 @@ import SideMenu from './components/SideMenu/SideMenu';
 import DefaultScreen from './Screens/DefaultScreen';
 import WalkThrough from './Screens/WalkThrough';
 import GetStarted from './Screens/WalkThrough/GetStarted';
-import { createBottomTabNavigator } from 'react-navigation-tabs';
+import {createBottomTabNavigator} from 'react-navigation-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { homeIcon, travel, travelList, download, review, share } from './Images';
-import { Image, StyleSheet } from 'react-native';
+import {homeIcon, travel, travelList, download, review, share} from './Images';
+import {Image, StyleSheet} from 'react-native';
 
-const userStack = () => (
-  {
-    Home: {
-      screen: HomeScreen,
-    },
-    MapPins: {
-      screen: MapPins,
-    },
-    ChangePassword: {
-      screen: ChangePassword,
-    },
-    EditCategories: {
-      screen: EditCategories,
-    },
-    TripPinList: {
-      screen: TripPinList,
-    },
-    EditProfile: {
-      screen: EditProfile,
-    },
-    EditMymaps: {
-      screen: EditMymaps,
-    },
-    MyTravel: {
-      screen: MyTravel,
-    },
-    EditMyTravel: {
-      screen: EditMyTravel,
-    },
-    EditMyTravelDetails: {
-      screen: EditMyTravelDetails,
-    },
-    AddMymaps: {
-      screen: AddMymaps,
-    },
-    MyReviews: {
-      screen: MyReviews,
-    },
-    MyTripList: {
-      screen: MyTripList,
-    },
-    MyMapShareList: {
-      screen: MyMapShareList,
-    },
-    MapList: {
-      screen: MapList,
-    },
-    MapView: {
-      screen: MapView,
-    },
-    FavouritePinMap: {
-      screen: FavouritePinMap,
-    },
-    PinCategories: {
-      screen: PinCategories,
-    },
-    SinglePinView: {
-      screen: SinglePinView,
-    },
-    FilterScreen: {
-      screen: FilterScreen,
-    },
-    UploadMap: {
-      screen: UploadMap,
-    },
-    PinView: {
-      screen: PinView,
-    },
-    AddMapDetail: {
-      screen: AddMapDetail,
-    },
-    EditMapDetails: {
-      screen: EditMapDetails,
-    },
-    AboutUsScreen: {
-      screen: AboutUsScreen,
-    },
-    PrivacyPolicyScreen: {
-      screen: PrivacyPolicyScreen,
-    },
-    TermsConditionScreen: {
-      screen: TermsConditionScreen,
-    },
-    DefaultScreen: {
-      screen: DefaultScreen,
-    },
-    OfflineMaps: {
-      screen: OfflineMaps,
-    },
-    OfflineMapView: {
-      screen: OfflineMapView,
-    },
-    MapReviews: {
-      screen: MapReviews,
-    },
-  }
-);
+const userStack = () => ({
+  Home: {
+    screen: HomeScreen,
+  },
+  MapPins: {
+    screen: MapPins,
+  },
+  ChangePassword: {
+    screen: ChangePassword,
+  },
+  EditCategories: {
+    screen: EditCategories,
+  },
+  TripPinList: {
+    screen: TripPinList,
+  },
+  EditProfile: {
+    screen: EditProfile,
+  },
+  EditMymaps: {
+    screen: EditMymaps,
+  },
+  MyTravel: {
+    screen: MyTravel,
+  },
+  EditMyTravel: {
+    screen: EditMyTravel,
+  },
+  EditMyTravelDetails: {
+    screen: EditMyTravelDetails,
+  },
+  AddMymaps: {
+    screen: AddMymaps,
+  },
+  MyReviews: {
+    screen: MyReviews,
+  },
+  MyTripList: {
+    screen: MyTripList,
+  },
+  MyMapShareList: {
+    screen: MyMapShareList,
+  },
+  MapList: {
+    screen: MapList,
+  },
+  MapView: {
+    screen: MapView,
+  },
+  FavouritePinMap: {
+    screen: FavouritePinMap,
+  },
+  PinCategories: {
+    screen: PinCategories,
+  },
+  SinglePinView: {
+    screen: SinglePinView,
+  },
+  FilterScreen: {
+    screen: FilterScreen,
+  },
+  UploadMap: {
+    screen: UploadMap,
+  },
+  PinView: {
+    screen: PinView,
+  },
+  AddMapDetail: {
+    screen: AddMapDetail,
+  },
+  EditMapDetails: {
+    screen: EditMapDetails,
+  },
+  AboutUsScreen: {
+    screen: AboutUsScreen,
+  },
+  PrivacyPolicyScreen: {
+    screen: PrivacyPolicyScreen,
+  },
+  TermsConditionScreen: {
+    screen: TermsConditionScreen,
+  },
+  DefaultScreen: {
+    screen: DefaultScreen,
+  },
+  OfflineMaps: {
+    screen: OfflineMaps,
+  },
+  OfflineMapView: {
+    screen: OfflineMapView,
+  },
+  MapReviews: {
+    screen: MapReviews,
+  },
+});
 
 const AuthStack = createStackNavigator(
   {
@@ -156,7 +154,7 @@ const AuthStack = createStackNavigator(
     },
     SetPassScreen: {
       screen: SetPassScreen,
-      path: 'setpass/:email'
+      path: 'setpass/:email',
     },
   },
   {
@@ -274,9 +272,11 @@ const HomeStack = createStackNavigator(
     MapReviews: {
       screen: MapReviews,
     },
-  }, {
-  headerMode: 'none',
-})
+  },
+  {
+    headerMode: 'none',
+  },
+);
 
 const MyTravelStack = createStackNavigator(
   {
@@ -373,9 +373,11 @@ const MyTravelStack = createStackNavigator(
     MapReviews: {
       screen: MapReviews,
     },
-  }, {
-  headerMode: 'none',
-})
+  },
+  {
+    headerMode: 'none',
+  },
+);
 
 const MyTripListStack = createStackNavigator(
   {
@@ -472,9 +474,11 @@ const MyTripListStack = createStackNavigator(
     MapReviews: {
       screen: MapReviews,
     },
-  }, {
-  headerMode: 'none',
-})
+  },
+  {
+    headerMode: 'none',
+  },
+);
 
 const OfflineMapsStack = createStackNavigator(
   {
@@ -571,9 +575,11 @@ const OfflineMapsStack = createStackNavigator(
     MapReviews: {
       screen: MapReviews,
     },
-  }, {
-  headerMode: 'none',
-})
+  },
+  {
+    headerMode: 'none',
+  },
+);
 
 const MyReviewsStack = createStackNavigator(
   {
@@ -670,9 +676,11 @@ const MyReviewsStack = createStackNavigator(
     MapReviews: {
       screen: MapReviews,
     },
-  }, {
-  headerMode: 'none',
-})
+  },
+  {
+    headerMode: 'none',
+  },
+);
 
 const MyMapShareListStack = createStackNavigator(
   {
@@ -769,47 +777,54 @@ const MyMapShareListStack = createStackNavigator(
     MapReviews: {
       screen: MapReviews,
     },
-  }, {
-  headerMode: 'none',
-})
+  },
+  {
+    headerMode: 'none',
+  },
+);
 
 const TabNavigation = createBottomTabNavigator(
   {
-    'Home': HomeStack,
-    'Travel': MyTravelStack,
+    Home: HomeStack,
+    Travel: MyTravelStack,
     'Trip List': MyTripListStack,
-    'Download': OfflineMapsStack,
-    'Reviews': MyReviewsStack,
-    'Share': MyMapShareListStack
+    Download: OfflineMapsStack,
+    Reviews: MyReviewsStack,
+    Share: MyMapShareListStack,
   },
   {
-    defaultNavigationOptions: ({ navigation }) => ({
-      tabBarIcon: ({ focused, horizontal, tintColor }) => {
-        const { routeName } = navigation.state;
+    defaultNavigationOptions: ({navigation}) => ({
+      tabBarIcon: ({focused, horizontal, tintColor}) => {
+        const {routeName} = navigation.state;
         let IconComponent = MaterialIcons;
         let iconName;
         if (routeName === 'Home') {
-          iconName = homeIcon
+          iconName = homeIcon;
         } else if (routeName === 'Travel') {
-          iconName = travel
+          iconName = travel;
         } else if (routeName === 'Trip List') {
-          iconName = travelList
+          iconName = travelList;
         } else if (routeName === 'Download') {
-          iconName = download
+          iconName = download;
         } else if (routeName === 'Reviews') {
-          iconName = review
+          iconName = review;
         } else if (routeName === 'Share') {
-          iconName = share
+          iconName = share;
         }
-        return <Image source={iconName} style={[styles.tabIcon, { tintColor: focused ? 'red' : 'gray' }]} />
+        return (
+          <Image
+            source={iconName}
+            style={[styles.tabIcon, {tintColor: focused ? 'red' : 'gray'}]}
+          />
+        );
       },
     }),
     tabBarOptions: {
       activeTintColor: 'black',
       inactiveTintColor: 'gray',
     },
-  }
-)
+  },
+);
 
 const App = createSwitchNavigator(
   {
@@ -839,10 +854,9 @@ const App = createSwitchNavigator(
 
 export default createAppContainer(App);
 
-
 const styles = StyleSheet.create({
   tabIcon: {
     width: 20,
-    height: 20
-  }
-})
+    height: 20,
+  },
+});

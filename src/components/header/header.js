@@ -20,6 +20,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as authActions from './../../actions/authActions';
 import ImageBlurLoading from '../ImageLoader';
+import MapboxGL from '@react-native-mapbox-gl/maps';
 
 class Header extends Component {
   constructor(props) {
@@ -59,7 +60,8 @@ class Header extends Component {
       },
       {
         text: 'Yes',
-        onPress: () => {
+        onPress: async () => {
+          await MapboxGL.offlineManager.resetDatabase();
           this.props.authAction.userLogout();
           this.setState({authModal: false}, () => {
             setTimeout(() => {

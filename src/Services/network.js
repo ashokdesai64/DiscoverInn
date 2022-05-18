@@ -28,10 +28,16 @@ export async function callAPI(url, data, method = 'POST') {
         let apiResponse = await response.json();
         resolve(apiResponse);
       } catch (err) {
-        reject({err, status: false});
+        if (err === '[TypeError: Network request failed]') {
+        } else {
+          reject({err: 'No Internet Connection', status: false});
+        }
       }
     } catch (err) {
-      reject({err, status: false});
+      if (err === '[TypeError: Network request failed]') {
+      } else {
+        reject({err: 'No Internet Connection', status: false});
+      }
     }
   });
 }

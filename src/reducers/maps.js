@@ -106,6 +106,21 @@ export default function maps(state = initialState, action = {}) {
         allUserNames: action.allUserNames || (state.allUserNames || []),
       };
     }
+    case 'userLogout': {
+      return {
+        ...state,
+        myReviews: false,
+        visitorReviews: false,
+        allUserNames: [],
+        mapListLoaded: false,
+        mapListCount: 0,
+        ownMaps: [],
+        fetchingMaps: false,
+        tripList: [],
+        mapList: [],
+        offlineMaps: [],
+      };
+    }
     default:
       return state;
   }

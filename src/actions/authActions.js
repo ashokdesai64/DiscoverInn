@@ -5,8 +5,13 @@ export function userLogin(email, password) {
   return async function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
       let postData = {email, password};
-      let response = await callAPI(apiUrls.login, postData);
-
+      let response;
+      try {
+        response = await callAPI(apiUrls.login, postData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         dispatch({
           type: 'userLogin',
@@ -23,8 +28,13 @@ export function userLogin(email, password) {
 export function userSignup(postData) {
   return async function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.signup, postData);
-
+      let response;
+      try {
+        response = await callAPI(apiUrls.signup, postData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         // dispatch({
         //   type: 'userLogin',
@@ -43,8 +53,13 @@ export function userSignup(postData) {
 export function setPassword(postData) {
   return async function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.setPassword, postData);
-
+      let response;
+      try {
+        response = await callAPI(apiUrls.setPassword, postData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         resolve(true);
       } else {
@@ -57,8 +72,13 @@ export function setPassword(postData) {
 export function forgotPassword(postData) {
   return async function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.forgotPassword, postData);
-
+      let response;
+      try {
+        response = await callAPI(apiUrls.forgotPassword, postData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         resolve(response.message);
       } else {
@@ -70,8 +90,13 @@ export function forgotPassword(postData) {
 export function changePassword(postData) {
   return async function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.changePassword, postData);
-
+      let response;
+      try {
+        response = await callAPI(apiUrls.changePassword, postData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         resolve(response.message);
       } else {
