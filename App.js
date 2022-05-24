@@ -48,7 +48,7 @@ export default class App extends Component {
         Alert.alert('Connection Issue', 'No Internet connection!');
       }
     });
-    Platform.OS == 'android' &&
+    Platform.OS === 'android' &&
       RNFetchBlob.fs.unlink(RNFileSystem.CachesDirectoryPath);
   }
   componentWillUnmount() {

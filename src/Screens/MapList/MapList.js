@@ -222,13 +222,6 @@ class MapList extends React.Component {
   }
 
   async downloadMap(mapData) {
-    this.setState({
-      mapDownloadInProgress: true,
-      downloadSpinnerMsg: `Preparing to download map.`,
-      downloadSpinnerMsg: 'Downloading map...',
-      canGoBack: true,
-    });
-
     if (!this.props.userData || !this.props.userData.id) {
       return Alert.alert('', 'Please Log In to access this feature', [
         {
@@ -245,6 +238,12 @@ class MapList extends React.Component {
     if (isDownloaded) {
       alert('This map is already downloaded');
     } else {
+      this.setState({
+        mapDownloadInProgress: true,
+        downloadSpinnerMsg: `Preparing to download map.`,
+        downloadSpinnerMsg: 'Downloading map...',
+        canGoBack: true,
+      });
       let hasPermission = await checkIfHasPermission('write_storage');
       if ((Platform.OS == 'android' && hasPermission) || Platform.OS == 'ios') {
         this.props.mapAction

@@ -1,9 +1,17 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { View, BackHandler, StyleSheet, Dimensions, Text, TouchableOpacity } from 'react-native';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
+import {
+  View,
+  BackHandler,
+  StyleSheet,
+  Dimensions,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 // import InfoScreen from './InfoScreen';
 import Carousel from 'react-native-snap-carousel';
 import Video from 'react-native-video';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import debounce from 'lodash.debounce';
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
@@ -19,7 +27,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
   slide3: {
     flex: 1,
@@ -35,7 +43,6 @@ const styles = StyleSheet.create({
   backgroundVideo: {
     height: '100%',
     width: DEVICE_WIDTH,
-    backgroundColor: 'white'
     // flex: 1,
     // position: 'absolute',
     // top: 0,
@@ -68,7 +75,7 @@ const styles = StyleSheet.create({
   header: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 40
+    marginTop: 40,
   },
   headerTitle: {
     fontFamily: 'Montserrat-Medium',
@@ -81,6 +88,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
   },
+  indicator: {
+    flex: 1,
+    color: 'black',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    position: 'absolute',
+    right: 0,
+  },
 });
 
 let data = [
@@ -92,8 +108,10 @@ let data = [
   // },
   {
     type: 'video',
-    uri: 'https://res.cloudinary.com/discover-inn/video/upload/q_auto/Discover-inn%20-%20How%20it%20works/video_1_320_480_rvqqvl.mp4',
-    poster: 'https://res.cloudinary.com/discover-inn/video/upload/q_auto/Discover-inn%20-%20How%20it%20works/video_1_320_480_rvqqvl.jpg',
+    uri:
+      'https://res.cloudinary.com/discover-inn/video/upload/q_auto/Discover-inn%20-%20How%20it%20works/video_1_320_480_rvqqvl.mp4',
+    poster:
+      'https://res.cloudinary.com/discover-inn/video/upload/q_auto/Discover-inn%20-%20How%20it%20works/video_1_320_480_rvqqvl.jpg',
     title: 'Start exploring',
     info: `Navigate through well known travel guides, bloggers' suggestions or your friends' last trip.`,
   },
@@ -105,10 +123,13 @@ let data = [
   // },
   {
     type: 'video',
-    uri: 'https://res.cloudinary.com/discover-inn/video/upload/q_auto/Discover-inn%20-%20How%20it%20works/video_2_320_480_r3xjqs.mp4',
-    poster: 'https://res.cloudinary.com/discover-inn/video/upload/q_auto/Discover-inn%20-%20How%20it%20works/video_2_320_480_r3xjqs.jpg',
+    uri:
+      'https://res.cloudinary.com/discover-inn/video/upload/q_auto/Discover-inn%20-%20How%20it%20works/video_2_320_480_r3xjqs.mp4',
+    poster:
+      'https://res.cloudinary.com/discover-inn/video/upload/q_auto/Discover-inn%20-%20How%20it%20works/video_2_320_480_r3xjqs.jpg',
     title: 'Set your Trip',
-    info: 'Dive into multiple maps and add your favorite suggestions to your Trip List.',
+    info:
+      'Dive into multiple maps and add your favorite suggestions to your Trip List.',
   },
   // {
   //   type: 'info',
@@ -118,8 +139,10 @@ let data = [
   // },
   {
     type: 'video',
-    uri: 'https://res.cloudinary.com/discover-inn/video/upload/q_auto/Discover-inn%20-%20How%20it%20works/video_3_320_480_yma81y.mp4',
-    poster: 'https://res.cloudinary.com/discover-inn/video/upload/q_auto/Discover-inn%20-%20How%20it%20works/video_3_320_480_yma81y.jpg',
+    uri:
+      'https://res.cloudinary.com/discover-inn/video/upload/q_auto/Discover-inn%20-%20How%20it%20works/video_3_320_480_yma81y.mp4',
+    poster:
+      'https://res.cloudinary.com/discover-inn/video/upload/q_auto/Discover-inn%20-%20How%20it%20works/video_3_320_480_yma81y.jpg',
     title: 'Create Souvenirs',
     info: `Do your own map based on your experiences and photos or import from Google MyMaps on Discover-inn.com`,
   },
@@ -131,10 +154,13 @@ let data = [
   // },
   {
     type: 'video',
-    uri: 'https://res.cloudinary.com/discover-inn/video/upload/q_auto/Discover-inn%20-%20How%20it%20works/video_4_320_480_dm4tow.mp4',
-    poster: 'https://res.cloudinary.com/discover-inn/video/upload/q_auto/Discover-inn%20-%20How%20it%20works/video_4_320_480_dm4tow.jpg',
+    uri:
+      'https://res.cloudinary.com/discover-inn/video/upload/q_auto/Discover-inn%20-%20How%20it%20works/video_4_320_480_dm4tow.mp4',
+    poster:
+      'https://res.cloudinary.com/discover-inn/video/upload/q_auto/Discover-inn%20-%20How%20it%20works/video_4_320_480_dm4tow.jpg',
     title: 'No Internet? No Problem!',
-    info: 'Download maps for Offline use to keep your Travel Guide right in your pocket.',
+    info:
+      'Download maps for Offline use to keep your Travel Guide right in your pocket.',
   },
 ];
 
@@ -144,7 +170,7 @@ const WalkThrough = props => {
   const sliderRef = useRef();
 
   useEffect(() => {
-    dispatch({ type: 'introCompleted', value: true });
+    dispatch({type: 'introCompleted', value: true});
     let eventHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       return props.navigation.navigate('GetStarted');
     });
@@ -152,12 +178,12 @@ const WalkThrough = props => {
   }, []);
 
   const onSkip = () => {
-    dispatch({ type: 'introCompleted', value: true });
+    dispatch({type: 'introCompleted', value: true});
     props.navigation.navigate('AuthLoading');
   };
 
   const onSignIn = () => {
-    dispatch({ type: 'introCompleted', value: true });
+    dispatch({type: 'introCompleted', value: true});
     props.navigation.navigate('SignupScreen');
   };
 
@@ -169,8 +195,8 @@ const WalkThrough = props => {
     }
   };
 
-  const renderComp = ({ item, index }) => {
-    // item.type == 'video' ? 
+  const renderComp = ({item, index}) => {
+    // item.type == 'video' ?
     return (
       <>
         <View style={styles.header}>
@@ -185,14 +211,14 @@ const WalkThrough = props => {
           onVideoEnd={onVideoEnd}
         />
       </>
-    )
+    );
     // : (
     //   <InfoScreen values={{ ...item }} onSkip={onSkip} onSignIn={onSignIn} />
     // );
   };
 
   return (
-    <View style={{ backgroundColor: 'white', flexGrow: 1 }}>
+    <View style={{backgroundColor: 'white', flexGrow: 1}}>
       <Carousel
         ref={sliderRef}
         data={data}
@@ -219,38 +245,40 @@ const WalkThrough = props => {
   );
 };
 
-const VideoComponent = React.memo(({ uri, paused, onVideoEnd, currentIndex, poster }) => {
+const VideoComponent = React.memo(
+  ({uri, paused, onVideoEnd, currentIndex, poster}) => {
+    const videoRef = useRef(null);
+    useEffect(() => {
+      videoRef && videoRef.current.seek(0);
+    }, [currentIndex]);
 
-  const videoRef = useRef(null);
-  useEffect(() => {
-    videoRef && videoRef.current.seek(0);
-  }, [currentIndex])
+    const f = useCallback(
+      debounce(({currentTime, playableDuration}) => {
+        if (Math.ceil(currentTime) == Math.ceil(playableDuration)) {
+          onVideoEnd();
+        }
+      }, 1000),
+      [],
+    );
 
-  const f = useCallback(
-    debounce(({ currentTime, playableDuration }) => {
-      if (Math.ceil(currentTime) == Math.ceil(playableDuration)) {
-        onVideoEnd();
-      }
-    }, 1000),
-    [],
-  );
-
-  return (
-    <View style={styles.slide2}>
-      <Video
-        resizeMode="stretch"
-        source={{ uri }}
-        volume={1.0}
-        key={uri}
-        paused={paused}
-        style={styles.backgroundVideo}
-        ref={videoRef}
-        // controls
-        onProgress={f}
-        poster={poster}
-        posterResizeMode="stretch"
-      />
-    </View>
-  );
-});
+    return (
+      <View style={styles.slide2}>
+        <ActivityIndicator style={styles.indicator} />
+        <Video
+          resizeMode="stretch"
+          source={{uri}}
+          volume={1.0}
+          key={uri}
+          paused={paused}
+          style={styles.backgroundVideo}
+          ref={videoRef}
+          // controls
+          onProgress={f}
+          poster={poster}
+          posterResizeMode="stretch"
+        />
+      </View>
+    );
+  },
+);
 export default React.memo(WalkThrough);
