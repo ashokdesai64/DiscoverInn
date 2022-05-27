@@ -274,7 +274,7 @@ const VideoComponent = React.memo(
           ref={videoRef}
           // controls
           onProgress={f}
-          poster={poster}
+          // poster={poster}
           posterResizeMode="stretch"
         />
       </View>

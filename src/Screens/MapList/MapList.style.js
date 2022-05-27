@@ -1,4 +1,4 @@
-import {StyleSheet, Dimensions,Platform} from 'react-native';
+import {StyleSheet, Dimensions, Platform} from 'react-native';
 const {width} = Dimensions.get('window');
 const height = Dimensions.get('window').height;
 
@@ -571,8 +571,8 @@ const styles = StyleSheet.create({
     color: '#4F4F4F',
     fontFamily: 'Montserrat-Regular',
     marginTop: 15,
-    paddingBottom:40,
-    marginBottom:20
+    paddingBottom: 40,
+    marginBottom: 20,
   },
   reviewCard: {
     borderRadius: 5,

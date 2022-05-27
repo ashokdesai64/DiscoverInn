@@ -29,14 +29,16 @@ export async function callAPI(url, data, method = 'POST') {
         resolve(apiResponse);
       } catch (err) {
         if (err === '[TypeError: Network request failed]') {
-        } else {
           reject({err: 'No Internet Connection', status: false});
+        } else {
+          reject({err: err, status: false});
         }
       }
     } catch (err) {
       if (err === '[TypeError: Network request failed]') {
-      } else {
         reject({err: 'No Internet Connection', status: false});
+      } else {
+        reject({err: err, status: false});
       }
     }
   });

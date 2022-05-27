@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   SafeAreaView,
+  Alert,
 } from 'react-native';
 import {Item, Input, Button, Picker} from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
@@ -52,14 +53,12 @@ class MapPins extends React.Component {
         let allPins = data.data.pin_list || [],
           searchTerm = this.state.searchTerm,
           filteredPinList = data.data.pin_list || [];
-
         if (allPins && allPins.length > 0 && searchTerm.trim() != '') {
           filteredPinList = allPins.filter(
             pin =>
               pin.name.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0,
           );
         }
-
         if (allPins && allPins.length > 0) {
           filteredPinList = allPins.filter(
             p =>
@@ -89,7 +88,8 @@ class MapPins extends React.Component {
         });
       })
       .catch(err => {
-        this.setState({pinList: [], fetchingPins: false});
+        // Alert.alert('Error', JSON.stringify(err), [{text: 'OK'}]);
+        this.setState({pinList: [], filteredPinList: [], fetchingPins: false});
       });
 
     this.props.mapAction.fetchTripList();
@@ -142,10 +142,17 @@ class MapPins extends React.Component {
       filteredPinList = [];
     if (searchTerm.trim() != '') {
       filteredPinList = allPins.filter(
-        pin => pin.name.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0,
+        pin =>
+          (!pin.save_triplist ||
+            (pin.save_triplist && pin.save_triplist == '0')) &&
+          pin.name.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0,
       );
     } else {
-      filteredPinList = [...allPins];
+      if (allPins && allPins.length > 0) {
+        filteredPinList = allPins.filter(
+          p => !p.save_triplist || (p.save_triplist && p.save_triplist == '0'),
+        );
+      }
     }
     this.setState({filteredPinList});
   }, 250);

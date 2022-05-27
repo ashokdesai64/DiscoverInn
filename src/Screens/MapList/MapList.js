@@ -1780,7 +1780,7 @@ class MapList extends React.Component {
                 {selectedMap && selectedMap.name}
               </Text>
               <View style={styles.mdPopupAuthor}>
-                <Text style={styles.mdPopupAuthorLabel}>Traveller: </Text>
+                <Text style={styles.mdPopupAuthorLabel}>Owner: </Text>
                 <Text style={styles.mdPopupAuthorName}>
                   {' '}
                   {selectedMap && (selectedMap.owner || selectedMap.username)}

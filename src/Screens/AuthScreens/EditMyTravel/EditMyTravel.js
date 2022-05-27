@@ -6,6 +6,7 @@ import {
   TextInput,
   Dimensions,
   Image,
+  Alert,
 } from 'react-native';
 import {Button} from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -47,6 +48,15 @@ class EditMyTravel extends React.Component {
   }
 
   updateMapName() {
+    if (!this.props.userData || !this.props.userData.id) {
+      return Alert.alert('', 'Please Log In to access this feature', [
+        {
+          text: 'Log In',
+          onPress: () => this.props.navigation.navigate('LoginScreen'),
+        },
+        {text: 'Cancel'},
+      ]);
+    }
     const {params} = this.props.navigation.state;
 
     let mapName = this.state.mapName;
@@ -212,7 +222,6 @@ class EditMyTravel extends React.Component {
                     value={this.state.mapName}
                     placeholder={'Add Map Name'}
                     returnKeyType={'done'}
-                    onSubmitEditing={() => this.updateMapName()}
                     onEndEditing={e => {
                       this.updateMapName();
                     }}
