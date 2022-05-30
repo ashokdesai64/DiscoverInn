@@ -263,15 +263,19 @@ export function fetchMapList(apiData) {
         });
         resolve(response.data);
       } else {
-        dispatch({
-          type: 'mapList',
-          mapList: [],
-        });
-        dispatch({
-          type: 'mapListCount',
-          mapListCount: '0',
-        });
-        reject(response.message);
+        if (apiData.page <= 1) {
+          dispatch({
+            type: 'mapList',
+            mapList: [],
+          });
+          dispatch({
+            type: 'mapListCount',
+            mapListCount: '0',
+          });
+          reject(response.message);
+        } else {
+          resolve(response.data);
+        }
       }
     });
   };

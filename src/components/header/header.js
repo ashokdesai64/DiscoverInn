@@ -259,17 +259,35 @@ class Header extends Component {
             <DialogContent style={styles.customPopupContent}>
               <View style={styles.loginDialogContentInner}>
                 {userData && userData.id ? (
-                  <TouchableOpacity
-                    onPress={() => this.signOut()}
-                    style={styles.loginDialogLink}>
-                    <SimpleLineIcons
-                      name={'login'}
-                      color={'#828282'}
-                      style={styles.loginDialogLinkIcon}
-                      size={18}
-                    />
-                    <Text style={styles.loginDialogLinkText}>Sign Out</Text>
-                  </TouchableOpacity>
+                  <>
+                    <TouchableOpacity
+                      onPress={() => {
+                        this.setState({authModal: false});
+                        this.props.navigation.navigate('EditProfile');
+                      }}
+                      style={styles.loginDialogLink}>
+                      <Icon
+                        name={'edit'}
+                        color={'#828282'}
+                        style={styles.loginDialogLinkIcon}
+                        size={18}
+                      />
+                      <Text style={styles.loginDialogLinkText}>
+                        Edit Profile
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => this.signOut()}
+                      style={styles.loginDialogLink}>
+                      <SimpleLineIcons
+                        name={'login'}
+                        color={'#828282'}
+                        style={styles.loginDialogLinkIcon}
+                        size={18}
+                      />
+                      <Text style={styles.loginDialogLinkText}>Sign Out</Text>
+                    </TouchableOpacity>
+                  </>
                 ) : (
                   <>
                     <TouchableOpacity
