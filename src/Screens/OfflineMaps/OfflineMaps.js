@@ -64,7 +64,7 @@ class OfflineMaps extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (
       nextProps.offlineMaps &&
       nextProps.offlineMaps.length != this.state.offlineMaps

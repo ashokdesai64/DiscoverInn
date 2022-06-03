@@ -59,7 +59,7 @@ class PinView extends React.Component {
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const { params } = this.props.navigation.state;
     let allPins = params.allPins || [];
     let pinIndex = allPins.findIndex(p => p.id == params.pinID);

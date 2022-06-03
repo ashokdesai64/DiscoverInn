@@ -9,7 +9,7 @@ export default class SwitchComponent extends React.PureComponent {
 		}
 	}
 
-	componentWillReceiveProps(nextProps) {
+	UNSAFE_componentWillReceiveProps(nextProps) {
 		if (nextProps.value != this.props.value) {
 			this.setState({ switchValue: nextProps.value })
 		}

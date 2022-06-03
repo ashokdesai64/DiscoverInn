@@ -70,7 +70,7 @@ class DefaultScreen extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.redirectToApp(nextProps);
   }
 

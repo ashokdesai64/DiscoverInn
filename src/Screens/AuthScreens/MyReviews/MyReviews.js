@@ -37,7 +37,7 @@ class MyReviews extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.myReviews) {
       this.setState({myReviews: nextProps.myReviews});
     }

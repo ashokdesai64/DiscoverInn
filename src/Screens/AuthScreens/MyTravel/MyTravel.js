@@ -379,7 +379,7 @@ class MyTravel extends React.Component {
     );
   };
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.fetchingMaps != this.state.fetchingMaps) {
       this.setState({ fetchingMaps: nextProps.fetchingMaps });
     }

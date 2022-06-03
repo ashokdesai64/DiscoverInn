@@ -34,7 +34,7 @@ class MyMapShareList extends React.Component {
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (this.props.userData && this.props.userData.id) {
       this.setState({ fetchingMaps: true });
       this.props.mapAction

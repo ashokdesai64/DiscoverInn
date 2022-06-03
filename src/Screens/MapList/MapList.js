@@ -136,7 +136,7 @@ class MapList extends React.Component {
     });
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     let { params } = this.props.navigation.state;
     if (params && params.searchObj) {
       const { searchUserId } = params.searchObj;

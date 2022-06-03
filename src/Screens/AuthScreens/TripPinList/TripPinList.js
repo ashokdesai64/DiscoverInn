@@ -50,7 +50,7 @@ class TripPinList extends React.Component {
       });
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.fetchPinList();
   }
 

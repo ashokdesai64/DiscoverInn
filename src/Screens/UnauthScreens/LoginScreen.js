@@ -32,7 +32,7 @@ class LoginScreen extends React.Component {
     this.checkLogin(props);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.checkLogin(nextProps);
   }
 

@@ -21,7 +21,7 @@ class InView extends Component {
     this.stopWatching();
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.active) {
       this.lastValue = null;
       this.startWatching();

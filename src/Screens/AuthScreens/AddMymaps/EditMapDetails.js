@@ -337,7 +337,7 @@ class EditMapDetails extends React.Component {
     }
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const { params } = this.props.navigation.state;
     let pinID = params.pinID;
     if (pinID) {

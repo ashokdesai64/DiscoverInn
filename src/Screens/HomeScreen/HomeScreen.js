@@ -21,7 +21,9 @@ import ImageBlurLoading from './../../components/ImageLoader';
 import { askForPermissions } from '../../config/permission';
 import RNLocation from 'react-native-location';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-
+MapboxGL.setAccessToken(
+  'sk.eyJ1IjoicmF2aXNvaml0cmF3b3JrIiwiYSI6ImNrYTByeHVxZjBqbGszZXBtZjF3NmJleWgifQ.idSimILJ3_sk1gSWs2sMsQ',
+);
 import Tabs from '../../components/TopTabBars'
 const { width } = Dimensions.get('window');
 

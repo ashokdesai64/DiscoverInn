@@ -41,7 +41,7 @@ let persistor = persistStore(store);
 const prefix = 'discoverinn://';
 
 export default class App extends Component {
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     Platform.OS == 'android' &&
       RNFetchBlob.fs.unlink(RNFileSystem.CachesDirectoryPath)
   }

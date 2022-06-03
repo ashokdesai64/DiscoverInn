@@ -55,7 +55,7 @@ class FavouritePinMap extends React.Component {
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (this.props.userData && this.props.userData.id) {
       const { params } = this.props.navigation.state;
       let tripID = params.tripID;
