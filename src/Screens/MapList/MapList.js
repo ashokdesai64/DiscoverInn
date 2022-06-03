@@ -15,7 +15,10 @@ import {
   Alert,
 } from 'react-native';
 import Share from 'react-native-share';
-import { askForPermissions, checkIfHasPermission } from './../../config/permission';
+import {
+  askForPermissions,
+  checkIfHasPermission,
+} from './../../config/permission';
 
 import { Item, Input, Button, Icon, Textarea, List, CheckBox } from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
@@ -37,7 +40,7 @@ import axios from 'axios';
 import _ from 'underscore';
 import { getBoundingBox } from 'geolocation-utils';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import RNLocation from 'react-native-location'
+import RNLocation from 'react-native-location';
 // import Geolocation from 'react-native-geolocation-service';
 MapboxGL.setAccessToken(
   'sk.eyJ1IjoicmF2aXNvaml0cmF3b3JrIiwiYSI6ImNrYTByeHVxZjBqbGszZXBtZjF3NmJleWgifQ.idSimILJ3_sk1gSWs2sMsQ',
@@ -219,17 +222,13 @@ class MapList extends React.Component {
   }
 
   async downloadMap(mapData) {
-    this.setState({
-      mapDownloadInProgress: true,
-      downloadSpinnerMsg: `Preparing to download map.`,
-      downloadSpinnerMsg: 'Downloading map...',
-      canGoBack: true,
-    });
-
     if (!this.props.userData || !this.props.userData.id) {
       return Alert.alert('', 'Please Log In to access this feature', [
-        { text: 'Log In', onPress: () => this.props.navigation.navigate('LoginScreen') },
-        { text: 'OK' }
+        {
+          text: 'Log In',
+          onPress: () => this.props.navigation.navigate('LoginScreen'),
+        },
+        { text: 'OK' },
       ]);
     }
     let packs = await MapboxGL.offlineManager.getPacks();
@@ -239,6 +238,12 @@ class MapList extends React.Component {
     if (isDownloaded) {
       alert('This map is already downloaded');
     } else {
+      this.setState({
+        mapDownloadInProgress: true,
+        downloadSpinnerMsg: `Preparing to download map.`,
+        downloadSpinnerMsg: 'Downloading map...',
+        canGoBack: true,
+      });
       let hasPermission = await checkIfHasPermission('write_storage');
       if ((Platform.OS == 'android' && hasPermission) || Platform.OS == 'ios') {
         this.props.mapAction
@@ -608,8 +613,12 @@ class MapList extends React.Component {
                     });
                   } else {
                     Alert.alert('', 'Please Log In to access this feature', [
-                      { text: 'Log In', onPress: () => this.props.navigation.navigate('LoginScreen') },
-                      { text: 'OK' }
+                      {
+                        text: 'Log In',
+                        onPress: () =>
+                          this.props.navigation.navigate('LoginScreen'),
+                      },
+                      { text: 'OK' },
                     ]);
                   }
                 }}>
@@ -641,7 +650,7 @@ class MapList extends React.Component {
       selectedCreatedWithin,
       selectedTravelType,
       sortBy,
-      searchTerm
+      searchTerm,
     } = this.state;
     let latitude, longitude;
     this.setState({ fetchingMaps: true });
@@ -660,7 +669,10 @@ class MapList extends React.Component {
       RNLocation.configure({
         distanceFilter: 5.0,
       });
-      await RNLocation.requestPermission({ ios: 'whenInUse', android: { detail: 'coarse' }, });
+      await RNLocation.requestPermission({
+        ios: 'whenInUse',
+        android: { detail: 'coarse' },
+      });
       let location = await RNLocation.getLatestLocation({ timeout: 5000 });
       apiData['latitude'] = location && location.latitude;
       apiData['longitude'] = location && location.longitude;
@@ -1108,7 +1120,7 @@ class MapList extends React.Component {
                 marginHorizontal: 10,
                 borderWidth: 1,
                 borderColor: '#ddd',
-                width: width - 20
+                width: width - 20,
               }}
               keyboardShouldPersistTaps={'always'}>
               {this.state.searchTerm[0] == '@'
@@ -1750,8 +1762,7 @@ class MapList extends React.Component {
                 />
               </TouchableOpacity>
             </View>
-            <ScrollView
-              style={{ backgroundColor: 'white', paddingBottom: 20 }}>
+            <ScrollView style={{ backgroundColor: 'white', paddingBottom: 20 }}>
               <View style={(styles.mdPopupImgCard, { height: 180 })}>
                 <ImageBlurLoading
                   withIndicator
@@ -1767,7 +1778,7 @@ class MapList extends React.Component {
                 {selectedMap && selectedMap.name}
               </Text>
               <View style={styles.mdPopupAuthor}>
-                <Text style={styles.mdPopupAuthorLabel}>Traveller: </Text>
+                <Text style={styles.mdPopupAuthorLabel}>Owner: </Text>
                 <Text style={styles.mdPopupAuthorName}>
                   {' '}
                   {selectedMap && (selectedMap.owner || selectedMap.username)}

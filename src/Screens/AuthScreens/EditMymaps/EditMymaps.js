@@ -1,23 +1,25 @@
-import React, { Fragment } from 'react';
-import { View, Text, ScrollView, Switch, Image } from 'react-native';
-import { Item, Input, Button, Content, Accordion, CheckBox } from 'native-base';
+import React, {Fragment} from 'react';
+import {View, Text, ScrollView, Switch, Image} from 'react-native';
+import {Item, Input, Button, Content, Accordion, CheckBox} from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import styles from './EditMymaps.style';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import Header from './../../../components/header/header';
-import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog';
+import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
 
 //REDUX
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
 import * as mapActions from './../../../actions/mapActions';
 
-const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
   const paddingToBottom = 20;
-  return layoutMeasurement.height + contentOffset.y >=
-    contentSize.height - paddingToBottom;
+  return (
+    layoutMeasurement.height + contentOffset.y >=
+    contentSize.height - paddingToBottom
+  );
 };
 class EditMymaps extends React.Component {
   constructor(props) {
@@ -64,7 +66,7 @@ class EditMymaps extends React.Component {
   };
 
   _updateSections = activeSections => {
-    this.setState({ activeSections });
+    this.setState({activeSections});
   };
 
   componentDidMount() {
@@ -92,7 +94,7 @@ class EditMymaps extends React.Component {
   }
 
   _renderContent = item => {
-    var commentIndex = this.state.dataArray.findIndex(function (c) {
+    var commentIndex = this.state.dataArray.findIndex(function(c) {
       return c.title == item.title;
     });
     return (
@@ -103,15 +105,15 @@ class EditMymaps extends React.Component {
             <Switch
               style={[
                 styles.mymapsItemSwitch,
-                { transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }] },
+                {transform: [{scaleX: 0.7}, {scaleY: 0.7}]},
               ]}
               value={item.map_type == 'public'}
               // trackColor={{true: '#fff', false: '#fff'}}
               thumbColor={'#2F80ED'}
               onValueChange={value =>
-              (this.state.dataArray[commentIndex].public = item.public
-                ? false
-                : true)
+                (this.state.dataArray[commentIndex].public = item.public
+                  ? false
+                  : true)
               }
             />
           </View>
@@ -157,7 +159,7 @@ class EditMymaps extends React.Component {
               <TouchableOpacity
                 style={styles.editImage}
                 onPress={() => {
-                  this.setState({ currentMap: item, changeCoverModal: true });
+                  this.setState({currentMap: item, changeCoverModal: true});
                 }}>
                 <Text
                   style={{
@@ -168,7 +170,7 @@ class EditMymaps extends React.Component {
                   Changes Picture
                 </Text>
                 <Feather
-                  style={{ color: '#828282', fontSize: 12 }}
+                  style={{color: '#828282', fontSize: 12}}
                   name="chevron-down"
                 />
               </TouchableOpacity>
@@ -186,14 +188,14 @@ class EditMymaps extends React.Component {
           <TouchableOpacity
             style={[styles.button, styles.buttonSm, styles.buttonSuccess]}
             onPress={() => {
-              this.props.navigation.navigate('AddMapDetail', { type: 'edit' });
+              this.props.navigation.navigate('AddMapDetail', {type: 'edit'});
             }}>
             <Text style={styles.buttonText}>Edit</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, styles.buttonSm, styles.buttonDanger]}
             onPress={() => {
-              this.setState({ showDeleteModal: true });
+              this.setState({showDeleteModal: true});
             }}>
             <Text style={styles.buttonText}>Delete</Text>
           </TouchableOpacity>
@@ -203,7 +205,11 @@ class EditMymaps extends React.Component {
   };
 
   fetchMaps() {
-    this.props.mapAction.fetchMyMaps({ user_id: this.props.userData.id, search: this.state.search, page: this.pageNo });
+    this.props.mapAction.fetchMyMaps({
+      user_id: this.props.userData.id,
+      search: this.state.search,
+      page: this.pageNo,
+    });
   }
 
   render() {
@@ -218,8 +224,7 @@ class EditMymaps extends React.Component {
         <ScrollView
           // style={styles.scrollView}
           showsHorizontalScrollIndicator={false}
-          keyboardShouldPersistTaps={'handled'}
-        >
+          keyboardShouldPersistTaps={'handled'}>
           <View style={styles.container}>
             <View style={styles.pageContent}>
               <View searchBar style={styles.searchbarCard}>
@@ -229,10 +234,12 @@ class EditMymaps extends React.Component {
                     style={styles.searchbarInput}
                     placeholder="Search your maps"
                     value={this.state.search}
-                    onChangeText={(search) => this.setState({ search })}
+                    onChangeText={search => this.setState({search})}
                   />
                 </Item>
-                <Button style={styles.searchbarCardButton} onPress={() => this.fetchMaps()}>
+                <Button
+                  style={styles.searchbarCardButton}
+                  onPress={() => this.fetchMaps()}>
                   <Feather
                     style={styles.searchbarCardButtonIcon}
                     name="arrow-right"
@@ -240,21 +247,31 @@ class EditMymaps extends React.Component {
                 </Button>
               </View>
 
-              {
-                this.props.myMaps && this.props.myMaps.length > 0 ?
-                  <Content style={styles.accordionCard}>
-                    <Accordion
-                      style={styles.accordionCardContent}
-                      dataArray={this.props.myMaps}
-                      renderHeader={this._renderHeader}
-                      renderContent={this._renderContent}
-                      onChange={this._updateSections}
-                      contentStyle={{ marginBottom: 10 }}
-                    />
-                  </Content>
-                  :
-                  <Text style={[styles.buttonText, { marginTop: 20, fontSize: 16, color: 'grey', alignSelf: 'center' }]}>No Maps Found.</Text>
-              }
+              {this.props.myMaps && this.props.myMaps.length > 0 ? (
+                <Content style={styles.accordionCard}>
+                  <Accordion
+                    style={styles.accordionCardContent}
+                    dataArray={this.props.myMaps}
+                    renderHeader={this._renderHeader}
+                    renderContent={this._renderContent}
+                    onChange={this._updateSections}
+                    contentStyle={{marginBottom: 10}}
+                  />
+                </Content>
+              ) : (
+                <Text
+                  style={[
+                    styles.buttonText,
+                    {
+                      marginTop: 20,
+                      fontSize: 16,
+                      color: 'grey',
+                      alignSelf: 'center',
+                    },
+                  ]}>
+                  No Maps Found.
+                </Text>
+              )}
             </View>
           </View>
         </ScrollView>
@@ -265,7 +282,7 @@ class EditMymaps extends React.Component {
           hasOverlay={true}
           animationDuration={1}
           onTouchOutside={() => {
-            this.setState({ changeCoverModal: false });
+            this.setState({changeCoverModal: false});
           }}
           dialogAnimation={
             new FadeAnimation({
@@ -275,7 +292,7 @@ class EditMymaps extends React.Component {
             })
           }
           onHardwareBackPress={() => {
-            this.setState({ changeCoverModal: false });
+            this.setState({changeCoverModal: false});
             return true;
           }}
           dialogStyle={styles.customPopup}>
@@ -286,7 +303,7 @@ class EditMymaps extends React.Component {
               </Text>
               <TouchableOpacity
                 style={styles.buttonClose}
-                onPress={() => this.setState({ changeCoverModal: false })}>
+                onPress={() => this.setState({changeCoverModal: false})}>
                 <Feather name={'x'} style={styles.buttonCloseIcon} />
               </TouchableOpacity>
             </View>
@@ -299,7 +316,7 @@ class EditMymaps extends React.Component {
                   styles.buttonUpload,
                 ]}
                 onPress={() => {
-                  this.setState({ uploadCoverModal: true });
+                  this.setState({uploadCoverModal: true});
                 }}>
                 <Text style={styles.buttonText}>Upload Image</Text>
               </Button>
@@ -307,7 +324,7 @@ class EditMymaps extends React.Component {
                 <CheckBox
                   checked={false}
                   color={'#BDBDBD'}
-                  style={{ borderRadius: 3, marginRight: 20 }}
+                  style={{borderRadius: 3, marginRight: 20}}
                 />
                 <Text style={styles.defaultImageCheckText}>Default Image</Text>
               </View>
@@ -321,7 +338,7 @@ class EditMymaps extends React.Component {
           hasOverlay={true}
           animationDuration={1}
           onTouchOutside={() => {
-            this.setState({ uploadCoverModal: false });
+            this.setState({uploadCoverModal: false});
           }}
           dialogAnimation={
             new FadeAnimation({
@@ -331,7 +348,7 @@ class EditMymaps extends React.Component {
             })
           }
           onHardwareBackPress={() => {
-            this.setState({ uploadCoverModal: false });
+            this.setState({uploadCoverModal: false});
             return true;
           }}
           dialogStyle={styles.customPopup}>
@@ -342,7 +359,7 @@ class EditMymaps extends React.Component {
               </Text>
               <TouchableOpacity
                 style={styles.buttonClose}
-                onPress={() => this.setState({ uploadCoverModal: false })}>
+                onPress={() => this.setState({uploadCoverModal: false})}>
                 <Feather name={'x'} style={styles.buttonCloseIcon} />
               </TouchableOpacity>
             </View>
@@ -350,7 +367,7 @@ class EditMymaps extends React.Component {
             <View style={[styles.coverImageCard]}>
               <Image
                 style={[styles.coverImageCardBox]}
-                source={{ uri: this.state.currentMap.cover_image }}
+                source={{uri: this.state.currentMap.cover_image}}
               />
               <View style={[styles.addPlusIcon]}>
                 <AntDesign name={'pluscircleo'} size={36} color={'#fff'} />
@@ -362,9 +379,9 @@ class EditMymaps extends React.Component {
                 styles.button,
                 styles.buttonPrimary,
                 styles.buttonLg,
-                { marginTop: 25 },
+                {marginTop: 25},
               ]}
-              onPress={() => this.setState({ saveToListModal: false })}>
+              onPress={() => this.setState({saveToListModal: false})}>
               <Text style={styles.buttonText}>Upload Image</Text>
             </TouchableOpacity>
           </DialogContent>
@@ -376,7 +393,7 @@ class EditMymaps extends React.Component {
           hasOverlay={true}
           animationDuration={1}
           onTouchOutside={() => {
-            this.setState({ showDeleteModal: false });
+            this.setState({showDeleteModal: false});
           }}
           dialogAnimation={
             new FadeAnimation({
@@ -386,7 +403,7 @@ class EditMymaps extends React.Component {
             })
           }
           onHardwareBackPress={() => {
-            this.setState({ showDeleteModal: false });
+            this.setState({showDeleteModal: false});
             return true;
           }}
           dialogStyle={styles.customPopup}>
@@ -395,7 +412,7 @@ class EditMymaps extends React.Component {
               <Text style={styles.customPopupHeaderTitle}>Delete Map</Text>
               <TouchableOpacity
                 style={styles.buttonClose}
-                onPress={() => this.setState({ showDeleteModal: false })}>
+                onPress={() => this.setState({showDeleteModal: false})}>
                 <Feather name={'x'} style={styles.buttonCloseIcon} />
               </TouchableOpacity>
             </View>
@@ -414,14 +431,14 @@ class EditMymaps extends React.Component {
                   styles.buttonOutlineGray,
                   styles.buttonDecline,
                 ]}
-                onPress={() => { }}>
+                onPress={() => {}}>
                 <Text style={[styles.buttonText, styles.buttonTextGray]}>
                   Decline
                 </Text>
               </Button>
               <Button
                 style={[styles.button, styles.buttonDanger, styles.buttonSave]}
-                onPress={() => { }}>
+                onPress={() => {}}>
                 <Text style={styles.buttonText}>Yes Sure</Text>
               </Button>
             </View>
@@ -437,7 +454,6 @@ function mapStateToProps(state) {
     userData: state.user.userData,
     categories: state.maps.categories,
     myMaps: state.maps.ownMaps,
-
   };
 }
 function mapDispatchToProps(dispatch) {
@@ -446,4 +462,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditMymaps);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(EditMymaps);

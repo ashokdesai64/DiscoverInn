@@ -8,13 +8,12 @@ const styles = StyleSheet.create({
   profileHeader: {
     flexDirection: 'row',
     paddingTop: 15,
-    paddingTop: 15,
     marginLeft: 15,
     marginRight: 15,
     height: 90,
     borderBottomWidth: 1,
     borderBottomColor: '#F2F2F2',
-    alignItems:'center'
+    alignItems: 'center',
   },
   profileHeader_img: {
     marginRight: 10,
@@ -31,7 +30,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ddd',
     borderRadius: 30,
     justifyContent: 'center',
-    alignItems:'center'
+    alignItems: 'center',
   },
   profileHeader_name: {
     fontSize: 14,

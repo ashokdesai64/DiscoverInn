@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, {Fragment} from 'react';
 import {
   View,
   Text,
@@ -13,8 +13,8 @@ import Feather from 'react-native-vector-icons/Feather';
 import styles from './Unauthscreens.style';
 
 //REDUX
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import * as authActions from './../../actions/authActions';
 class SetPassScreen extends React.Component {
   constructor(props) {
@@ -31,9 +31,13 @@ class SetPassScreen extends React.Component {
   }
 
   signUp() {
-    const { password, confirmPassword, firstname, lastname, email } = this.state;
+    const {password, confirmPassword, firstname, lastname, email} = this.state;
     if (!password) {
       alert('Please enter password.');
+      return;
+    }
+    if (password.length < 6) {
+      alert('Password must be 6 characters.');
       return;
     }
     if (!confirmPassword) {
@@ -44,25 +48,29 @@ class SetPassScreen extends React.Component {
       alert('Passwords do not match.');
       return;
     }
-    this.setState({ signingUp: true });
+    this.setState({signingUp: true});
 
     if (this.state.fromDeepLink) {
       this.props.authAction
-        .setPassword({ email, new_password: password, confirm_password: password })
+        .setPassword({
+          email,
+          new_password: password,
+          confirm_password: password,
+        })
         .then(d => {
-          this.props.authAction.userLogin(email, new_password)
+          this.props.authAction.userLogin(email, new_password);
         })
         .catch(e => {
           alert(JSON.stringify(e));
-          this.setState({ signingUp: false });
+          this.setState({signingUp: false});
         });
     } else {
       this.props.authAction
-        .userSignup({ email, password, firstname, lastname })
+        .userSignup({email, password, firstname, lastname})
         .then(d => this.props.navigation.navigate('LoginScreen'))
         .catch(e => {
           alert(JSON.stringify(e));
-          this.setState({ signingUp: false });
+          this.setState({signingUp: false});
         });
     }
   }
@@ -72,9 +80,11 @@ class SetPassScreen extends React.Component {
       <Fragment>
         <ImageBackground
           source={require('../../Images/signup-bg-dark.jpg')}
-          style={{ flex: 1 }}>
-          <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView style={styles.unauthContent}>
+          style={{flex: 1}}>
+          <SafeAreaView style={{flex: 1}}>
+            <ScrollView
+              keyboardShouldPersistTaps="handled"
+              style={styles.unauthContent}>
               <Text style={styles.logoText}>Discover - Inn</Text>
               <View style={styles.unauthForm}>
                 <Text style={styles.formTitle}>Set Password</Text>
@@ -84,7 +94,7 @@ class SetPassScreen extends React.Component {
                     style={styles.formControl}
                     secureTextEntry={true}
                     onChangeText={password =>
-                      this.setState({ password: password.trim() })
+                      this.setState({password: password.trim()})
                     }
                     autoCapitalize={'none'}
                   />
@@ -94,7 +104,7 @@ class SetPassScreen extends React.Component {
                   <TextInput
                     style={styles.formControl}
                     onChangeText={confirmPassword =>
-                      this.setState({ confirmPassword: confirmPassword.trim() })
+                      this.setState({confirmPassword: confirmPassword.trim()})
                     }
                     autoCapitalize={'none'}
                     secureTextEntry={true}
@@ -109,7 +119,9 @@ class SetPassScreen extends React.Component {
                   {this.state.signingUp ? (
                     <ActivityIndicator size="small" color="#fff" />
                   ) : (
-                    <Text style={styles.buttonText}>{this.state.fromDeepLink ? 'Submit' : 'Sign Up'}</Text>
+                    <Text style={styles.buttonText}>
+                      {this.state.fromDeepLink ? 'Submit' : 'Sign Up'}
+                    </Text>
                   )}
                 </TouchableOpacity>
               </View>

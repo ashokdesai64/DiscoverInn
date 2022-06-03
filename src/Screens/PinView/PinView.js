@@ -27,8 +27,8 @@ const DEVICE_HEIGHT = Dimensions.get('window').height;
 const DEVICE_WIDTH = Dimensions.get('window').width;
 import Spinner from '../../components/Loader';
 import styles from './PinView.styles';
-import KeyboardSpacer from './KeyboardSpacer'
-import ZoomImage from './zoomImage'
+import KeyboardSpacer from './KeyboardSpacer';
+import ZoomImage from './zoomImage';
 //REDUX
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -55,7 +55,7 @@ class PinView extends React.Component {
       isOffline: params.isOffline,
       mapPins: [],
       firstItem: 0,
-      keyboardHeight: 0
+      keyboardHeight: 0,
     };
   }
 
@@ -121,7 +121,10 @@ class PinView extends React.Component {
 
   _renderItemCate = ({ item, index }) => {
     return (
-      <TouchableWithoutFeedback onPress={() => this.setState({ zoomImage: item.image || item.thumb_image })} >
+      <TouchableWithoutFeedback
+        onPress={() =>
+          this.setState({ zoomImage: item.image || item.thumb_image })
+        }>
         <ImageBlurLoading
           withIndicator
           style={styles.cateSlideCardIcon}
@@ -156,8 +159,7 @@ class PinView extends React.Component {
             this.props.mapAction.fetchTripList();
           });
         })
-        .catch(err => {
-        });
+        .catch(err => { });
     }
   }
 
@@ -184,7 +186,11 @@ class PinView extends React.Component {
           .then(data => {
             this.props.mapAction.fetchTripList();
             this.setState(
-              { saveToListModal: false, creatingTripList: false, tripInputFocus: false },
+              {
+                saveToListModal: false,
+                creatingTripList: false,
+                tripInputFocus: false,
+              },
               () => {
                 this.fetchSinglePinData();
               },
@@ -192,12 +198,20 @@ class PinView extends React.Component {
           })
           .catch(err => {
             alert(err);
-            this.setState({ saveToListModal: false, tripInputFocus: false, creatingTripList: false });
+            this.setState({
+              saveToListModal: false,
+              tripInputFocus: false,
+              creatingTripList: false,
+            });
           });
       })
       .catch(err => {
         alert(err);
-        this.setState({ saveToListModal: false, tripInputFocus: false, creatingTripList: false });
+        this.setState({
+          saveToListModal: false,
+          tripInputFocus: false,
+          creatingTripList: false,
+        });
       });
   }
 
@@ -230,9 +244,12 @@ class PinView extends React.Component {
     } else {
       // alert('Please Log In to access this feature');
       Alert.alert('', 'Please Log In to access this feature', [
-        { text: 'Log In', onPress: () => this.props.navigation.navigate('LoginScreen') },
-        { text: 'OK' }
-      ])
+        {
+          text: 'Log In',
+          onPress: () => this.props.navigation.navigate('LoginScreen'),
+        },
+        { text: 'OK' },
+      ]);
     }
   }
 
@@ -324,7 +341,9 @@ class PinView extends React.Component {
           borderRadius: 100,
         }}
         nestedScrollEnabled={true}>
-        <Text style={styles.pinViewTitle}>{index + 1 + '. ' + nameSplit[0]}{' '}</Text>
+        <Text style={styles.pinViewTitle}>
+          {index + 1 + '. ' + nameSplit[0]}{' '}
+        </Text>
         <View style={styles.pinViewCate}>
           <IconMoon
             name={categoryName.toLowerCase()}
@@ -431,13 +450,18 @@ class PinView extends React.Component {
             this.setState({ saveToListModal: false, tripInputFocus: false });
             return true;
           }}
-          dialogStyle={[styles.customPopup, { bottom: this.state.tripInputFocus ? this.state.keyboardHeight : 0 }]}>
+          dialogStyle={[
+            styles.customPopup,
+            { bottom: this.state.tripInputFocus ? this.state.keyboardHeight : 0 },
+          ]}>
           <DialogContent style={styles.customPopupContent}>
             <View style={styles.customPopupHeader}>
               <Text style={styles.customPopupHeaderTitle}>Save to list</Text>
               <TouchableOpacity
                 style={styles.buttonClose}
-                onPress={() => this.setState({ saveToListModal: false, tripInputFocus: false })}>
+                onPress={() =>
+                  this.setState({ saveToListModal: false, tripInputFocus: false })
+                }>
                 <Feather style={styles.buttonCloseIcon} name={'x'} />
               </TouchableOpacity>
             </View>
@@ -507,7 +531,9 @@ class PinView extends React.Component {
                   styles.buttonCTCancel,
                   styles.buttonOutline,
                 ]}
-                onPress={() => this.setState({ saveToListModal: false, tripInputFocus: false })}>
+                onPress={() =>
+                  this.setState({ saveToListModal: false, tripInputFocus: false })
+                }>
                 <Text style={[styles.buttonText, styles.buttonTextDark]}>
                   Cancel
                 </Text>
@@ -530,17 +556,23 @@ class PinView extends React.Component {
             <KeyboardSpacer />
           </DialogContent>
         </Dialog>
-        {this.state.zoomImage &&
+        {this.state.zoomImage && (
           <ZoomImage
             closeModal={() => this.setState({ zoomImage: null })}
             uri={this.state.zoomImage}
             navigation={this.props.navigation}
             isOffline={this.state.isOffline}
             isSaved={this.state.isSaved}
-            removeFromTrip={() => this.setState({ zoomImage: null }, () => this.removeFromTrip(this.state.isSaved))}
-            openSaveToListModal={() => this.setState({ zoomImage: null }, () => this.openSaveToListModal())}
+            removeFromTrip={() =>
+              this.setState({ zoomImage: null }, () =>
+                this.removeFromTrip(this.state.isSaved),
+              )
+            }
+            openSaveToListModal={() =>
+              this.setState({ zoomImage: null }, () => this.openSaveToListModal())
+            }
           />
-        }
+        )}
       </>
     );
   }

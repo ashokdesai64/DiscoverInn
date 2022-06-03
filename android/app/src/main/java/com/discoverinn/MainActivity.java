@@ -6,9 +6,12 @@ import com.facebook.react.ReactRootView;
 import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
+
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import org.devio.rn.splashscreen.SplashScreen;
 
 public class MainActivity extends ReactActivity {
 
@@ -20,6 +23,11 @@ public class MainActivity extends ReactActivity {
   protected String getMainComponentName() {
     return "DiscoverInn";
   }
+ @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        SplashScreen.show(this);  // here
+        super.onCreate(savedInstanceState);
+    }
 
   @Override
   protected ReactActivityDelegate createReactActivityDelegate() {

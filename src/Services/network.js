@@ -24,16 +24,22 @@ export async function callAPI(url, data, method = 'POST') {
     // console.log('body >>>>', formData);
     try {
       let response = await fetch(url, apiSkeleton);
-
       try {
         let apiResponse = await response.json();
-        // console.log('response >>>>', apiResponse);
         resolve(apiResponse);
-      } catch (error) {
-        reject({ error, status: false });
+      } catch (err) {
+        if (err === '[TypeError: Network request failed]') {
+          reject({err: 'No Internet Connection', status: false});
+        } else {
+          reject({err: err, status: false});
+        }
       }
     } catch (err) {
-      reject({ err, status: false });
+      if (err === '[TypeError: Network request failed]') {
+        reject({err: 'No Internet Connection', status: false});
+      } else {
+        reject({err: err, status: false});
+      }
     }
   });
 }

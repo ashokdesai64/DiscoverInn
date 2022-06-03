@@ -4,7 +4,13 @@ import {apiUrls} from './../config/api';
 export function loadPopularAndRated() {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.popularAndRated, {}, 'GET');
+      let response;
+      try {
+        response = await callAPI(apiUrls.popularAndRated, {}, 'GET');
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         dispatch({
           type: 'popularMaps',
@@ -25,7 +31,13 @@ export function loadPopularAndRated() {
 export function loadCategories() {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.getCategories, {}, 'GET');
+      let response;
+      try {
+        response = await callAPI(apiUrls.getCategories, {}, 'GET');
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         dispatch({
           type: 'categories',
@@ -42,7 +54,13 @@ export function loadCategories() {
 export function loadTravelTypes() {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.getTravelType, {}, 'GET');
+      let response;
+      try {
+        response = await callAPI(apiUrls.getTravelType, {}, 'GET');
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         dispatch({
           type: 'travelTypes',
@@ -59,7 +77,13 @@ export function loadTravelTypes() {
 export function loadBudgetList() {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.getBudgetList, {}, 'GET');
+      let response;
+      try {
+        response = await callAPI(apiUrls.getBudgetList, {}, 'GET');
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         dispatch({
           type: 'budgetLists',
@@ -76,7 +100,13 @@ export function loadBudgetList() {
 export function loadAgeList() {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.getAgeList, {}, 'GET');
+      let response;
+      try {
+        response = await callAPI(apiUrls.getAgeList, {}, 'GET');
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         dispatch({
           type: 'ageLists',
@@ -93,7 +123,13 @@ export function loadAgeList() {
 export function loadCreatedWithin() {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.getCreatedWithin, {}, 'GET');
+      let response;
+      try {
+        response = await callAPI(apiUrls.getCreatedWithin, {}, 'GET');
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         dispatch({
           type: 'createdWithins',
@@ -110,7 +146,13 @@ export function loadCreatedWithin() {
 export function fetchMyFirstMaps(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.myMaps, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.myMaps, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         dispatch({
           type: 'ownMaps',
@@ -132,7 +174,13 @@ export function fetchMyFirstMaps(apiData) {
 export function fetchMyMaps(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.myMaps, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.myMaps, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       let oldMaps = getState().maps.ownMaps;
       if (response.status) {
         let newMaps = [...oldMaps, ...response.data];
@@ -161,13 +209,19 @@ export function fetchTripList() {
       let userData = getState().user && getState().user.userData;
 
       if (userData && userData.id) {
-        let response = await callAPI(apiUrls.tripList, { user_id: userData.id });
+        let response;
+        try {
+          response = await callAPI(apiUrls.tripList, {user_id: userData.id});
+        } catch (err) {
+          reject(err.err);
+          return;
+        }
         if (response.status) {
           dispatch({
             type: 'tripList',
             tripList: response.data,
           });
-          resolve({data:response.data,total_pins:response.total_pins});
+          resolve({data: response.data, total_pins: response.total_pins});
         } else {
           dispatch({
             type: 'tripList',
@@ -187,7 +241,13 @@ export function fetchMapList(apiData) {
       mapListLoaded: false,
     });
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.mapList, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.mapList, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       dispatch({
         type: 'mapListLoaded',
         mapListLoaded: true,
@@ -203,15 +263,19 @@ export function fetchMapList(apiData) {
         });
         resolve(response.data);
       } else {
-        dispatch({
-          type: 'mapList',
-          mapList: [],
-        });
-        dispatch({
-          type: 'mapListCount',
-          mapListCount: '0',
-        });
-        reject(response.message);
+        if (apiData.page <= 1) {
+          dispatch({
+            type: 'mapList',
+            mapList: [],
+          });
+          dispatch({
+            type: 'mapListCount',
+            mapListCount: '0',
+          });
+          reject(response.message);
+        } else {
+          resolve(response.data);
+        }
       }
     });
   };
@@ -224,7 +288,13 @@ export function fetchUserMapList(apiData) {
       mapListLoaded: false,
     });
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.searchUserMaps, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.searchUserMaps, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       dispatch({
         type: 'mapListLoaded',
         mapListLoaded: true,
@@ -257,7 +327,13 @@ export function fetchUserMapList(apiData) {
 export function fetchMyReviews(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.yourReviews, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.yourReviews, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         dispatch({
           type: 'myReviews',
@@ -278,7 +354,13 @@ export function fetchMyReviews(apiData) {
 export function fetchVisitorReviews(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.visitorReviews, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.visitorReviews, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         dispatch({
           type: 'visitorReviews',
@@ -299,7 +381,13 @@ export function fetchVisitorReviews(apiData) {
 export function addMyMap(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.addMyMap, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.addMyMap, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status && response.map_id) {
         resolve({mapID: response.map_id});
       } else {
@@ -313,7 +401,13 @@ export function addMapPin(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
       try {
-        let response = await callAPI(apiUrls.addMapPin, apiData);
+        let response;
+        try {
+          response = await callAPI(apiUrls.addMapPin, apiData);
+        } catch (err) {
+          reject(err.err);
+          return;
+        }
         if (response.status) {
           resolve({mapID: response.data});
         } else {
@@ -329,8 +423,13 @@ export function addMapPin(apiData) {
 export function getMapPins(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.getMapPins, apiData);
-
+      let response;
+      try {
+        response = await callAPI(apiUrls.getMapPins, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         resolve({mapID: response.data});
       } else {
@@ -343,8 +442,13 @@ export function getMapPins(apiData) {
 export function fetchMapPinList(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.getMapPinsList, apiData);
-
+      let response;
+      try {
+        response = await callAPI(apiUrls.getMapPinsList, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response && response.status) {
         resolve({mapID: response.data});
       } else {
@@ -357,21 +461,27 @@ export function fetchMapPinList(apiData) {
 export function addReview(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.addReview, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.addReview, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         resolve({mapID: response.data});
-        const currentMaps = [...getState().maps.mapList]
+        const currentMaps = [...getState().maps.mapList];
         currentMaps.map(map => {
-          if(map.id == apiData.map_id){
-            let oldReviewCount = map['total_review']
-            let oldAvg = map['avrage_review']|0
-            map['total_review'] = oldReviewCount+1;
+          if (map.id == apiData.map_id) {
+            let oldReviewCount = map['total_review'];
+            let oldAvg = map['avrage_review'] | 0;
+            map['total_review'] = oldReviewCount + 1;
             map['avrage_review'] = Math.round(
-              ((oldAvg*oldReviewCount)+apiData.ratings) / map['total_review']
-            )
+              (oldAvg * oldReviewCount + apiData.ratings) / map['total_review'],
+            );
           }
-          return map
-        })
+          return map;
+        });
         dispatch({
           type: 'mapList',
           mapList: currentMaps,
@@ -386,8 +496,13 @@ export function addReview(apiData) {
 export function deleteReview(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.deleteReview, apiData);
-
+      let response;
+      try {
+        response = await callAPI(apiUrls.deleteReview, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         let reviews = getState().maps.myReviews;
         let filteredReviews = reviews.filter(
@@ -408,8 +523,13 @@ export function deleteReview(apiData) {
 export function editReview(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.editReview, apiData);
-
+      let response;
+      try {
+        response = await callAPI(apiUrls.editReview, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         let allReviews = getState().maps.myReviews;
         allReviews.map(review => {
@@ -431,8 +551,13 @@ export function editReview(apiData) {
 export function updateMapName(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.updateMapTitle, apiData);
-
+      let response;
+      try {
+        response = await callAPI(apiUrls.updateMapTitle, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         resolve({data: response.data});
       } else {
@@ -445,7 +570,13 @@ export function updateMapName(apiData) {
 export function updateMyMap(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.updateMapDetails, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.updateMapDetails, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         resolve({response});
       } else {
@@ -458,7 +589,13 @@ export function updateMyMap(apiData) {
 export function updateCoverImage(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.updateCoverImage, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.updateCoverImage, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         resolve(response);
       } else {
@@ -471,7 +608,13 @@ export function updateCoverImage(apiData) {
 export function removeMap(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.removeMap, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.removeMap, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         let oldMaps = getState().maps.ownMaps || [];
         let maps = [...oldMaps];
@@ -492,11 +635,21 @@ export function removeMap(apiData) {
 export function getMapPinsList(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.getMapPins, apiData);
-      if (response.status) {
-        resolve({data:response.data,pin_count:response.total_pins});
-      } else {
-        reject(response.message);
+      try {
+        let response;
+        try {
+          response = await callAPI(apiUrls.getMapPins, apiData);
+        } catch (err) {
+          reject(err.err);
+          return;
+        }
+        if (response.status) {
+          resolve({data: response.data, pin_count: response.total_pins});
+        } else {
+          reject(response.message);
+        }
+      } catch (err) {
+        reject(err);
       }
     });
   };
@@ -505,7 +658,13 @@ export function getMapPinsList(apiData) {
 export function deleteMapPin(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.deleteMapPin, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.deleteMapPin, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         resolve(response.data);
       } else {
@@ -518,7 +677,13 @@ export function deleteMapPin(apiData) {
 export function addPinFromTripList(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.addPinFromTripList, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.addPinFromTripList, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         resolve(response.data);
       } else {
@@ -531,7 +696,13 @@ export function addPinFromTripList(apiData) {
 export function getSinglePinData(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.getSinglePin, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.getSinglePin, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         resolve(response.data);
       } else {
@@ -544,7 +715,13 @@ export function getSinglePinData(apiData) {
 export function removeSinglePinImage(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.removeSinglePinImage, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.removeSinglePinImage, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         resolve(response.data);
       } else {
@@ -557,7 +734,13 @@ export function removeSinglePinImage(apiData) {
 export function updateMapPin(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.updateMapPin, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.updateMapPin, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         resolve(response.data);
       } else {
@@ -570,7 +753,13 @@ export function updateMapPin(apiData) {
 export function createFavouriteList(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.createFavouriteList, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.createFavouriteList, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         resolve(response);
       } else {
@@ -583,7 +772,13 @@ export function createFavouriteList(apiData) {
 export function deleteFavouriteList(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.deleteFavouriteList, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.deleteFavouriteList, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         let tripLists = getState().maps.tripList || [];
         let lists = [...tripLists];
@@ -604,7 +799,13 @@ export function deleteFavouriteList(apiData) {
 export function updateFavouriteList(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.updateFavouriteList, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.updateFavouriteList, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         resolve(response.data);
       } else {
@@ -617,7 +818,13 @@ export function updateFavouriteList(apiData) {
 export function singleFavouritePinList(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.singleFavouritePinList, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.singleFavouritePinList, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         resolve(response.data);
       } else {
@@ -630,7 +837,13 @@ export function singleFavouritePinList(apiData) {
 export function addRemoveToTrip(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.addRemovePinToFavourite, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.addRemovePinToFavourite, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         resolve(response.data);
       } else {
@@ -640,11 +853,30 @@ export function addRemoveToTrip(apiData) {
   };
 }
 
-export function changeMapStatus(apiData) {
+export function changeMapStatus(apiData, val) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.changeMapStatus, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.changeMapStatus, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
+        const oldData = getState().maps.ownMaps;
+        const currentData = oldData.map(function(x) {
+          if (x.id == apiData.map_id) {
+            return {...x, status: val ? '1' : '0'};
+          } else {
+            return x;
+          }
+        });
+        dispatch({
+          type: 'ownMaps',
+          fetchingMaps: false,
+          ownMaps: currentData,
+        });
         resolve(response.data);
       } else {
         reject(response.message);
@@ -656,7 +888,13 @@ export function changeMapStatus(apiData) {
 export function shareMap(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.shareMap, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.shareMap, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         resolve(response.data);
       } else {
@@ -669,7 +907,13 @@ export function shareMap(apiData) {
 export function fetchAllUserNames(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.fetchAllUserNames, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.fetchAllUserNames, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         dispatch({
           type: 'allUserNames',
@@ -690,7 +934,13 @@ export function fetchAllUserNames(apiData) {
 export function sharedMapsList(apiData) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
-      let response = await callAPI(apiUrls.sharedMapsList, apiData);
+      let response;
+      try {
+        response = await callAPI(apiUrls.sharedMapsList, apiData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
       if (response.status) {
         resolve(response.data);
       } else {
@@ -724,8 +974,8 @@ export function storeOfflineMapData({mapData, pinData, bounds, pinList}) {
 export function removeOfflineMapData(mapData) {
   return function(dispatch, getState) {
     return new Promise((resolve, reject) => {
-        let offlineMaps = getState().maps.offlineMaps || [];
-        let maps = [...offlineMaps];
+      let offlineMaps = getState().maps.offlineMaps || [];
+      let maps = [...offlineMaps];
       let isAlreadyDownloadedIndex = maps.findIndex(
         d => d.mapData.id == mapData.id,
       );

@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Linking } from 'react-native';
+import React, {useEffect} from 'react';
+import {Linking} from 'react-native';
 import {
   SafeAreaView,
   View,
@@ -9,7 +9,7 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import DeepLinking from 'react-native-deep-linking';
 const DEVICE_WIDTH = Dimensions.get('window').width;
 
@@ -21,8 +21,8 @@ const FirstScreen = props => {
   useEffect(() => {
     DeepLinking.addScheme('discoverinn://');
 
-    DeepLinking.addRoute('/maps/:email', (response) => {
-      navigate('SetPassScreen', { email: response.email, deepLink: true });
+    DeepLinking.addRoute('/maps/:email', response => {
+      navigate('SetPassScreen', {email: response.email, deepLink: true});
     });
 
     Linking.addEventListener('url', handleUrl);
@@ -31,8 +31,8 @@ const FirstScreen = props => {
     return () => Linking.removeEventListener('url', handleUrl);
   }, []);
 
-  const handleUrl = ({ url }) => {
-    Linking.canOpenURL(url).then((supported) => {
+  const handleUrl = ({url}) => {
+    Linking.canOpenURL(url).then(supported => {
       if (supported) {
         DeepLinking.evaluateUrl(url);
       }
@@ -40,20 +40,19 @@ const FirstScreen = props => {
   };
 
   const handleDeepLinkingRequests = () => {
-    Linking.getInitialURL()
-      .then(handleOpenURL)
+    Linking.getInitialURL().then(handleOpenURL);
   };
 
   const handleOpenURL = data => {
     let finalUrl = data?.url || data;
     if (finalUrl) {
-      const { navigate } = props.navigation;
+      const {navigate} = props.navigation;
       const route = finalUrl.replace(/.*?:\/\//g, '');
       const email = route.match(/\/([^\/]+)\/?$/)[1];
       const routeName = route.split('/')[0];
 
       if (routeName === 'maps') {
-        navigate('SetPassScreen', { email, deepLink: true });
+        navigate('SetPassScreen', {email, deepLink: true});
       }
     }
   };
@@ -69,7 +68,7 @@ const FirstScreen = props => {
   };
 
   const onSignIn = () => {
-    dispatch({ type: 'introCompleted', value: true });
+    dispatch({type: 'introCompleted', value: true});
     props.navigation.navigate('SignupScreen');
   };
 
@@ -88,7 +87,7 @@ const FirstScreen = props => {
           style={styles.pageLogo}
         />
         <View style={styles.infoContainer}>
-          <Text style={[styles.headerTitle, { fontWeight: 'bold' }]}>
+          <Text style={[styles.headerTitle, {fontWeight: 'bold'}]}>
             Welcome to Discover-inn
           </Text>
           <Text style={styles.infoText}>
@@ -97,9 +96,7 @@ const FirstScreen = props => {
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={[styles.button]}
-          onPress={startWalkthrough}>
+        <TouchableOpacity style={[styles.button]} onPress={startWalkthrough}>
           <Text style={styles.buttonText}>GET STARTED</Text>
         </TouchableOpacity>
       </View>

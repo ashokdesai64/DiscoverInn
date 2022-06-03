@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { View, BackHandler, Alert } from 'react-native';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import React, {Component} from 'react';
+import {View, Text} from 'react-native';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import * as userActions from './../actions/authActions';
 import * as mapActions from './../actions/mapActions';
 
@@ -62,11 +62,14 @@ class DefaultScreen extends Component {
         user_id: this.props.userData.id,
         page: 1,
       });
-      this.props.mapAction.fetchVisitorReviews({ user_id: this.props.userData.id, page: 1 });
+      this.props.mapAction.fetchVisitorReviews({
+        user_id: this.props.userData.id,
+        page: 1,
+      });
     }
 
     if (this.props && !this.props.allUserNames) {
-      this.props.mapAction.fetchAllUserNames({ user_id: 1, page: 1 });
+      this.props.mapAction.fetchAllUserNames({user_id: 1, page: 1});
     }
   }
 
@@ -75,7 +78,7 @@ class DefaultScreen extends Component {
   }
 
   render() {
-    return <View style={{ flex: 1, backgroundColor: '#fff' }} />;
+    return <View style={{flex: 1, backgroundColor: '#fff'}} />;
   }
 }
 

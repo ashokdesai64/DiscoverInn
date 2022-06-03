@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const DEVICE_WIDTH = Dimensions.get('window').width;
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     // bottom: 0,
     // right: 0,
     // left: 0,
-    display:'flex',
+    display: 'flex',
     flex: 1,
     // width: DEVICE_WIDTH,
   },
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
   myTravelNameText: {
     fontFamily: 'Montserrat-Medium',
@@ -188,8 +188,8 @@ const styles = StyleSheet.create({
   },
   coverImage: {
     height: 150,
-    width:DEVICE_WIDTH-30,
-    borderRadius: 10
+    width: DEVICE_WIDTH - 30,
+    borderRadius: 10,
   },
   uploadCoverCardText: {
     color: '#2F80ED',

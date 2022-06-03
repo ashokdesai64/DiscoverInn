@@ -1,6 +1,13 @@
-import React, { Fragment } from 'react';
-import { View, Text, KeyboardAvoidingView, ScrollView, ImageBackground, TouchableOpacity, } from 'react-native';
-import { ListItem, Picker, Textarea } from 'native-base';
+import React, {Fragment} from 'react';
+import {
+  View,
+  Text,
+  KeyboardAvoidingView,
+  ScrollView,
+  ImageBackground,
+  TouchableOpacity,
+} from 'react-native';
+import {ListItem, Picker, Textarea} from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import Header from '../../../components/header/header';
 import styles from './EditMyTravelDetails.style';
@@ -8,22 +15,24 @@ import ImagePicker from 'react-native-image-picker';
 import Spinner from '../../../components/Loader';
 import moment from 'moment';
 //REDUX
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
 import * as mapActions from '../../../actions/mapActions';
-const currentYear = new Date().getFullYear()
-const year = Array(currentYear - 1999).fill('').map((v, i) => (i + 2000).toString()).reverse()
+const currentYear = new Date().getFullYear();
+const year = Array(currentYear - 1999)
+  .fill('')
+  .map((v, i) => (i + 2000).toString())
+  .reverse();
 class EditMyTravelDetails extends React.Component {
-
   constructor(props) {
     super(props);
 
-    const { params } = props.navigation.state;
+    const {params} = props.navigation.state;
 
-    let travelMonth = '', travelYear = '';
+    let travelMonth = '',
+      travelYear = '';
     if (params.type == 'edit') {
-
       let momentMonth = moment(params.mapData.date_of_travel).month();
       let momentYear = moment(params.mapData.date_of_travel).year();
 
@@ -44,20 +53,19 @@ class EditMyTravelDetails extends React.Component {
       year: `${travelYear}`,
       addMapInProgress: false,
     };
-
   }
 
   change_month = month => {
-    this.setState({ month: month });
+    this.setState({month: month});
   };
   change_year = year => {
-    this.setState({ year: year });
+    this.setState({year: year});
   };
 
   openImagePicker() {
     const options = {
       title: 'Select Avatar',
-      customButtons: [{ name: 'fb', title: 'Choose Photo from Gallery' }],
+      customButtons: [{name: 'fb', title: 'Choose Photo from Gallery'}],
       permissionDenied: {
         title: 'Give permission',
         text: 'Text',
@@ -78,22 +86,22 @@ class EditMyTravelDetails extends React.Component {
   }
 
   updateMap() {
-    const { params } = this.props.navigation.state;
+    const {params} = this.props.navigation.state;
     const {
       selectedAge,
       selectedBudget,
       travelType,
       month,
       year,
-      mapDescription
+      mapDescription,
     } = this.state;
 
-    this.setState({ addMapInProgress: true });
+    this.setState({addMapInProgress: true});
 
     let addMapObject = {
       user_id: this.props.userData.id,
       description: mapDescription,
-      map_id: params.mapData.id
+      map_id: params.mapData.id,
     };
 
     if (travelType) {
@@ -115,18 +123,28 @@ class EditMyTravelDetails extends React.Component {
     this.props.mapAction
       .updateMyMap(addMapObject)
       .then(data => {
-        this.props.mapAction.getMapPins({ user_id: this.props.userData.id, map_id: params.mapData.id }).then((data) => {
-          this.setState({ addMapInProgress: false }, () => {
-            this.props.mapAction.fetchMyMaps({ user_id: this.props.userData.id, search: '', page: 1 });
-            this.props.navigation.state.params.setMapData(data && data.mapID);
-            this.props.navigation.goBack()
+        this.props.mapAction
+          .getMapPins({
+            user_id: this.props.userData.id,
+            map_id: params.mapData.id,
+          })
+          .then(data => {
+            this.setState({addMapInProgress: false}, () => {
+              this.props.mapAction.fetchMyMaps({
+                user_id: this.props.userData.id,
+                search: '',
+                page: 1,
+              });
+              this.props.navigation.state.params.setMapData(data && data.mapID);
+              this.props.navigation.goBack();
+            });
+          })
+          .catch(err => {
+            this.props.navigation.goBack();
           });
-        }).catch(err => {
-          this.props.navigation.goBack()
-        })
       })
       .catch(err => {
-        this.setState({ addMapInProgress: false }, () => {
+        this.setState({addMapInProgress: false}, () => {
           alert(err);
         });
       });
@@ -134,12 +152,12 @@ class EditMyTravelDetails extends React.Component {
 
   render() {
     console.log('this.state.year', this.state.year);
-    const { params } = this.props.navigation.state;
+    const {params} = this.props.navigation.state;
     return (
       <Fragment>
         <ImageBackground
           source={require('../../../Images/map-bg.png')}
-          style={{ width: '100%', height: '100%' }}>
+          style={{width: '100%', height: '100%'}}>
           <Header
             showBack={true}
             title={params.mapData.name}
@@ -151,14 +169,14 @@ class EditMyTravelDetails extends React.Component {
           <Spinner
             visible={this.state.addMapInProgress}
             textContent={'Updating Map...'}
-            textStyle={{ color: '#fff' }}
+            textStyle={{color: '#fff'}}
           />
           <View style={styles.pageContent}>
             <ScrollView
               showsHorizontalScrollIndicator={false}
               showsVerticalScrollIndicator={false}
               keyboardShouldPersistTaps={'handled'}
-            // contentContainerStyle={{ height: '100%' }}
+              // contentContainerStyle={{ height: '100%' }}
             >
               <View style={styles.formGroup}>
                 <Text style={styles.formLabel}>Description</Text>
@@ -168,7 +186,7 @@ class EditMyTravelDetails extends React.Component {
                     style={styles.formControlTextarea}
                     value={this.state.mapDescription}
                     onChangeText={mapDescription => {
-                      this.setState({ mapDescription });
+                      this.setState({mapDescription});
                     }}
                   />
                 </KeyboardAvoidingView>
@@ -187,7 +205,7 @@ class EditMyTravelDetails extends React.Component {
                               : styles.UnCheckboxBlue,
                           ]}
                           onPress={() =>
-                            this.setState({ travelType: travelType.id })
+                            this.setState({travelType: travelType.id})
                           }>
                           <Text
                             style={[
@@ -222,7 +240,7 @@ class EditMyTravelDetails extends React.Component {
                                 : styles.UnCheckboxGreen,
                             ]}
                             onPress={() =>
-                              this.setState({ selectedBudget: budget.value })
+                              this.setState({selectedBudget: budget.value})
                             }>
                             <Text
                               style={[
@@ -254,7 +272,7 @@ class EditMyTravelDetails extends React.Component {
                                 : styles.UnCheckboxYellow,
                             ]}
                             onPress={() =>
-                              this.setState({ selectedAge: age.value })
+                              this.setState({selectedAge: age.value})
                             }>
                             <Text
                               style={[
@@ -276,7 +294,7 @@ class EditMyTravelDetails extends React.Component {
                 <View style={[styles.formGroup, styles.picker]}>
                   <Picker
                     style={styles.formDropdown}
-                    placeholderStyle={{ color: '#2874F0' }}
+                    placeholderStyle={{color: '#2874F0'}}
                     selectedValue={this.state.month}
                     textStyle={styles.dropdownText}
                     onValueChange={this.change_month}
@@ -317,16 +335,12 @@ class EditMyTravelDetails extends React.Component {
                       />
                     }>
                     <Picker.Item label="Year" value="" />
-                    {
-                      year.map(y => (
-                        <Picker.Item key={y} label={y} value={y} />
-                      ))
-                    }
+                    {year.map(y => (
+                      <Picker.Item key={y} label={y} value={y} />
+                    ))}
                   </Picker>
                 </View>
-
               </View>
-
 
               <View style={styles.actionButton}>
                 <TouchableOpacity
@@ -335,8 +349,7 @@ class EditMyTravelDetails extends React.Component {
                     styles.buttonOutline,
                     styles.buttonEditMapDetail,
                   ]}
-                  onPress={() => this.props.navigation.goBack()}
-                >
+                  onPress={() => this.props.navigation.goBack()}>
                   <Text style={styles.buttonTextGray}>Cancel</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -345,14 +358,12 @@ class EditMyTravelDetails extends React.Component {
                     styles.buttonPrimary,
                     styles.buttonEditPin,
                   ]}
-                  onPress={() => this.updateMap()}
-                >
+                  onPress={() => this.updateMap()}>
                   <Text style={styles.buttonText}>Save</Text>
                 </TouchableOpacity>
               </View>
             </ScrollView>
           </View>
-
         </ImageBackground>
       </Fragment>
     );

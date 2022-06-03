@@ -145,7 +145,6 @@ class OfflineMaps extends React.Component {
           style={styles.mapSlideCardHeader}
           activeOpacity={0.5}
           onPress={() => this.navigateToOfflineMap(item, item.id)}>
-       
           <ImageBlurLoading
             withIndicator
             style={styles.mapSlideCardImg}
@@ -176,7 +175,12 @@ class OfflineMaps extends React.Component {
               </Text>
             </View>
           </View> */}
-          <Text style={styles.mapSlideCardTitle} numberOfLines={1} ellipsizeMode={'tail'}>{item.name}</Text>
+          <Text
+            style={styles.mapSlideCardTitle}
+            numberOfLines={1}
+            ellipsizeMode={'tail'}>
+            {item.name}
+          </Text>
           <Text style={styles.mapSlideCardAuthor} numberOfLines={1}>
             {item.username}
           </Text>
@@ -321,7 +325,7 @@ class OfflineMaps extends React.Component {
         style={styles.scrollView}
         showsHorizontalScrollIndicator={false}>
         <Header
-          showBack={true}
+          showBack={false}
           title={'Downloaded Maps'}
           {...this.props}
           style={styles.bgHeader}
