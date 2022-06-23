@@ -9,7 +9,7 @@ import styles from './HomeScreen.style';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImageBlurLoading from './../../components/ImageLoader';
-export default class MostPopular extends React.Component {
+export default class Nearby extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -87,7 +87,6 @@ export default class MostPopular extends React.Component {
 				<Text style={styles.mapTitle}>{item.name}</Text>
 				<Text style={styles.authorTitle}>{item.owner}</Text>
 				<Text style={styles.authorTitle}>{item.total_pins} Highlights</Text>
-
 			</View>
 		);
 	}
@@ -95,7 +94,7 @@ export default class MostPopular extends React.Component {
 		return (
 			<View style={styles.carouselMapView}>
 				<FlatList
-					data={this.props.props.props.popularMaps}
+					data={this.props.props.props.nearby}
 					renderItem={this._renderItem.bind(this)}
 				/>
 				{/* <Carousel

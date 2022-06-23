@@ -23,6 +23,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
 import * as mapActions from './../../../actions/mapActions';
+import {Alert} from 'react-native';
 
 class TripPinList extends React.Component {
   constructor(props) {
@@ -290,7 +291,15 @@ class TripPinList extends React.Component {
                 style={{height: DEVICE_HEIGHT / 1.5}}
                 showsVerticalScrollIndicator={false}
                 data={this.state.pinList}
-                onDragEnd={({data}) => this.setState({pinList: data})}
+                onDragEnd={({data}) => {
+                  this.setState({pinList: data});
+                  this.props.mapAction
+                    .updateTripOrder(data)
+                    .then(value => {})
+                    .catch(err => {
+                      Alert.alert('Error', err);
+                    });
+                }}
                 keyExtractor={item => item.id}
                 renderItem={({item, index, drag, isActive}) => {
                   const pin = item;

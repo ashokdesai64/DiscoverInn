@@ -266,7 +266,6 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     alignSelf: 'flex-start',
     marginLeft: 5,
-    marginBottom: 5
   },
 });
 

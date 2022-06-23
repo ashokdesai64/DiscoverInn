@@ -14,6 +14,12 @@ export default function maps(state = initialState, action = {}) {
         topRatedMaps: action.topRatedMaps || (state.topRatedMaps || {}),
       };
     }
+    case 'nearby': {
+      return {
+        ...state,
+        nearby: action.nearby || (state.nearby || {}),
+      };
+    }
     case 'categories': {
       return {
         ...state,

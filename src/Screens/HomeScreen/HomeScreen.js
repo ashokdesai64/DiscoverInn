@@ -51,6 +51,7 @@ import { NavigationEvents } from 'react-navigation';
 import MostPopular from './MostPopular';
 import TopRated from './TopRated';
 import colors from '../../config/colors';
+import Nearby from './Nearby';
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -386,7 +387,7 @@ class HomeScreen extends React.Component {
             },
             {
               title: "Nearby",
-              component: Test2,
+              component: Nearby,
               props: this.props
             },
           ]}
@@ -474,6 +475,7 @@ function mapStateToProps(state) {
     userData: state.user.userData,
     popularMaps: state.maps.popularMaps,
     topRatedMaps: state.maps.topRatedMaps,
+    nearby: state.maps.nearby,
     categories: state.maps.categories,
   };
 }

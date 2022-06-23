@@ -17,7 +17,7 @@ const ZoomImage = ({
   closeModal,
   uri,
   navigation,
-  isSaved,
+  isFavourite,
   isOffline,
   removeFromTrip,
   openSaveToListModal,
@@ -36,7 +36,7 @@ const ZoomImage = ({
         </TouchableOpacity>
 
         {!isOffline &&
-          (isSaved ? (
+          (isFavourite ? (
             <TouchableOpacity onPress={removeFromTrip}>
               <AntDesign name={'heart'} size={24} color={'white'} />
             </TouchableOpacity>

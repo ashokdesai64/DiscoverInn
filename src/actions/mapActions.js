@@ -20,6 +20,10 @@ export function loadPopularAndRated() {
           type: 'topRatedMaps',
           topRatedMaps: response.toprated,
         });
+        dispatch({
+          type: 'nearby',
+          nearby: response.nearby,
+        });
         resolve(response.data);
       } else {
         reject(response.message);
@@ -987,6 +991,35 @@ export function removeOfflineMapData(mapData) {
         offlineMaps: [...maps],
       });
       resolve([...maps]);
+    });
+  };
+}
+
+export function updateTripOrder(data) {
+  return function(dispatch, getState) {
+    let newData = {};
+    data.forEach((value, index) => {
+      const key = `favorites_pins[${index}]`;
+      newData = {...newData, [key]: value.favorite_id};
+    });
+    let userData = getState().user && getState().user.userData;
+    newData = {...newData, user_id: userData.id};
+    return new Promise(async (resolve, reject) => {
+      let response;
+      try {
+        response = await callAPI(
+          apiUrls.update_favorite_pin_list_order,
+          newData,
+        );
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
+      if (response.status) {
+        resolve(response.data);
+      } else {
+        reject(response.message);
+      }
     });
   };
 }

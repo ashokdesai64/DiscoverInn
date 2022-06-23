@@ -87,6 +87,8 @@ export default class TopRated extends React.Component {
 				</TouchableWithoutFeedback>
 				<Text style={styles.mapTitle}>{item.name}</Text>
 				<Text style={styles.authorTitle}>{item.owner}</Text>
+				<Text style={styles.authorTitle}>{item.total_pins} Highlights</Text>
+
 			</View>
 		);
 	}

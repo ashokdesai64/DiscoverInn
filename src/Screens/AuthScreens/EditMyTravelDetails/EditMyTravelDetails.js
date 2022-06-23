@@ -151,7 +151,6 @@ class EditMyTravelDetails extends React.Component {
   }
 
   render() {
-    console.log('this.state.year', this.state.year);
     const {params} = this.props.navigation.state;
     return (
       <Fragment>
