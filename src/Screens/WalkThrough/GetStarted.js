@@ -11,7 +11,10 @@ import {
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import DeepLinking from 'react-native-deep-linking';
+import {Platform} from 'react-native';
+import {askForPermissions} from '../../config/permission';
 const DEVICE_WIDTH = Dimensions.get('window').width;
+import RNLocation from 'react-native-location';
 
 const FirstScreen = props => {
   const dispatch = useDispatch();
@@ -19,6 +22,21 @@ const FirstScreen = props => {
   const isIntroCompleted = useSelector(state => state.user.introCompleted);
 
   useEffect(() => {
+    (async () => {
+      if (Platform.OS == 'android') {
+        await askForPermissions();
+      }
+      RNLocation.configure({
+        distanceFilter: 5.0,
+      });
+      await RNLocation.requestPermission({
+        ios: 'whenInUse',
+        android: {
+          detail: 'coarse',
+        },
+      });
+    })();
+
     DeepLinking.addScheme('discoverinn://');
 
     DeepLinking.addRoute('/maps/:email', response => {

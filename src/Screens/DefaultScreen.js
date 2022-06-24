@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as userActions from './../actions/authActions';
 import * as mapActions from './../actions/mapActions';
+import RNLocation from 'react-native-location';
 
 class DefaultScreen extends Component {
   resetAction(routeName) {
@@ -33,8 +34,14 @@ class DefaultScreen extends Component {
     this.redirectToApp(this.props);
   }
 
-  fetchInitialData() {
-    this.props.mapAction.loadPopularAndRated();
+  async fetchInitialData() {
+    let location = await RNLocation.getLatestLocation({timeout: 5000});
+    var lat = location && location.latitude;
+    var lon = location && location.longitude;
+    this.props.mapAction.loadPopularAndRated({
+      latitude: lat ? lat : '',
+      longitude: lon ? lon : '',
+    });
     this.props.mapAction.fetchTripList();
 
     if (this.props && !this.props.categories) {

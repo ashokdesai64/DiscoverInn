@@ -1,12 +1,17 @@
 import {callAPI} from './../Services/network';
 import {apiUrls} from './../config/api';
 
-export function loadPopularAndRated() {
+export function loadPopularAndRated(data) {
   return function(dispatch, getState) {
     return new Promise(async (resolve, reject) => {
       let response;
       try {
-        response = await callAPI(apiUrls.popularAndRated, {}, 'GET');
+        response = await callAPI(
+          apiUrls.popularAndRated +
+            `?latitude=${data.latitude}&longitude=${data.longitude}`,
+          {},
+          'GET',
+        );
       } catch (err) {
         reject(err.err);
         return;
