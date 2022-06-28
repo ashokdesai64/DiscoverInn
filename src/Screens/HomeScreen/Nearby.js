@@ -86,7 +86,7 @@ export default class Nearby extends React.Component {
 				</TouchableWithoutFeedback>
 				<Text style={styles.mapTitle}>{item.name}</Text>
 				<Text style={styles.authorTitle}>{item.owner}</Text>
-				<Text style={styles.authorTitle}>{item.total_pins} Highlights</Text>
+				<Text style={styles.authorTitle}>Nearest location at {Math.round(item.distance)} km</Text>
 			</View>
 		);
 	}

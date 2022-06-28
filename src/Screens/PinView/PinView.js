@@ -67,7 +67,7 @@ class PinView extends React.Component {
       this.setPinData(allPins, pinIndex);
     } else {
       if (params?.mapID) {
-        this.fetchSinglePinData();
+        this.fetchSinglePinData(params.pinID);
       } else {
         this.setPinData(allPins, pinIndex);
       }
@@ -87,13 +87,14 @@ class PinView extends React.Component {
       isSaved: pins[index].save_triplist,
       isFavourite: pins[index].is_favourite,
       favourite_id: pins[index].favourite_id,
+      pin_id: pins[index].id,
       firstItem: index,
     });
   }
 
-  fetchSinglePinData() {
+  fetchSinglePinData(pin_id) {
     const {params} = this.props.navigation.state;
-    let pinID = params.pinID;
+    let pinID = pin_id ? pin_id : this.state.pin_id;
     let mapID = params.mapID;
     let fromFav = params.fromFav;
 
@@ -151,7 +152,7 @@ class PinView extends React.Component {
       this.props.mapAction
         .addRemoveToTrip({
           map_id: params.mapID,
-          pin_id: this.state.currentPinData.id,
+          pin_id: this.state.pin_id,
           favorite_id: tripID,
           user_id: this.props.userData.id,
         })
@@ -183,7 +184,7 @@ class PinView extends React.Component {
         this.props.mapAction
           .addRemoveToTrip({
             map_id: params.mapID,
-            pin_id: params.pinID,
+            pin_id: this.state.pin_id,
             favorite_id: tripListID,
             user_id: this.props.userData.id,
           })
@@ -220,15 +221,14 @@ class PinView extends React.Component {
       });
   }
 
-  removeFromTrip(favorite_id) {
-    // console.log(tripListID);
+  removeFromTrip(favorite_id, pinId) {
     let {params} = this.props.navigation.state;
 
     this.setState({loaderMsg: 'Removing pin...', pinLoader: true});
     this.props.mapAction
       .addRemoveToTrip({
         map_id: params.mapID,
-        pin_id: params.pinID,
+        pin_id: pinId,
         favorite_id: favorite_id,
         user_id: this.props.userData.id,
       })
@@ -391,6 +391,7 @@ class PinView extends React.Component {
       isSaved: currentPinData.save_triplist,
       isFavourite: currentPinData.is_favourite,
       favourite_id: currentPinData.favourite_id,
+      pin_id: currentPinData.id,
       currentPinData,
     });
   }
@@ -412,7 +413,12 @@ class PinView extends React.Component {
           {!this.state.isOffline &&
             (this.state.isFavourite ? (
               <TouchableOpacity
-                onPress={() => this.removeFromTrip(this.state.favourite_id)}>
+                onPress={() =>
+                  this.removeFromTrip(
+                    this.state.favourite_id,
+                    this.state.pin_id,
+                  )
+                }>
                 <AntDesign name={'heart'} size={24} color={'white'} />
               </TouchableOpacity>
             ) : (
@@ -578,7 +584,7 @@ class PinView extends React.Component {
             isFavourite={this.state.isFavourite}
             removeFromTrip={() =>
               this.setState({zoomImage: null}, () =>
-                this.removeFromTrip(this.state.favourite_id),
+                this.removeFromTrip(this.state.favourite_id, this.state.pin_id),
               )
             }
             openSaveToListModal={() =>

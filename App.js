@@ -44,7 +44,7 @@ const prefix = 'discoverinn://';
 export default class App extends Component {
   UNSAFE_componentWillMount() {
     this.unsubscribe = NetInfo.addEventListener(state => {
-      if (!state.isConnected) {
+      if (!state.isInternetReachable) {
         Alert.alert('Connection Issue', 'No Internet connection!');
       }
     });
