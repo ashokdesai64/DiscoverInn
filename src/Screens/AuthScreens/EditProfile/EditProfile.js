@@ -163,6 +163,38 @@ class EditProfile extends React.Component {
     }
   }
 
+  deleteUserAccount() {
+    let apiData = {
+      user_id: this.props.userData.id,
+    };
+    this.props.authAction.deleteAccount(apiData).then(res => {
+      if (res.status) {
+        this.props.authAction.userLogout();
+        setTimeout(() => {
+          this.props.navigation.navigate('Auth');
+        }, 100);
+      }
+    });
+  }
+
+  showConfirmDialog() {
+    return Alert.alert(
+      'Account Delete',
+      'Do you want to delete this account? This action cannot be reverted.',
+      [
+        {
+          text: 'Yes',
+          onPress: () => {
+            this.deleteUserAccount();
+          },
+        },
+        {
+          text: 'No',
+        },
+      ],
+    );
+  }
+
   render() {
     const {userData} = this.props;
     return (
@@ -264,6 +296,23 @@ class EditProfile extends React.Component {
                   marginLeft: 0,
                 }}>
                 Change Password
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: 20,
+              }}
+              onPress={() => this.showConfirmDialog()}>
+              <Text
+                style={{
+                  color: '#EB5757',
+                  fontFamily: 'Montserrat-Regular',
+                  fontSize: 16,
+                  marginLeft: 0,
+                }}>
+                Delete Account
               </Text>
             </TouchableOpacity>
           </View>

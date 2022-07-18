@@ -46,5 +46,6 @@ export const apiUrls = {
   searchUserMaps: 'https://discover-inn.com/api/v1/search_users_maplist',
   singleMapReview:'https://discover-inn.com/api/v1/single_map_review',
   setPassword:'https://discover-inn.com/api/v1/set_new_password',
-  update_favorite_pin_list_order:'https://discover-inn.com/api/v1/update_favorite_pin_list_order'
+  update_favorite_pin_list_order:'https://discover-inn.com/api/v1/update_favorite_pin_list_order',
+  deleteAccount : 'https://discover-inn.com/api/v1/remove_user'
 };

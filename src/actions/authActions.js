@@ -113,3 +113,22 @@ export function userLogout() {
     });
   };
 }
+
+export function deleteAccount(postData) {
+  return async function(dispatch, getState) {
+    return new Promise(async (resolve, reject) => {
+      let response;
+      try {
+        response = await callAPI(apiUrls.deleteAccount, postData);
+      } catch (err) {
+        reject(err.err);
+        return;
+      }
+      if (response.status) {
+        resolve(response);
+      } else {
+        reject(response);
+      }
+    });
+  };
+}
