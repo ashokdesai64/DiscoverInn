@@ -124,7 +124,7 @@ class EditMapDetails extends React.Component {
         waitAnimationEnd: false,
         includeExif: true,
         forceJpg: true,
-        compressImageQuality: 0.7,
+        // compressImageQuality: 0.7,
       }).then(response => {
         if (response && response.length) {
           let tempArray = [];
@@ -150,7 +150,7 @@ class EditMapDetails extends React.Component {
         avoidEmptySpaceAroundImage: true,
         mediaType: 'photo',
         cropping: true,
-        compressImageQuality: 0.5,
+        // compressImageQuality: 0.5,
         includeExif: true,
       }).then(item => {
         if (item) {

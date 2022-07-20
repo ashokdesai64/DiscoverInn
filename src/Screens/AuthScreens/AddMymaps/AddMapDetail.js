@@ -69,7 +69,6 @@ class AddMapDetail extends React.Component {
     this.state = {
       pinTitle: '',
       pinDescription: '',
-      isLocationSelected: false,
       pinDetailInProgress: true,
       placeName: '',
       locationName: '',
@@ -101,7 +100,7 @@ class AddMapDetail extends React.Component {
   }
 
   handleCheckBox = () => {
-    if (this.state.pinImages.length == 0) {
+    if (!this.state.locationAccepted && this.state.pinImages.length == 0) {
       return alert('Please select image first');
     }
     this.setState(
@@ -185,7 +184,7 @@ class AddMapDetail extends React.Component {
   };
 
   async getLocationFromSelectedImages() {
-    if (!this.state.isLocationSelected && this.state.locationAccepted) {
+    if (this.state.locationAccepted) {
       let imageLocation = false;
 
       for (var i = 0; i < this.state.pinImages.length; i++) {
