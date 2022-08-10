@@ -7,10 +7,8 @@ import {
   TouchableOpacity,
   Image,
   ActivityIndicator,
-  ToastAndroid,
   Alert,
 } from 'react-native';
-import Toast from 'react-native-root-toast';
 import styles from './EditProfile.style';
 import Icon from 'react-native-vector-icons/Feather';
 import Header from './../../../components/header/header';

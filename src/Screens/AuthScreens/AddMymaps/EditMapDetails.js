@@ -9,6 +9,7 @@ import {
   ImageBackground,
   TouchableOpacity,
   Image,
+  Platform
 } from 'react-native';
 import { Textarea } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -22,7 +23,10 @@ import ImagePicker from 'react-native-image-crop-picker';
 import Spinner from './../../../components/Loader';
 import ImageBlurLoading from './../../../components/ImageLoader';
 import axios from 'axios';
-import RNLocation from 'react-native-location'
+import RNLocation from 'react-native-location';
+import Toast from 'react-native-simple-toast';
+import DeviceInfo from "react-native-device-info";
+
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 
 //REDUX
@@ -266,6 +270,9 @@ class EditMapDetails extends React.Component {
         }
 
       } else {
+        if(Platform.OS === "android" && DeviceInfo.getSystemVersion() > 10){
+          Toast.show('Currently unavailable on Android');
+        }
         this.setState({
           locationFromImage: false,
           locationName: '',
