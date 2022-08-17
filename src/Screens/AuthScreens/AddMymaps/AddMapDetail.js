@@ -28,6 +28,8 @@ import RNLocation from 'react-native-location';
 //REDUX
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import Toast from 'react-native-simple-toast';
+import DeviceInfo from "react-native-device-info";
 
 import * as mapActions from './../../../actions/mapActions';
 
@@ -275,6 +277,9 @@ class AddMapDetail extends React.Component {
           }
         }
       } else {
+        if(Platform.OS === "android" && DeviceInfo.getSystemVersion() > 10){
+          Toast.show('Currently unavailable on Android');
+        }
         this.setState({
           locationFromImage: false,
           locationName: '',
