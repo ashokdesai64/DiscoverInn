@@ -183,7 +183,7 @@ class TripPinList extends React.Component {
               </TouchableOpacity>
             </View>
             {!this.state.switchView && (
-              <Text style={styles.holdDrag}>Drag pin to remember</Text>
+              <Text style={styles.holdDrag}>Drag pin to renumber</Text>
             )}
             {this.state.pinList && this.state.pinList.length <= 0 ? (
               <View style={styles.container}>

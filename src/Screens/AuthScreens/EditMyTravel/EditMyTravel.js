@@ -15,8 +15,7 @@ import styles from './EditMyTravel.style';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Header from '../../../components/header/header';
 import moment from 'moment';
-
-import ImagePicker from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 import Spinner from './../../../components/Loader';
 //REDUX
 import {connect} from 'react-redux';
@@ -111,33 +110,40 @@ class EditMyTravel extends React.Component {
     };
     if (!this.state.mapData.id) return alert('Please enter map name first...');
 
-    ImagePicker.launchImageLibrary(options, response => {
-      if (!response.didCancel) {
-        this.setState({addCoverInProgress: true});
-        let fileObj = {
-          uri: response.uri,
-          name: response.fileName,
-          type: response.type,
-        };
-        this.props.mapAction
-          .updateCoverImage({
-            user_id: this.props.userData.id,
-            map_id: this.state.mapData.id,
-            cover_image: fileObj,
-          })
-          .then(data => {
-            this.setState({
-              addCoverInProgress: false,
-              mapData: {...this.state.mapData, cover_image: response.uri},
-              coverImage: response.uri,
+    ImagePicker.openPicker({
+      multiple: false, // <-- Set to true for multiple image selection
+      mediaType: 'photo',
+      compressImageQuality: 0.7,
+    })
+      .then(response => {
+        if (!response.didCancel) {
+          this.setState({ addCoverInProgress: true });
+          let fileObj = {
+            uri: response.path,
+            name: response.path.split('/').slice(-1)[0] || `${+new Date()}.jpg`,
+            type: response.mime,
+          };
+          this.props.mapAction
+            .updateCoverImage({
+              user_id: this.props.userData.id,
+              map_id: this.state.mapData.id,
+              cover_image: fileObj,
+            })
+            .then(data => {
+              this.setState({
+                addCoverInProgress: false,
+                mapData: { ...this.state.mapData, cover_image: response.path },
+                coverImage: response.path,
+              });
+            })
+            .catch(err => {
+              this.setState({ addCoverInProgress: false });
+              alert("Couldn't update image, Please try again.");
             });
-          })
-          .catch(err => {
-            this.setState({addCoverInProgress: false});
-            alert("Couldn't update image, Please try again.");
-          });
-      }
-    });
+        }
+      })
+      .catch(e => console.log(e));
+
   }
 
   navigateToMapDetails() {

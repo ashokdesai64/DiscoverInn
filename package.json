@@ -13,7 +13,7 @@
   "dependencies": {
     "@react-native-community/async-storage": "^1.6.2",
     "@react-native-community/netinfo": "^6.0.2",
-    "@react-native-community/toolbar-android": "0.1.0-rc.2",
+    "@react-native-community/toolbar-android": "^0.2.1",
     "@react-native-mapbox-gl/maps": "^8.2.0-beta1",
     "axios": "^0.19.2",
     "geolocation-utils": "^1.2.2",
