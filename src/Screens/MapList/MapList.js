@@ -660,8 +660,6 @@ class MapList extends React.Component {
       search: searchTerm || '',
     };
 
-
-
     if (sortBy == 'distance') {
       if (Platform.OS == 'android') {
         await askForPermissions();
@@ -701,7 +699,6 @@ class MapList extends React.Component {
     }
     if (selectedCreatedWithin && !!selectedCreatedWithin.length) {
       apiData['when_travel'] = selectedCreatedWithin;
-      console.log("API DATA:::::::::::::", selectedCreatedWithin)
     }
     if (selectedTravelType && !!selectedTravelType.length) {
       apiData['travel_type'] = selectedTravelType;
