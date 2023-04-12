@@ -313,9 +313,11 @@ class MapPins extends React.Component {
                               ]}
                               onPress={() =>
                                 this.props.navigation.navigate('PinView', {
+                                  mapData: this.state.mapData,
                                   mapID: params.mapID,
                                   mapName: params.mapName,
                                   pinID: pin.id,
+                                  screen: 'travel'
                                 })
                               }>
                               <Feather

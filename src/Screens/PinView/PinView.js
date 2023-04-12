@@ -74,6 +74,28 @@ class PinView extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    const {params} = this.props.navigation.state;
+    const prevParams = prevProps.navigation.state.params;
+    if (params.update && !prevParams.update) {
+      console.log('inside params.update')
+      this.props.navigation.state.update = false
+      let allPins = params.allPins || [];
+      let pinIndex = allPins.findIndex(p => p.id == params.pinID);
+  
+      if (this.state.isOffline) {
+        this.setPinData(allPins, pinIndex);
+      } else {
+        if (params?.mapID) {
+          console.log('inside params.update')
+          this.fetchSinglePinData(params.pinID);
+        } else {
+          this.setPinData(allPins, pinIndex);
+        }
+      }
+    }
+  }
+  
   setPinData(pins, index) {
     this.setState({
       mapPins: pins,
@@ -104,6 +126,7 @@ class PinView extends React.Component {
         let pinIndex = pinData.findIndex(p => p.id == pinID);
         this.setPinData(pinData, pinIndex);
       } else {
+        console.log("3-----")
         this.setState({loaderMsg: 'Fetching Pin Data', pinLoader: true});
         this.props.mapAction
           .fetchMapPinList({
@@ -126,14 +149,14 @@ class PinView extends React.Component {
     return (
       <TouchableWithoutFeedback
         onPress={() =>
-          this.setState({zoomImage: item.image || item.thumb_image})
+          this.setState({ zoomImage: item.image || item.thumb_image })
         }>
         <ImageBlurLoading
           withIndicator
           style={styles.cateSlideCardIcon}
-          source={{uri: item.image || item.thumb_image}}
+          source={{ uri: item.cover_image || item.thumb_image }}
           thumbnailSource={{
-            uri: 'https://discover-inn.com/upload/cover/map-image.jpeg',
+            uri: item.cover_image
           }}
         />
       </TouchableWithoutFeedback>
@@ -285,10 +308,8 @@ class PinView extends React.Component {
           <ImageBlurLoading
             withIndicator
             style={styles.cateSlideCardIcon}
-            source={{uri: pathToDisplay}}
-            thumbnailSource={{
-              uri: pathToDisplay,
-            }}
+            source={{ uri: imagePath }}
+            thumbnailSource={{ uri: imagePath }}
           />
         ) : (
           <PinImages
@@ -333,6 +354,7 @@ class PinView extends React.Component {
   }
 
   renderPinContent(pinData, index) {
+    console.log("what is pinData???????", pinData)
     let {categories} = this.props;
 
     let selectedCategory =
@@ -396,7 +418,8 @@ class PinView extends React.Component {
     });
   }
 
-  render() {
+  render(props) {
+    let { params } = this.props.navigation.state;
     let paddingTop = 0,
       height = 60;
     if (Platform.OS === 'ios') {
@@ -410,7 +433,7 @@ class PinView extends React.Component {
             <Feather name={'arrow-left'} size={24} color={'white'} />
           </TouchableOpacity>
 
-          {!this.state.isOffline &&
+          {params.screen !== 'travel' && !this.state.isOffline &&
             (this.state.isFavourite ? (
               <TouchableOpacity
                 onPress={() =>
@@ -426,6 +449,32 @@ class PinView extends React.Component {
                 <AntDesign name={'hearto'} size={24} color={'white'} />
               </TouchableOpacity>
             ))}
+
+          {params.screen === 'travel' && !this.state.isOffline &&
+            (<TouchableOpacity
+              onPress={() =>
+              (this.props.navigation.navigate(
+                'EditMapDetails',
+                
+                {
+                    pinData: this.state.pinData,
+                    screen: 'EditMapDetails',
+                    pinID: this.state?.pin_id,
+                    pinDescription:  this.state.currentPinData.description,
+                    pinTitle: this.state.currentPinData.name,
+                    selectedCategory: this.state.currentPinData.categories,
+                    image: params.mapData.cover_image,
+                    mapID: params.mapData?.id,
+                    userID: params.mapData?.userid,  
+                }
+              )
+              )
+              }
+            >
+              <AntDesign name={'edit'} size={24} color={'white'} />
+            </TouchableOpacity>)}
+
+
         </View>
         <Spinner
           visible={this.state.pinLoader}
@@ -490,7 +539,7 @@ class PinView extends React.Component {
                 <>
                   <ScrollView
                     style={styles.MVTripList}
-                    contentContainerStyle={{maxHeight: 200, flexGrow: 0}}
+                    contentContainerStyle={{ maxHeight: 200, flexGrow: 0 }}
                     showsVerticalScrollIndicator={true}>
                     {this.props.tripList.map(trip => {
                       return (

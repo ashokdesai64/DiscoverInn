@@ -149,10 +149,10 @@ class OfflineMaps extends React.Component {
             withIndicator
             style={styles.mapSlideCardImg}
             source={{
-              uri: displayPath,
+              uri: imagePath,
             }}
             thumbnailSource={{
-              uri: displayPath,
+              uri: imagePath,
             }}
           />
 
@@ -320,6 +320,8 @@ class OfflineMaps extends React.Component {
       data.mapData['pinList'] = data.pinList;
       return data.mapData;
     });
+    console.log("Maps:----------------", maps)
+    console.log("Maps:----offlin ------------", offlineMaps)
     return (
       <ScrollView
         style={styles.scrollView}

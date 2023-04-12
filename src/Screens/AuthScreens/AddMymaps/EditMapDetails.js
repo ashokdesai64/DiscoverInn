@@ -71,15 +71,17 @@ const LocationCheckbox = ({
 class EditMapDetails extends React.Component {
   constructor(props) {
     super(props);
+    const  dataEdit  = this.props.navigation.state;
     this.state = {
+      webImages: dataEdit.params.screen === 'EditMapDetails' && dataEdit.params.image ? [dataEdit.params.image] : [],
       pinImages: [],
       imageSelected: false,
       locationAccepted: false,
       listViewDisplayed: false,
       addPinInProgress: false,
       addingPin: false,
-      pinTitle: '',
-      pinDescription: '',
+      pinTitle:dataEdit.params.screen === 'EditMapDetails' ? dataEdit.params.pinTitle : '',
+      pinDescription: dataEdit.params.screen === 'EditMapDetails' ?  dataEdit.params.pinDescription : '',
       isLocationSelected: true,
       pinDetailInProgress: true,
       locationFromImage: false,
@@ -87,7 +89,15 @@ class EditMapDetails extends React.Component {
       locationName: '',
       gotTrueLocation: false,
       hasCameraImage: false,
-      currentLocation: false
+      currentLocation: false,
+        showTripList: false,
+        pinList: [],
+        mapPinsInProgress: false,
+        followUserLocation: true,
+        filteredCollections: [],
+        mapHasLoaded: false,
+        allPins: [],
+     
     };
   }
 
@@ -399,8 +409,8 @@ class EditMapDetails extends React.Component {
     this.setState({ pinUpdateInProgress: true });
 
     let apiData = {
-      map_id: params.mapID,
-      user_id: this.props.userData.id,
+      map_id :params.mapID? params?.mapID : ''  ,
+      user_id: this.props.userData.id || params.userID,
       pin_title: pinTitle,
       category: selectedCategory,
       pin_id: params.pinID,
@@ -419,9 +429,13 @@ class EditMapDetails extends React.Component {
     this.props.mapAction
       .updateMapPin(apiData)
       .then(data => {
-        this.setState({ pinUpdateInProgress: false }, () => {
-          this.props.navigation.goBack();
-        });
+            this.props.navigation.navigate("PinView", {
+              mapID: params.mapID,
+              pinID: params.pinID,
+              update: true
+            });
+         
+        
       })
       .catch(err => {
         this.setState({ pinUpdateInProgress: false });
@@ -523,10 +537,10 @@ class EditMapDetails extends React.Component {
                           <ImageBlurLoading
                             withIndicator
                             style={{ height: 80, width: 80, borderRadius: 5 }}
-                            source={{ uri: image.image }}
+                            source={{ uri: params.image}}
                             thumbnailSource={{
                               uri:
-                                'https://discover-inn.com/upload/cover/map-image.jpeg',
+                              params.image
                             }}
                           />
                           <TouchableOpacity

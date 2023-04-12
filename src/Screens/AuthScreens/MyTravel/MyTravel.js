@@ -366,6 +366,7 @@ class MyTravel extends React.Component {
                   mapName: item.name,
                   mapData: item,
                   // fromMyTravel: true,
+                  screen: 'travel',
                 });
               }}>
               <Image source={eye} style={styles.buttonIcon1} />
@@ -460,7 +461,7 @@ class MyTravel extends React.Component {
               showsHorizontalScrollIndicator={false}
               keyboardShouldPersistTaps={'handled'}
               showsVerticalScrollIndicator={false}
-              onScroll={({nativeEvent}) => {
+              onScroll={({ nativeEvent }) => {
                 if (isCloseToBottom(nativeEvent) && !this.state.fetchingMaps) {
                   this.pageNo += 1;
                   this.fetchMaps(true);
@@ -470,12 +471,12 @@ class MyTravel extends React.Component {
               <Spinner
                 visible={this.state.fetchingMaps}
                 textContent={'Fetching more maps...'}
-                textStyle={{color: '#fff'}}
+                textStyle={{ color: '#fff' }}
               />
               <Spinner
                 visible={this.state.mapDownloadInProgress}
                 textContent={this.state.downloadSpinnerMsg}
-                textStyle={{color: '#fff'}}
+                textStyle={{ color: '#fff' }}
                 canGoBack={this.state.canGoBack}
                 backButtonText={'Download in background'}
                 onGoBack={() =>
@@ -495,10 +496,10 @@ class MyTravel extends React.Component {
                     onChangeText={search => {
                       if (search.length === 0) {
                         this.pageNo = 1;
-                        this.setState({search: ''});
+                        this.setState({ search: '' });
                         this.fetchMaps(true, true);
                       } else {
-                        this.setState({search});
+                        this.setState({ search });
                       }
                     }}
                   />
@@ -524,7 +525,7 @@ class MyTravel extends React.Component {
                     renderHeader={this._renderHeader}
                     renderContent={this._renderContent}
                     onChange={this._updateSections}
-                    contentStyle={{marginBottom: 10}}
+                    contentStyle={{ marginBottom: 10 }}
                   />
                 </Content>
               ) : (
@@ -549,7 +550,7 @@ class MyTravel extends React.Component {
             <TouchableOpacity
               style={[styles.button, styles.buttonPrimary, styles.buttonNewMap]}
               onPress={() => {
-                this.props.navigation.navigate('EditMyTravel', {type: 'add'});
+                this.props.navigation.navigate('EditMyTravel', { type: 'add' });
               }}>
               <Text style={styles.buttonText}>Add New Map</Text>
             </TouchableOpacity>
@@ -562,7 +563,7 @@ class MyTravel extends React.Component {
           hasOverlay={true}
           animationDuration={1}
           onTouchOutside={() => {
-            this.setState({showDeleteModal: false});
+            this.setState({ showDeleteModal: false });
           }}
           dialogAnimation={
             new FadeAnimation({
@@ -572,7 +573,7 @@ class MyTravel extends React.Component {
             })
           }
           onHardwareBackPress={() => {
-            this.setState({showDeleteModal: false});
+            this.setState({ showDeleteModal: false });
             return true;
           }}
           dialogStyle={styles.customPopup}>
@@ -581,7 +582,7 @@ class MyTravel extends React.Component {
               <Text style={styles.customPopupHeaderTitle}>Delete Map</Text>
               <TouchableOpacity
                 style={styles.buttonClose}
-                onPress={() => this.setState({showDeleteModal: false})}>
+                onPress={() => this.setState({ showDeleteModal: false })}>
                 <Feather name={'x'} style={styles.buttonCloseIcon} />
               </TouchableOpacity>
             </View>
@@ -601,7 +602,7 @@ class MyTravel extends React.Component {
                   styles.buttonDecline,
                 ]}
                 onPress={() => {
-                  this.setState({showDeleteModal: false});
+                  this.setState({ showDeleteModal: false });
                 }}>
                 <Text style={[styles.buttonText, styles.buttonTextGray]}>
                   Decline

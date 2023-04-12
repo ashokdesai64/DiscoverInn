@@ -267,16 +267,17 @@ class OfflineMapView extends React.Component {
                         isOffline: true,
                         offlinePath: pathToDisplay,
                         allPins: params.mapData.pinList,
+                        displayImg: params.mapData.cover_image,
                       })
                     }>
                     <ImageBlurLoading
                       withIndicator
                       style={styles.mapViewCardImg}
                       source={{
-                        uri: pathToDisplay,
+                        uri: params.mapData.cover_image,
                       }}
                       thumbnailSource={{
-                        uri: pathToDisplay,
+                        uri: params.mapData.cover_image,
                       }}
                     />
                     <View style={styles.mapViewCardContent}>

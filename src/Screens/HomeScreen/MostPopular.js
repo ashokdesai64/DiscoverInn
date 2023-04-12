@@ -30,7 +30,8 @@ export default class MostPopular extends React.Component {
 						this.props.props.props.navigation.navigate('MapView', {
 							mapID: item.id,
 							mapName: item.name,
-							mapData: item
+							mapData: item,
+							screen: 'home'
 						})
 					}
 				>
