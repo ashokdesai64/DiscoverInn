@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   Text,
@@ -8,31 +8,31 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import {Item, Input, Button, Content, Accordion, CheckBox} from 'native-base';
+import { Item, Input, Button, Content, Accordion, CheckBox } from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import RNFetchBlob from 'rn-fetch-blob';
-import {checkIfHasPermission} from './../../../config/permission';
+import { checkIfHasPermission } from './../../../config/permission';
 
-import {Switch} from './../../../components/RNSwitch';
+import { Switch } from './../../../components/RNSwitch';
 import styles from './MyTravel.style';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import Header from '../../../components/header/header';
-import Dialog, {FadeAnimation, DialogContent} from 'react-native-popup-dialog';
+import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog';
 import Spinner from './../../../components/Loader';
 import _ from 'underscore';
-import {getBoundingBox} from 'geolocation-utils';
+import { getBoundingBox } from 'geolocation-utils';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 //REDUX
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 MapboxGL.setAccessToken(
   'sk.eyJ1IjoicmF2aXNvaml0cmF3b3JrIiwiYSI6ImNrYTByeHVxZjBqbGszZXBtZjF3NmJleWgifQ.idSimILJ3_sk1gSWs2sMsQ',
 );
 import * as mapActions from '../../../actions/mapActions';
-import {editing, eye, deleteIcon} from '../../../Images';
+import { editing, eye, deleteIcon } from '../../../Images';
 
 MapboxGL.offlineManager.setTileCountLimit(15000);
-const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
   const paddingToBottom = 20;
   return (
     layoutMeasurement.height + contentOffset.y >=
@@ -69,7 +69,7 @@ class MyTravel extends React.Component {
   };
 
   _updateSections = activeSections => {
-    this.setState({activeSections});
+    this.setState({ activeSections });
   };
 
   componentDidMount() {
@@ -145,7 +145,7 @@ class MyTravel extends React.Component {
           text: 'Log In',
           onPress: () => this.props.navigation.navigate('LoginScreen'),
         },
-        {text: 'OK'},
+        { text: 'OK' },
       ]);
     }
 
@@ -177,11 +177,11 @@ class MyTravel extends React.Component {
                 mapDownloadInProgress: true,
                 downloadSpinnerMsg: `Downloading assets...`,
               });
-              var splitByString = function(source, splitBy) {
+              var splitByString = function (source, splitBy) {
                 var splitter = splitBy.split('');
                 splitter.push([source]); //Push initial value
 
-                return splitter.reduceRight(function(accumulator, curValue) {
+                return splitter.reduceRight(function (accumulator, curValue) {
                   var k = [];
                   accumulator.forEach(v => (k = [...k, ...v.split(curValue)]));
                   return k;
@@ -193,6 +193,7 @@ class MyTravel extends React.Component {
               pinImages.push(
                 mapData.thumb_cover_image || mapData.cover_image || '',
               );
+
               pinList.map(pin => {
                 if (pin.longitude && pin.latitude) {
                   let exploded = splitByString(pin.name, '.,-');
@@ -228,6 +229,7 @@ class MyTravel extends React.Component {
                   }
                 }
               });
+
 
               featureCollections.push({
                 type: `FeatureCollection`,
@@ -317,7 +319,7 @@ class MyTravel extends React.Component {
             }
           })
           .catch(err => {
-            this.setState({mapDownloadInProgress: false});
+            this.setState({ mapDownloadInProgress: false });
           });
       } else {
         alert(
@@ -336,7 +338,7 @@ class MyTravel extends React.Component {
             <Switch
               value={item.status != '0'}
               onValueChange={val => {
-                this.setState({fetchingMaps: true});
+                this.setState({ fetchingMaps: true });
                 this.changeMapStatus(item.id, val);
               }}
               changeValueImmediately={true}
@@ -385,7 +387,7 @@ class MyTravel extends React.Component {
             <TouchableOpacity
               style={styles.button1}
               onPress={() => {
-                this.setState({showDeleteModal: true, selectedMap: item});
+                this.setState({ showDeleteModal: true, selectedMap: item });
               }}>
               <Image source={deleteIcon} style={styles.buttonIcon1} />
             </TouchableOpacity>
@@ -397,13 +399,13 @@ class MyTravel extends React.Component {
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.fetchingMaps != this.state.fetchingMaps) {
-      this.setState({fetchingMaps: nextProps.fetchingMaps});
+      this.setState({ fetchingMaps: nextProps.fetchingMaps });
     }
   }
 
   fetchFirstMaps() {
     if (!this.props.myMaps || this.props.myMaps.length == 0) {
-      this.setState({fetchingMaps: true});
+      this.setState({ fetchingMaps: true });
     }
     this.props.mapAction
       .fetchMyFirstMaps({
@@ -411,13 +413,13 @@ class MyTravel extends React.Component {
         search: this.state.search,
         page: 1,
       })
-      .then(d => this.setState({fetchingMaps: false}))
-      .catch(err => this.setState({fetchingMaps: false}));
+      .then(d => this.setState({ fetchingMaps: false }))
+      .catch(err => this.setState({ fetchingMaps: false }));
   }
 
   fetchMaps(showLoader = false, isBlank = false) {
     if (showLoader) {
-      this.setState({fetchingMaps: true});
+      this.setState({ fetchingMaps: true });
     }
     this.props.mapAction.fetchMyMaps({
       user_id: this.props.userData && this.props.userData.id,
@@ -427,17 +429,17 @@ class MyTravel extends React.Component {
   }
 
   deleteMap() {
-    this.setState({deleteInProgrss: true});
+    this.setState({ deleteInProgrss: true });
     this.props.mapAction
       .removeMap({
         map_id: this.state.selectedMap.id,
         user_id: this.props.userData.id,
       })
       .then(data => {
-        this.setState({deleteInProgrss: false, showDeleteModal: false});
+        this.setState({ deleteInProgrss: false, showDeleteModal: false });
       })
       .catch(err => {
-        this.setState({deleteInProgrss: false, showDeleteModal: false}, () => {
+        this.setState({ deleteInProgrss: false, showDeleteModal: false }, () => {
           alert(err);
         });
       });

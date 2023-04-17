@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, ScrollView, TouchableOpacity,Platform} from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Platform } from 'react-native';
 import ImageBlurLoading from './../../components/ImageLoader';
 import RNFetchBlob from 'rn-fetch-blob';
 
@@ -16,7 +16,7 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 import Spinner from './../../components/Loader';
 import _ from 'underscore';
 
-import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import fontelloConfig from './../../selection.json';
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
@@ -25,15 +25,15 @@ MapboxGL.setAccessToken(
 );
 
 //REDUX
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import * as mapActions from './../../actions/mapActions';
 
 class OfflineMapView extends React.Component {
   constructor(props) {
     super(props);
-    const {params} = props.navigation.state;
+    const { params } = props.navigation.state;
     let pinList = params.mapData.pinList || [];
     if (
       params &&
@@ -65,17 +65,19 @@ class OfflineMapView extends React.Component {
   }
 
   render() {
-    let {params} = this.props.navigation.state;
+    let { params } = this.props.navigation.state;
+    console.log("🚀 ~ file: OfflineMapView.js:69 ~ OfflineMapView ~ render ~ params:", params)
+    // console.log("Pin Data::::", map.pinData);
     params = params || {};
 
-    let {filteredCollections, mapData, pinList} = this.state;
+    let { filteredCollections, mapData, pinList } = this.state;
     return (
       <View style={styles.page}>
         <View style={styles.container}>
           <Spinner
             visible={this.state.mapPinsInProgress}
             textContent={'Fetching Pins...'}
-            textStyle={{color: '#fff'}}
+            textStyle={{ color: '#fff' }}
           />
 
           <Header
@@ -97,11 +99,11 @@ class OfflineMapView extends React.Component {
             attributionEnabled={false}
             rotateEnabled={false}
             onDidFinishRenderingMapFully={r => {
-              this.setState({followUserLocation: false});
+              this.setState({ followUserLocation: false });
             }}
             onRegionDidChange={() => {
               if (!this.state.followUserLocation) {
-                this.setState({followUserLocation: false});
+                this.setState({ followUserLocation: false });
               }
             }}>
             {mapData.bounds && (
@@ -126,78 +128,78 @@ class OfflineMapView extends React.Component {
 
             {filteredCollections && filteredCollections.length > 0
               ? filteredCollections.map(collection => {
-                  let random = Math.floor(Math.random() * 90000) + 10000;
-                  return (
-                    <MapboxGL.ShapeSource
-                      id={'symbolLocationSource' + random}
-                      hitbox={{width: 20, height: 20}}
-                      shape={collection}
-                      cluster
-                      clusterMaxZoomLevel={14}
-                      clusterRadius={40}
-                      onPress={e => {
-                        let payload = e.nativeEvent.payload;
-                        if (!payload.properties.cluster) {
-                          this.props.navigation.navigate('PinView', {
-                            pinID: payload.id,
-                            mapID: payload.properties.mapID,
-                            mapName: params.mapData.name,
-                            isOffline: true,
-                            allPins: params.mapData.pinList,
-                          });
-                        }
-                      }}>
-                      <MapboxGL.CircleLayer
-                        id={`singlePoint${Math.random()}`}
-                        filter={['has', 'point_count']}
-                        style={{
-                          circleColor: 'rgba(47,128,237,1)',
-                          circleRadius: 20,
-                          circleStrokeWidth: 2,
-                          circleStrokeColor: 'white',
-                        }}
-                      />
-                      <MapboxGL.SymbolLayer
-                        id={`pointCount${Math.random()}`}
-                        filter={['has', 'point_count']}
-                        style={{
-                          textField: '{point_count}',
-                          textSize: 14,
-                          textHaloColor: '#fff',
-                          textHaloWidth: 0.3,
-                          textColor: '#fff',
-                          iconAllowOverlap: false,
-                        }}
-                      />
-                      <MapboxGL.SymbolLayer
-                        id={`singlePointSelected${collection.id}`}
-                        filter={['!', ['has', 'point_count']]}
-                        style={{
-                          iconImage: ['get', 'category'],
-                          iconAllowOverlap: true,
-                          textAllowOverlap: true,
-                          iconSize: 0.4,
-                        }}
-                      />
+                let random = Math.floor(Math.random() * 90000) + 10000;
+                return (
+                  <MapboxGL.ShapeSource
+                    id={'symbolLocationSource' + random}
+                    hitbox={{ width: 20, height: 20 }}
+                    shape={collection}
+                    cluster
+                    clusterMaxZoomLevel={14}
+                    clusterRadius={40}
+                    onPress={e => {
+                      let payload = e.nativeEvent.payload;
+                      if (!payload.properties.cluster) {
+                        this.props.navigation.navigate('PinView', {
+                          pinID: payload.id,
+                          mapID: payload.properties.mapID,
+                          mapName: params.mapData.name,
+                          isOffline: true,
+                          allPins: params.mapData.pinList,
+                        });
+                      }
+                    }}>
+                    <MapboxGL.CircleLayer
+                      id={`singlePoint${Math.random()}`}
+                      filter={['has', 'point_count']}
+                      style={{
+                        circleColor: 'rgba(47,128,237,1)',
+                        circleRadius: 20,
+                        circleStrokeWidth: 2,
+                        circleStrokeColor: 'white',
+                      }}
+                    />
+                    <MapboxGL.SymbolLayer
+                      id={`pointCount${Math.random()}`}
+                      filter={['has', 'point_count']}
+                      style={{
+                        textField: '{point_count}',
+                        textSize: 14,
+                        textHaloColor: '#fff',
+                        textHaloWidth: 0.3,
+                        textColor: '#fff',
+                        iconAllowOverlap: false,
+                      }}
+                    />
+                    <MapboxGL.SymbolLayer
+                      id={`singlePointSelected${collection.id}`}
+                      filter={['!', ['has', 'point_count']]}
+                      style={{
+                        iconImage: ['get', 'category'],
+                        iconAllowOverlap: true,
+                        textAllowOverlap: true,
+                        iconSize: 0.4,
+                      }}
+                    />
 
-                      <MapboxGL.SymbolLayer
-                        id={`singleNumberSelected${collection.id}`}
-                        filter={['==', 'hasNumber', true]}
-                        style={{
-                          textField: '{number}',
-                          textColor: 'white',
-                          textJustify: 'left',
-                          textAnchor: 'bottom-right',
-                          textOffset: [-0.5, -1],
-                          textHaloColor: 'rgba(47,128,237,1)',
-                          textHaloWidth: 5,
-                          textTranslate: [-0.5, -0.5],
-                          textPadding: 2,
-                        }}
-                      />
-                    </MapboxGL.ShapeSource>
-                  );
-                })
+                    <MapboxGL.SymbolLayer
+                      id={`singleNumberSelected${collection.id}`}
+                      filter={['==', 'hasNumber', true]}
+                      style={{
+                        textField: '{number}',
+                        textColor: 'white',
+                        textJustify: 'left',
+                        textAnchor: 'bottom-right',
+                        textOffset: [-0.5, -1],
+                        textHaloColor: 'rgba(47,128,237,1)',
+                        textHaloWidth: 5,
+                        textTranslate: [-0.5, -0.5],
+                        textPadding: 2,
+                      }}
+                    />
+                  </MapboxGL.ShapeSource>
+                );
+              })
               : null}
             <MapboxGL.UserLocation
               visible={true}
@@ -210,7 +212,7 @@ class OfflineMapView extends React.Component {
               null
           } */}
           <TouchableOpacity
-            onPress={() => this.setState({followUserLocation: true})}
+            onPress={() => this.setState({ followUserLocation: true })}
             style={{
               position: 'absolute',
               bottom: 140,
@@ -224,7 +226,7 @@ class OfflineMapView extends React.Component {
             }}>
             <MaterialIcons
               name={'my-location'}
-              style={{color: '#2F80ED'}}
+              style={{ color: '#2F80ED' }}
               size={25}
             />
           </TouchableOpacity>
@@ -245,14 +247,13 @@ class OfflineMapView extends React.Component {
 
                 let imagePath = '';
                 if (typeof pin.images == 'string') {
-                  imagePath = pin.images;
+                  imagePath = pin?.images;
                 } else if (Array.isArray(pin.images) && pin.images.length > 0) {
-                  imagePath = pin.images[0].image || pin.images[0].thumb_image;
+                  imagePath = pin?.images[0].image || pin.images[0].thumb_image;
                 }
-
                 let fileName = imagePath.split('/').pop();
                 let endPath = RNFetchBlob.fs.dirs.CacheDir + '/discover/' + fileName;
-                let pathToDisplay =Platform.OS === 'android' ? 'file://' + endPath : endPath;
+                let pathToDisplay = Platform.OS === 'android' ? 'file://' + endPath : endPath;
                 return (
                   <TouchableOpacity
                     activeOpacity={0.9}
@@ -274,10 +275,10 @@ class OfflineMapView extends React.Component {
                       withIndicator
                       style={styles.mapViewCardImg}
                       source={{
-                        uri: params.mapData.cover_image,
+                        uri: imagePath,
                       }}
                       thumbnailSource={{
-                        uri: params.mapData.cover_image,
+                        uri: imagePath,
                       }}
                     />
                     <View style={styles.mapViewCardContent}>

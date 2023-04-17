@@ -78,7 +78,6 @@ class PinView extends React.Component {
     const {params} = this.props.navigation.state;
     const prevParams = prevProps.navigation.state.params;
     if (params.update && !prevParams.update) {
-      console.log('inside params.update')
       this.props.navigation.state.update = false
       let allPins = params.allPins || [];
       let pinIndex = allPins.findIndex(p => p.id == params.pinID);
@@ -87,7 +86,6 @@ class PinView extends React.Component {
         this.setPinData(allPins, pinIndex);
       } else {
         if (params?.mapID) {
-          console.log('inside params.update')
           this.fetchSinglePinData(params.pinID);
         } else {
           this.setPinData(allPins, pinIndex);
@@ -126,7 +124,6 @@ class PinView extends React.Component {
         let pinIndex = pinData.findIndex(p => p.id == pinID);
         this.setPinData(pinData, pinIndex);
       } else {
-        console.log("3-----")
         this.setState({loaderMsg: 'Fetching Pin Data', pinLoader: true});
         this.props.mapAction
           .fetchMapPinList({
@@ -284,43 +281,83 @@ class PinView extends React.Component {
     }
   }
 
+  // renderImages(pinData) {
+  //   console.log("🚀 ~ file: PinView.js:285 ~ PinView ~ renderImages ~ pinData:", pinData)
+  //   let sliderData =
+  //     pinData?.images || pinData?.pin_images || this.state.carouselItems;
+  //   let pathToDisplay = '';
+
+  //   if (this.state.isOffline) {
+  //     let imagePath = '';
+  //     if (typeof pinData.images == 'string') {
+  //       imagePath = pinData.images;
+        
+  //     } else if (Array.isArray(pinData.images) && pinData.images.length > 0) {
+  //       imagePath = pinData.images[0].image || pinData.images[0].thumb_image;
+       
+  //     }
+
+  //     let fileName = imagePath.split('/').pop();
+  //     let endPath = RNFetchBlob.fs.dirs.CacheDir + '/discover/' + fileName;
+  //     pathToDisplay = Platform.OS === 'android' ? 'file://' + endPath : endPath;
+  //   }
+
+  //   return (
+  //     <>
+  //       {this.state.isOffline ? (
+  //         <ImageBlurLoading
+  //           withIndicator
+  //           style={styles.cateSlideCardIcon}
+  //           source={{ uri: pathToDisplay }}
+  //           thumbnailSource={{ uri: pathToDisplay }}
+  //         />
+  //       ) : (
+  //         <PinImages
+  //           data={sliderData}
+  //           renderItem={this._renderItemCate}
+  //           onSnapToItem={index => this.setState({activeSlide: index})}
+  //         />
+  //       )}
+  //     </>
+  //   );
+  // }
+
   renderImages(pinData) {
-    let sliderData =
-      pinData.images || pinData.pin_images || this.state.carouselItems;
-    let pathToDisplay = '';
+    console.log("🚀 ~ file: PinView.js:285 ~ PinView ~ renderImages ~ pinData:", pinData)
+    let images = pinData.images || [];
+    let { isOffline } = this.state;
 
-    if (this.state.isOffline) {
-      let imagePath = '';
-      if (typeof pinData.images == 'string') {
-        imagePath = pinData.images;
-      } else if (Array.isArray(pinData.images) && pinData.images.length > 0) {
-        imagePath = pinData.images[0].image || pinData.images[0].thumb_image;
-      }
+    if (isOffline) {
+      return images.map((image) => {
+        let imagePath =
+          typeof image === "string" ? image : image.image || image.thumb_image;
+        let fileName = imagePath.split('/').pop();
+        let endPath = RNFetchBlob.fs.dirs.CacheDir + '/discover/' + fileName;
+        let source = Platform.OS === 'android' ? {uri: 'file://' + endPath} : {uri: endPath};
 
-      let fileName = imagePath.split('/').pop();
-      let endPath = RNFetchBlob.fs.dirs.CacheDir + '/discover/' + fileName;
-      pathToDisplay = Platform.OS === 'android' ? 'file://' + endPath : endPath;
-    }
-
-    return (
-      <>
-        {this.state.isOffline ? (
+        return (
           <ImageBlurLoading
+            key={image.id}
             withIndicator
             style={styles.cateSlideCardIcon}
-            source={{ uri: imagePath }}
-            thumbnailSource={{ uri: imagePath }}
+            source={{ uri: pinData.images[0].image }}
+            thumbnailSource={{ uri: pinData.images[0].image }}
           />
-        ) : (
-          <PinImages
-            data={sliderData}
-            renderItem={this._renderItemCate}
-            onSnapToItem={index => this.setState({activeSlide: index})}
-          />
-        )}
-      </>
-    );
+        );
+      });
+    } else {
+      let sliderData = images || this.state.carouselItems;
+
+      return (
+        <PinImages
+          data={sliderData}
+          renderItem={this._renderItemCate}
+          onSnapToItem={(index) => this.setState({ activeSlide: index })}
+        />
+      );
+    }
   }
+
 
   renderPagination(pinData) {
     let sliderData =
@@ -354,7 +391,6 @@ class PinView extends React.Component {
   }
 
   renderPinContent(pinData, index) {
-    console.log("what is pinData???????", pinData)
     let {categories} = this.props;
 
     let selectedCategory =
