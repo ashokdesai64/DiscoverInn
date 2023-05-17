@@ -1,4 +1,6 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
+let DEVICE_HEIGHT = Dimensions.get('window').height;
+let DEVICE_WIDTH = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   container: {
@@ -261,6 +263,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 12,
     fontFamily: 'Montserrat-Medium',
+   
   },
   buttonPrimary: {
     backgroundColor: '#2F80ED',
@@ -290,6 +293,95 @@ const styles = StyleSheet.create({
   shareButtonText: {
     color: '#fff',
     fontSize: 16,
+  },
+  customPopup: {
+    width: DEVICE_WIDTH,
+    padding: 0,
+    position: 'absolute',
+    bottom: 0,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: -2 },
+    shadowRadius: 10,
+    maxHeight: DEVICE_HEIGHT - 190,
+  },
+  customPopupContent: {
+    paddingVertical: 20,
+    paddingHorizontal: 5,
+  },
+  customPopupHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  customPopupHeaderTitle: {
+    fontSize: 16,
+    fontFamily: 'Montserrat-SemiBold',
+    color: '#333333',
+  },
+  footerButton: {
+    flexDirection: 'row',
+    marginTop: 0,
+    marginHorizontal: 15,
+    alignItems: 'flex-end',
+    marginBottom: 20,
+  },
+  button: {
+    paddingVertical: 5,
+    paddingHorizontal: 20,
+    height: 40,
+    alignSelf: 'center',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  buttonOutline: {
+    borderColor: '#BDBDBD',
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    color: '#fff',
+  },
+  buttonDecline: {
+    flex: 1,
+    marginRight: 15,
+    backgroundColor:'#eb5757'
+  },
+  buttonDanger: {
+    backgroundColor: '#51a345',
+    color: '#fff',
+  },
+  buttonSave: {
+    flex: 1,
+    marginLeft: 15,
+  },
+  buttonClose: {
+    width: 24,
+    height: 24,
+  },
+  buttonCloseIcon: {
+    color: '#BDBDBD',
+    fontSize: 24,
+  },
+  buttonTextGray: {
+    color: '#333333',
+   
+  },
+  deleteModalBody: {
+    paddingTop: 20,
+    paddingHorizontal: 35,
+    paddingBottom: 50,
+  },
+  deleteModalBodyText: {
+    fontSize: 18,
+    fontFamily: 'Montserrat-SemiBold',
+    textAlign: 'center',
   },
 });
 

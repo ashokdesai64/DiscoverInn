@@ -1,6 +1,6 @@
 import React from 'react';
-import {View, Text, ScrollView, Platform, Dimensions} from 'react-native';
-import {Item, Input, Button} from 'native-base';
+import { View, Text, ScrollView, Platform, Dimensions, ActivityIndicator } from 'react-native';
+import { Item, Input, Button } from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import styles from './OfflineMaps.style';
 import Carousel from 'react-native-snap-carousel';
@@ -10,16 +10,17 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import _ from 'underscore';
 import RNFetchBlob from 'rn-fetch-blob';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import fontelloConfig from './../../selection.json';
 const IconMoon = createIconSetFromIcoMoon(fontelloConfig);
 //REDUX
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import * as mapActions from './../../actions/mapActions';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import moment from 'moment';
+import Dialog, { FadeAnimation, DialogContent } from 'react-native-popup-dialog';
 
 class OfflineMaps extends React.Component {
   constructor(props) {
@@ -30,7 +31,9 @@ class OfflineMaps extends React.Component {
       searchTerm: '',
       fetchingMaps: true,
       offlineMaps: props.offlineMaps,
-      selectedMapCategories: {map_id: null, categories: []},
+      deleteInProgrss: false,
+      showDeleteModal: false,
+      selectedMapCategories: { map_id: null, categories: [] },
       carouselCateItems: [
         {
           title: 'Sights',
@@ -69,7 +72,7 @@ class OfflineMaps extends React.Component {
       nextProps.offlineMaps &&
       nextProps.offlineMaps.length != this.state.offlineMaps
     ) {
-      this.setState({offlineMaps: nextProps.offlineMaps});
+      this.setState({ offlineMaps: nextProps.offlineMaps });
     }
   }
 
@@ -85,7 +88,7 @@ class OfflineMaps extends React.Component {
     } else {
       filteredMapList = [...allMaps];
     }
-    this.setState({offlineMaps: filteredMapList});
+    this.setState({ offlineMaps: filteredMapList });
   }, 250);
 
   navigateToOfflineMap(mapData, mapID) {
@@ -100,10 +103,10 @@ class OfflineMaps extends React.Component {
   }
 
   pinToggle(categoryID, mapID) {
-    let {selectedMapCategories} = this.state;
+    let { selectedMapCategories } = this.state;
     if (selectedMapCategories.map_id != mapID) {
       this.setState({
-        selectedMapCategories: {map_id: mapID, categories: [categoryID]},
+        selectedMapCategories: { map_id: mapID, categories: [categoryID] },
       });
     } else {
       let categories = selectedMapCategories.categories;
@@ -114,17 +117,26 @@ class OfflineMaps extends React.Component {
         categories.push(categoryID);
       }
       this.setState({
-        selectedMapCategories: {map_id: mapID, categories: [...categories]},
+        selectedMapCategories: { map_id: mapID, categories: [...categories] },
       });
     }
   }
 
   deleteOfflineMap(mapData) {
-    MapboxGL.offlineManager.deletePack(`${mapData.id}${mapData.name}`);
-    this.props.mapAction.removeOfflineMapData(mapData);
+    MapboxGL.offlineManager
+      .deletePack(`${mapData.id}${mapData.name}`)
+      .then(() => {
+        this.props.mapAction.removeOfflineMapData(mapData);
+        this.setState({ deleteInProgress: false, showDeleteModal: false });
+      })
+      .catch(err => {
+        this.setState({ deleteInProgress: false, showDeleteModal: false }, () => {
+          alert(err);
+        });
+      });
   }
 
-  _renderItem({item, index}) {
+  _renderItem({ item, index }) {
     let avgReview = item.avrage_review || 0;
     let imagePath = item.cover_image || item.thumb_cover_image || '';
     let fileName = imagePath && imagePath.split('/').pop();
@@ -138,7 +150,9 @@ class OfflineMaps extends React.Component {
       );
       travelType = (currentTravelType && currentTravelType.name) || '-';
     }
-    let {selectedMapCategories} = this.state;
+    let { selectedMapCategories } = this.state;
+
+
     return (
       <View style={[styles.mapSlideCard]}>
         <TouchableOpacity
@@ -300,20 +314,91 @@ class OfflineMaps extends React.Component {
               <TouchableOpacity
                 style={[styles.button, styles.deleteButton]}
                 onPress={() => {
-                  this.deleteOfflineMap(item);
+                  this.setState({
+                    showDeleteModal: true,
+                  })
                 }}>
                 <Text style={styles.buttonText}>Delete</Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
+        <Dialog
+          rounded={false}
+          visible={this.state.showDeleteModal}
+          hasOverlay={true}
+          animationDuration={1}
+          onTouchOutside={() => {
+            this.setState({ showDeleteModal: false });
+          }}
+          dialogAnimation={
+            new FadeAnimation({
+              initialValue: 0, // optional
+              animationDuration: 150, // optional
+              useNativeDriver: true, // optional
+            })
+          }
+          onHardwareBackPress={() => {
+            this.setState({ showDeleteModal: false });
+            return true;
+          }}
+          dialogStyle={styles.customPopup}>
+          <DialogContent style={styles.customPopupContent}>
+            <View style={styles.customPopupHeader}>
+              <Text style={styles.customPopupHeaderTitle}>Delete Map</Text>
+              <TouchableOpacity
+                style={styles.buttonClose}
+                onPress={() => this.setState({ showDeleteModal: false })}>
+                <Feather name={'x'} style={styles.buttonCloseIcon} />
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.deleteModalBody}>
+              <Text style={styles.deleteModalBodyText}>
+                {' '}
+                Are you sure you want to delete this downloaded map?{' '}
+              </Text>
+            </View>
+
+            <View style={[styles.footerButton]}>
+              <Button
+                style={[
+                  styles.button,
+                  styles.buttonOutline,
+                  styles.buttonOutlineGray,
+                  styles.buttonDecline,
+                ]}
+                onPress={() => {
+                  this.setState({ showDeleteModal: false });
+                }}>
+                <Text style={[styles.buttonText, styles.buttonTextGray]}>
+                  {' '}
+                  Not Now{' '}
+                </Text>
+              </Button>
+              <Button
+                style={[styles.button, styles.buttonDanger, styles.buttonSave]}
+                onPress={() => {
+                  this.setState({ showDeleteModal: false });
+                  this.deleteOfflineMap(item);
+                }}
+              >
+                 {this.state.deleteInProgrss ? (
+                      <ActivityIndicator size={'small'} color={'white'} />
+                    ) : (
+                      <Text style={styles.buttonText}>Yes Sure</Text>
+                    )}
+              </Button>
+            </View>
+          </DialogContent>
+        </Dialog>
       </View>
     );
   }
 
   render() {
-    const {width} = Dimensions.get('window');
-    let {offlineMaps} = this.state;
+    const { width } = Dimensions.get('window');
+    let { offlineMaps } = this.state;
     let maps = (offlineMaps || []).map(data => {
       data.mapData['pinData'] = data.pinData;
       data.mapData['bounds'] = data.bounds;
@@ -339,14 +424,14 @@ class OfflineMaps extends React.Component {
                 placeholder="Search your maps"
                 value={this.state.searchTerm}
                 onChangeText={searchTerm =>
-                  this.setState({searchTerm}, () => {
+                  this.setState({ searchTerm }, () => {
                     this.searchSharedMaps();
                   })
                 }
               />
             </Item>
           </View>
-          <View style={{paddingTop: 20}}>
+          <View style={{ paddingTop: 20 }}>
             {maps && maps.length > 0 ? (
               <Carousel
                 ref={c => (this.carousel = c)}
