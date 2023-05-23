@@ -64,10 +64,31 @@ class OfflineMapView extends React.Component {
     };
   }
 
+  pinComparator(a, b) {
+    // Extract the number from the name using regex
+    const regex = /\d+/;
+    const aMatch = a.name && a.name.match(regex);
+    const bMatch = b.name && b.name.match(regex);
+
+    if (aMatch && bMatch) {
+      // Compare the extracted numbers
+      const aNum = parseInt(aMatch[0]);
+      const bNum = parseInt(bMatch[0]);
+      return aNum - bNum;
+    } else if (aMatch) {
+      return -1;
+    } else if (bMatch) {
+      return 1;
+    } else {
+      // Neither name has a number, compare alphabetically
+      return a.name.localeCompare(b.name);
+    }
+  }
+
+
+
   render() {
     let { params } = this.props.navigation.state;
-    console.log("🚀 ~ file: OfflineMapView.js:69 ~ OfflineMapView ~ render ~ params:", params)
-    // console.log("Pin Data::::", map.pinData);
     params = params || {};
 
     let { filteredCollections, mapData, pinList } = this.state;
@@ -106,6 +127,7 @@ class OfflineMapView extends React.Component {
                 this.setState({ followUserLocation: false });
               }
             }}>
+              
             {mapData.bounds && (
               <MapboxGL.Camera
                 bounds={mapData.bounds}
@@ -131,6 +153,7 @@ class OfflineMapView extends React.Component {
                 let random = Math.floor(Math.random() * 90000) + 10000;
                 return (
                   <MapboxGL.ShapeSource
+                    key={collection.id}
                     id={'symbolLocationSource' + random}
                     hitbox={{ width: 20, height: 20 }}
                     shape={collection}
@@ -181,7 +204,7 @@ class OfflineMapView extends React.Component {
                         iconSize: 0.4,
                       }}
                     />
-
+                
                     <MapboxGL.SymbolLayer
                       id={`singleNumberSelected${collection.id}`}
                       filter={['==', 'hasNumber', true]}
@@ -239,82 +262,88 @@ class OfflineMapView extends React.Component {
                 position: 'absolute',
                 bottom: 30,
                 paddingRight: 30,
-              }}>
-              {pinList.map(pin => {
-                let category = this.props.categories.find(
-                  c => c.id == pin.categories,
-                );
-
-                let imagePath = '';
-                if (typeof pin.images == 'string') {
-                  imagePath = pin?.images;
-                } else if (Array.isArray(pin.images) && pin.images.length > 0) {
-                  imagePath = pin?.images[0].image || pin.images[0].thumb_image;
-                }
-                let fileName = imagePath.split('/').pop();
-                let endPath = RNFetchBlob.fs.dirs.CacheDir + '/discover/' + fileName;
-                let pathToDisplay = Platform.OS === 'android' ? 'file://' + endPath : endPath;
-                return (
-                  <TouchableOpacity
-                    activeOpacity={0.9}
-                    style={styles.mapViewCard}
-                    onPress={() =>
-                      //     this.setState({ followUserLocation: true })
-                      // return
-                      this.props.navigation.navigate('PinView', {
-                        pinID: pin.id,
-                        mapID: params.mapData.id,
-                        mapName: params.mapData.name,
-                        isOffline: true,
-                        offlinePath: pathToDisplay,
-                        allPins: params.mapData.pinList,
-                        displayImg: params.mapData.cover_image,
-                      })
-                    }>
-                    <ImageBlurLoading
-                      withIndicator
-                      style={styles.mapViewCardImg}
-                      source={{
-                        uri: imagePath,
-                      }}
-                      thumbnailSource={{
-                        uri: imagePath,
-                      }}
-                    />
-                    <View style={styles.mapViewCardContent}>
-                      <View style={styles.mapViewTitle}>
+              }} >
+              {pinList
+                .slice()
+                .sort((a, b) => this.pinComparator(a, b))
+                .map((pin, index) => {
+                  let category = this.props.categories.find(
+                    c => c.id == pin.categories,
+                  );
+                  let imagePath = '';
+                  if (typeof pin.images == 'string') {
+                    imagePath = pin?.images;
+                  } else if (Array.isArray(pin.images) && pin.images.length > 0) {
+                    imagePath =
+                      pin?.images[0].image || pin.images[0].thumb_image;
+                  }
+                  let fileName = imagePath.split('/').pop();
+                  let endPath =
+                    RNFetchBlob.fs.dirs.CacheDir + '/discover/' + fileName;
+                  let pathToDisplay =
+                    Platform.OS === 'android' ? 'file://' + endPath : endPath;
+                  return (
+                    <TouchableOpacity
+                      activeOpacity={0.9}
+                      style={styles.mapViewCard}
+                      onPress={() =>
+                        this.props.navigation.navigate('PinView', {
+                          pinID: pin.id,
+                          mapID: params.mapData.id,
+                          mapName: params.mapData.name,
+                          isOffline: true,
+                          offlinePath: pathToDisplay,
+                          allPins: params.mapData.pinList,
+                          displayImg: params.mapData.cover_image,
+                        })
+                      }
+                    >
+                      <ImageBlurLoading
+                        withIndicator
+                        style={styles.mapViewCardImg}
+                        source={{
+                          uri: imagePath,
+                        }}
+                        thumbnailSource={{
+                          uri: imagePath,
+                        }}
+                      />
+                      <View style={styles.mapViewCardContent}>
+                        <View style={styles.mapViewTitle}>
+                          <Text
+                            style={styles.mapViewTitleText}
+                            numberOfLines={1}
+                            ellipsizeMode={'tail'}
+                          >
+                            {' '}
+                            {pin.name}{' '}
+                          </Text>
+                        </View>
+                        <View style={styles.mapViewCate}>
+                          <IconMoon
+                            name={
+                              category &&
+                              category.name &&
+                              category.name.toLowerCase()
+                            }
+                            style={styles.mapViewCateIcon}
+                          />
+                          <Text style={styles.mapViewCateText}>
+                            {' '}
+                            {(category && category.name) || ''}
+                          </Text>
+                        </View>
                         <Text
-                          style={styles.mapViewTitleText}
-                          numberOfLines={1}
-                          ellipsizeMode={'tail'}>
-                          {' '}
-                          {pin.name}{' '}
+                          style={styles.mapViewContentText}
+                          numberOfLines={3}
+                          ellipsizeMode={'tail'}
+                        >
+                          {pin.description}
                         </Text>
                       </View>
-                      <View style={styles.mapViewCate}>
-                        <IconMoon
-                          name={
-                            category &&
-                            category.name &&
-                            category.name.toLowerCase()
-                          }
-                          style={styles.mapViewCateIcon}
-                        />
-                        <Text style={styles.mapViewCateText}>
-                          {' '}
-                          {(category && category.name) || ''}
-                        </Text>
-                      </View>
-                      <Text
-                        style={styles.mapViewContentText}
-                        numberOfLines={3}
-                        ellipsizeMode={'tail'}>
-                        {pin.description}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                );
-              })}
+                    </TouchableOpacity>
+                  );
+                })}
             </ScrollView>
           ) : null}
         </View>

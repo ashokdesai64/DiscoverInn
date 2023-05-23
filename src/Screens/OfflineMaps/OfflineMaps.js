@@ -33,6 +33,7 @@ class OfflineMaps extends React.Component {
       offlineMaps: props.offlineMaps,
       deleteInProgrss: false,
       showDeleteModal: false,
+      deleteMapData: null,
       selectedMapCategories: { map_id: null, categories: [] },
       carouselCateItems: [
         {
@@ -171,24 +172,10 @@ class OfflineMaps extends React.Component {
           />
 
           <View style={styles.mapSlideCardImg_overlay} />
-          {/* <Button style={styles.shareButton}>
-            <Feather style={styles.shareButtonText} name="share-2" />
-          </Button> */}
+         
         </TouchableOpacity>
         <View style={styles.mapSlideCardBody}>
-          {/* <View style={styles.mapSlideBadgeGroup}>
-            <View style={[styles.badgeRed, styles.badge]}>
-              <Text style={[styles.badgeText, styles.badgeRedText]}>
-                {item.view || 0} <Feather style={styles.badgeIcon} name="eye" />
-              </Text>
-            </View>
-            <View style={[styles.badgeGreen, styles.badge]}>
-              <Text style={[styles.badgeText, styles.badgeGreenText]}>
-                {item.avrage_review || 0}{' '}
-                <Feather style={styles.badgeIcon} name="star" />
-              </Text>
-            </View>
-          </View> */}
+         
           <Text
             style={styles.mapSlideCardTitle}
             numberOfLines={1}
@@ -316,6 +303,7 @@ class OfflineMaps extends React.Component {
                 onPress={() => {
                   this.setState({
                     showDeleteModal: true,
+                    deleteMapData: item,
                   })
                 }}>
                 <Text style={styles.buttonText}>Delete</Text>
@@ -380,7 +368,7 @@ class OfflineMaps extends React.Component {
                 style={[styles.button, styles.buttonDanger, styles.buttonSave]}
                 onPress={() => {
                   this.setState({ showDeleteModal: false });
-                  this.deleteOfflineMap(item);
+                  this.deleteOfflineMap(this.state.deleteMapData);
                 }}
               >
                  {this.state.deleteInProgrss ? (

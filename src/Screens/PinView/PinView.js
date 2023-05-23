@@ -39,6 +39,7 @@ class PinView extends React.Component {
   constructor(props) {
     super(props);
     const {params} = props.navigation.state;
+    params.allPins.sort((a, b) => this.pinComparator(a, b))
     this.state = {
       saveToListModal: false,
       activeSlide: 0,
@@ -58,11 +59,30 @@ class PinView extends React.Component {
       keyboardHeight: 0,
     };
   }
+  pinComparator(a, b) {
+    // Extract the number from the name using regex
+    const regex = /\d+/;
+    const aMatch = a.name && a.name.match(regex);
+    const bMatch = b.name && b.name.match(regex);
 
+    if (aMatch && bMatch) {
+      // Compare the extracted numbers
+      const aNum = parseInt(aMatch[0]);
+      const bNum = parseInt(bMatch[0]);
+      return aNum - bNum;
+    } else if (aMatch) {
+      return -1;
+    } else if (bMatch) {
+      return 1;
+    } else {
+      // Neither name has a number, compare alphabetically
+      return a.name.localeCompare(b.name);
+    }
+  }
   UNSAFE_componentWillMount() {
     const {params} = this.props.navigation.state;
     let allPins = params.allPins || [];
-    let pinIndex = allPins.findIndex(p => p.id == params.pinID);
+    let pinIndex = allPins.findIndex(p => p.id == params.pinID); 
     if (this.state.isOffline) {
       this.setPinData(allPins, pinIndex);
     } else {
@@ -76,11 +96,13 @@ class PinView extends React.Component {
 
   componentDidUpdate(prevProps) {
     const {params} = this.props.navigation.state;
+    
     const prevParams = prevProps.navigation.state.params;
     if (params.update && !prevParams.update) {
       this.props.navigation.state.update = false
       let allPins = params.allPins || [];
       let pinIndex = allPins.findIndex(p => p.id == params.pinID);
+      console.log("🚀 ~ file: PinView.js:87 ~ PinView ~ componentDidUpdate ~ pinIndex:", pinIndex)
   
       if (this.state.isOffline) {
         this.setPinData(allPins, pinIndex);
@@ -122,6 +144,8 @@ class PinView extends React.Component {
       if (fromFav) {
         let pinData = params.pinList || [];
         let pinIndex = pinData.findIndex(p => p.id == pinID);
+        console.log("🚀 ~ file: PinView.js:129 ~ PinView ~ fetchSinglePinData ~ pinIndex:", pinIndex)
+        
         this.setPinData(pinData, pinIndex);
       } else {
         this.setState({loaderMsg: 'Fetching Pin Data', pinLoader: true});
@@ -133,6 +157,7 @@ class PinView extends React.Component {
           .then(data => {
             let pinData = (data && data.mapID && data.mapID.pin_list) || [];
             let pinIndex = pinData.findIndex(p => p.id == pinID);
+            console.log("🚀 ~ file: PinView.js:142 ~ PinView ~ fetchSinglePinData ~ pinIndex:", pinIndex)
             this.setPinData(pinData, pinIndex);
           })
           .catch(err => {
@@ -323,7 +348,6 @@ class PinView extends React.Component {
   // }
 
   renderImages(pinData) {
-    console.log("🚀 ~ file: PinView.js:285 ~ PinView ~ renderImages ~ pinData:", pinData)
     let images = pinData.images || [];
     let { isOffline } = this.state;
 
@@ -334,7 +358,7 @@ class PinView extends React.Component {
         let fileName = imagePath.split('/').pop();
         let endPath = RNFetchBlob.fs.dirs.CacheDir + '/discover/' + fileName;
         let source = Platform.OS === 'android' ? {uri: 'file://' + endPath} : {uri: endPath};
-
+  
         return (
           <ImageBlurLoading
             key={image.id}
@@ -391,24 +415,24 @@ class PinView extends React.Component {
   }
 
   renderPinContent(pinData, index) {
-    let {categories} = this.props;
+    let { categories } = this.props;
 
-    let selectedCategory =
-      categories && categories.find(c => c.id == pinData.categories);
+    let selectedCategory = categories && categories.find(c => c.id === pinData.categories);
     let categoryName = (selectedCategory && selectedCategory.name) || '';
-    let nameSplit = pinData.name.split(/^\d*\.?/).filter(x => x != '');
+    let nameSplit = pinData.name.split(/^\d*\.?/).filter(x => x !== '');
+    
     return (
       <ScrollView
         style={styles.pinScrollView}
         contentContainerStyle={{
           justifyContent: 'center',
-          // alignItems: 'center',
-          // alignSelf: 'center',
           borderRadius: 100,
         }}
-        nestedScrollEnabled={true}>
+        nestedScrollEnabled={true}
+      >
         <Text style={styles.pinViewTitle}>
-          {index + 1 + '. ' + nameSplit[0]}{' '}
+          {pinData.name}
+          {/* {index + 1}. {nameSplit[0]}{' '} */}
         </Text>
         <View style={styles.pinViewCate}>
           <IconMoon
@@ -421,8 +445,9 @@ class PinView extends React.Component {
           <Text
             style={[
               styles.pinViewCateText,
-              {marginBottom: 15, paddingLeft: 15},
-            ]}>
+              { marginBottom: 15, paddingLeft: 15 },
+            ]}
+          >
             {' '}
             Added From: {pinData.added_from || ''}
           </Text>
