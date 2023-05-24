@@ -138,7 +138,7 @@ ndkVersion "21.1.6352462"
         applicationId "com.discoverinn"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 10
+        versionCode 13
         versionName "10.0"
         multiDexEnabled true
     }
