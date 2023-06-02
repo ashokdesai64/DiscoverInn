@@ -39,7 +39,7 @@ class PinView extends React.Component {
   constructor(props) {
     super(props);
     const {params} = props.navigation.state;
-    params.allPins.sort((a, b) => this.pinComparator(a, b))
+    params.allPins?.sort((a, b) => this.pinComparator(a, b))
     this.state = {
       saveToListModal: false,
       activeSlide: 0,
@@ -60,25 +60,38 @@ class PinView extends React.Component {
     };
   }
   pinComparator(a, b) {
-    // Extract the number from the name using regex
-    const regex = /\d+/;
-    const aMatch = a.name && a.name.match(regex);
-    const bMatch = b.name && b.name.match(regex);
-
-    if (aMatch && bMatch) {
-      // Compare the extracted numbers
-      const aNum = parseInt(aMatch[0]);
-      const bNum = parseInt(bMatch[0]);
-      return aNum - bNum;
-    } else if (aMatch) {
+    const aSortOrder = parseInt(a.sort_order);
+    const bSortOrder = parseInt(b.sort_order);
+  
+    if (!isNaN(aSortOrder) && !isNaN(bSortOrder)) {
+      // Both pins have valid sort_order values, compare numerically
+      return aSortOrder - bSortOrder;
+    } else if (!isNaN(aSortOrder)) {
+      // Only pin A has a valid sort_order, consider it first
       return -1;
-    } else if (bMatch) {
+    } else if (!isNaN(bSortOrder)) {
+      // Only pin B has a valid sort_order, consider it first
       return 1;
     } else {
-      // Neither name has a number, compare alphabetically
-      return a.name.localeCompare(b.name);
+      // Neither pin has a valid sort_order, compare using name and numbers
+      const regex = /\d+/;
+      const aMatch = a.name && a.name.match(regex);
+      const bMatch = b.name && b.name.match(regex);
+  
+      if (aMatch && bMatch) {
+        const aNum = parseInt(aMatch[0]);
+        const bNum = parseInt(bMatch[0]);
+        return aNum - bNum;
+      } else if (aMatch) {
+        return -1;
+      } else if (bMatch) {
+        return 1;
+      } else {
+        return a.name.localeCompare(b.name);
+      }
     }
   }
+  
   UNSAFE_componentWillMount() {
     const {params} = this.props.navigation.state;
     let allPins = params.allPins || [];
@@ -431,8 +444,8 @@ class PinView extends React.Component {
         nestedScrollEnabled={true}
       >
         <Text style={styles.pinViewTitle}>
-          {pinData.name}
-          {/* {index + 1}. {nameSplit[0]}{' '} */}
+          {/* {pinData.name} */}
+          {index + 1}. {nameSplit[0]}{' '}
         </Text>
         <View style={styles.pinViewCate}>
           <IconMoon

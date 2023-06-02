@@ -1,7 +1,7 @@
 import React from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import styles from './FavouritePinMap.style';
-
+import RNFetchBlob from 'rn-fetch-blob';
 import sights1 from './../../Images/sights1.png';
 import activities1 from './../../Images/activities1.png';
 import restaurants1 from './../../Images/restaurants1.png';
@@ -54,6 +54,25 @@ class FavouritePinMap extends React.Component {
       '7': other1,
     };
   }
+
+  pinComparator(a, b) {
+    // Extract the sort_order values from the pins
+    const aSortOrder = parseInt(a.sort_order);
+    const bSortOrder = parseInt(b.sort_order);
+  
+    if (!isNaN(aSortOrder) && !isNaN(bSortOrder)) {
+      // Compare the sort_order values
+      return aSortOrder - bSortOrder;
+    } else if (!isNaN(aSortOrder)) {
+      return -1;
+    } else if (!isNaN(bSortOrder)) {
+      return 1;
+    } else {
+      // Both pins don't have a valid sort_order, compare alphabetically by name
+      return a.name.localeCompare(b.name);
+    }
+  }
+  
 
   UNSAFE_componentWillMount() {
     if (this.props.userData && this.props.userData.id) {
@@ -305,15 +324,28 @@ class FavouritePinMap extends React.Component {
               bottom: 30,
               paddingRight: 30,
             }}>
-            {this.state.pinList.map((pin, index) => {
-              let category = this.props.categories.find(
-                c => c.id == pin.categories,
-              );
-              let imageData = pin.images && pin.images[0] && pin.images[0];
-              let image = imageData
-                ? { uri: imageData.image || imageData.thumb_image }
-                : require('./../../Images/login-bg.jpg');
-              let nameSplit = pin.name.split(/^\d*\.?/).filter(x => x != '');
+              {console.log("this.state.pinList::: in favouritePinMap", this.state.pinList)}
+            {this.state.pinList
+                .slice()
+                .sort((a, b) => this.pinComparator(a, b))
+                .map((pin, index) => {
+                  let category = this.props.categories.find(
+                    c => c.id == pin.categories,
+                  );
+                  let nameSplit = pin.name.split(/^\d*\.?/).filter(x => x != '');
+                  let imagePath = '';
+                  console.log("Pin:::::::::::::::::", pin)
+                  if (typeof pin.images == 'string') {
+                    imagePath = pin?.images;
+                  } else if (Array.isArray(pin.images) && pin.images.length > 0) {
+                    imagePath =
+                      pin?.images[0]?.image || pin.images[0].thumb_image;
+                  }
+                  let fileName = imagePath.split('/').pop();
+                  let endPath =
+                    RNFetchBlob.fs.dirs.CacheDir + '/discover/' + fileName;
+                  let pathToDisplay =
+                    Platform.OS === 'android' ? 'file://' + endPath : endPath;
               return (
                 <TouchableOpacity
                   key={pin.id}
@@ -333,7 +365,9 @@ class FavouritePinMap extends React.Component {
                   <ImageBlurLoading
                     withIndicator
                     style={styles.mapViewCardImg}
-                    source={image}
+                    source={{
+                      uri: imagePath,
+                    }}
                     thumbnailSource={{
                       uri:
                         'https://discover-inn.com/upload/cover/map-image.jpeg',
